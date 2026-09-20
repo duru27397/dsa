@@ -18,7 +18,11 @@
     "dp-l3": "dp-sequence-sub",
     "stack-l1": "stack-fundamental-sub",
     "stack-l2": "stack-monotonic-sub",
-    "stack-l3": "queue-monotonic-sub"
+    "stack-l3": "queue-monotonic-sub",
+    "binary-search": "bs-blueprint",
+    "bs-l1": "bs-arrays-sub",
+    "bs-l2": "bs-rotated-sub",
+    "bs-l3": "bs-answer-sub"
   };
 
   const showPage = (rawTargetId, updateUrl = true, subTargetId = null) => {

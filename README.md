@@ -1,10 +1,11 @@
 # DSA Cheat Sheet
 
-A compact, dependency-free Python 3 revision cheat sheet featuring a 3-level hierarchical navigation tree (Category $\to$ Subcategory $\to$ Topic/Technique), LeetCode Monaco editor syntax highlighting, and discrete non-scrolling page views across three core domains:
+A compact, dependency-free Python 3 revision cheat sheet featuring a 3-level hierarchical navigation tree (Category $\to$ Subcategory $\to$ Topic/Technique), LeetCode Monaco editor syntax highlighting, and discrete non-scrolling page views across four core domains:
 
 1. Arrays & Hashing
 2. Dynamic Programming
 3. Stack & Queue
+4. Binary Search
 
 ## Structure
 
@@ -24,9 +25,9 @@ A compact, dependency-free Python 3 revision cheat sheet featuring a 3-level hie
 
 The sidebar is organized into a clean 3-level taxonomy without artificial badges:
 
-- **Level 1 (Category - A)**: Arrays & Hashing, Dynamic Programming, Stack & Queue
-- **Level 2 (Subcategory - B)**: Overview & Blueprint, Hash Maps & Sets, Prefix & Suffix Accumulation, Two Pointers & Sliding Window, LIFO & FIFO Fundamentals, Monotonic Stack, Monotonic Queue & Deque, Practice Problems
-- **Level 3 (Topic / Technique - C)**: Specific sub-techniques (e.g., Hash Set Lookups, Complement Map, Product Except Self, Two Pointers, Climbing Stairs, Coin Change, LIS, Next Greater Element, Histogram & Trapping, Sliding Window Maximum, Monotonic Prefix Deque)
+- **Level 1 (Category - A)**: Arrays & Hashing, Dynamic Programming, Stack & Queue, Binary Search
+- **Level 2 (Subcategory - B)**: Overview & Blueprint, Hash Maps & Sets, Prefix & Suffix Accumulation, Two Pointers & Sliding Window, LIFO & FIFO Fundamentals, Monotonic Stack, Monotonic Queue & Deque, Search in Arrays & Bisect, Rotated Arrays & Invariants, Solution Space & Monotonic Functions, Practice Problems
+- **Level 3 (Topic / Technique - C)**: Specific sub-techniques (e.g., Hash Set Lookups, Complement Map, Product Except Self, Two Pointers, Climbing Stairs, Coin Change, LIS, Next Greater Element, Histogram & Trapping, Sliding Window Maximum, Monotonic Prefix Deque, Bisect Insertion Point, Rotated Array Search, Peak Element Invariant, Koko Bananas Minimization, Split Array Largest Sum)
 
 ## Code Style & Highlighting
 

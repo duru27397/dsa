@@ -326,6 +326,109 @@
           </div>
         </div>
       </div>
+
+      <!-- LEVEL 1 (Category A): Binary Search -->
+      <div class="tree-node l1-node" data-topic="binary-search">
+        <div class="tree-header l1-header">
+          <button class="tree-toggle" type="button" aria-label="Toggle Binary Search">
+            <span class="chevron">▸</span>
+          </button>
+          <a class="nav-item l1-link" href="#bs-blueprint">
+            <span class="topic-icon">🎯</span>
+            <span class="nav-title">Binary Search</span>
+          </a>
+        </div>
+
+        <!-- LEVEL 2 (Subcategory B): Subtopics under Binary Search -->
+        <div class="tree-children l2-children">
+          <!-- Blueprint -->
+          <div class="tree-node l2-node">
+            <div class="tree-header l2-header">
+              <a class="nav-item l2-link" href="#bs-blueprint">
+                <span class="nav-title">Overview &amp; Blueprint</span>
+              </a>
+            </div>
+          </div>
+
+          <!-- Subcategory 1: Sorted Arrays & Boundaries -->
+          <div class="tree-node l2-node">
+            <div class="tree-header l2-header">
+              <button class="tree-toggle" type="button" aria-label="Toggle Sorted Arrays &amp; Boundaries">
+                <span class="chevron">▸</span>
+              </button>
+              <a class="nav-item l2-link" href="#bs-arrays-sub">
+                <span class="nav-title">Sorted Arrays &amp; Boundaries</span>
+              </a>
+            </div>
+            <!-- LEVEL 3 (Topic / Technique C) -->
+            <div class="tree-children l3-children">
+              <a class="nav-item l3-link" href="#bs-arrays-sub" data-target-sub="bs-search-insert">
+                <span class="leaf-dot">•</span>
+                <span class="nav-title">Search Insert Position</span>
+              </a>
+              <a class="nav-item l3-link" href="#bs-arrays-sub" data-target-sub="bs-first-last">
+                <span class="leaf-dot">•</span>
+                <span class="nav-title">First &amp; Last Position</span>
+              </a>
+            </div>
+          </div>
+
+          <!-- Subcategory 2: Rotated Arrays & Peaks -->
+          <div class="tree-node l2-node">
+            <div class="tree-header l2-header">
+              <button class="tree-toggle" type="button" aria-label="Toggle Rotated Arrays &amp; Peaks">
+                <span class="chevron">▸</span>
+              </button>
+              <a class="nav-item l2-link" href="#bs-rotated-sub">
+                <span class="nav-title">Rotated Arrays &amp; Peaks</span>
+              </a>
+            </div>
+            <!-- LEVEL 3 (Topic / Technique C) -->
+            <div class="tree-children l3-children">
+              <a class="nav-item l3-link" href="#bs-rotated-sub" data-target-sub="bs-rotated">
+                <span class="leaf-dot">•</span>
+                <span class="nav-title">Search in Rotated Array</span>
+              </a>
+              <a class="nav-item l3-link" href="#bs-rotated-sub" data-target-sub="bs-peak">
+                <span class="leaf-dot">•</span>
+                <span class="nav-title">Find Peak Element</span>
+              </a>
+            </div>
+          </div>
+
+          <!-- Subcategory 3: Search on Solution Space -->
+          <div class="tree-node l2-node">
+            <div class="tree-header l2-header">
+              <button class="tree-toggle" type="button" aria-label="Toggle Search on Solution Space">
+                <span class="chevron">▸</span>
+              </button>
+              <a class="nav-item l2-link" href="#bs-answer-sub">
+                <span class="nav-title">Search on Solution Space</span>
+              </a>
+            </div>
+            <!-- LEVEL 3 (Topic / Technique C) -->
+            <div class="tree-children l3-children">
+              <a class="nav-item l3-link" href="#bs-answer-sub" data-target-sub="bs-koko">
+                <span class="leaf-dot">•</span>
+                <span class="nav-title">Koko Eating Bananas</span>
+              </a>
+              <a class="nav-item l3-link" href="#bs-answer-sub" data-target-sub="bs-capacity">
+                <span class="leaf-dot">•</span>
+                <span class="nav-title">Capacity to Ship Packages</span>
+              </a>
+            </div>
+          </div>
+
+          <!-- Subcategory 4: Practice Problems -->
+          <div class="tree-node l2-node">
+            <div class="tree-header l2-header">
+              <a class="nav-item l2-link" href="#bs-reference">
+                <span class="nav-title">Practice Problems</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
     </nav>
   </aside>
 
@@ -1658,6 +1761,556 @@ i=6 ( 6): 6 &gt; 3 and 6 &gt; 5 -&gt; POP both! q = [6: 6]     -&gt; Window 4..6
                 <span class="badge-diff diff-hard">Hard</span>
                 <span class="actual-diff">Actual: <span class="diff-num">5/5</span></span>
                 <a class="pattern-ref-link" href="#queue-monotonic-sub">View Pattern →</a>
+              </div>
+            </li>
+          </ul>
+        </section>
+      </section>
+
+      <!-- ========================================== -->
+      <!-- TOPIC 4: BINARY SEARCH PAGES               -->
+      <!-- ========================================== -->
+
+      <!-- PAGE 16: Binary Search Blueprint -->
+      <section class="page-view" id="bs-blueprint" data-topic-title="Binary Search" data-page-title="Overview &amp; Blueprint">
+        <header class="topic-heading">
+          <span class="level-tag">Topic 04 · Logarithmic Space Reduction</span>
+          <h1><span>🎯</span> Binary Search: Overview &amp; Blueprint</h1>
+          <p class="topic-summary">Halve the candidate space on each step by evaluating a monotonic boolean predicate P(x) in O(log n) time without off-by-one errors.</p>
+        </header>
+
+        <section class="blueprint-card" aria-labelledby="bs-blueprint-title">
+          <div class="blueprint-head">
+            <span class="language-pill" id="bs-blueprint-title">Python 3 ▾</span>
+            <button class="copy-button" type="button" data-code="bs-code"><span>📋</span> Copy</button>
+          </div>
+          <pre class="code-block" id="bs-code"><code><span class="line-text"><span class="kw-def">def</span> <span class="fn">binarySearch</span><span class="punct">(</span><span class="param">nums</span><span class="punct">:</span> <span class="type">List</span><span class="punct">[</span><span class="type">int</span><span class="punct">],</span> <span class="param">target</span><span class="punct">:</span> <span class="type">int</span><span class="punct">)</span> <span class="punct">-&gt;</span> <span class="type">int</span><span class="punct">:</span></span><span class="line-text">    <span class="docstr">"""</span></span><span class="line-text">    <span class="docstr">Monotonic Predicate Theorem: P(x) -&gt; [F, F, ..., F, T, T, ..., T]</span></span><span class="line-text">    <span class="docstr">-----------------------------------------------------------------</span></span><span class="line-text">    <span class="docstr">Template 1 (Exact Match): while left &lt;= right:</span></span><span class="line-text">    <span class="docstr">  - Search interval is fully inclusive [left, right]</span></span><span class="line-text">    <span class="docstr">  - Returns mid when found; if absent, 'left' is insertion index!</span></span><span class="line-text"></span><span class="line-text">    <span class="docstr">Template 2 (Boundary Search): while left &lt; right:</span></span><span class="line-text">    <span class="docstr">  - Finds first True (lower bound) or minimum feasible value</span></span><span class="line-text">    <span class="docstr">  - Terminates with left == right pointing directly to boundary!</span></span><span class="line-text">    <span class="docstr">"""</span></span><span class="line-text"></span><span class="line-text">    <span class="comment"># Template 1: Exact target or insertion index</span></span><span class="line-text">    <span class="var">left</span><span class="punct">,</span> <span class="var">right</span> <span class="punct">=</span> <span class="num">0</span><span class="punct">,</span> <span class="fn">len</span><span class="punct">(</span><span class="param">nums</span><span class="punct">)</span> <span class="punct">-</span> <span class="num">1</span></span><span class="line-text"></span><span class="line-text">    <span class="flow">while</span> <span class="var">left</span> <span class="punct">&lt;=</span> <span class="var">right</span><span class="punct">:</span></span><span class="line-text">        <span class="var">mid</span> <span class="punct">=</span> <span class="var">left</span> <span class="punct">+</span> <span class="punct">(</span><span class="var">right</span> <span class="punct">-</span> <span class="var">left</span><span class="punct">)</span> <span class="punct">//</span> <span class="num">2</span></span><span class="line-text">        <span class="flow">if</span> <span class="param">nums</span><span class="punct">[</span><span class="var">mid</span><span class="punct">]</span> <span class="punct">==</span> <span class="param">target</span><span class="punct">:</span></span><span class="line-text">            <span class="flow">return</span> <span class="var">mid</span></span><span class="line-text">        <span class="flow">elif</span> <span class="param">nums</span><span class="punct">[</span><span class="var">mid</span><span class="punct">]</span> <span class="punct">&lt;</span> <span class="param">target</span><span class="punct">:</span></span><span class="line-text">            <span class="var">left</span> <span class="punct">=</span> <span class="var">mid</span> <span class="punct">+</span> <span class="num">1</span></span><span class="line-text">        <span class="flow">else</span><span class="punct">:</span></span><span class="line-text">            <span class="var">right</span> <span class="punct">=</span> <span class="var">mid</span> <span class="punct">-</span> <span class="num">1</span></span><span class="line-text"></span><span class="line-text">    <span class="flow">return</span> <span class="var">left</span>  <span class="comment"># insertion index</span></span></code></pre>
+        </section>
+      </section>
+
+      <!-- PAGE 17: Sorted Arrays & Boundaries -->
+      <section class="page-view" id="bs-arrays-sub" data-topic-title="Binary Search" data-page-title="Sorted Arrays &amp; Boundaries">
+        <header class="topic-heading">
+          <span class="level-tag">Topic 04 · Subcategory 01</span>
+          <h1><span>🎯</span> Sorted Arrays &amp; Boundaries</h1>
+          <p class="topic-summary">Find exact values, determine insertion rankings, or identify start and end ranges using bisect-left and bisect-right invariants.</p>
+        </header>
+
+        <section class="patterns-section">
+          <article class="pattern-card">
+            <div class="pattern-card-head">
+              <h3>Bisect Left / Right &amp; Range Boundaries</h3>
+            </div>
+            <p class="use-when"><strong>Use when:</strong> finding the first occurrence, last occurrence, or valid insertion point of a target in a sorted array.</p>
+            <div class="why-box">
+              <strong>Why it works &amp; Visual Trace</strong>
+              <p>When searching for the first occurrence, finding <code>nums[mid] == target</code> does not stop the search: we set <code>right = mid</code> to continue searching the left half until <code>left == right</code> points to the very first occurrence!</p>
+              <pre class="trace-diagram"><code>nums = [5,  7,  7,  8,  8,  10],  target = 8
+
+Lower Bound (First 8): Predicate nums[mid] &gt;= 8
+[5,  7,  7,  8,  8,  10]
+ F   F   F   T   T    T   -&gt; First True is index 3
+
+Upper Bound (First &gt; 8): Predicate nums[mid] &gt; 8
+[5,  7,  7,  8,  8,  10]
+ F   F   F   F   F    T   -&gt; First True is index 5 -&gt; Last 8 is index 5 - 1 = 4</code></pre>
+            </div>
+            <div class="mini-code-wrap">
+              <button class="copy-button mini-copy" type="button" data-code="bs-arrays-code">Copy</button>
+              <pre class="mini-code" id="bs-arrays-code"><code><span class="line-text"><span class="kw-def">def</span> <span class="fn">searchRange</span><span class="punct">(</span><span class="param">nums</span><span class="punct">:</span> <span class="type">List</span><span class="punct">[</span><span class="type">int</span><span class="punct">],</span> <span class="param">target</span><span class="punct">:</span> <span class="type">int</span><span class="punct">)</span> <span class="punct">-&gt;</span> <span class="type">List</span><span class="punct">[</span><span class="type">int</span><span class="punct">]:</span></span><span class="line-text">    <span class="kw-def">def</span> <span class="fn">findBound</span><span class="punct">(</span><span class="param">is_first</span><span class="punct">:</span> <span class="type">bool</span><span class="punct">)</span> <span class="punct">-&gt;</span> <span class="type">int</span><span class="punct">:</span></span><span class="line-text">        <span class="var">left</span><span class="punct">,</span> <span class="var">right</span> <span class="punct">=</span> <span class="num">0</span><span class="punct">,</span> <span class="fn">len</span><span class="punct">(</span><span class="param">nums</span><span class="punct">)</span></span><span class="line-text">        <span class="flow">while</span> <span class="var">left</span> <span class="punct">&lt;</span> <span class="var">right</span><span class="punct">:</span></span><span class="line-text">            <span class="var">mid</span> <span class="punct">=</span> <span class="var">left</span> <span class="punct">+</span> <span class="punct">(</span><span class="var">right</span> <span class="punct">-</span> <span class="var">left</span><span class="punct">)</span> <span class="punct">//</span> <span class="num">2</span></span><span class="line-text">            <span class="flow">if</span> <span class="param">nums</span><span class="punct">[</span><span class="var">mid</span><span class="punct">]</span> <span class="punct">&gt;</span> <span class="param">target</span> <span class="flow">or</span> <span class="punct">(</span><span class="param">is_first</span> <span class="flow">and</span> <span class="param">nums</span><span class="punct">[</span><span class="var">mid</span><span class="punct">]</span> <span class="punct">==</span> <span class="param">target</span><span class="punct">):</span></span><span class="line-text">                <span class="var">right</span> <span class="punct">=</span> <span class="var">mid</span></span><span class="line-text">            <span class="flow">else</span><span class="punct">:</span></span><span class="line-text">                <span class="var">left</span> <span class="punct">=</span> <span class="var">mid</span> <span class="punct">+</span> <span class="num">1</span></span><span class="line-text">        <span class="flow">return</span> <span class="var">left</span></span></code></pre>
+            </div>
+          </article>
+
+          <!-- Level 3 Sub-Techniques -->
+          <div class="technique-section">
+            <div class="section-heading">
+              <span class="section-kicker">Core Techniques</span>
+              <h2>Sub-Techniques to Recognize</h2>
+            </div>
+            <div class="technique-grid">
+              <div class="technique-card" id="bs-search-insert">
+                <div class="technique-header">
+                  <h4>Search Insert Position</h4>
+                </div>
+                <p>When searching for a target using <code>while left &lt;= right</code>, termination leaves <code>left</code> pointing to the exact index where the target fits in sorted order.</p>
+                <div class="technique-problem">
+                  <span>Practice:</span>
+                  <a href="https://leetcode.com/problems/search-insert-position/" target="_blank" rel="noopener">Search Insert Position ↗</a>
+                </div>
+              </div>
+
+              <div class="technique-card" id="bs-first-last">
+                <div class="technique-header">
+                  <h4>First &amp; Last Position</h4>
+                </div>
+                <p>Run two binary searches: one with <code>nums[mid] &gt;= target</code> to find the first index, and one with <code>nums[mid] &gt; target</code> minus 1 to find the last index.</p>
+                <div class="technique-problem">
+                  <span>Practice:</span>
+                  <a href="https://leetcode.com/problems/find-first-and-last-position-of-element-in-sorted-array/" target="_blank" rel="noopener">First &amp; Last Position ↗</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Practice Problems for this Pattern -->
+          <div class="pattern-problems-section">
+            <div class="section-heading">
+              <span class="section-kicker">Practice Problems</span>
+              <h2>Linked Problems for this Pattern</h2>
+            </div>
+            <div class="pattern-problems-list">
+              <div class="pattern-problem-card">
+                <div class="pattern-problem-top">
+                  <a class="pattern-problem-title" href="https://leetcode.com/problems/binary-search/" target="_blank" rel="noopener">
+                    <span>Binary Search</span>
+                    <span>↗</span>
+                  </a>
+                  <div class="pattern-problem-badges">
+                    <span class="problem-tag">Exact Match</span>
+                    <span class="badge-diff diff-easy">Easy</span>
+                    <span class="actual-diff">Actual: <span class="diff-num">1/5</span></span>
+                  </div>
+                </div>
+                <p class="pattern-problem-takeaway">
+                  <strong>Pattern Takeaway:</strong> Textbook Template 1 with inclusive bounds <code>[left, right]</code>. Check equality at midpoint and shrink by 1.
+                </p>
+              </div>
+
+              <div class="pattern-problem-card">
+                <div class="pattern-problem-top">
+                  <a class="pattern-problem-title" href="https://leetcode.com/problems/search-insert-position/" target="_blank" rel="noopener">
+                    <span>Search Insert Position</span>
+                    <span>↗</span>
+                  </a>
+                  <div class="pattern-problem-badges">
+                    <span class="problem-tag">Insertion Rank</span>
+                    <span class="badge-diff diff-easy">Easy</span>
+                    <span class="actual-diff">Actual: <span class="diff-num">1.5/5</span></span>
+                  </div>
+                </div>
+                <p class="pattern-problem-takeaway">
+                  <strong>Pattern Takeaway:</strong> If target is absent when loop exits (<code>left &gt; right</code>), <code>left</code> is the guaranteed insertion index.
+                </p>
+              </div>
+
+              <div class="pattern-problem-card">
+                <div class="pattern-problem-top">
+                  <a class="pattern-problem-title" href="https://leetcode.com/problems/find-first-and-last-position-of-element-in-sorted-array/" target="_blank" rel="noopener">
+                    <span>First &amp; Last Position of Element</span>
+                    <span>↗</span>
+                  </a>
+                  <div class="pattern-problem-badges">
+                    <span class="problem-tag">Range Search</span>
+                    <span class="badge-diff diff-medium">Medium</span>
+                    <span class="actual-diff">Actual: <span class="diff-num">3/5</span></span>
+                  </div>
+                </div>
+                <p class="pattern-problem-takeaway">
+                  <strong>Pattern Takeaway:</strong> Separate lower bound (<code>nums[mid] &gt;= target</code>) from upper bound (<code>nums[mid] &gt; target</code>) to find contiguous occurrence intervals in O(log n).
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+      </section>
+
+      <!-- PAGE 18: Rotated Arrays & Peaks -->
+      <section class="page-view" id="bs-rotated-sub" data-topic-title="Binary Search" data-page-title="Rotated Arrays &amp; Peaks">
+        <header class="topic-heading">
+          <span class="level-tag">Topic 04 · Subcategory 02</span>
+          <h1><span>🎯</span> Rotated Arrays &amp; Peaks</h1>
+          <p class="topic-summary">Exploit local monotonicity: identify which half is normally sorted or follow the slope gradient to find peaks and pivots.</p>
+        </header>
+
+        <section class="patterns-section">
+          <article class="pattern-card">
+            <div class="pattern-card-head">
+              <h3>Identify the sorted half or slope</h3>
+            </div>
+            <p class="use-when"><strong>Use when:</strong> the array was sorted but rotated at an unknown pivot, or finding a local maximum peak in an unsorted array.</p>
+            <div class="why-box">
+              <strong>Why it works &amp; Visual Trace</strong>
+              <p>Cutting a rotated sorted array in half guarantees that <em>at least one half is strictly sorted</em>! We check whether the target lies inside the sorted half's boundaries; if not, we discard that half and search the other!</p>
+              <pre class="trace-diagram"><code>nums = [4,  5,  6,  7,  0,  1,  2],  target = 0
+
+mid = 3 (val: 7). Compare nums[left=0]=4 with nums[mid]=7:
+4 &lt;= 7 -&gt; Left half [4, 5, 6, 7] is NORMAL SORTED.
+Is target (0) in [4..7]? No! -&gt; Discard left half! -&gt; left = mid + 1 = 4.
+
+Next space: [0,  1,  2] -&gt; mid = 5 (val: 1).
+Compare nums[left=4]=0 with nums[mid]=1:
+0 &lt;= 1 -&gt; Left half [0, 1] is NORMAL SORTED.
+Is target (0) in [0..1]? Yes! -&gt; right = mid - 1 = 4.
+nums[4] == 0 -&gt; Found at index 4!</code></pre>
+            </div>
+            <div class="mini-code-wrap">
+              <button class="copy-button mini-copy" type="button" data-code="bs-rotated-code">Copy</button>
+              <pre class="mini-code" id="bs-rotated-code"><code><span class="line-text"><span class="flow">while</span> <span class="var">left</span> <span class="punct">&lt;=</span> <span class="var">right</span><span class="punct">:</span></span><span class="line-text">    <span class="var">mid</span> <span class="punct">=</span> <span class="var">left</span> <span class="punct">+</span> <span class="punct">(</span><span class="var">right</span> <span class="punct">-</span> <span class="var">left</span><span class="punct">)</span> <span class="punct">//</span> <span class="num">2</span></span><span class="line-text">    <span class="flow">if</span> <span class="param">nums</span><span class="punct">[</span><span class="var">mid</span><span class="punct">]</span> <span class="punct">==</span> <span class="param">target</span><span class="punct">:</span> <span class="flow">return</span> <span class="var">mid</span></span><span class="line-text">    <span class="flow">if</span> <span class="param">nums</span><span class="punct">[</span><span class="var">left</span><span class="punct">]</span> <span class="punct">&lt;=</span> <span class="param">nums</span><span class="punct">[</span><span class="var">mid</span><span class="punct">]:</span>  <span class="comment"># left half sorted</span></span><span class="line-text">        <span class="flow">if</span> <span class="param">nums</span><span class="punct">[</span><span class="var">left</span><span class="punct">]</span> <span class="punct">&lt;=</span> <span class="param">target</span> <span class="punct">&lt;</span> <span class="param">nums</span><span class="punct">[</span><span class="var">mid</span><span class="punct">]:</span> <span class="var">right</span> <span class="punct">=</span> <span class="var">mid</span> <span class="punct">-</span> <span class="num">1</span></span><span class="line-text">        <span class="flow">else</span><span class="punct">:</span> <span class="var">left</span> <span class="punct">=</span> <span class="var">mid</span> <span class="punct">+</span> <span class="num">1</span></span><span class="line-text">    <span class="flow">else</span><span class="punct">:</span>  <span class="comment"># right half sorted</span></span><span class="line-text">        <span class="flow">if</span> <span class="param">nums</span><span class="punct">[</span><span class="var">mid</span><span class="punct">]</span> <span class="punct">&lt;</span> <span class="param">target</span> <span class="punct">&lt;=</span> <span class="param">nums</span><span class="punct">[</span><span class="var">right</span><span class="punct">]:</span> <span class="var">left</span> <span class="punct">=</span> <span class="var">mid</span> <span class="punct">+</span> <span class="num">1</span></span><span class="line-text">        <span class="flow">else</span><span class="punct">:</span> <span class="var">right</span> <span class="punct">=</span> <span class="var">mid</span> <span class="punct">-</span> <span class="num">1</span></span></code></pre>
+            </div>
+          </article>
+
+          <!-- Level 3 Sub-Techniques -->
+          <div class="technique-section">
+            <div class="section-heading">
+              <span class="section-kicker">Core Techniques</span>
+              <h2>Sub-Techniques to Recognize</h2>
+            </div>
+            <div class="technique-grid">
+              <div class="technique-card" id="bs-rotated">
+                <div class="technique-header">
+                  <h4>Search in Rotated Array</h4>
+                </div>
+                <p>Determine which half is sorted by comparing <code>nums[left] &lt;= nums[mid]</code>. Test if target lies within the sorted half's bounds to eliminate half the array.</p>
+                <div class="technique-problem">
+                  <span>Practice:</span>
+                  <a href="https://leetcode.com/problems/search-in-rotated-sorted-array/" target="_blank" rel="noopener">Search in Rotated Array ↗</a>
+                </div>
+              </div>
+
+              <div class="technique-card" id="bs-peak">
+                <div class="technique-header">
+                  <h4>Find Peak Element (Slope)</h4>
+                </div>
+                <p>Compare <code>nums[mid] &lt; nums[mid+1]</code>. If uphill, a peak is guaranteed to exist on the right (<code>left = mid + 1</code>); if downhill, a peak exists on the left (<code>right = mid</code>).</p>
+                <div class="technique-problem">
+                  <span>Practice:</span>
+                  <a href="https://leetcode.com/problems/find-peak-element/" target="_blank" rel="noopener">Find Peak Element ↗</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Practice Problems for this Pattern -->
+          <div class="pattern-problems-section">
+            <div class="section-heading">
+              <span class="section-kicker">Practice Problems</span>
+              <h2>Linked Problems for this Pattern</h2>
+            </div>
+            <div class="pattern-problems-list">
+              <div class="pattern-problem-card">
+                <div class="pattern-problem-top">
+                  <a class="pattern-problem-title" href="https://leetcode.com/problems/search-in-rotated-sorted-array/" target="_blank" rel="noopener">
+                    <span>Search in Rotated Sorted Array</span>
+                    <span>↗</span>
+                  </a>
+                  <div class="pattern-problem-badges">
+                    <span class="problem-tag">Rotated Pivot</span>
+                    <span class="badge-diff diff-medium">Medium</span>
+                    <span class="actual-diff">Actual: <span class="diff-num">3.5/5</span></span>
+                  </div>
+                </div>
+                <p class="pattern-problem-takeaway">
+                  <strong>Pattern Takeaway:</strong> One half is always sorted. Check if target lies within the sorted half to discard the other half safely.
+                </p>
+              </div>
+
+              <div class="pattern-problem-card">
+                <div class="pattern-problem-top">
+                  <a class="pattern-problem-title" href="https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/" target="_blank" rel="noopener">
+                    <span>Find Minimum in Rotated Sorted Array</span>
+                    <span>↗</span>
+                  </a>
+                  <div class="pattern-problem-badges">
+                    <span class="problem-tag">Pivot Inflection</span>
+                    <span class="badge-diff diff-medium">Medium</span>
+                    <span class="actual-diff">Actual: <span class="diff-num">3/5</span></span>
+                  </div>
+                </div>
+                <p class="pattern-problem-takeaway">
+                  <strong>Pattern Takeaway:</strong> Compare <code>nums[mid]</code> against <code>nums[right]</code>. If <code>nums[mid] &gt; nums[right]</code>, pivot is to the right (<code>left = mid + 1</code>); else <code>right = mid</code>.
+                </p>
+              </div>
+
+              <div class="pattern-problem-card">
+                <div class="pattern-problem-top">
+                  <a class="pattern-problem-title" href="https://leetcode.com/problems/find-peak-element/" target="_blank" rel="noopener">
+                    <span>Find Peak Element</span>
+                    <span>↗</span>
+                  </a>
+                  <div class="pattern-problem-badges">
+                    <span class="problem-tag">Gradient Ascent</span>
+                    <span class="badge-diff diff-medium">Medium</span>
+                    <span class="actual-diff">Actual: <span class="diff-num">3/5</span></span>
+                  </div>
+                </div>
+                <p class="pattern-problem-takeaway">
+                  <strong>Pattern Takeaway:</strong> Walk uphill: if <code>nums[mid] &lt; nums[mid+1]</code>, a peak is guaranteed to the right. Template 2 converges directly on a local maximum.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+      </section>
+
+      <!-- PAGE 19: Search on Solution Space -->
+      <section class="page-view" id="bs-answer-sub" data-topic-title="Binary Search" data-page-title="Search on Solution Space">
+        <header class="topic-heading">
+          <span class="level-tag">Topic 04 · Subcategory 03</span>
+          <h1><span>🎯</span> Search on Solution Space</h1>
+          <p class="topic-summary">When the answer range is bounded and monotonic, binary search the numerical solution space using a feasibility predicate check(mid).</p>
+        </header>
+
+        <section class="patterns-section">
+          <article class="pattern-card">
+            <div class="pattern-card-head">
+              <h3>Binary search the answer with check(mid)</h3>
+            </div>
+            <p class="use-when"><strong>Use when:</strong> problem asks for the "minimum capacity", "minimum speed", "maximum distance", or "minimum largest sum" across partitions.</p>
+            <div class="why-box">
+              <strong>Why it works &amp; Visual Trace</strong>
+              <p>We do not search the array itself. We search the numerical answer range $[min\_ans, max\_ans]$. A greedy feasibility function <code>canFinish(mid)</code> creates a monotonic boolean sequence $[F, \dots, F, T, \dots, T]$; Template 2 finds the boundary in $O(n \log(\text{range}))$.</p>
+              <pre class="trace-diagram"><code>piles = [3,  6,  7,  11],  h = 8 hours
+Speed k range: [1, max(piles)=11]
+
+k:          1   2   3   4   5   6   7   8   9  10  11
+canFinish:  F   F   F   T   T   T   T   T   T   T   T
+                        ^
+      First True is k = 4 (Minimal feasible eating speed!)</code></pre>
+            </div>
+            <div class="mini-code-wrap">
+              <button class="copy-button mini-copy" type="button" data-code="bs-answer-code">Copy</button>
+              <pre class="mini-code" id="bs-answer-code"><code><span class="line-text"><span class="kw-def">def</span> <span class="fn">minEatingSpeed</span><span class="punct">(</span><span class="param">piles</span><span class="punct">:</span> <span class="type">List</span><span class="punct">[</span><span class="type">int</span><span class="punct">],</span> <span class="param">h</span><span class="punct">:</span> <span class="type">int</span><span class="punct">)</span> <span class="punct">-&gt;</span> <span class="type">int</span><span class="punct">:</span></span><span class="line-text">    <span class="var">left</span><span class="punct">,</span> <span class="var">right</span> <span class="punct">=</span> <span class="num">1</span><span class="punct">,</span> <span class="fn">max</span><span class="punct">(</span><span class="param">piles</span><span class="punct">)</span></span><span class="line-text"></span><span class="line-text">    <span class="flow">while</span> <span class="var">left</span> <span class="punct">&lt;</span> <span class="var">right</span><span class="punct">:</span></span><span class="line-text">        <span class="var">mid</span> <span class="punct">=</span> <span class="var">left</span> <span class="punct">+</span> <span class="punct">(</span><span class="var">right</span> <span class="punct">-</span> <span class="var">left</span><span class="punct">)</span> <span class="punct">//</span> <span class="num">2</span></span><span class="line-text">        <span class="var">hours</span> <span class="punct">=</span> <span class="fn">sum</span><span class="punct">((</span><span class="var">p</span> <span class="punct">+</span> <span class="var">mid</span> <span class="punct">-</span> <span class="num">1</span><span class="punct">)</span> <span class="punct">//</span> <span class="var">mid</span> <span class="flow">for</span> <span class="var">p</span> <span class="flow">in</span> <span class="param">piles</span><span class="punct">)</span></span><span class="line-text">        <span class="flow">if</span> <span class="var">hours</span> <span class="punct">&lt;=</span> <span class="param">h</span><span class="punct">:</span> <span class="var">right</span> <span class="punct">=</span> <span class="var">mid</span></span><span class="line-text">        <span class="flow">else</span><span class="punct">:</span> <span class="var">left</span> <span class="punct">=</span> <span class="var">mid</span> <span class="punct">+</span> <span class="num">1</span></span><span class="line-text"></span><span class="line-text">    <span class="flow">return</span> <span class="var">left</span></span></code></pre>
+            </div>
+          </article>
+
+          <!-- Level 3 Sub-Techniques -->
+          <div class="technique-section">
+            <div class="section-heading">
+              <span class="section-kicker">Core Techniques</span>
+              <h2>Sub-Techniques to Recognize</h2>
+            </div>
+            <div class="technique-grid">
+              <div class="technique-card" id="bs-koko">
+                <div class="technique-header">
+                  <h4>Koko Eating Bananas</h4>
+                </div>
+                <p>Define speed range <code>[1, max(piles)]</code>. Sum ceiling hours per pile. If total hours $\le h$, speed is feasible—shrink right bound to seek smaller speeds.</p>
+                <div class="technique-problem">
+                  <span>Practice:</span>
+                  <a href="https://leetcode.com/problems/koko-eating-bananas/" target="_blank" rel="noopener">Koko Eating Bananas ↗</a>
+                </div>
+              </div>
+
+              <div class="technique-card" id="bs-capacity">
+                <div class="technique-header">
+                  <h4>Capacity to Ship Packages</h4>
+                </div>
+                <p>Define capacity range <code>[max(weights), sum(weights)]</code>. Greedily count days needed. If days $\le D$, capacity is feasible (<code>right = mid</code>).</p>
+                <div class="technique-problem">
+                  <span>Practice:</span>
+                  <a href="https://leetcode.com/problems/capacity-to-ship-packages-within-d-days/" target="_blank" rel="noopener">Capacity to Ship ↗</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Practice Problems for this Pattern -->
+          <div class="pattern-problems-section">
+            <div class="section-heading">
+              <span class="section-kicker">Practice Problems</span>
+              <h2>Linked Problems for this Pattern</h2>
+            </div>
+            <div class="pattern-problems-list">
+              <div class="pattern-problem-card">
+                <div class="pattern-problem-top">
+                  <a class="pattern-problem-title" href="https://leetcode.com/problems/koko-eating-bananas/" target="_blank" rel="noopener">
+                    <span>Koko Eating Bananas</span>
+                    <span>↗</span>
+                  </a>
+                  <div class="pattern-problem-badges">
+                    <span class="problem-tag">BS on Answer</span>
+                    <span class="badge-diff diff-medium">Medium</span>
+                    <span class="actual-diff">Actual: <span class="diff-num">3.5/5</span></span>
+                  </div>
+                </div>
+                <p class="pattern-problem-takeaway">
+                  <strong>Pattern Takeaway:</strong> Feasibility function is monotonic: faster speed always takes $\le$ hours. Template 2 finds the minimal feasible rate.
+                </p>
+              </div>
+
+              <div class="pattern-problem-card">
+                <div class="pattern-problem-top">
+                  <a class="pattern-problem-title" href="https://leetcode.com/problems/capacity-to-ship-packages-within-d-days/" target="_blank" rel="noopener">
+                    <span>Capacity to Ship Packages</span>
+                    <span>↗</span>
+                  </a>
+                  <div class="pattern-problem-badges">
+                    <span class="problem-tag">Greedy Feasibility</span>
+                    <span class="badge-diff diff-medium">Medium</span>
+                    <span class="actual-diff">Actual: <span class="diff-num">3.5/5</span></span>
+                  </div>
+                </div>
+                <p class="pattern-problem-takeaway">
+                  <strong>Pattern Takeaway:</strong> Lower bound is <code>max(weights)</code> (must carry heaviest package); upper bound is <code>sum(weights)</code>. Greedy check determines feasibility.
+                </p>
+              </div>
+
+              <div class="pattern-problem-card">
+                <div class="pattern-problem-top">
+                  <a class="pattern-problem-title" href="https://leetcode.com/problems/split-array-largest-sum/" target="_blank" rel="noopener">
+                    <span>Split Array Largest Sum</span>
+                    <span>↗</span>
+                  </a>
+                  <div class="pattern-problem-badges">
+                    <span class="problem-tag">Minimax Partition</span>
+                    <span class="badge-diff diff-hard">Hard</span>
+                    <span class="actual-diff">Actual: <span class="diff-num">4.5/5</span></span>
+                  </div>
+                </div>
+                <p class="pattern-problem-takeaway">
+                  <strong>Pattern Takeaway:</strong> Minimax optimization: binary search the maximum allowable subarray sum, greedily partitioning into $\le k$ subarrays.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+      </section>
+
+      <!-- PAGE 20: Binary Search Practice Problems -->
+      <section class="page-view" id="bs-reference" data-topic-title="Binary Search" data-page-title="Practice Problems">
+        <header class="topic-heading">
+          <span class="level-tag">Topic 04 · Problem Directory</span>
+          <h1><span>🎯</span> Binary Search: Practice Problems</h1>
+          <p class="topic-summary">Targeted LeetCode practice problems from the official study plan mapped to standard search, rotated arrays, and solution space optimization.</p>
+        </header>
+
+        <section class="reference-section">
+          <div class="reference-header">
+            <h2 id="bs-reference-title">Problem Reference List</h2>
+            <p>Every problem is categorized with its official LeetCode tag, official difficulty, and actual problem complexity rating (1 to 5).</p>
+          </div>
+
+          <ul class="reference-list" aria-labelledby="bs-reference-title">
+            <li>
+              <div class="ref-left">
+                <a class="prob-link" href="https://leetcode.com/problems/binary-search/" target="_blank" rel="noopener">Binary Search ↗</a>
+              </div>
+              <div class="ref-right">
+                <span class="problem-tag">Exact Match</span>
+                <span class="badge-diff diff-easy">Easy</span>
+                <span class="actual-diff">Actual: <span class="diff-num">1/5</span></span>
+                <a class="pattern-ref-link" href="#bs-arrays-sub">View Pattern →</a>
+              </div>
+            </li>
+            <li>
+              <div class="ref-left">
+                <a class="prob-link" href="https://leetcode.com/problems/search-insert-position/" target="_blank" rel="noopener">Search Insert Position ↗</a>
+              </div>
+              <div class="ref-right">
+                <span class="problem-tag">Insertion Rank</span>
+                <span class="badge-diff diff-easy">Easy</span>
+                <span class="actual-diff">Actual: <span class="diff-num">1.5/5</span></span>
+                <a class="pattern-ref-link" href="#bs-arrays-sub">View Pattern →</a>
+              </div>
+            </li>
+            <li>
+              <div class="ref-left">
+                <a class="prob-link" href="https://leetcode.com/problems/find-first-and-last-position-of-element-in-sorted-array/" target="_blank" rel="noopener">Find First &amp; Last Position ↗</a>
+              </div>
+              <div class="ref-right">
+                <span class="problem-tag">Range Search</span>
+                <span class="badge-diff diff-medium">Medium</span>
+                <span class="actual-diff">Actual: <span class="diff-num">3/5</span></span>
+                <a class="pattern-ref-link" href="#bs-arrays-sub">View Pattern →</a>
+              </div>
+            </li>
+            <li>
+              <div class="ref-left">
+                <a class="prob-link" href="https://leetcode.com/problems/search-in-rotated-sorted-array/" target="_blank" rel="noopener">Search in Rotated Sorted Array ↗</a>
+              </div>
+              <div class="ref-right">
+                <span class="problem-tag">Rotated Pivot</span>
+                <span class="badge-diff diff-medium">Medium</span>
+                <span class="actual-diff">Actual: <span class="diff-num">3.5/5</span></span>
+                <a class="pattern-ref-link" href="#bs-rotated-sub">View Pattern →</a>
+              </div>
+            </li>
+            <li>
+              <div class="ref-left">
+                <a class="prob-link" href="https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/" target="_blank" rel="noopener">Find Minimum in Rotated Array ↗</a>
+              </div>
+              <div class="ref-right">
+                <span class="problem-tag">Pivot Inflection</span>
+                <span class="badge-diff diff-medium">Medium</span>
+                <span class="actual-diff">Actual: <span class="diff-num">3/5</span></span>
+                <a class="pattern-ref-link" href="#bs-rotated-sub">View Pattern →</a>
+              </div>
+            </li>
+            <li>
+              <div class="ref-left">
+                <a class="prob-link" href="https://leetcode.com/problems/find-peak-element/" target="_blank" rel="noopener">Find Peak Element ↗</a>
+              </div>
+              <div class="ref-right">
+                <span class="problem-tag">Gradient Ascent</span>
+                <span class="badge-diff diff-medium">Medium</span>
+                <span class="actual-diff">Actual: <span class="diff-num">3/5</span></span>
+                <a class="pattern-ref-link" href="#bs-rotated-sub">View Pattern →</a>
+              </div>
+            </li>
+            <li>
+              <div class="ref-left">
+                <a class="prob-link" href="https://leetcode.com/problems/single-element-in-a-sorted-array/" target="_blank" rel="noopener">Single Element in Sorted Array ↗</a>
+              </div>
+              <div class="ref-right">
+                <span class="problem-tag">Parity Invariant</span>
+                <span class="badge-diff diff-medium">Medium</span>
+                <span class="actual-diff">Actual: <span class="diff-num">3/5</span></span>
+                <a class="pattern-ref-link" href="#bs-rotated-sub">View Pattern →</a>
+              </div>
+            </li>
+            <li>
+              <div class="ref-left">
+                <a class="prob-link" href="https://leetcode.com/problems/koko-eating-bananas/" target="_blank" rel="noopener">Koko Eating Bananas ↗</a>
+              </div>
+              <div class="ref-right">
+                <span class="problem-tag">BS on Answer</span>
+                <span class="badge-diff diff-medium">Medium</span>
+                <span class="actual-diff">Actual: <span class="diff-num">3.5/5</span></span>
+                <a class="pattern-ref-link" href="#bs-answer-sub">View Pattern →</a>
+              </div>
+            </li>
+            <li>
+              <div class="ref-left">
+                <a class="prob-link" href="https://leetcode.com/problems/capacity-to-ship-packages-within-d-days/" target="_blank" rel="noopener">Capacity to Ship Packages ↗</a>
+              </div>
+              <div class="ref-right">
+                <span class="problem-tag">Greedy Feasibility</span>
+                <span class="badge-diff diff-medium">Medium</span>
+                <span class="actual-diff">Actual: <span class="diff-num">3.5/5</span></span>
+                <a class="pattern-ref-link" href="#bs-answer-sub">View Pattern →</a>
+              </div>
+            </li>
+            <li>
+              <div class="ref-left">
+                <a class="prob-link" href="https://leetcode.com/problems/split-array-largest-sum/" target="_blank" rel="noopener">Split Array Largest Sum ↗</a>
+              </div>
+              <div class="ref-right">
+                <span class="problem-tag">Minimax Partition</span>
+                <span class="badge-diff diff-hard">Hard</span>
+                <span class="actual-diff">Actual: <span class="diff-num">4.5/5</span></span>
+                <a class="pattern-ref-link" href="#bs-answer-sub">View Pattern →</a>
+              </div>
+            </li>
+            <li>
+              <div class="ref-left">
+                <a class="prob-link" href="https://leetcode.com/problems/minimum-time-to-complete-trips/" target="_blank" rel="noopener">Min Time to Complete Trips ↗</a>
+              </div>
+              <div class="ref-right">
+                <span class="problem-tag">Trip Feasibility</span>
+                <span class="badge-diff diff-medium">Medium</span>
+                <span class="actual-diff">Actual: <span class="diff-num">3.5/5</span></span>
+                <a class="pattern-ref-link" href="#bs-answer-sub">View Pattern →</a>
+              </div>
+            </li>
+            <li>
+              <div class="ref-left">
+                <a class="prob-link" href="https://leetcode.com/problems/median-of-two-sorted-arrays/" target="_blank" rel="noopener">Median of Two Sorted Arrays ↗</a>
+              </div>
+              <div class="ref-right">
+                <span class="problem-tag">Partition Halves</span>
+                <span class="badge-diff diff-hard">Hard</span>
+                <span class="actual-diff">Actual: <span class="diff-num">5/5</span></span>
+                <a class="pattern-ref-link" href="#bs-arrays-sub">View Pattern →</a>
               </div>
             </li>
           </ul>
