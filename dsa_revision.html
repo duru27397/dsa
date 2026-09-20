@@ -229,6 +229,7 @@ body {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  min-width: 0;
 }
 
 /* Clean Topbar */
@@ -284,6 +285,19 @@ body {
   gap: 0.5rem;
 }
 
+.mobile-menu-btn {
+  display: none;
+  align-items: center;
+  gap: 0.35rem;
+  background: transparent;
+  border: 1px solid var(--lc-border);
+  color: var(--lc-text-secondary);
+  padding: 0.3rem 0.55rem;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.76rem;
+}
+.mobile-menu-btn:hover { background: var(--lc-bg-card-hover); color: var(--lc-text-primary); }
 
 
 
@@ -298,6 +312,19 @@ body {
   display: flex;
   flex-direction: column;
   gap: 3.5rem;
+}
+
+/* Keep the revision guide as one readable vertical stream. */
+#main-content {
+  flex: 0 1 auto;
+  flex-direction: column !important;
+  align-items: stretch;
+  min-width: 0;
+}
+#main-content > .topic-section {
+  width: 100%;
+  min-width: 0;
+  flex: 0 0 auto;
 }
 
 .topic-section {
@@ -543,6 +570,7 @@ body {
   #sidebar { transform: translateX(-100%); }
   #sidebar.open { transform: translateX(0); box-shadow: 4px 0 24px rgba(0,0,0,0.8); }
   .sidebar-close-btn { display: flex; }
+  .mobile-menu-btn { display: inline-flex; }
   #main-wrapper { margin-left: 0; }
   .main-content { padding: 1.5rem 1rem 4rem 1rem; }
 }
@@ -2270,6 +2298,11 @@ tr.prob-highlight {
         </a>
         <span class="topbar-divider">/</span>
         <div class="current-topic-heading" id="topbar-topic-heading">Arrays &amp; Hashing</div>
+      </div>
+      <div class="topbar-right">
+        <button class="mobile-menu-btn" onclick="toggleSidebar()" aria-label="Open topic navigation">
+          ☰ Topics
+        </button>
       </div>
     </header>
 
@@ -7920,10 +7953,10 @@ tr.prob-highlight {
     }
 
     function expandAllSidebar() {
-      document.querySelectorAll(".sb-topic-node").forEach(n => n.classList.remove("collapsed"));
+      document.querySelectorAll(".sb-topic-node, .sb-subtopic-node").forEach(n => n.classList.remove("collapsed"));
     }
     function collapseAllSidebar() {
-      document.querySelectorAll(".sb-topic-node").forEach(n => n.classList.add("collapsed"));
+      document.querySelectorAll(".sb-topic-node, .sb-subtopic-node").forEach(n => n.classList.add("collapsed"));
     }
 
     function copyBlueprint(containerId, btn) {
@@ -7947,36 +7980,34 @@ tr.prob-highlight {
 
     function filterSidebar(q) {
       const query = q.trim().toLowerCase();
-      const nodes = document.querySelectorAll(".sb-topic-node");
+      const topicNodes = document.querySelectorAll(".sb-topic-node");
 
-      if (!query) {
-        nodes.forEach(n => {
-          n.style.display = "";
-          n.querySelectorAll(".sb-subtopic-link").forEach(l => l.style.display = "");
+      topicNodes.forEach(topicNode => {
+        const topicTitle = topicNode.querySelector(".sb-topic-title");
+        const topicMatches = topicTitle && topicTitle.textContent.toLowerCase().includes(query);
+        let hasVisibleSubtopic = false;
+
+        topicNode.querySelectorAll(".sb-subtopic-node").forEach(subtopicNode => {
+          const subtopicTitle = subtopicNode.querySelector(".sb-subtopic-title");
+          const subtopicMatches = subtopicTitle && subtopicTitle.textContent.toLowerCase().includes(query);
+          let hasVisibleProblem = false;
+
+          subtopicNode.querySelectorAll(".sb-problem-item").forEach(problemLink => {
+            const problemMatches = problemLink.textContent.toLowerCase().includes(query);
+            const visible = !query || topicMatches || subtopicMatches || problemMatches;
+            problemLink.style.display = visible ? "flex" : "none";
+            hasVisibleProblem = hasVisibleProblem || visible;
+          });
+
+          const visible = !query || topicMatches || subtopicMatches || hasVisibleProblem;
+          subtopicNode.style.display = visible ? "" : "none";
+          if (visible && query) subtopicNode.classList.remove("collapsed");
+          hasVisibleSubtopic = hasVisibleSubtopic || visible;
         });
-        return;
-      }
 
-      expandAllSidebar();
-
-      nodes.forEach(node => {
-        const topicText = node.querySelector(".sb-topic-head").innerText.toLowerCase();
-        let anySubMatch = false;
-
-        node.querySelectorAll(".sb-subtopic-link").forEach(link => {
-          if (link.innerText.toLowerCase().includes(query)) {
-            link.style.display = "flex";
-            anySubMatch = true;
-          } else {
-            link.style.display = "none";
-          }
-        });
-
-        if (anySubMatch || topicText.includes(query)) {
-          node.style.display = "";
-        } else {
-          node.style.display = "none";
-        }
+        const visible = !query || topicMatches || hasVisibleSubtopic;
+        topicNode.style.display = visible ? "" : "none";
+        if (visible && query) topicNode.classList.remove("collapsed");
       });
     }
 
