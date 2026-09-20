@@ -223,6 +223,109 @@
           </div>
         </div>
       </div>
+
+      <!-- LEVEL 1 (Category A): Stack & Queue -->
+      <div class="tree-node l1-node" data-topic="stack-queue">
+        <div class="tree-header l1-header">
+          <button class="tree-toggle" type="button" aria-label="Toggle Stack &amp; Queue">
+            <span class="chevron">▸</span>
+          </button>
+          <a class="nav-item l1-link" href="#stack-blueprint">
+            <span class="topic-icon">🥞</span>
+            <span class="nav-title">Stack &amp; Queue</span>
+          </a>
+        </div>
+
+        <!-- LEVEL 2 (Subcategory B): Subtopics under Stack & Queue -->
+        <div class="tree-children l2-children">
+          <!-- Blueprint -->
+          <div class="tree-node l2-node">
+            <div class="tree-header l2-header">
+              <a class="nav-item l2-link" href="#stack-blueprint">
+                <span class="nav-title">Overview &amp; Blueprint</span>
+              </a>
+            </div>
+          </div>
+
+          <!-- Subcategory 1: LIFO & FIFO Fundamentals -->
+          <div class="tree-node l2-node">
+            <div class="tree-header l2-header">
+              <button class="tree-toggle" type="button" aria-label="Toggle LIFO &amp; FIFO Fundamentals">
+                <span class="chevron">▸</span>
+              </button>
+              <a class="nav-item l2-link" href="#stack-fundamental-sub">
+                <span class="nav-title">LIFO &amp; FIFO Fundamentals</span>
+              </a>
+            </div>
+            <!-- LEVEL 3 (Topic / Technique C) -->
+            <div class="tree-children l3-children">
+              <a class="nav-item l3-link" href="#stack-fundamental-sub" data-target-sub="stack-parentheses">
+                <span class="leaf-dot">•</span>
+                <span class="nav-title">Matching Parentheses</span>
+              </a>
+              <a class="nav-item l3-link" href="#stack-fundamental-sub" data-target-sub="queue-bfs">
+                <span class="leaf-dot">•</span>
+                <span class="nav-title">Queue &amp; Deque BFS</span>
+              </a>
+            </div>
+          </div>
+
+          <!-- Subcategory 2: Monotonic Stack -->
+          <div class="tree-node l2-node">
+            <div class="tree-header l2-header">
+              <button class="tree-toggle" type="button" aria-label="Toggle Monotonic Stack">
+                <span class="chevron">▸</span>
+              </button>
+              <a class="nav-item l2-link" href="#stack-monotonic-sub">
+                <span class="nav-title">Monotonic Stack</span>
+              </a>
+            </div>
+            <!-- LEVEL 3 (Topic / Technique C) -->
+            <div class="tree-children l3-children">
+              <a class="nav-item l3-link" href="#stack-monotonic-sub" data-target-sub="stack-next-greater">
+                <span class="leaf-dot">•</span>
+                <span class="nav-title">Next Greater Element</span>
+              </a>
+              <a class="nav-item l3-link" href="#stack-monotonic-sub" data-target-sub="stack-histogram">
+                <span class="leaf-dot">•</span>
+                <span class="nav-title">Histogram &amp; Trapping</span>
+              </a>
+            </div>
+          </div>
+
+          <!-- Subcategory 3: Monotonic Queue & Deque -->
+          <div class="tree-node l2-node">
+            <div class="tree-header l2-header">
+              <button class="tree-toggle" type="button" aria-label="Toggle Monotonic Queue &amp; Deque">
+                <span class="chevron">▸</span>
+              </button>
+              <a class="nav-item l2-link" href="#queue-monotonic-sub">
+                <span class="nav-title">Monotonic Queue &amp; Deque</span>
+              </a>
+            </div>
+            <!-- LEVEL 3 (Topic / Technique C) -->
+            <div class="tree-children l3-children">
+              <a class="nav-item l3-link" href="#queue-monotonic-sub" data-target-sub="queue-sliding-max">
+                <span class="leaf-dot">•</span>
+                <span class="nav-title">Sliding Window Maximum</span>
+              </a>
+              <a class="nav-item l3-link" href="#queue-monotonic-sub" data-target-sub="queue-constrained">
+                <span class="leaf-dot">•</span>
+                <span class="nav-title">Monotonic Prefix Deque</span>
+              </a>
+            </div>
+          </div>
+
+          <!-- Subcategory 4: Practice Problems -->
+          <div class="tree-node l2-node">
+            <div class="tree-header l2-header">
+              <a class="nav-item l2-link" href="#stack-reference">
+                <span class="nav-title">Practice Problems</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
     </nav>
   </aside>
 
@@ -1042,6 +1145,519 @@
                 <span class="badge-diff diff-medium">Medium</span>
                 <span class="actual-diff">Actual: <span class="diff-num">4/5</span></span>
                 <a class="pattern-ref-link" href="#dp-sequence-sub">View Pattern →</a>
+              </div>
+            </li>
+          </ul>
+        </section>
+      </section>
+
+      <!-- ========================================== -->
+      <!-- TOPIC 3: STACK & QUEUE PAGES               -->
+      <!-- ========================================== -->
+
+      <!-- PAGE 11: Stack & Queue Blueprint -->
+      <section class="page-view" id="stack-blueprint" data-topic-title="Stack &amp; Queue" data-page-title="Overview &amp; Blueprint">
+        <header class="topic-heading">
+          <span class="level-tag">Topic 03 · Ordered State &amp; Windows</span>
+          <h1><span>🥞</span> Stack &amp; Queue: Overview &amp; Blueprint</h1>
+          <p class="topic-summary">Use LIFO order for nested/backtracking state and FIFO/deque for ordered streams; apply monotonic invariants to eliminate dominated candidates in O(1) amortized time.</p>
+        </header>
+
+        <section class="blueprint-card" aria-labelledby="stack-blueprint-title">
+          <div class="blueprint-head">
+            <span class="language-pill" id="stack-blueprint-title">Python 3 ▾</span>
+            <button class="copy-button" type="button" data-code="stack-code"><span>📋</span> Copy</button>
+          </div>
+          <pre class="code-block" id="stack-code"><code><span class="line-text"><span class="flow">from</span> <span class="param">collections</span> <span class="flow">import</span> <span class="fn">deque</span></span><span class="line-text"></span><span class="line-text"><span class="kw-def">def</span> <span class="fn">processMonotonic</span><span class="punct">(</span><span class="param">nums</span><span class="punct">:</span> <span class="type">List</span><span class="punct">[</span><span class="type">int</span><span class="punct">],</span> <span class="param">k</span><span class="punct">:</span> <span class="type">int</span><span class="punct">)</span> <span class="punct">-&gt;</span> <span class="type">List</span><span class="punct">[</span><span class="type">int</span><span class="punct">]:</span></span><span class="line-text">    <span class="docstr">"""</span></span><span class="line-text">    <span class="docstr">Stack &amp; Queue Invariants</span></span><span class="line-text">    <span class="docstr">------------------------</span></span><span class="line-text">    <span class="docstr">1. Monotonic Stack (Next Greater):</span></span><span class="line-text">    <span class="docstr">   nums:   [2,  1,  2,  4,  3]</span></span><span class="line-text">    <span class="docstr">   stack:  [4] (stores candidates; pops smaller items)</span></span><span class="line-text">    <span class="docstr">   result: [4,  2,  4, -1, -1]</span></span><span class="line-text"></span><span class="line-text">    <span class="docstr">2. Monotonic Deque (Sliding Window Max, k=3):</span></span><span class="line-text">    <span class="docstr">   window: [1, 3, -1] -&gt; deque: [3, -1] -&gt; max: 3</span></span><span class="line-text">    <span class="docstr">   Next 5: 3 and -1 are smaller &amp; older -&gt; pop -&gt; deque: [5]</span></span><span class="line-text">    <span class="docstr">"""</span></span><span class="line-text"></span><span class="line-text">    <span class="comment"># Monotonic Decreasing Stack: Next Greater Element</span></span><span class="line-text">    <span class="var">n</span> <span class="punct">=</span> <span class="fn">len</span><span class="punct">(</span><span class="param">nums</span><span class="punct">)</span></span><span class="line-text">    <span class="var">next_greater</span> <span class="punct">=</span> <span class="punct">[-</span><span class="num">1</span><span class="punct">]</span> <span class="punct">*</span> <span class="var">n</span></span><span class="line-text">    <span class="var">stack</span> <span class="punct">=</span> <span class="punct">[]</span>  <span class="comment"># stores indices</span></span><span class="line-text"></span><span class="line-text">    <span class="flow">for</span> <span class="var">i</span><span class="punct">,</span> <span class="var">val</span> <span class="flow">in</span> <span class="fn">enumerate</span><span class="punct">(</span><span class="param">nums</span><span class="punct">):</span></span><span class="line-text">        <span class="flow">while</span> <span class="var">stack</span> <span class="flow">and</span> <span class="param">nums</span><span class="punct">[</span><span class="var">stack</span><span class="punct">[-</span><span class="num">1</span><span class="punct">]]</span> <span class="punct">&lt;</span> <span class="var">val</span><span class="punct">:</span></span><span class="line-text">            <span class="var">prev_idx</span> <span class="punct">=</span> <span class="var">stack</span><span class="punct">.</span><span class="fn">pop</span><span class="punct">()</span></span><span class="line-text">            <span class="var">next_greater</span><span class="punct">[</span><span class="var">prev_idx</span><span class="punct">]</span> <span class="punct">=</span> <span class="var">val</span></span><span class="line-text">        <span class="var">stack</span><span class="punct">.</span><span class="fn">append</span><span class="punct">(</span><span class="var">i</span><span class="punct">)</span></span><span class="line-text"></span><span class="line-text">    <span class="flow">return</span> <span class="var">next_greater</span></span></code></pre>
+        </section>
+      </section>
+
+      <!-- PAGE 12: LIFO & FIFO Fundamentals -->
+      <section class="page-view" id="stack-fundamental-sub" data-topic-title="Stack &amp; Queue" data-page-title="LIFO &amp; FIFO Fundamentals">
+        <header class="topic-heading">
+          <span class="level-tag">Topic 03 · Subcategory 01</span>
+          <h1><span>🥞</span> LIFO &amp; FIFO Fundamentals</h1>
+          <p class="topic-summary">Manage context reversals and ordered arrival streams using Python lists as LIFO stacks and collections.deque as O(1) FIFO queues.</p>
+        </header>
+
+        <section class="patterns-section">
+          <article class="pattern-card">
+            <div class="pattern-card-head">
+              <h3>Match context and buffer streams</h3>
+            </div>
+            <p class="use-when"><strong>Use when:</strong> matching nested brackets, evaluating reverse Polish notation, tracking undo states, or exploring nodes level by level (BFS).</p>
+            <div class="why-box">
+              <strong>Why it works</strong>
+              <p>A stack's LIFO discipline naturally matches the most recently opened scope. A deque's O(1) <code>popleft()</code> preserves exact arrival order without O(n) array shifting penalties.</p>
+            </div>
+            <div class="mini-code-wrap">
+              <button class="copy-button mini-copy" type="button" data-code="stack-fundamental-code">Copy</button>
+              <pre class="mini-code" id="stack-fundamental-code"><code><span class="line-text"><span class="var">stack</span> <span class="punct">=</span> <span class="punct">[]</span></span><span class="line-text"><span class="var">pairs</span> <span class="punct">=</span> <span class="punct">{</span><span class="str">")"</span><span class="punct">:</span> <span class="str">"("</span><span class="punct">,</span> <span class="str">"}"</span><span class="punct">:</span> <span class="str">"{"</span><span class="punct">,</span> <span class="str">"]"</span><span class="punct">:</span> <span class="str">"["</span><span class="punct">}</span></span><span class="line-text"></span><span class="line-text"><span class="flow">for</span> <span class="var">char</span> <span class="flow">in</span> <span class="param">s</span><span class="punct">:</span></span><span class="line-text">    <span class="flow">if</span> <span class="var">char</span> <span class="flow">in</span> <span class="var">pairs</span><span class="punct">:</span></span><span class="line-text">        <span class="flow">if</span> <span class="flow">not</span> <span class="var">stack</span> <span class="flow">or</span> <span class="var">stack</span><span class="punct">.</span><span class="fn">pop</span><span class="punct">()</span> <span class="punct">!=</span> <span class="var">pairs</span><span class="punct">[</span><span class="var">char</span><span class="punct">]:</span></span><span class="line-text">            <span class="flow">return</span> <span class="kw-def">False</span></span><span class="line-text">    <span class="flow">else</span><span class="punct">:</span></span><span class="line-text">        <span class="var">stack</span><span class="punct">.</span><span class="fn">append</span><span class="punct">(</span><span class="var">char</span><span class="punct">)</span></span><span class="line-text"></span><span class="line-text"><span class="flow">return</span> <span class="fn">len</span><span class="punct">(</span><span class="var">stack</span><span class="punct">)</span> <span class="punct">==</span> <span class="num">0</span></span></code></pre>
+            </div>
+          </article>
+
+          <!-- Level 3 Sub-Techniques -->
+          <div class="technique-section">
+            <div class="section-heading">
+              <span class="section-kicker">Core Techniques</span>
+              <h2>Sub-Techniques to Recognize</h2>
+            </div>
+            <div class="technique-grid">
+              <div class="technique-card" id="stack-parentheses">
+                <div class="technique-header">
+                  <h4>Matching Parentheses</h4>
+                </div>
+                <p>Push opening symbols onto the stack. When encountering a closing symbol, pop the top and verify compatibility. An empty stack at the end verifies full balance.</p>
+                <div class="technique-problem">
+                  <span>Practice:</span>
+                  <a href="https://leetcode.com/problems/valid-parentheses/" target="_blank" rel="noopener">Valid Parentheses ↗</a>
+                </div>
+              </div>
+
+              <div class="technique-card" id="queue-bfs">
+                <div class="technique-header">
+                  <h4>Queue &amp; Deque BFS</h4>
+                </div>
+                <p>Use <code>collections.deque</code> for O(1) pops and appends. Maintain queue length per level to process trees and graphs in discrete breadth-first batches.</p>
+                <div class="technique-problem">
+                  <span>Practice:</span>
+                  <a href="https://leetcode.com/problems/binary-tree-level-order-traversal/" target="_blank" rel="noopener">Binary Tree Level Order ↗</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Practice Problems for this Pattern -->
+          <div class="pattern-problems-section">
+            <div class="section-heading">
+              <span class="section-kicker">Practice Problems</span>
+              <h2>Linked Problems for this Pattern</h2>
+            </div>
+            <div class="pattern-problems-list">
+              <div class="pattern-problem-card">
+                <div class="pattern-problem-top">
+                  <a class="pattern-problem-title" href="https://leetcode.com/problems/valid-parentheses/" target="_blank" rel="noopener">
+                    <span>Valid Parentheses</span>
+                    <span>↗</span>
+                  </a>
+                  <div class="pattern-problem-badges">
+                    <span class="problem-tag">LIFO Matching</span>
+                    <span class="badge-diff diff-easy">Easy</span>
+                    <span class="actual-diff">Actual: <span class="diff-num">1.5/5</span></span>
+                  </div>
+                </div>
+                <p class="pattern-problem-takeaway">
+                  <strong>Pattern Takeaway:</strong> Map closing brackets to opening brackets. Mismatches or premature empty stack indicate invalid nesting immediately.
+                </p>
+              </div>
+
+              <div class="pattern-problem-card">
+                <div class="pattern-problem-top">
+                  <a class="pattern-problem-title" href="https://leetcode.com/problems/min-stack/" target="_blank" rel="noopener">
+                    <span>Min Stack</span>
+                    <span>↗</span>
+                  </a>
+                  <div class="pattern-problem-badges">
+                    <span class="problem-tag">Auxiliary Stack</span>
+                    <span class="badge-diff diff-medium">Medium</span>
+                    <span class="actual-diff">Actual: <span class="diff-num">2.5/5</span></span>
+                  </div>
+                </div>
+                <p class="pattern-problem-takeaway">
+                  <strong>Pattern Takeaway:</strong> Pair each pushed element with the current running minimum, or use a parallel min-stack to answer <code>getMin()</code> in O(1).
+                </p>
+              </div>
+
+              <div class="pattern-problem-card">
+                <div class="pattern-problem-top">
+                  <a class="pattern-problem-title" href="https://leetcode.com/problems/implement-queue-using-stacks/" target="_blank" rel="noopener">
+                    <span>Implement Queue using Stacks</span>
+                    <span>↗</span>
+                  </a>
+                  <div class="pattern-problem-badges">
+                    <span class="problem-tag">Amortized FIFO</span>
+                    <span class="badge-diff diff-easy">Easy</span>
+                    <span class="actual-diff">Actual: <span class="diff-num">2/5</span></span>
+                  </div>
+                </div>
+                <p class="pattern-problem-takeaway">
+                  <strong>Pattern Takeaway:</strong> Use two stacks (<code>in_stack</code> and <code>out_stack</code>). Transfer elements lazily on pop/peek for amortized O(1) operations.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+      </section>
+
+      <!-- PAGE 13: Monotonic Stack -->
+      <section class="page-view" id="stack-monotonic-sub" data-topic-title="Stack &amp; Queue" data-page-title="Monotonic Stack">
+        <header class="topic-heading">
+          <span class="level-tag">Topic 03 · Subcategory 02</span>
+          <h1><span>🥞</span> Monotonic Stack</h1>
+          <p class="topic-summary">Maintain elements in strictly increasing or decreasing order to identify nearest greater or smaller neighbors in linear amortized time.</p>
+        </header>
+
+        <section class="patterns-section">
+          <article class="pattern-card">
+            <div class="pattern-card-head">
+              <h3>Next / previous greater or smaller element</h3>
+            </div>
+            <p class="use-when"><strong>Use when:</strong> finding the next warmer temperature, next greater number, previous smaller element, or bounding rectangle widths in a histogram.</p>
+            <div class="why-box">
+              <strong>Why it works &amp; Visual Trace</strong>
+              <p>Each element is pushed once and popped at most once $\implies$ amortized O(n) total time. When an incoming element violates monotonicity, it serves as the exact "next greater" value for all smaller elements waiting on the stack!</p>
+              <pre class="trace-diagram"><code>Array:  [73,  74,  75,  71,  69,  72,  76,  73]
+Stack:  Monotonically decreasing (waiting for warmer day)
+
+Day 0 (73): stack=[(0:73)]
+Day 1 (74): 74 &gt; 73 -&gt; POP 73! Next warmer day for Day 0 is Day 1 (span: 1).
+            stack=[(1:74)]
+Day 2 (75): 75 &gt; 74 -&gt; POP 74! Next warmer day for Day 1 is Day 2 (span: 1).
+            stack=[(2:75)]
+Day 3 (71): 71 &lt; 75 -&gt; PUSH. stack=[(2:75), (3:71)]
+Day 4 (69): 69 &lt; 71 -&gt; PUSH. stack=[(2:75), (3:71), (4:69)]
+Day 5 (72): 72 &gt; 69 -&gt; POP 69! Day 4 answer is Day 5 (span: 1).
+            72 &gt; 71 -&gt; POP 71! Day 3 answer is Day 5 (span: 2).
+            72 &lt; 75 -&gt; PUSH. stack=[(2:75), (5:72)]</code></pre>
+            </div>
+            <div class="mini-code-wrap">
+              <button class="copy-button mini-copy" type="button" data-code="stack-monotonic-code">Copy</button>
+              <pre class="mini-code" id="stack-monotonic-code"><code><span class="line-text"><span class="var">stack</span> <span class="punct">=</span> <span class="punct">[]</span>  <span class="comment"># stores indices of candidate temperatures</span></span><span class="line-text"><span class="var">ans</span> <span class="punct">=</span> <span class="punct">[</span><span class="num">0</span><span class="punct">]</span> <span class="punct">*</span> <span class="fn">len</span><span class="punct">(</span><span class="param">temperatures</span><span class="punct">)</span></span><span class="line-text"></span><span class="line-text"><span class="flow">for</span> <span class="var">i</span><span class="punct">,</span> <span class="var">t</span> <span class="flow">in</span> <span class="fn">enumerate</span><span class="punct">(</span><span class="param">temperatures</span><span class="punct">):</span></span><span class="line-text">    <span class="flow">while</span> <span class="var">stack</span> <span class="flow">and</span> <span class="param">temperatures</span><span class="punct">[</span><span class="var">stack</span><span class="punct">[-</span><span class="num">1</span><span class="punct">]]</span> <span class="punct">&lt;</span> <span class="var">t</span><span class="punct">:</span></span><span class="line-text">        <span class="var">prev_i</span> <span class="punct">=</span> <span class="var">stack</span><span class="punct">.</span><span class="fn">pop</span><span class="punct">()</span></span><span class="line-text">        <span class="var">ans</span><span class="punct">[</span><span class="var">prev_i</span><span class="punct">]</span> <span class="punct">=</span> <span class="var">i</span> <span class="punct">-</span> <span class="var">prev_i</span></span><span class="line-text">    <span class="var">stack</span><span class="punct">.</span><span class="fn">append</span><span class="punct">(</span><span class="var">i</span><span class="punct">)</span></span></code></pre>
+            </div>
+          </article>
+
+          <!-- Level 3 Sub-Techniques -->
+          <div class="technique-section">
+            <div class="section-heading">
+              <span class="section-kicker">Core Techniques</span>
+              <h2>Sub-Techniques to Recognize</h2>
+            </div>
+            <div class="technique-grid">
+              <div class="technique-card" id="stack-next-greater">
+                <div class="technique-header">
+                  <h4>Next Greater Element</h4>
+                </div>
+                <p>Maintain a decreasing stack of indices. An incoming larger element pops and resolves all smaller pending elements in linear amortized time.</p>
+                <div class="technique-problem">
+                  <span>Practice:</span>
+                  <a href="https://leetcode.com/problems/daily-temperatures/" target="_blank" rel="noopener">Daily Temperatures ↗</a>
+                </div>
+              </div>
+
+              <div class="technique-card" id="stack-histogram">
+                <div class="technique-header">
+                  <h4>Histogram &amp; Trapping</h4>
+                </div>
+                <p>Maintain an increasing stack of heights. When a shorter bar appears, pop the taller bar: its width is bounded between the current index and the new stack top.</p>
+                <div class="technique-problem">
+                  <span>Practice:</span>
+                  <a href="https://leetcode.com/problems/largest-rectangle-in-histogram/" target="_blank" rel="noopener">Largest Rectangle in Histogram ↗</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Practice Problems for this Pattern -->
+          <div class="pattern-problems-section">
+            <div class="section-heading">
+              <span class="section-kicker">Practice Problems</span>
+              <h2>Linked Problems for this Pattern</h2>
+            </div>
+            <div class="pattern-problems-list">
+              <div class="pattern-problem-card">
+                <div class="pattern-problem-top">
+                  <a class="pattern-problem-title" href="https://leetcode.com/problems/daily-temperatures/" target="_blank" rel="noopener">
+                    <span>Daily Temperatures</span>
+                    <span>↗</span>
+                  </a>
+                  <div class="pattern-problem-badges">
+                    <span class="problem-tag">Monotonic Decreasing</span>
+                    <span class="badge-diff diff-medium">Medium</span>
+                    <span class="actual-diff">Actual: <span class="diff-num">3/5</span></span>
+                  </div>
+                </div>
+                <p class="pattern-problem-takeaway">
+                  <strong>Pattern Takeaway:</strong> Push indices. When current temperature exceeds stack top, pop and calculate span <code>i - prev_i</code> in amortized O(n).
+                </p>
+              </div>
+
+              <div class="pattern-problem-card">
+                <div class="pattern-problem-top">
+                  <a class="pattern-problem-title" href="https://leetcode.com/problems/next-greater-element-i/" target="_blank" rel="noopener">
+                    <span>Next Greater Element I</span>
+                    <span>↗</span>
+                  </a>
+                  <div class="pattern-problem-badges">
+                    <span class="problem-tag">Next Greater Map</span>
+                    <span class="badge-diff diff-easy">Easy</span>
+                    <span class="actual-diff">Actual: <span class="diff-num">2/5</span></span>
+                  </div>
+                </div>
+                <p class="pattern-problem-takeaway">
+                  <strong>Pattern Takeaway:</strong> Build a hash map of <code>num -&gt; next_greater</code> using a monotonic stack on the target array, then query in O(1).
+                </p>
+              </div>
+
+              <div class="pattern-problem-card">
+                <div class="pattern-problem-top">
+                  <a class="pattern-problem-title" href="https://leetcode.com/problems/largest-rectangle-in-histogram/" target="_blank" rel="noopener">
+                    <span>Largest Rectangle in Histogram</span>
+                    <span>↗</span>
+                  </a>
+                  <div class="pattern-problem-badges">
+                    <span class="problem-tag">Increasing Stack</span>
+                    <span class="badge-diff diff-hard">Hard</span>
+                    <span class="actual-diff">Actual: <span class="diff-num">4.5/5</span></span>
+                  </div>
+                </div>
+                <p class="pattern-problem-takeaway">
+                  <strong>Pattern Takeaway:</strong> Popped height is bounded on the right by current index <code>i</code> and on the left by the new stack top <code>stack[-1]</code>.
+                </p>
+              </div>
+
+              <div class="pattern-problem-card">
+                <div class="pattern-problem-top">
+                  <a class="pattern-problem-title" href="https://leetcode.com/problems/trapping-rain-water/" target="_blank" rel="noopener">
+                    <span>Trapping Rain Water</span>
+                    <span>↗</span>
+                  </a>
+                  <div class="pattern-problem-badges">
+                    <span class="problem-tag">Bounded Trough</span>
+                    <span class="badge-diff diff-hard">Hard</span>
+                    <span class="actual-diff">Actual: <span class="diff-num">4.5/5</span></span>
+                  </div>
+                </div>
+                <p class="pattern-problem-takeaway">
+                  <strong>Pattern Takeaway:</strong> Monotonic decreasing stack records troughs. Popping a bottom height bounds water by <code>min(left_wall, right_wall) - bottom</code>.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+      </section>
+
+      <!-- PAGE 14: Monotonic Queue & Deque -->
+      <section class="page-view" id="queue-monotonic-sub" data-topic-title="Stack &amp; Queue" data-page-title="Monotonic Queue &amp; Deque">
+        <header class="topic-heading">
+          <span class="level-tag">Topic 03 · Subcategory 03</span>
+          <h1><span>🥞</span> Monotonic Queue &amp; Deque</h1>
+          <p class="topic-summary">Maintain an ordered double-ended queue to query sliding window extrema and optimal prefix boundaries in constant time per step.</p>
+        </header>
+
+        <section class="patterns-section">
+          <article class="pattern-card">
+            <div class="pattern-card-head">
+              <h3>Sliding window optimum with purge</h3>
+            </div>
+            <p class="use-when"><strong>Use when:</strong> tracking the maximum or minimum in a moving window of size k, or optimizing prefix sum ranges under a constraint.</p>
+            <div class="why-box">
+              <strong>Why it works &amp; Visual Trace</strong>
+              <p>If element <code>A</code> is older than <code>B</code> ($idx_A &lt; idx_B$) and $val_A \le val_B$, <code>A</code> can <em>never</em> be the maximum in any current or future window containing <code>B</code>. Popping dominated back elements keeps the deque strictly decreasing; the front always yields the window maximum in O(1)!</p>
+              <pre class="trace-diagram"><code>nums = [1,  3, -1, -3,  5,  3,  6,  7],  k = 3
+
+i=0 ( 1): q = [0: 1]
+i=1 ( 3): 3 &gt; 1 -&gt; POP back. q = [1: 3]
+i=2 (-1): -1 &lt; 3 -&gt; PUSH.    q = [1: 3, 2:-1]          -&gt; Window 0..2 Max: nums[q[0]] = 3
+i=3 (-3): -3 &lt; -1 -&gt; PUSH.   q = [1: 3, 2:-1, 3:-3]    -&gt; Window 1..3 Max: nums[q[0]] = 3
+i=4 ( 5): Drop expired idx 1 (1 &lt; 4-3+1).
+          5 &gt; -3 and 5 &gt; -1 -&gt; POP both! q = [4: 5]     -&gt; Window 2..4 Max: nums[q[0]] = 5
+i=5 ( 3): 3 &lt; 5 -&gt; PUSH.     q = [4: 5, 5: 3]          -&gt; Window 3..5 Max: nums[q[0]] = 5
+i=6 ( 6): 6 &gt; 3 and 6 &gt; 5 -&gt; POP both! q = [6: 6]     -&gt; Window 4..6 Max: nums[q[0]] = 6</code></pre>
+            </div>
+            <div class="mini-code-wrap">
+              <button class="copy-button mini-copy" type="button" data-code="queue-monotonic-code">Copy</button>
+              <pre class="mini-code" id="queue-monotonic-code"><code><span class="line-text"><span class="var">q</span> <span class="punct">=</span> <span class="fn">deque</span><span class="punct">()</span>  <span class="comment"># stores indices; values strictly decreasing</span></span><span class="line-text"><span class="var">res</span> <span class="punct">=</span> <span class="punct">[]</span></span><span class="line-text"></span><span class="line-text"><span class="flow">for</span> <span class="var">i</span><span class="punct">,</span> <span class="var">x</span> <span class="flow">in</span> <span class="fn">enumerate</span><span class="punct">(</span><span class="param">nums</span><span class="punct">):</span></span><span class="line-text">    <span class="flow">while</span> <span class="var">q</span> <span class="flow">and</span> <span class="var">q</span><span class="punct">[</span><span class="num">0</span><span class="punct">]</span> <span class="punct">&lt;</span> <span class="var">i</span> <span class="punct">-</span> <span class="param">k</span> <span class="punct">+</span> <span class="num">1</span><span class="punct">:</span></span><span class="line-text">        <span class="var">q</span><span class="punct">.</span><span class="fn">popleft</span><span class="punct">()</span>  <span class="comment"># drop expired front</span></span><span class="line-text">    <span class="flow">while</span> <span class="var">q</span> <span class="flow">and</span> <span class="param">nums</span><span class="punct">[</span><span class="var">q</span><span class="punct">[-</span><span class="num">1</span><span class="punct">]]</span> <span class="punct">&lt;=</span> <span class="var">x</span><span class="punct">:</span></span><span class="line-text">        <span class="var">q</span><span class="punct">.</span><span class="fn">pop</span><span class="punct">()</span>      <span class="comment"># drop dominated smaller back items</span></span><span class="line-text">    <span class="var">q</span><span class="punct">.</span><span class="fn">append</span><span class="punct">(</span><span class="var">i</span><span class="punct">)</span></span><span class="line-text">    <span class="flow">if</span> <span class="var">i</span> <span class="punct">&gt;=</span> <span class="param">k</span> <span class="punct">-</span> <span class="num">1</span><span class="punct">:</span></span><span class="line-text">        <span class="var">res</span><span class="punct">.</span><span class="fn">append</span><span class="punct">(</span><span class="param">nums</span><span class="punct">[</span><span class="var">q</span><span class="punct">[</span><span class="num">0</span><span class="punct">]])</span></span></code></pre>
+            </div>
+          </article>
+
+          <!-- Level 3 Sub-Techniques -->
+          <div class="technique-section">
+            <div class="section-heading">
+              <span class="section-kicker">Core Techniques</span>
+              <h2>Sub-Techniques to Recognize</h2>
+            </div>
+            <div class="technique-grid">
+              <div class="technique-card" id="queue-sliding-max">
+                <div class="technique-header">
+                  <h4>Sliding Window Maximum</h4>
+                </div>
+                <p>Purge smaller elements from the back upon arrival, and drop expired elements from the front on sliding. Deque head always yields window optimum in O(1).</p>
+                <div class="technique-problem">
+                  <span>Practice:</span>
+                  <a href="https://leetcode.com/problems/sliding-window-maximum/" target="_blank" rel="noopener">Sliding Window Maximum ↗</a>
+                </div>
+              </div>
+
+              <div class="technique-card" id="queue-constrained">
+                <div class="technique-header">
+                  <h4>Monotonic Prefix Deque</h4>
+                </div>
+                <p>Store prefix sum indices in increasing order. When <code>prefix[i] - prefix[q[0]] &gt;= k</code>, pop from front to minimize subarray length, then maintain back monotonicity.</p>
+                <div class="technique-problem">
+                  <span>Practice:</span>
+                  <a href="https://leetcode.com/problems/shortest-subarray-with-sum-at-least-k/" target="_blank" rel="noopener">Shortest Subarray Sum at Least K ↗</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Practice Problems for this Pattern -->
+          <div class="pattern-problems-section">
+            <div class="section-heading">
+              <span class="section-kicker">Practice Problems</span>
+              <h2>Linked Problems for this Pattern</h2>
+            </div>
+            <div class="pattern-problems-list">
+              <div class="pattern-problem-card">
+                <div class="pattern-problem-top">
+                  <a class="pattern-problem-title" href="https://leetcode.com/problems/sliding-window-maximum/" target="_blank" rel="noopener">
+                    <span>Sliding Window Maximum</span>
+                    <span>↗</span>
+                  </a>
+                  <div class="pattern-problem-badges">
+                    <span class="problem-tag">Monotonic Deque</span>
+                    <span class="badge-diff diff-hard">Hard</span>
+                    <span class="actual-diff">Actual: <span class="diff-num">4.5/5</span></span>
+                  </div>
+                </div>
+                <p class="pattern-problem-takeaway">
+                  <strong>Pattern Takeaway:</strong> Drop elements smaller than incoming value from back, remove elements older than <code>i - k + 1</code> from front. Front is always maximum.
+                </p>
+              </div>
+
+              <div class="pattern-problem-card">
+                <div class="pattern-problem-top">
+                  <a class="pattern-problem-title" href="https://leetcode.com/problems/shortest-subarray-with-sum-at-least-k/" target="_blank" rel="noopener">
+                    <span>Shortest Subarray with Sum at Least K</span>
+                    <span>↗</span>
+                  </a>
+                  <div class="pattern-problem-badges">
+                    <span class="problem-tag">Prefix Deque</span>
+                    <span class="badge-diff diff-hard">Hard</span>
+                    <span class="actual-diff">Actual: <span class="diff-num">5/5</span></span>
+                  </div>
+                </div>
+                <p class="pattern-problem-takeaway">
+                  <strong>Pattern Takeaway:</strong> Prefix sums with negative numbers: pop front when sum criterion is met to record minimum length; pop back to preserve increasing prefix order.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+      </section>
+
+      <!-- PAGE 15: Stack & Queue Practice Problems -->
+      <section class="page-view" id="stack-reference" data-topic-title="Stack &amp; Queue" data-page-title="Practice Problems">
+        <header class="topic-heading">
+          <span class="level-tag">Topic 03 · Problem Directory</span>
+          <h1><span>🥞</span> Stack &amp; Queue: Practice Problems</h1>
+          <p class="topic-summary">Targeted LeetCode practice problems mapped to LIFO/FIFO fundamentals, monotonic stacks, and monotonic sliding-window deques.</p>
+        </header>
+
+        <section class="reference-section">
+          <div class="reference-header">
+            <h2 id="stack-reference-title">Problem Reference List</h2>
+            <p>Every problem is categorized with its official LeetCode tag, official difficulty, and actual problem complexity rating (1 to 5).</p>
+          </div>
+
+          <ul class="reference-list" aria-labelledby="stack-reference-title">
+            <li>
+              <div class="ref-left">
+                <a class="prob-link" href="https://leetcode.com/problems/valid-parentheses/" target="_blank" rel="noopener">Valid Parentheses ↗</a>
+              </div>
+              <div class="ref-right">
+                <span class="problem-tag">LIFO Matching</span>
+                <span class="badge-diff diff-easy">Easy</span>
+                <span class="actual-diff">Actual: <span class="diff-num">1.5/5</span></span>
+                <a class="pattern-ref-link" href="#stack-fundamental-sub">View Pattern →</a>
+              </div>
+            </li>
+            <li>
+              <div class="ref-left">
+                <a class="prob-link" href="https://leetcode.com/problems/min-stack/" target="_blank" rel="noopener">Min Stack ↗</a>
+              </div>
+              <div class="ref-right">
+                <span class="problem-tag">Auxiliary Stack</span>
+                <span class="badge-diff diff-medium">Medium</span>
+                <span class="actual-diff">Actual: <span class="diff-num">2.5/5</span></span>
+                <a class="pattern-ref-link" href="#stack-fundamental-sub">View Pattern →</a>
+              </div>
+            </li>
+            <li>
+              <div class="ref-left">
+                <a class="prob-link" href="https://leetcode.com/problems/implement-queue-using-stacks/" target="_blank" rel="noopener">Implement Queue using Stacks ↗</a>
+              </div>
+              <div class="ref-right">
+                <span class="problem-tag">Amortized FIFO</span>
+                <span class="badge-diff diff-easy">Easy</span>
+                <span class="actual-diff">Actual: <span class="diff-num">2/5</span></span>
+                <a class="pattern-ref-link" href="#stack-fundamental-sub">View Pattern →</a>
+              </div>
+            </li>
+            <li>
+              <div class="ref-left">
+                <a class="prob-link" href="https://leetcode.com/problems/daily-temperatures/" target="_blank" rel="noopener">Daily Temperatures ↗</a>
+              </div>
+              <div class="ref-right">
+                <span class="problem-tag">Monotonic Decreasing</span>
+                <span class="badge-diff diff-medium">Medium</span>
+                <span class="actual-diff">Actual: <span class="diff-num">3/5</span></span>
+                <a class="pattern-ref-link" href="#stack-monotonic-sub">View Pattern →</a>
+              </div>
+            </li>
+            <li>
+              <div class="ref-left">
+                <a class="prob-link" href="https://leetcode.com/problems/next-greater-element-i/" target="_blank" rel="noopener">Next Greater Element I ↗</a>
+              </div>
+              <div class="ref-right">
+                <span class="problem-tag">Next Greater Map</span>
+                <span class="badge-diff diff-easy">Easy</span>
+                <span class="actual-diff">Actual: <span class="diff-num">2/5</span></span>
+                <a class="pattern-ref-link" href="#stack-monotonic-sub">View Pattern →</a>
+              </div>
+            </li>
+            <li>
+              <div class="ref-left">
+                <a class="prob-link" href="https://leetcode.com/problems/largest-rectangle-in-histogram/" target="_blank" rel="noopener">Largest Rectangle in Histogram ↗</a>
+              </div>
+              <div class="ref-right">
+                <span class="problem-tag">Increasing Stack</span>
+                <span class="badge-diff diff-hard">Hard</span>
+                <span class="actual-diff">Actual: <span class="diff-num">4.5/5</span></span>
+                <a class="pattern-ref-link" href="#stack-monotonic-sub">View Pattern →</a>
+              </div>
+            </li>
+            <li>
+              <div class="ref-left">
+                <a class="prob-link" href="https://leetcode.com/problems/trapping-rain-water/" target="_blank" rel="noopener">Trapping Rain Water ↗</a>
+              </div>
+              <div class="ref-right">
+                <span class="problem-tag">Bounded Trough</span>
+                <span class="badge-diff diff-hard">Hard</span>
+                <span class="actual-diff">Actual: <span class="diff-num">4.5/5</span></span>
+                <a class="pattern-ref-link" href="#stack-monotonic-sub">View Pattern →</a>
+              </div>
+            </li>
+            <li>
+              <div class="ref-left">
+                <a class="prob-link" href="https://leetcode.com/problems/sliding-window-maximum/" target="_blank" rel="noopener">Sliding Window Maximum ↗</a>
+              </div>
+              <div class="ref-right">
+                <span class="problem-tag">Monotonic Deque</span>
+                <span class="badge-diff diff-hard">Hard</span>
+                <span class="actual-diff">Actual: <span class="diff-num">4.5/5</span></span>
+                <a class="pattern-ref-link" href="#queue-monotonic-sub">View Pattern →</a>
+              </div>
+            </li>
+            <li>
+              <div class="ref-left">
+                <a class="prob-link" href="https://leetcode.com/problems/shortest-subarray-with-sum-at-least-k/" target="_blank" rel="noopener">Shortest Subarray with Sum at Least K ↗</a>
+              </div>
+              <div class="ref-right">
+                <span class="problem-tag">Prefix Deque</span>
+                <span class="badge-diff diff-hard">Hard</span>
+                <span class="actual-diff">Actual: <span class="diff-num">5/5</span></span>
+                <a class="pattern-ref-link" href="#queue-monotonic-sub">View Pattern →</a>
               </div>
             </li>
           </ul>

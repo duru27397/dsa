@@ -12,9 +12,9 @@ revising.
 - `assets/css/cheat-sheet.css` contains the dark LeetCode-style theme, Monaco-style Python 3 syntax highlighting, and 3-level tree navigation.
 - `assets/js/cheat-sheet.js` manages tree expansion, discrete page switching (no scrolling across sections), URL hash routing, and clipboard copy fallbacks.
 - Navigation uses a clean 3-level sidebar hierarchy (Category -> Subcategory -> Topic/Technique):
-  1. Level 1 (Category): Arrays & Hashing, Dynamic Programming
-  2. Level 2 (Subcategory): Overview & Blueprint, Hash Maps & Sets, Prefix & Suffix Accumulation, Two Pointers & Sliding Window, Practice Problems
-  3. Level 3 (Topic / Technique): Specific techniques (e.g., Hash Set Lookups, Complement Map, Product Except Self, Two Pointers, Linear Recurrence, Unbounded Knapsack, etc.)
+  1. Level 1 (Category): Arrays & Hashing, Dynamic Programming, Stack & Queue
+  2. Level 2 (Subcategory): Overview & Blueprint, Hash Maps & Sets, Prefix & Suffix Accumulation, Two Pointers & Sliding Window, LIFO & FIFO Fundamentals, Monotonic Stack, Monotonic Queue & Deque, Practice Problems
+  3. Level 3 (Topic / Technique): Specific techniques (e.g., Hash Set Lookups, Complement Map, Product Except Self, Two Pointers, Linear Recurrence, Unbounded Knapsack, Next Greater Element, Sliding Window Maximum, etc.)
   - No artificial "L1", "L2", "L3", "BP", or "REF" badges in the sidebar.
 - Code blocks follow Python 3 snippet style (clean function definitions without class wrapper or line numbers, with docstring ASCII diagrams, type hints, and Monaco dark syntax highlighting).
 - Each section acts as a distinct, non-scrolling page view (`.page-view`), showing only one section at a time.

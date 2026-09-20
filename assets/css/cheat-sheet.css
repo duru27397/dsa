@@ -510,6 +510,23 @@ h1 {
   text-transform: uppercase;
 }
 
+.trace-diagram {
+  margin-top: 0.65rem;
+  padding: 0.55rem 0.75rem;
+  background: #181818;
+  border: 1px solid #2d2d2d;
+  border-radius: 5px;
+  color: #c9d1d9;
+  font: 0.73rem/1.38 "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+  overflow-x: auto;
+  white-space: pre;
+}
+
+.trace-diagram code {
+  display: block;
+  white-space: pre;
+}
+
 .mini-code-wrap {
   position: relative;
   margin-top: auto;

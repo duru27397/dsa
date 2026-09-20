@@ -8,12 +8,17 @@
   const pageAliases = {
     "arrays-hashing": "arrays-blueprint",
     "dynamic-programming": "dp-blueprint",
+    "stack-queue": "stack-blueprint",
+    "stacks-queues": "stack-blueprint",
     "arrays-l1": "arrays-hash",
     "arrays-l2": "arrays-prefix-sub",
     "arrays-l3": "arrays-pointers",
     "dp-l1": "dp-state-sub",
     "dp-l2": "dp-knapsack-sub",
-    "dp-l3": "dp-sequence-sub"
+    "dp-l3": "dp-sequence-sub",
+    "stack-l1": "stack-fundamental-sub",
+    "stack-l2": "stack-monotonic-sub",
+    "stack-l3": "queue-monotonic-sub"
   };
 
   const showPage = (rawTargetId, updateUrl = true, subTargetId = null) => {
