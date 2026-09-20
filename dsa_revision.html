@@ -3,14 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>DSA Revision Guide — 18 Topics • 1-5 Star Difficulties</title>
+  <title>Python 3 DSA Revision Guide — Topics & Short-Circuit Blueprints</title>
   <style>
 
 :root {
   --sidebar-width: 300px;
-  --topbar-height: 56px;
+  --topbar-height: 54px;
   
-  /* Main Dark Theme */
   --lc-bg-main: #141414;
   --lc-bg-surface: #1e1e1e;
   --lc-bg-card: #242424;
@@ -30,21 +29,21 @@
   --diff-hard: #ff375f;
   --star-gold: #fbbf24;
   
-  /* Exact Screenshot Code Colors */
+  /* Exact LeetCode Editor Colors (No vertical lines!) */
   --code-bg: #1a1a1a;
   --tok-def-kw: #38bdf8;      /* class, def */
   --tok-flow-kw: #f472b6;     /* for, in, if, and, return, from, import */
-  --tok-func-def: #facc15;    /* longestIncreasingPath, dfs */
-  --tok-func-call: #facc15;   /* len, range, max, min */
+  --tok-func-def: #facc15;    /* function names */
+  --tok-func-call: #facc15;   /* len, range, max */
   --tok-decorator: #facc15;   /* @cache */
-  --tok-type: #2dd4bf;        /* int, List, str */
+  --tok-type: #2dd4bf;        /* int, List */
   --tok-self: #38bdf8;        /* self */
-  --tok-string: #fb923c;      /* strings, triple quotes */
-  --tok-number: #fb923c;      /* 0, 1, 9, etc */
-  --tok-comment: #4ade80;     /* # hello */
-  --tok-operator: #d4d4d4;    /* :, ->, =, +, etc */
-  --tok-ident: #eff1f6;       /* result, ni, nj, di, dj */
-  --tok-gutter: #64748b;      /* 1, 2, 3... */
+  --tok-string: #fb923c;      /* strings */
+  --tok-number: #fb923c;      /* numbers */
+  --tok-comment: #4ade80;     /* # comments */
+  --tok-operator: #d4d4d4;    /* operators */
+  --tok-ident: #eff1f6;       /* identifiers */
+  --tok-gutter: #64748b;      /* line numbers */
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -64,7 +63,7 @@ body {
 ::-webkit-scrollbar-thumb { background: #333333; border-radius: 4px; }
 ::-webkit-scrollbar-thumb:hover { background: #444444; }
 
-/* ================= SIDEBAR ================= */
+/* SIDEBAR */
 #sidebar {
   width: var(--sidebar-width);
   height: 100vh;
@@ -80,7 +79,7 @@ body {
 }
 
 .sidebar-header {
-  padding: 0.95rem 1.15rem;
+  padding: 0.9rem 1.15rem;
   border-bottom: 1px solid var(--lc-border);
   display: flex;
   align-items: center;
@@ -95,25 +94,33 @@ body {
 }
 .sidebar-title span { color: var(--lc-orange); }
 
-.sidebar-close-btn {
-  background: transparent;
-  border: 1px solid var(--lc-border);
-  color: var(--lc-text-secondary);
-  width: 28px;
-  height: 28px;
-  border-radius: 5px;
-  cursor: pointer;
-  display: none;
-  align-items: center;
-  justify-content: center;
+.sidebar-nav-home {
+  padding: 0.6rem 1rem;
+  border-bottom: 1px solid var(--lc-border);
+  background: rgba(255, 255, 255, 0.02);
 }
 
+.home-nav-link {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--lc-orange);
+  text-decoration: none;
+  font-size: 0.82rem;
+  font-weight: 700;
+  padding: 0.35rem 0.6rem;
+  border-radius: 5px;
+  background: var(--lc-orange-bg);
+  transition: all 0.15s;
+}
+.home-nav-link:hover { background: rgba(255, 161, 22, 0.22); }
+
 .sidebar-search-area {
-  padding: 0.75rem 1rem;
+  padding: 0.65rem 1rem;
   border-bottom: 1px solid var(--lc-border);
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 0.45rem;
 }
 
 .sidebar-search-input {
@@ -128,12 +135,7 @@ body {
 }
 .sidebar-search-input:focus { border-color: var(--lc-orange); }
 
-.tree-action-btns {
-  display: flex;
-  justify-content: space-between;
-  gap: 0.35rem;
-}
-
+.tree-action-btns { display: flex; justify-content: space-between; gap: 0.35rem; }
 .tree-action-btn {
   background: transparent;
   border: 1px solid var(--lc-border);
@@ -148,14 +150,13 @@ body {
 .sidebar-tree {
   flex: 1;
   overflow-y: auto;
-  padding: 0.75rem 0.6rem 3rem 0.6rem;
+  padding: 0.65rem 0.6rem 3rem 0.6rem;
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
 }
 
 .sb-topic-node { border-radius: 6px; }
-
 .sb-topic-head {
   display: flex;
   align-items: center;
@@ -169,7 +170,6 @@ body {
   transition: background 0.15s;
 }
 .sb-topic-head:hover { background: var(--lc-bg-card-hover); }
-
 .sb-topic-node.active > .sb-topic-head {
   background: var(--lc-orange-bg);
   color: var(--lc-orange);
@@ -193,7 +193,18 @@ body {
 }
 .sb-topic-node.collapsed .sb-chevron { transform: rotate(-90deg); }
 
-.sb-count-tag { font-size: 0.72rem; color: var(--lc-text-muted); flex-shrink: 0; }
+.sb-status-pill {
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 0.1rem 0.4rem;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--lc-text-muted);
+}
+.sb-status-pill.done {
+  background: rgba(0, 184, 163, 0.15);
+  color: var(--lc-cyan);
+}
 
 .sb-subtopics-list {
   padding-left: 1.4rem;
@@ -223,7 +234,7 @@ body {
 .sb-subtopic-link:hover { background: rgba(255, 255, 255, 0.05); color: var(--lc-text-primary); }
 .sb-subtopic-link::before { content: "↳"; color: var(--lc-text-muted); font-size: 0.75rem; }
 
-/* ================= MAIN WRAPPER ================= */
+/* MAIN WRAPPER */
 #main-wrapper {
   margin-left: var(--sidebar-width);
   flex: 1;
@@ -232,9 +243,10 @@ body {
   min-height: 100vh;
 }
 
+/* Clean Topbar without Roadmap or global counts */
 .topbar {
   height: var(--topbar-height);
-  background: rgba(30, 30, 30, 0.96);
+  background: rgba(26, 26, 26, 0.96);
   backdrop-filter: blur(8px);
   border-bottom: 1px solid var(--lc-border);
   position: sticky;
@@ -249,7 +261,7 @@ body {
 .topbar-left {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 0.85rem;
 }
 
 .sidebar-toggle-btn {
@@ -267,43 +279,48 @@ body {
 }
 .sidebar-toggle-btn:hover { background: #2a2a2a; color: #fff; }
 
-.breadcrumbs {
-  display: flex;
+.topbar-home-btn {
+  display: inline-flex;
   align-items: center;
-  gap: 0.45rem;
-  font-size: 0.82rem;
-  color: var(--lc-text-muted);
-}
-.breadcrumbs a { color: var(--lc-text-secondary); text-decoration: none; }
-.breadcrumbs a:hover { color: var(--lc-orange); }
-.bc-sep { color: var(--lc-text-muted); }
-.bc-cur { color: var(--lc-text-primary); font-weight: 600; }
-
-.progress-widget {
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
-  background: #181818;
+  gap: 0.35rem;
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--lc-text-primary);
   border: 1px solid var(--lc-border);
-  padding: 0.25rem 0.75rem;
-  border-radius: 9999px;
-  font-size: 0.8rem;
+  padding: 0.3rem 0.65rem;
+  border-radius: 5px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.15s;
 }
-.progress-widget .val { color: var(--lc-cyan); font-weight: 800; }
+.topbar-home-btn:hover { background: #333333; color: var(--lc-orange); }
 
-.progress-track {
-  width: 100px;
-  height: 8px;
-  background: #101010;
-  border-radius: 9999px;
-  overflow: hidden;
+.current-topic-heading {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #ffffff;
 }
-.progress-fill {
-  height: 100%;
-  background: linear-gradient(90deg, var(--lc-orange), var(--lc-cyan));
-  width: 0%;
-  transition: width 0.3s;
+
+.topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
+
+.w3-nav-top-btn {
+  background: #2a2a2a;
+  color: var(--lc-text-primary);
+  border: 1px solid var(--lc-border);
+  padding: 0.32rem 0.75rem;
+  border-radius: 5px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.w3-nav-top-btn:hover { background: #383838; color: #fff; }
+.w3-nav-top-btn.next { background: #2cbb5d; border-color: #2cbb5d; color: #fff; }
+.w3-nav-top-btn.next:hover { background: #26a350; }
 
 .main-content {
   padding: 2rem 2.5rem 6rem 2.5rem;
@@ -355,7 +372,26 @@ body {
   color: #ffffff;
 }
 
-.topic-diff-pills { display: flex; gap: 0.4rem; align-items: center; }
+.topic-meta-right {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.topic-done-badge {
+  font-size: 0.76rem;
+  font-weight: 700;
+  padding: 0.25rem 0.65rem;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--lc-text-secondary);
+  border: 1px solid var(--lc-border);
+}
+.topic-done-badge.completed {
+  background: rgba(0, 184, 163, 0.15);
+  color: var(--lc-cyan);
+  border-color: rgba(0, 184, 163, 0.4);
+}
 
 .diff-badge {
   display: inline-block;
@@ -370,41 +406,48 @@ body {
 
 .topic-desc { font-size: 0.9rem; color: var(--lc-text-secondary); line-height: 1.55; }
 
-/* ================= EXACT SCREENSHOT CODE EDITOR CARD ================= */
+/* EXACT LEETCODE EDITOR CODE CARD (NO VERTICAL BACKGROUND LINES) */
 .blueprint-card {
   background: var(--code-bg);
   border: 1px solid var(--lc-border);
   border-radius: 8px;
   overflow: hidden;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
 }
 
 .blueprint-header {
-  padding: 0.65rem 1rem;
+  padding: 0.55rem 1rem;
   background: #202020;
-  border-bottom: 1px solid var(--lc-border);
+  border-bottom: 1px solid #2e2e2e;
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.blueprint-title {
+.editor-header-left {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  font-size: 0.84rem;
-  font-weight: 700;
-  color: var(--tok-def-kw);
+  gap: 0.75rem;
 }
 
-.blueprint-tag {
-  font-size: 0.72rem;
-  background: rgba(56, 189, 248, 0.15);
-  color: var(--tok-def-kw);
-  border: 1px solid rgba(56, 189, 248, 0.3);
-  padding: 0.15rem 0.5rem;
+/* LeetCode style language pill */
+.lc-lang-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: #2b2b2b;
+  color: var(--lc-text-primary);
+  border: 1px solid #3d3d3d;
+  padding: 0.2rem 0.55rem;
   border-radius: 4px;
+  font-size: 0.76rem;
   font-weight: 600;
+}
+.lc-lang-pill .arrow { font-size: 0.65rem; color: var(--lc-text-muted); }
+
+.blueprint-subtag {
+  font-size: 0.72rem;
+  color: var(--lc-text-muted);
 }
 
 .copy-btn {
@@ -412,55 +455,49 @@ body {
   border: 1px solid var(--lc-border);
   color: var(--lc-text-secondary);
   font-size: 0.74rem;
-  padding: 0.25rem 0.65rem;
+  padding: 0.22rem 0.6rem;
   border-radius: 4px;
   cursor: pointer;
   transition: all 0.15s;
 }
 .copy-btn:hover { background: #333333; color: #fff; }
 
-/* Exact Monaco Code Canvas with Indent Guide */
+/* Exact Monaco Code Canvas with NO background lines */
 .code-canvas {
-  font-family: 'JetBrains Mono', 'Fira Code', 'SF Mono', Consolas, Menlo, 'Courier New', monospace;
+  font-family: 'JetBrains Mono', 'Fira Code', 'SF Mono', Consolas, Menlo, monospace;
   font-size: 0.86rem;
   line-height: 1.6;
-  background: var(--code-bg);
+  background: var(--code-bg); /* Pure solid dark background */
   padding: 0.85rem 0;
   overflow-x: auto;
-  tab-size: 4;
 }
 
 .code-line {
   display: flex;
   min-height: 1.6rem;
-  position: relative;
 }
-.code-line:hover {
-  background: rgba(255, 255, 255, 0.025);
-}
+.code-line:hover { background: rgba(255, 255, 255, 0.025); }
 
 .line-num {
-  width: 48px;
-  padding-right: 16px;
+  width: 44px;
+  padding-right: 14px;
   text-align: right;
   color: var(--tok-gutter);
   user-select: none;
   font-size: 0.78rem;
   flex-shrink: 0;
-  border-right: 1px solid #2d2d2d;
+  border-right: 1px solid #2e2e2e;
 }
 
 .line-content {
   flex: 1;
-  padding-left: 16px;
+  padding-left: 14px;
   white-space: pre;
   color: var(--tok-ident);
-  /* Indent guide simulation every 4 spaces */
-  background-image: linear-gradient(to right, rgba(255, 255, 255, 0.06) 1px, transparent 1px);
-  background-size: 32px 100%;
+  /* CLEAN: NO vertical gradient lines */
 }
 
-/* Exact Tokens from Screenshot */
+/* Exact Tokens */
 .tok-def-kw { color: var(--tok-def-kw); font-weight: 600; }
 .tok-flow-kw { color: var(--tok-flow-kw); font-weight: 500; }
 .tok-func-def { color: var(--tok-func-def); }
@@ -476,7 +513,7 @@ body {
 .tok-operator { color: var(--tok-operator); }
 .tok-ident { color: var(--tok-ident); }
 
-/* ================= PROBLEM TABLES ================= */
+/* PROBLEMS TABLE */
 .tier-box {
   background: var(--lc-bg-surface);
   border: 1px solid var(--lc-border);
@@ -588,7 +625,6 @@ body {
 @media (max-width: 900px) {
   #sidebar { transform: translateX(-100%); }
   #sidebar.open { transform: translateX(0); box-shadow: 4px 0 24px rgba(0,0,0,0.8); }
-  .sidebar-close-btn { display: flex; }
   #main-wrapper { margin-left: 0; }
   .main-content { padding: 1.5rem 1rem 4rem 1rem; }
 }
@@ -597,14 +633,22 @@ body {
 </head>
 <body>
 
-  <!-- ================= SIDEBAR: TOPICS & TREE-LEVEL SUBTOPICS ONLY ================= -->
+  <!-- SIDEBAR: TOPICS & SUBTOPICS ONLY -->
   <aside id="sidebar">
     <div class="sidebar-header">
       <div class="sidebar-title">DSA <span>Revision</span></div>
-      <button class="sidebar-close-btn" onclick="toggleSidebar()" title="Close Sidebar">✕</button>
+      <button class="sidebar-toggle-btn" onclick="toggleSidebar()" title="Close Sidebar" style="width:28px;height:28px;font-size:0.85rem;">✕</button>
     </div>
 
-    <!-- Sidebar Search -->
+    <!-- Link back to Home Page Index -->
+    <div class="sidebar-nav-home">
+      <a href="index.html" class="home-nav-link">
+        <span>🏠</span>
+        <span>Home Page Index</span>
+      </a>
+    </div>
+
+    <!-- Search Box -->
     <div class="sidebar-search-area">
       <input type="text" id="sb-search" class="sidebar-search-input" placeholder="🔍 Search topics or subtopics..." oninput="filterSidebar(this.value)">
       <div class="tree-action-btns">
@@ -614,7 +658,7 @@ body {
       </div>
     </div>
 
-    <!-- Tree: Topics and Subtopics Only -->
+    <!-- Topic & Subtopic Tree -->
     <nav class="sidebar-tree" id="sidebar-tree">
 
       <div class="sb-topic-node" id="sb-node-arrays-hashing">
@@ -624,7 +668,7 @@ body {
             <span>⚡</span>
             <span>Arrays &amp; Hashing</span>
           </div>
-          <span class="sb-count-tag" id="sb-count-arrays-hashing">0/9</span>
+          <span class="sb-status-pill" id="sb-status-arrays-hashing">0/9</span>
         </div>
 
         <div class="sb-subtopics-list">
@@ -647,7 +691,7 @@ body {
             <span>👉👈</span>
             <span>Two Pointers</span>
           </div>
-          <span class="sb-count-tag" id="sb-count-two-pointers">0/5</span>
+          <span class="sb-status-pill" id="sb-status-two-pointers">0/5</span>
         </div>
 
         <div class="sb-subtopics-list">
@@ -670,7 +714,7 @@ body {
             <span>🪟</span>
             <span>Sliding Window</span>
           </div>
-          <span class="sb-count-tag" id="sb-count-sliding-window">0/6</span>
+          <span class="sb-status-pill" id="sb-status-sliding-window">0/6</span>
         </div>
 
         <div class="sb-subtopics-list">
@@ -693,7 +737,7 @@ body {
             <span>🥞</span>
             <span>Stack</span>
           </div>
-          <span class="sb-count-tag" id="sb-count-stack">0/7</span>
+          <span class="sb-status-pill" id="sb-status-stack">0/7</span>
         </div>
 
         <div class="sb-subtopics-list">
@@ -716,7 +760,7 @@ body {
             <span>🔍</span>
             <span>Binary Search</span>
           </div>
-          <span class="sb-count-tag" id="sb-count-binary-search">0/7</span>
+          <span class="sb-status-pill" id="sb-status-binary-search">0/7</span>
         </div>
 
         <div class="sb-subtopics-list">
@@ -739,7 +783,7 @@ body {
             <span>🔗</span>
             <span>Linked List</span>
           </div>
-          <span class="sb-count-tag" id="sb-count-linked-list">0/11</span>
+          <span class="sb-status-pill" id="sb-status-linked-list">0/11</span>
         </div>
 
         <div class="sb-subtopics-list">
@@ -762,7 +806,7 @@ body {
             <span>🌲</span>
             <span>Trees</span>
           </div>
-          <span class="sb-count-tag" id="sb-count-trees">0/15</span>
+          <span class="sb-status-pill" id="sb-status-trees">0/15</span>
         </div>
 
         <div class="sb-subtopics-list">
@@ -788,7 +832,7 @@ body {
             <span>🌳</span>
             <span>Tries</span>
           </div>
-          <span class="sb-count-tag" id="sb-count-tries">0/3</span>
+          <span class="sb-status-pill" id="sb-status-tries">0/3</span>
         </div>
 
         <div class="sb-subtopics-list">
@@ -811,7 +855,7 @@ body {
             <span>⛰️</span>
             <span>Heap / Priority Queue</span>
           </div>
-          <span class="sb-count-tag" id="sb-count-heap-priority-queue">0/7</span>
+          <span class="sb-status-pill" id="sb-status-heap-priority-queue">0/7</span>
         </div>
 
         <div class="sb-subtopics-list">
@@ -834,7 +878,7 @@ body {
             <span>🌲🔙</span>
             <span>Backtracking</span>
           </div>
-          <span class="sb-count-tag" id="sb-count-backtracking">0/9</span>
+          <span class="sb-status-pill" id="sb-status-backtracking">0/9</span>
         </div>
 
         <div class="sb-subtopics-list">
@@ -857,7 +901,7 @@ body {
             <span>⏱️</span>
             <span>Intervals</span>
           </div>
-          <span class="sb-count-tag" id="sb-count-intervals">0/6</span>
+          <span class="sb-status-pill" id="sb-status-intervals">0/6</span>
         </div>
 
         <div class="sb-subtopics-list">
@@ -880,7 +924,7 @@ body {
             <span>⚡🎯</span>
             <span>Greedy</span>
           </div>
-          <span class="sb-count-tag" id="sb-count-greedy">0/8</span>
+          <span class="sb-status-pill" id="sb-status-greedy">0/8</span>
         </div>
 
         <div class="sb-subtopics-list">
@@ -903,7 +947,7 @@ body {
             <span>🕸️</span>
             <span>Graphs</span>
           </div>
-          <span class="sb-count-tag" id="sb-count-graphs">0/13</span>
+          <span class="sb-status-pill" id="sb-status-graphs">0/13</span>
         </div>
 
         <div class="sb-subtopics-list">
@@ -926,7 +970,7 @@ body {
             <span>📈</span>
             <span>1-D Dynamic Programming</span>
           </div>
-          <span class="sb-count-tag" id="sb-count-1-d-dynamic-programming">0/12</span>
+          <span class="sb-status-pill" id="sb-status-1-d-dynamic-programming">0/12</span>
         </div>
 
         <div class="sb-subtopics-list">
@@ -949,7 +993,7 @@ body {
             <span>🚀🕸️</span>
             <span>Advanced Graphs</span>
           </div>
-          <span class="sb-count-tag" id="sb-count-advanced-graphs">0/6</span>
+          <span class="sb-status-pill" id="sb-status-advanced-graphs">0/6</span>
         </div>
 
         <div class="sb-subtopics-list">
@@ -972,7 +1016,7 @@ body {
             <span>📊</span>
             <span>2-D Dynamic Programming</span>
           </div>
-          <span class="sb-count-tag" id="sb-count-2-d-dynamic-programming">0/11</span>
+          <span class="sb-status-pill" id="sb-status-2-d-dynamic-programming">0/11</span>
         </div>
 
         <div class="sb-subtopics-list">
@@ -995,7 +1039,7 @@ body {
             <span>0️⃣1️⃣</span>
             <span>Bit Manipulation</span>
           </div>
-          <span class="sb-count-tag" id="sb-count-bit-manipulation">0/7</span>
+          <span class="sb-status-pill" id="sb-status-bit-manipulation">0/7</span>
         </div>
 
         <div class="sb-subtopics-list">
@@ -1018,7 +1062,7 @@ body {
             <span>📐</span>
             <span>Math &amp; Geometry</span>
           </div>
-          <span class="sb-count-tag" id="sb-count-math-geometry">0/8</span>
+          <span class="sb-status-pill" id="sb-status-math-geometry">0/8</span>
         </div>
 
         <div class="sb-subtopics-list">
@@ -1036,46 +1080,38 @@ body {
     </nav>
   </aside>
 
-  <!-- ================= MAIN CONTENT WRAPPER ================= -->
+  <!-- MAIN WRAPPER -->
   <div id="main-wrapper">
     
-    <!-- Topbar (Clean: NO 'LC' badge) -->
+    <!-- Clean Topbar (No roadmap section, no problem count, just clean title and nav) -->
     <header class="topbar">
       <div class="topbar-left">
         <button class="sidebar-toggle-btn" onclick="toggleSidebar()" title="Toggle Sidebar">☰</button>
-        <div class="breadcrumbs">
-          <a href="#">Roadmap</a>
-          <span class="bc-sep">/</span>
-          <span id="bc-level">Level 0: Foundation</span>
-          <span class="bc-sep">/</span>
-          <span class="bc-cur" id="bc-topic">Arrays & Hashing</span>
-        </div>
+        <a href="index.html" class="topbar-home-btn" title="Go to Home Dashboard">
+          <span>🏠</span>
+          <span>Home Index</span>
+        </a>
+        <div class="current-topic-heading" id="topbar-topic-heading">Arrays & Hashing</div>
       </div>
 
       <div class="topbar-right">
-        <div class="progress-widget">
-          <span>Solved:</span>
-          <span class="val" id="top-solved-num">0</span>
-          <span>/ 150</span>
-          <div class="progress-track">
-            <div class="progress-fill" id="top-progress-fill"></div>
-          </div>
-          <span style="font-weight:700; color:var(--lc-cyan);" id="top-pct">0%</span>
-        </div>
+        <button class="w3-nav-top-btn" id="top-prev-btn" onclick="navigateTopicOffset(-1)">❮ Prev Topic</button>
+        <button class="w3-nav-top-btn next" id="top-next-btn" onclick="navigateTopicOffset(1)">Next Topic ❯</button>
       </div>
     </header>
 
-    <!-- Main Content Area -->
+    <!-- Main Content -->
     <main class="main-content" id="main-content">
 
       <!-- Topic: Arrays &amp; Hashing -->
-      <article class="topic-section" id="arrays-hashing" data-topic-index="0" data-level="Level 0: Foundation" data-name="Arrays &amp; Hashing">
+      <article class="topic-section" id="arrays-hashing" data-topic-index="0" data-name="Arrays &amp; Hashing">
         <div class="topic-header-block">
           <span class="level-tag">Level 0: Foundation</span>
           <div class="topic-title-row">
             <h1 class="topic-h1"><span>⚡</span> Arrays &amp; Hashing</h1>
-            <div class="topic-diff-pills">
-              <span style="font-size:0.8rem; color:var(--lc-text-secondary);">(9 Problems)</span>
+            <div class="topic-meta-right">
+              <!-- Topic Status: Done or In Progress -->
+              <span class="topic-done-badge" id="topic-badge-arrays-hashing">In Progress (0/9 Done)</span>
               <span class="diff-badge Easy">3 Easy</span>
               <span class="diff-badge Medium">6 Med</span>
               <span class="diff-badge Hard">0 Hard</span>
@@ -1084,13 +1120,15 @@ body {
           <p class="topic-desc">The bedrock of DSA. Master O(1) average hash lookups, frequency maps, prefix aggregations, and bucket partitioning to eliminate brute-force O(N^2) scans.</p>
         </div>
 
-        <!-- Short-Circuit Python 3 Blueprint (Exact Screenshot Styling) -->
+        <!-- Short-Circuit Python 3 Blueprint (Exact LeetCode Format - NO Vertical Lines!) -->
         <div class="blueprint-card">
           <div class="blueprint-header">
-            <div class="blueprint-title">
-              <span>⚡</span>
-              <span>Python 3 Blueprint</span>
-              <span class="blueprint-tag">Short-Circuit</span>
+            <div class="editor-header-left">
+              <div class="lc-lang-pill">
+                <span>Python3</span>
+                <span class="arrow">▾</span>
+              </div>
+              <span class="blueprint-subtag">Short-Circuit Blueprint</span>
             </div>
             <button class="copy-btn" onclick="copyBlueprint('code-bp-arrays-hashing', this)">📋 Copy</button>
           </div>
@@ -1115,7 +1153,7 @@ body {
           </div>
         </div>
 
-        <!-- Problems Categorized by Levels / 1-5 Stars -->
+        <!-- Problems Categorized by 1-5 Stars -->
         <div class="tiers-wrap">
 
           <div class="tier-box">
@@ -1415,13 +1453,14 @@ body {
       </article>
 
       <!-- Topic: Two Pointers -->
-      <article class="topic-section" id="two-pointers" data-topic-index="1" data-level="Level 1: Linear Navigation" data-name="Two Pointers">
+      <article class="topic-section" id="two-pointers" data-topic-index="1" data-name="Two Pointers">
         <div class="topic-header-block">
           <span class="level-tag">Level 1: Linear Navigation</span>
           <div class="topic-title-row">
             <h1 class="topic-h1"><span>👉👈</span> Two Pointers</h1>
-            <div class="topic-diff-pills">
-              <span style="font-size:0.8rem; color:var(--lc-text-secondary);">(5 Problems)</span>
+            <div class="topic-meta-right">
+              <!-- Topic Status: Done or In Progress -->
+              <span class="topic-done-badge" id="topic-badge-two-pointers">In Progress (0/5 Done)</span>
               <span class="diff-badge Easy">1 Easy</span>
               <span class="diff-badge Medium">3 Med</span>
               <span class="diff-badge Hard">1 Hard</span>
@@ -1430,13 +1469,15 @@ body {
           <p class="topic-desc">Maintain two indices converging from opposite ends or moving at different speeds. Eliminates quadratic nested iterations on sorted sequences or palindromes.</p>
         </div>
 
-        <!-- Short-Circuit Python 3 Blueprint (Exact Screenshot Styling) -->
+        <!-- Short-Circuit Python 3 Blueprint (Exact LeetCode Format - NO Vertical Lines!) -->
         <div class="blueprint-card">
           <div class="blueprint-header">
-            <div class="blueprint-title">
-              <span>⚡</span>
-              <span>Python 3 Blueprint</span>
-              <span class="blueprint-tag">Short-Circuit</span>
+            <div class="editor-header-left">
+              <div class="lc-lang-pill">
+                <span>Python3</span>
+                <span class="arrow">▾</span>
+              </div>
+              <span class="blueprint-subtag">Short-Circuit Blueprint</span>
             </div>
             <button class="copy-btn" onclick="copyBlueprint('code-bp-two-pointers', this)">📋 Copy</button>
           </div>
@@ -1461,7 +1502,7 @@ body {
           </div>
         </div>
 
-        <!-- Problems Categorized by Levels / 1-5 Stars -->
+        <!-- Problems Categorized by 1-5 Stars -->
         <div class="tiers-wrap">
 
           <div class="tier-box">
@@ -1661,13 +1702,14 @@ body {
       </article>
 
       <!-- Topic: Sliding Window -->
-      <article class="topic-section" id="sliding-window" data-topic-index="2" data-level="Level 2: Pointer &amp; Search Specialization" data-name="Sliding Window">
+      <article class="topic-section" id="sliding-window" data-topic-index="2" data-name="Sliding Window">
         <div class="topic-header-block">
           <span class="level-tag">Level 2: Pointer &amp; Search Specialization</span>
           <div class="topic-title-row">
             <h1 class="topic-h1"><span>🪟</span> Sliding Window</h1>
-            <div class="topic-diff-pills">
-              <span style="font-size:0.8rem; color:var(--lc-text-secondary);">(6 Problems)</span>
+            <div class="topic-meta-right">
+              <!-- Topic Status: Done or In Progress -->
+              <span class="topic-done-badge" id="topic-badge-sliding-window">In Progress (0/6 Done)</span>
               <span class="diff-badge Easy">1 Easy</span>
               <span class="diff-badge Medium">3 Med</span>
               <span class="diff-badge Hard">2 Hard</span>
@@ -1676,13 +1718,15 @@ body {
           <p class="topic-desc">Continuously expand right boundary to satisfy or break a constraint, then contract left boundary to restore validity or minimize window. Converts O(N^2) subarray problems to O(N).</p>
         </div>
 
-        <!-- Short-Circuit Python 3 Blueprint (Exact Screenshot Styling) -->
+        <!-- Short-Circuit Python 3 Blueprint (Exact LeetCode Format - NO Vertical Lines!) -->
         <div class="blueprint-card">
           <div class="blueprint-header">
-            <div class="blueprint-title">
-              <span>⚡</span>
-              <span>Python 3 Blueprint</span>
-              <span class="blueprint-tag">Short-Circuit</span>
+            <div class="editor-header-left">
+              <div class="lc-lang-pill">
+                <span>Python3</span>
+                <span class="arrow">▾</span>
+              </div>
+              <span class="blueprint-subtag">Short-Circuit Blueprint</span>
             </div>
             <button class="copy-btn" onclick="copyBlueprint('code-bp-sliding-window', this)">📋 Copy</button>
           </div>
@@ -1711,7 +1755,7 @@ body {
           </div>
         </div>
 
-        <!-- Problems Categorized by Levels / 1-5 Stars -->
+        <!-- Problems Categorized by 1-5 Stars -->
         <div class="tiers-wrap">
 
           <div class="tier-box">
@@ -1936,13 +1980,14 @@ body {
       </article>
 
       <!-- Topic: Stack -->
-      <article class="topic-section" id="stack" data-topic-index="3" data-level="Level 1: Linear Navigation" data-name="Stack">
+      <article class="topic-section" id="stack" data-topic-index="3" data-name="Stack">
         <div class="topic-header-block">
           <span class="level-tag">Level 1: Linear Navigation</span>
           <div class="topic-title-row">
             <h1 class="topic-h1"><span>🥞</span> Stack</h1>
-            <div class="topic-diff-pills">
-              <span style="font-size:0.8rem; color:var(--lc-text-secondary);">(7 Problems)</span>
+            <div class="topic-meta-right">
+              <!-- Topic Status: Done or In Progress -->
+              <span class="topic-done-badge" id="topic-badge-stack">In Progress (0/7 Done)</span>
               <span class="diff-badge Easy">1 Easy</span>
               <span class="diff-badge Medium">5 Med</span>
               <span class="diff-badge Hard">1 Hard</span>
@@ -1951,13 +1996,15 @@ body {
           <p class="topic-desc">LIFO (Last-In, First-Out) data structure. Essential for matched bracket parsing, nested evaluations, and Monotonic Stacks to find Next Greater / Smaller elements in O(N).</p>
         </div>
 
-        <!-- Short-Circuit Python 3 Blueprint (Exact Screenshot Styling) -->
+        <!-- Short-Circuit Python 3 Blueprint (Exact LeetCode Format - NO Vertical Lines!) -->
         <div class="blueprint-card">
           <div class="blueprint-header">
-            <div class="blueprint-title">
-              <span>⚡</span>
-              <span>Python 3 Blueprint</span>
-              <span class="blueprint-tag">Short-Circuit</span>
+            <div class="editor-header-left">
+              <div class="lc-lang-pill">
+                <span>Python3</span>
+                <span class="arrow">▾</span>
+              </div>
+              <span class="blueprint-subtag">Short-Circuit Blueprint</span>
             </div>
             <button class="copy-btn" onclick="copyBlueprint('code-bp-stack', this)">📋 Copy</button>
           </div>
@@ -1980,7 +2027,7 @@ body {
           </div>
         </div>
 
-        <!-- Problems Categorized by Levels / 1-5 Stars -->
+        <!-- Problems Categorized by 1-5 Stars -->
         <div class="tiers-wrap">
 
           <div class="tier-box">
@@ -2251,13 +2298,14 @@ body {
       </article>
 
       <!-- Topic: Binary Search -->
-      <article class="topic-section" id="binary-search" data-topic-index="4" data-level="Level 2: Pointer &amp; Search Specialization" data-name="Binary Search">
+      <article class="topic-section" id="binary-search" data-topic-index="4" data-name="Binary Search">
         <div class="topic-header-block">
           <span class="level-tag">Level 2: Pointer &amp; Search Specialization</span>
           <div class="topic-title-row">
             <h1 class="topic-h1"><span>🔍</span> Binary Search</h1>
-            <div class="topic-diff-pills">
-              <span style="font-size:0.8rem; color:var(--lc-text-secondary);">(7 Problems)</span>
+            <div class="topic-meta-right">
+              <!-- Topic Status: Done or In Progress -->
+              <span class="topic-done-badge" id="topic-badge-binary-search">In Progress (0/7 Done)</span>
               <span class="diff-badge Easy">1 Easy</span>
               <span class="diff-badge Medium">5 Med</span>
               <span class="diff-badge Hard">1 Hard</span>
@@ -2266,13 +2314,15 @@ body {
           <p class="topic-desc">Logarithmic O(log N) divide-and-conquer on sorted arrays, rotated arrays, or monotonic answer spaces (Binary Search on Answer).</p>
         </div>
 
-        <!-- Short-Circuit Python 3 Blueprint (Exact Screenshot Styling) -->
+        <!-- Short-Circuit Python 3 Blueprint (Exact LeetCode Format - NO Vertical Lines!) -->
         <div class="blueprint-card">
           <div class="blueprint-header">
-            <div class="blueprint-title">
-              <span>⚡</span>
-              <span>Python 3 Blueprint</span>
-              <span class="blueprint-tag">Short-Circuit</span>
+            <div class="editor-header-left">
+              <div class="lc-lang-pill">
+                <span>Python3</span>
+                <span class="arrow">▾</span>
+              </div>
+              <span class="blueprint-subtag">Short-Circuit Blueprint</span>
             </div>
             <button class="copy-btn" onclick="copyBlueprint('code-bp-binary-search', this)">📋 Copy</button>
           </div>
@@ -2297,7 +2347,7 @@ body {
           </div>
         </div>
 
-        <!-- Problems Categorized by Levels / 1-5 Stars -->
+        <!-- Problems Categorized by 1-5 Stars -->
         <div class="tiers-wrap">
 
           <div class="tier-box">
@@ -2568,13 +2618,14 @@ body {
       </article>
 
       <!-- Topic: Linked List -->
-      <article class="topic-section" id="linked-list" data-topic-index="5" data-level="Level 2: Pointer &amp; Search Specialization" data-name="Linked List">
+      <article class="topic-section" id="linked-list" data-topic-index="5" data-name="Linked List">
         <div class="topic-header-block">
           <span class="level-tag">Level 2: Pointer &amp; Search Specialization</span>
           <div class="topic-title-row">
             <h1 class="topic-h1"><span>🔗</span> Linked List</h1>
-            <div class="topic-diff-pills">
-              <span style="font-size:0.8rem; color:var(--lc-text-secondary);">(11 Problems)</span>
+            <div class="topic-meta-right">
+              <!-- Topic Status: Done or In Progress -->
+              <span class="topic-done-badge" id="topic-badge-linked-list">In Progress (0/11 Done)</span>
               <span class="diff-badge Easy">3 Easy</span>
               <span class="diff-badge Medium">6 Med</span>
               <span class="diff-badge Hard">2 Hard</span>
@@ -2583,13 +2634,15 @@ body {
           <p class="topic-desc">Linear collection of nodes connected by pointer references. Master sentinel dummy nodes, in-place pointer reversal, and Floyd&#x27;s Cycle Detection.</p>
         </div>
 
-        <!-- Short-Circuit Python 3 Blueprint (Exact Screenshot Styling) -->
+        <!-- Short-Circuit Python 3 Blueprint (Exact LeetCode Format - NO Vertical Lines!) -->
         <div class="blueprint-card">
           <div class="blueprint-header">
-            <div class="blueprint-title">
-              <span>⚡</span>
-              <span>Python 3 Blueprint</span>
-              <span class="blueprint-tag">Short-Circuit</span>
+            <div class="editor-header-left">
+              <div class="lc-lang-pill">
+                <span>Python3</span>
+                <span class="arrow">▾</span>
+              </div>
+              <span class="blueprint-subtag">Short-Circuit Blueprint</span>
             </div>
             <button class="copy-btn" onclick="copyBlueprint('code-bp-linked-list', this)">📋 Copy</button>
           </div>
@@ -2612,7 +2665,7 @@ body {
           </div>
         </div>
 
-        <!-- Problems Categorized by Levels / 1-5 Stars -->
+        <!-- Problems Categorized by 1-5 Stars -->
         <div class="tiers-wrap">
 
           <div class="tier-box">
@@ -2983,13 +3036,14 @@ body {
       </article>
 
       <!-- Topic: Trees -->
-      <article class="topic-section" id="trees" data-topic-index="6" data-level="Level 3: The Central Tree Pivot" data-name="Trees">
+      <article class="topic-section" id="trees" data-topic-index="6" data-name="Trees">
         <div class="topic-header-block">
           <span class="level-tag">Level 3: The Central Tree Pivot</span>
           <div class="topic-title-row">
             <h1 class="topic-h1"><span>🌲</span> Trees</h1>
-            <div class="topic-diff-pills">
-              <span style="font-size:0.8rem; color:var(--lc-text-secondary);">(15 Problems)</span>
+            <div class="topic-meta-right">
+              <!-- Topic Status: Done or In Progress -->
+              <span class="topic-done-badge" id="topic-badge-trees">In Progress (0/15 Done)</span>
               <span class="diff-badge Easy">6 Easy</span>
               <span class="diff-badge Medium">7 Med</span>
               <span class="diff-badge Hard">2 Hard</span>
@@ -2998,13 +3052,15 @@ body {
           <p class="topic-desc">Hierarchical node structure. Master DFS (pre-order, in-order for BSTs, post-order for bottom-up aggregation) and BFS level-order with collections.deque.</p>
         </div>
 
-        <!-- Short-Circuit Python 3 Blueprint (Exact Screenshot Styling) -->
+        <!-- Short-Circuit Python 3 Blueprint (Exact LeetCode Format - NO Vertical Lines!) -->
         <div class="blueprint-card">
           <div class="blueprint-header">
-            <div class="blueprint-title">
-              <span>⚡</span>
-              <span>Python 3 Blueprint</span>
-              <span class="blueprint-tag">Short-Circuit</span>
+            <div class="editor-header-left">
+              <div class="lc-lang-pill">
+                <span>Python3</span>
+                <span class="arrow">▾</span>
+              </div>
+              <span class="blueprint-subtag">Short-Circuit Blueprint</span>
             </div>
             <button class="copy-btn" onclick="copyBlueprint('code-bp-trees', this)">📋 Copy</button>
           </div>
@@ -3019,7 +3075,7 @@ body {
           </div>
         </div>
 
-        <!-- Problems Categorized by Levels / 1-5 Stars -->
+        <!-- Problems Categorized by 1-5 Stars -->
         <div class="tiers-wrap">
 
           <div class="tier-box">
@@ -3490,13 +3546,14 @@ body {
       </article>
 
       <!-- Topic: Tries -->
-      <article class="topic-section" id="tries" data-topic-index="7" data-level="Level 4: Tree Specializations" data-name="Tries">
+      <article class="topic-section" id="tries" data-topic-index="7" data-name="Tries">
         <div class="topic-header-block">
           <span class="level-tag">Level 4: Tree Specializations</span>
           <div class="topic-title-row">
             <h1 class="topic-h1"><span>🌳</span> Tries</h1>
-            <div class="topic-diff-pills">
-              <span style="font-size:0.8rem; color:var(--lc-text-secondary);">(3 Problems)</span>
+            <div class="topic-meta-right">
+              <!-- Topic Status: Done or In Progress -->
+              <span class="topic-done-badge" id="topic-badge-tries">In Progress (0/3 Done)</span>
               <span class="diff-badge Easy">0 Easy</span>
               <span class="diff-badge Medium">2 Med</span>
               <span class="diff-badge Hard">1 Hard</span>
@@ -3505,13 +3562,15 @@ body {
           <p class="topic-desc">Prefix tree where each node represents a character. Unlocks O(L) insertion, word search, and prefix matching where L is string length, independent of dictionary size.</p>
         </div>
 
-        <!-- Short-Circuit Python 3 Blueprint (Exact Screenshot Styling) -->
+        <!-- Short-Circuit Python 3 Blueprint (Exact LeetCode Format - NO Vertical Lines!) -->
         <div class="blueprint-card">
           <div class="blueprint-header">
-            <div class="blueprint-title">
-              <span>⚡</span>
-              <span>Python 3 Blueprint</span>
-              <span class="blueprint-tag">Short-Circuit</span>
+            <div class="editor-header-left">
+              <div class="lc-lang-pill">
+                <span>Python3</span>
+                <span class="arrow">▾</span>
+              </div>
+              <span class="blueprint-subtag">Short-Circuit Blueprint</span>
             </div>
             <button class="copy-btn" onclick="copyBlueprint('code-bp-tries', this)">📋 Copy</button>
           </div>
@@ -3544,7 +3603,7 @@ body {
           </div>
         </div>
 
-        <!-- Problems Categorized by Levels / 1-5 Stars -->
+        <!-- Problems Categorized by 1-5 Stars -->
         <div class="tiers-wrap">
 
           <div class="tier-box">
@@ -3673,13 +3732,14 @@ body {
       </article>
 
       <!-- Topic: Heap / Priority Queue -->
-      <article class="topic-section" id="heap-priority-queue" data-topic-index="8" data-level="Level 4: Tree Specializations" data-name="Heap / Priority Queue">
+      <article class="topic-section" id="heap-priority-queue" data-topic-index="8" data-name="Heap / Priority Queue">
         <div class="topic-header-block">
           <span class="level-tag">Level 4: Tree Specializations</span>
           <div class="topic-title-row">
             <h1 class="topic-h1"><span>⛰️</span> Heap / Priority Queue</h1>
-            <div class="topic-diff-pills">
-              <span style="font-size:0.8rem; color:var(--lc-text-secondary);">(7 Problems)</span>
+            <div class="topic-meta-right">
+              <!-- Topic Status: Done or In Progress -->
+              <span class="topic-done-badge" id="topic-badge-heap-priority-queue">In Progress (0/7 Done)</span>
               <span class="diff-badge Easy">2 Easy</span>
               <span class="diff-badge Medium">4 Med</span>
               <span class="diff-badge Hard">1 Hard</span>
@@ -3688,13 +3748,15 @@ body {
           <p class="topic-desc">Complete binary tree satisfying heap invariant. Provides O(log N) insertion/removal and O(1) peek of minimum or maximum elements using Python&#x27;s heapq.</p>
         </div>
 
-        <!-- Short-Circuit Python 3 Blueprint (Exact Screenshot Styling) -->
+        <!-- Short-Circuit Python 3 Blueprint (Exact LeetCode Format - NO Vertical Lines!) -->
         <div class="blueprint-card">
           <div class="blueprint-header">
-            <div class="blueprint-title">
-              <span>⚡</span>
-              <span>Python 3 Blueprint</span>
-              <span class="blueprint-tag">Short-Circuit</span>
+            <div class="editor-header-left">
+              <div class="lc-lang-pill">
+                <span>Python3</span>
+                <span class="arrow">▾</span>
+              </div>
+              <span class="blueprint-subtag">Short-Circuit Blueprint</span>
             </div>
             <button class="copy-btn" onclick="copyBlueprint('code-bp-heap-priority-queue', this)">📋 Copy</button>
           </div>
@@ -3717,7 +3779,7 @@ body {
           </div>
         </div>
 
-        <!-- Problems Categorized by Levels / 1-5 Stars -->
+        <!-- Problems Categorized by 1-5 Stars -->
         <div class="tiers-wrap">
 
           <div class="tier-box">
@@ -3988,13 +4050,14 @@ body {
       </article>
 
       <!-- Topic: Backtracking -->
-      <article class="topic-section" id="backtracking" data-topic-index="9" data-level="Level 4: Tree Specializations" data-name="Backtracking">
+      <article class="topic-section" id="backtracking" data-topic-index="9" data-name="Backtracking">
         <div class="topic-header-block">
           <span class="level-tag">Level 4: Tree Specializations</span>
           <div class="topic-title-row">
             <h1 class="topic-h1"><span>🌲🔙</span> Backtracking</h1>
-            <div class="topic-diff-pills">
-              <span style="font-size:0.8rem; color:var(--lc-text-secondary);">(9 Problems)</span>
+            <div class="topic-meta-right">
+              <!-- Topic Status: Done or In Progress -->
+              <span class="topic-done-badge" id="topic-badge-backtracking">In Progress (0/9 Done)</span>
               <span class="diff-badge Easy">0 Easy</span>
               <span class="diff-badge Medium">8 Med</span>
               <span class="diff-badge Hard">1 Hard</span>
@@ -4003,13 +4066,15 @@ body {
           <p class="topic-desc">Systematically explore a state tree by making a choice, recursing into sub-choices, and undoing the choice to restore previous state.</p>
         </div>
 
-        <!-- Short-Circuit Python 3 Blueprint (Exact Screenshot Styling) -->
+        <!-- Short-Circuit Python 3 Blueprint (Exact LeetCode Format - NO Vertical Lines!) -->
         <div class="blueprint-card">
           <div class="blueprint-header">
-            <div class="blueprint-title">
-              <span>⚡</span>
-              <span>Python 3 Blueprint</span>
-              <span class="blueprint-tag">Short-Circuit</span>
+            <div class="editor-header-left">
+              <div class="lc-lang-pill">
+                <span>Python3</span>
+                <span class="arrow">▾</span>
+              </div>
+              <span class="blueprint-subtag">Short-Circuit Blueprint</span>
             </div>
             <button class="copy-btn" onclick="copyBlueprint('code-bp-backtracking', this)">📋 Copy</button>
           </div>
@@ -4040,7 +4105,7 @@ body {
           </div>
         </div>
 
-        <!-- Problems Categorized by Levels / 1-5 Stars -->
+        <!-- Problems Categorized by 1-5 Stars -->
         <div class="tiers-wrap">
 
           <div class="tier-box">
@@ -4340,13 +4405,14 @@ body {
       </article>
 
       <!-- Topic: Intervals -->
-      <article class="topic-section" id="intervals" data-topic-index="10" data-level="Level 5: Optimization &amp; Synthesis" data-name="Intervals">
+      <article class="topic-section" id="intervals" data-topic-index="10" data-name="Intervals">
         <div class="topic-header-block">
           <span class="level-tag">Level 5: Optimization &amp; Synthesis</span>
           <div class="topic-title-row">
             <h1 class="topic-h1"><span>⏱️</span> Intervals</h1>
-            <div class="topic-diff-pills">
-              <span style="font-size:0.8rem; color:var(--lc-text-secondary);">(6 Problems)</span>
+            <div class="topic-meta-right">
+              <!-- Topic Status: Done or In Progress -->
+              <span class="topic-done-badge" id="topic-badge-intervals">In Progress (0/6 Done)</span>
               <span class="diff-badge Easy">1 Easy</span>
               <span class="diff-badge Medium">4 Med</span>
               <span class="diff-badge Hard">1 Hard</span>
@@ -4355,13 +4421,15 @@ body {
           <p class="topic-desc">Techniques for managing overlapping time segments. The golden rule: ALWAYS sort intervals by start time (or end time for activity selection) to reduce 2D overlap checks to a linear scan.</p>
         </div>
 
-        <!-- Short-Circuit Python 3 Blueprint (Exact Screenshot Styling) -->
+        <!-- Short-Circuit Python 3 Blueprint (Exact LeetCode Format - NO Vertical Lines!) -->
         <div class="blueprint-card">
           <div class="blueprint-header">
-            <div class="blueprint-title">
-              <span>⚡</span>
-              <span>Python 3 Blueprint</span>
-              <span class="blueprint-tag">Short-Circuit</span>
+            <div class="editor-header-left">
+              <div class="lc-lang-pill">
+                <span>Python3</span>
+                <span class="arrow">▾</span>
+              </div>
+              <span class="blueprint-subtag">Short-Circuit Blueprint</span>
             </div>
             <button class="copy-btn" onclick="copyBlueprint('code-bp-intervals', this)">📋 Copy</button>
           </div>
@@ -4386,7 +4454,7 @@ body {
           </div>
         </div>
 
-        <!-- Problems Categorized by Levels / 1-5 Stars -->
+        <!-- Problems Categorized by 1-5 Stars -->
         <div class="tiers-wrap">
 
           <div class="tier-box">
@@ -4632,13 +4700,14 @@ body {
       </article>
 
       <!-- Topic: Greedy -->
-      <article class="topic-section" id="greedy" data-topic-index="11" data-level="Level 5: Optimization &amp; Synthesis" data-name="Greedy">
+      <article class="topic-section" id="greedy" data-topic-index="11" data-name="Greedy">
         <div class="topic-header-block">
           <span class="level-tag">Level 5: Optimization &amp; Synthesis</span>
           <div class="topic-title-row">
             <h1 class="topic-h1"><span>⚡🎯</span> Greedy</h1>
-            <div class="topic-diff-pills">
-              <span style="font-size:0.8rem; color:var(--lc-text-secondary);">(8 Problems)</span>
+            <div class="topic-meta-right">
+              <!-- Topic Status: Done or In Progress -->
+              <span class="topic-done-badge" id="topic-badge-greedy">In Progress (0/8 Done)</span>
               <span class="diff-badge Easy">0 Easy</span>
               <span class="diff-badge Medium">8 Med</span>
               <span class="diff-badge Hard">0 Hard</span>
@@ -4647,13 +4716,15 @@ body {
           <p class="topic-desc">Make the locally optimal choice at each step without ever backtracking, guaranteed to lead to the global optimum. Fast O(N) or O(N log N) runtime.</p>
         </div>
 
-        <!-- Short-Circuit Python 3 Blueprint (Exact Screenshot Styling) -->
+        <!-- Short-Circuit Python 3 Blueprint (Exact LeetCode Format - NO Vertical Lines!) -->
         <div class="blueprint-card">
           <div class="blueprint-header">
-            <div class="blueprint-title">
-              <span>⚡</span>
-              <span>Python 3 Blueprint</span>
-              <span class="blueprint-tag">Short-Circuit</span>
+            <div class="editor-header-left">
+              <div class="lc-lang-pill">
+                <span>Python3</span>
+                <span class="arrow">▾</span>
+              </div>
+              <span class="blueprint-subtag">Short-Circuit Blueprint</span>
             </div>
             <button class="copy-btn" onclick="copyBlueprint('code-bp-greedy', this)">📋 Copy</button>
           </div>
@@ -4676,7 +4747,7 @@ body {
           </div>
         </div>
 
-        <!-- Problems Categorized by Levels / 1-5 Stars -->
+        <!-- Problems Categorized by 1-5 Stars -->
         <div class="tiers-wrap">
 
           <div class="tier-box">
@@ -4951,13 +5022,14 @@ body {
       </article>
 
       <!-- Topic: Graphs -->
-      <article class="topic-section" id="graphs" data-topic-index="12" data-level="Level 5: Optimization &amp; Synthesis" data-name="Graphs">
+      <article class="topic-section" id="graphs" data-topic-index="12" data-name="Graphs">
         <div class="topic-header-block">
           <span class="level-tag">Level 5: Optimization &amp; Synthesis</span>
           <div class="topic-title-row">
             <h1 class="topic-h1"><span>🕸️</span> Graphs</h1>
-            <div class="topic-diff-pills">
-              <span style="font-size:0.8rem; color:var(--lc-text-secondary);">(13 Problems)</span>
+            <div class="topic-meta-right">
+              <!-- Topic Status: Done or In Progress -->
+              <span class="topic-done-badge" id="topic-badge-graphs">In Progress (0/13 Done)</span>
               <span class="diff-badge Easy">0 Easy</span>
               <span class="diff-badge Medium">12 Med</span>
               <span class="diff-badge Hard">1 Hard</span>
@@ -4966,13 +5038,15 @@ body {
           <p class="topic-desc">Network of vertices and edges. Master 2D grid matrix traversals (DFS/BFS), graph cycle detection, and Kahn&#x27;s Topological Sort algorithm for dependency ordering.</p>
         </div>
 
-        <!-- Short-Circuit Python 3 Blueprint (Exact Screenshot Styling) -->
+        <!-- Short-Circuit Python 3 Blueprint (Exact LeetCode Format - NO Vertical Lines!) -->
         <div class="blueprint-card">
           <div class="blueprint-header">
-            <div class="blueprint-title">
-              <span>⚡</span>
-              <span>Python 3 Blueprint</span>
-              <span class="blueprint-tag">Short-Circuit</span>
+            <div class="editor-header-left">
+              <div class="lc-lang-pill">
+                <span>Python3</span>
+                <span class="arrow">▾</span>
+              </div>
+              <span class="blueprint-subtag">Short-Circuit Blueprint</span>
             </div>
             <button class="copy-btn" onclick="copyBlueprint('code-bp-graphs', this)">📋 Copy</button>
           </div>
@@ -5005,7 +5079,7 @@ body {
           </div>
         </div>
 
-        <!-- Problems Categorized by Levels / 1-5 Stars -->
+        <!-- Problems Categorized by 1-5 Stars -->
         <div class="tiers-wrap">
 
           <div class="tier-box">
@@ -5405,13 +5479,14 @@ body {
       </article>
 
       <!-- Topic: 1-D Dynamic Programming -->
-      <article class="topic-section" id="1-d-dynamic-programming" data-topic-index="13" data-level="Level 5: Optimization &amp; Synthesis" data-name="1-D Dynamic Programming">
+      <article class="topic-section" id="1-d-dynamic-programming" data-topic-index="13" data-name="1-D Dynamic Programming">
         <div class="topic-header-block">
           <span class="level-tag">Level 5: Optimization &amp; Synthesis</span>
           <div class="topic-title-row">
             <h1 class="topic-h1"><span>📈</span> 1-D Dynamic Programming</h1>
-            <div class="topic-diff-pills">
-              <span style="font-size:0.8rem; color:var(--lc-text-secondary);">(12 Problems)</span>
+            <div class="topic-meta-right">
+              <!-- Topic Status: Done or In Progress -->
+              <span class="topic-done-badge" id="topic-badge-1-d-dynamic-programming">In Progress (0/12 Done)</span>
               <span class="diff-badge Easy">2 Easy</span>
               <span class="diff-badge Medium">10 Med</span>
               <span class="diff-badge Hard">0 Hard</span>
@@ -5420,13 +5495,15 @@ body {
           <p class="topic-desc">Break complex problems into overlapping subproblems with optimal substructure. Define 1D recurrence relations and optimize space from O(N) to O(1).</p>
         </div>
 
-        <!-- Short-Circuit Python 3 Blueprint (Exact Screenshot Styling) -->
+        <!-- Short-Circuit Python 3 Blueprint (Exact LeetCode Format - NO Vertical Lines!) -->
         <div class="blueprint-card">
           <div class="blueprint-header">
-            <div class="blueprint-title">
-              <span>⚡</span>
-              <span>Python 3 Blueprint</span>
-              <span class="blueprint-tag">Short-Circuit</span>
+            <div class="editor-header-left">
+              <div class="lc-lang-pill">
+                <span>Python3</span>
+                <span class="arrow">▾</span>
+              </div>
+              <span class="blueprint-subtag">Short-Circuit Blueprint</span>
             </div>
             <button class="copy-btn" onclick="copyBlueprint('code-bp-1-d-dynamic-programming', this)">📋 Copy</button>
           </div>
@@ -5445,7 +5522,7 @@ body {
           </div>
         </div>
 
-        <!-- Problems Categorized by Levels / 1-5 Stars -->
+        <!-- Problems Categorized by 1-5 Stars -->
         <div class="tiers-wrap">
 
           <div class="tier-box">
@@ -5820,13 +5897,14 @@ body {
       </article>
 
       <!-- Topic: Advanced Graphs -->
-      <article class="topic-section" id="advanced-graphs" data-topic-index="14" data-level="Level 6: Advanced DP &amp; Graphs" data-name="Advanced Graphs">
+      <article class="topic-section" id="advanced-graphs" data-topic-index="14" data-name="Advanced Graphs">
         <div class="topic-header-block">
           <span class="level-tag">Level 6: Advanced DP &amp; Graphs</span>
           <div class="topic-title-row">
             <h1 class="topic-h1"><span>🚀🕸️</span> Advanced Graphs</h1>
-            <div class="topic-diff-pills">
-              <span style="font-size:0.8rem; color:var(--lc-text-secondary);">(6 Problems)</span>
+            <div class="topic-meta-right">
+              <!-- Topic Status: Done or In Progress -->
+              <span class="topic-done-badge" id="topic-badge-advanced-graphs">In Progress (0/6 Done)</span>
               <span class="diff-badge Easy">0 Easy</span>
               <span class="diff-badge Medium">3 Med</span>
               <span class="diff-badge Hard">3 Hard</span>
@@ -5835,13 +5913,15 @@ body {
           <p class="topic-desc">Weighted and specialized graph algorithms: Dijkstra&#x27;s Shortest Path, Prim&#x27;s / Kruskal&#x27;s Minimum Spanning Tree (MST), and Bellman-Ford / BFS with step constraints.</p>
         </div>
 
-        <!-- Short-Circuit Python 3 Blueprint (Exact Screenshot Styling) -->
+        <!-- Short-Circuit Python 3 Blueprint (Exact LeetCode Format - NO Vertical Lines!) -->
         <div class="blueprint-card">
           <div class="blueprint-header">
-            <div class="blueprint-title">
-              <span>⚡</span>
-              <span>Python 3 Blueprint</span>
-              <span class="blueprint-tag">Short-Circuit</span>
+            <div class="editor-header-left">
+              <div class="lc-lang-pill">
+                <span>Python3</span>
+                <span class="arrow">▾</span>
+              </div>
+              <span class="blueprint-subtag">Short-Circuit Blueprint</span>
             </div>
             <button class="copy-btn" onclick="copyBlueprint('code-bp-advanced-graphs', this)">📋 Copy</button>
           </div>
@@ -5870,7 +5950,7 @@ body {
           </div>
         </div>
 
-        <!-- Problems Categorized by Levels / 1-5 Stars -->
+        <!-- Problems Categorized by 1-5 Stars -->
         <div class="tiers-wrap">
 
           <div class="tier-box">
@@ -6095,13 +6175,14 @@ body {
       </article>
 
       <!-- Topic: 2-D Dynamic Programming -->
-      <article class="topic-section" id="2-d-dynamic-programming" data-topic-index="15" data-level="Level 6: Advanced DP &amp; Graphs" data-name="2-D Dynamic Programming">
+      <article class="topic-section" id="2-d-dynamic-programming" data-topic-index="15" data-name="2-D Dynamic Programming">
         <div class="topic-header-block">
           <span class="level-tag">Level 6: Advanced DP &amp; Graphs</span>
           <div class="topic-title-row">
             <h1 class="topic-h1"><span>📊</span> 2-D Dynamic Programming</h1>
-            <div class="topic-diff-pills">
-              <span style="font-size:0.8rem; color:var(--lc-text-secondary);">(11 Problems)</span>
+            <div class="topic-meta-right">
+              <!-- Topic Status: Done or In Progress -->
+              <span class="topic-done-badge" id="topic-badge-2-d-dynamic-programming">In Progress (0/11 Done)</span>
               <span class="diff-badge Easy">0 Easy</span>
               <span class="diff-badge Medium">7 Med</span>
               <span class="diff-badge Hard">4 Hard</span>
@@ -6110,13 +6191,15 @@ body {
           <p class="topic-desc">State depends on two independent dimensions (grid rows/cols, or dual string prefix indices i and j). Master Longest Common Subsequence, Edit Distance, and knapsacks.</p>
         </div>
 
-        <!-- Short-Circuit Python 3 Blueprint (Exact Screenshot Styling) -->
+        <!-- Short-Circuit Python 3 Blueprint (Exact LeetCode Format - NO Vertical Lines!) -->
         <div class="blueprint-card">
           <div class="blueprint-header">
-            <div class="blueprint-title">
-              <span>⚡</span>
-              <span>Python 3 Blueprint</span>
-              <span class="blueprint-tag">Short-Circuit</span>
+            <div class="editor-header-left">
+              <div class="lc-lang-pill">
+                <span>Python3</span>
+                <span class="arrow">▾</span>
+              </div>
+              <span class="blueprint-subtag">Short-Circuit Blueprint</span>
             </div>
             <button class="copy-btn" onclick="copyBlueprint('code-bp-2-d-dynamic-programming', this)">📋 Copy</button>
           </div>
@@ -6141,7 +6224,7 @@ body {
           </div>
         </div>
 
-        <!-- Problems Categorized by Levels / 1-5 Stars -->
+        <!-- Problems Categorized by 1-5 Stars -->
         <div class="tiers-wrap">
 
           <div class="tier-box">
@@ -6491,13 +6574,14 @@ body {
       </article>
 
       <!-- Topic: Bit Manipulation -->
-      <article class="topic-section" id="bit-manipulation" data-topic-index="16" data-level="Level 7: Math &amp; Low-Level Foundations" data-name="Bit Manipulation">
+      <article class="topic-section" id="bit-manipulation" data-topic-index="16" data-name="Bit Manipulation">
         <div class="topic-header-block">
           <span class="level-tag">Level 7: Math &amp; Low-Level Foundations</span>
           <div class="topic-title-row">
             <h1 class="topic-h1"><span>0️⃣1️⃣</span> Bit Manipulation</h1>
-            <div class="topic-diff-pills">
-              <span style="font-size:0.8rem; color:var(--lc-text-secondary);">(7 Problems)</span>
+            <div class="topic-meta-right">
+              <!-- Topic Status: Done or In Progress -->
+              <span class="topic-done-badge" id="topic-badge-bit-manipulation">In Progress (0/7 Done)</span>
               <span class="diff-badge Easy">5 Easy</span>
               <span class="diff-badge Medium">2 Med</span>
               <span class="diff-badge Hard">0 Hard</span>
@@ -6506,13 +6590,15 @@ body {
           <p class="topic-desc">Direct binary logic operations. Fast, constant-space tricks using AND (&amp;), OR (|), XOR (^), NOT (~), and bit shifts (&lt;&lt;, &gt;&gt;).</p>
         </div>
 
-        <!-- Short-Circuit Python 3 Blueprint (Exact Screenshot Styling) -->
+        <!-- Short-Circuit Python 3 Blueprint (Exact LeetCode Format - NO Vertical Lines!) -->
         <div class="blueprint-card">
           <div class="blueprint-header">
-            <div class="blueprint-title">
-              <span>⚡</span>
-              <span>Python 3 Blueprint</span>
-              <span class="blueprint-tag">Short-Circuit</span>
+            <div class="editor-header-left">
+              <div class="lc-lang-pill">
+                <span>Python3</span>
+                <span class="arrow">▾</span>
+              </div>
+              <span class="blueprint-subtag">Short-Circuit Blueprint</span>
             </div>
             <button class="copy-btn" onclick="copyBlueprint('code-bp-bit-manipulation', this)">📋 Copy</button>
           </div>
@@ -6529,7 +6615,7 @@ body {
           </div>
         </div>
 
-        <!-- Problems Categorized by Levels / 1-5 Stars -->
+        <!-- Problems Categorized by 1-5 Stars -->
         <div class="tiers-wrap">
 
           <div class="tier-box">
@@ -6758,13 +6844,14 @@ body {
       </article>
 
       <!-- Topic: Math &amp; Geometry -->
-      <article class="topic-section" id="math-geometry" data-topic-index="17" data-level="Level 7: Math &amp; Low-Level Foundations" data-name="Math &amp; Geometry">
+      <article class="topic-section" id="math-geometry" data-topic-index="17" data-name="Math &amp; Geometry">
         <div class="topic-header-block">
           <span class="level-tag">Level 7: Math &amp; Low-Level Foundations</span>
           <div class="topic-title-row">
             <h1 class="topic-h1"><span>📐</span> Math &amp; Geometry</h1>
-            <div class="topic-diff-pills">
-              <span style="font-size:0.8rem; color:var(--lc-text-secondary);">(8 Problems)</span>
+            <div class="topic-meta-right">
+              <!-- Topic Status: Done or In Progress -->
+              <span class="topic-done-badge" id="topic-badge-math-geometry">In Progress (0/8 Done)</span>
               <span class="diff-badge Easy">2 Easy</span>
               <span class="diff-badge Medium">6 Med</span>
               <span class="diff-badge Hard">0 Hard</span>
@@ -6773,13 +6860,15 @@ body {
           <p class="topic-desc">Mathematical properties, in-place matrix algebra, fast exponentiation, and coordinate geometry.</p>
         </div>
 
-        <!-- Short-Circuit Python 3 Blueprint (Exact Screenshot Styling) -->
+        <!-- Short-Circuit Python 3 Blueprint (Exact LeetCode Format - NO Vertical Lines!) -->
         <div class="blueprint-card">
           <div class="blueprint-header">
-            <div class="blueprint-title">
-              <span>⚡</span>
-              <span>Python 3 Blueprint</span>
-              <span class="blueprint-tag">Short-Circuit</span>
+            <div class="editor-header-left">
+              <div class="lc-lang-pill">
+                <span>Python3</span>
+                <span class="arrow">▾</span>
+              </div>
+              <span class="blueprint-subtag">Short-Circuit Blueprint</span>
             </div>
             <button class="copy-btn" onclick="copyBlueprint('code-bp-math-geometry', this)">📋 Copy</button>
           </div>
@@ -6806,7 +6895,7 @@ body {
           </div>
         </div>
 
-        <!-- Problems Categorized by Levels / 1-5 Stars -->
+        <!-- Problems Categorized by 1-5 Stars -->
         <div class="tiers-wrap">
 
           <div class="tier-box">
@@ -7095,6 +7184,20 @@ body {
       if (el) {
         el.scrollIntoView({ behavior: "smooth", block: "start" });
         updateActiveSidebar(tid);
+        document.getElementById("topbar-topic-heading").textContent = el.getAttribute("data-name") || "";
+      }
+    }
+
+    function navigateTopicOffset(offset) {
+      const currentArt = document.querySelector(".sb-topic-node.active");
+      let curId = TOPIC_IDS[0];
+      if (currentArt) {
+        curId = currentArt.id.replace("sb-node-", "");
+      }
+      const idx = TOPIC_IDS.indexOf(curId);
+      const targetIdx = idx + offset;
+      if (targetIdx >= 0 && targetIdx < TOPIC_IDS.length) {
+        navigateToTopic(TOPIC_IDS[targetIdx]);
       }
     }
 
@@ -7137,19 +7240,35 @@ body {
         cb.checked = !!solvedMap[slug];
       });
 
-      const total = 150;
-      const count = Object.keys(solvedMap).length;
-      const pct = Math.round((count / total) * 100);
-
-      document.getElementById("top-solved-num").textContent = count;
-      document.getElementById("top-progress-fill").style.width = pct + "%";
-      document.getElementById("top-pct").textContent = pct + "%";
-
       TOPIC_IDS.forEach(tid => {
         const slugs = TOPIC_PROBS[tid] || [];
         const solvedInTopic = slugs.filter(s => solvedMap[s]).length;
-        const tag = document.getElementById(`sb-count-${tid}`);
-        if (tag) tag.textContent = `${solvedInTopic}/${slugs.length}`;
+        const totalInTopic = slugs.length;
+        const isDone = (solvedInTopic === totalInTopic && totalInTopic > 0);
+
+        // Update Topic header status badge
+        const badge = document.getElementById(`topic-badge-${tid}`);
+        if (badge) {
+          if (isDone) {
+            badge.textContent = "✓ Completed";
+            badge.classList.add("completed");
+          } else {
+            badge.textContent = `In Progress (${solvedInTopic}/${totalInTopic} Done)`;
+            badge.classList.remove("completed");
+          }
+        }
+
+        // Update Sidebar topic status
+        const sbStatus = document.getElementById(`sb-status-${tid}`);
+        if (sbStatus) {
+          if (isDone) {
+            sbStatus.textContent = "✓ Done";
+            sbStatus.classList.add("done");
+          } else {
+            sbStatus.textContent = `${solvedInTopic}/${totalInTopic}`;
+            sbStatus.classList.remove("done");
+          }
+        }
       });
     }
 
@@ -7220,8 +7339,7 @@ body {
 
       const currentArt = document.getElementById(activeId);
       if (currentArt) {
-        document.getElementById("bc-level").textContent = currentArt.getAttribute("data-level") || "";
-        document.getElementById("bc-topic").textContent = currentArt.getAttribute("data-name") || "";
+        document.getElementById("topbar-topic-heading").textContent = currentArt.getAttribute("data-name") || "";
         updateActiveSidebar(activeId);
       }
     });
