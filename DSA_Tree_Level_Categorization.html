@@ -1,0 +1,1205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DSA Roadmap: Tree-Level Categorization</title>
+  <style>
+    :root {
+      --bg-main: #0b0f19;
+      --bg-card: #131b2e;
+      --bg-card-hover: #1e293b;
+      --bg-node: #1e2538;
+      --border-color: #2a364f;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent-primary: #6366f1;
+      --accent-cyan: #06b6d4;
+      --accent-emerald: #10b981;
+      --accent-amber: #f59e0b;
+      --accent-rose: #f43f5e;
+      --easy-color: #22c55e;
+      --med-color: #eab308;
+      --hard-color: #ef4444;
+      --glow-blue: rgba(99, 102, 241, 0.4);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: var(--bg-main);
+      color: var(--text-main);
+      line-height: 1.5;
+      min-height: 100vh;
+      background-image: radial-gradient(rgba(255, 255, 255, 0.07) 1px, transparent 1px);
+      background-size: 24px 24px;
+    }
+
+    header {
+      background: rgba(15, 23, 42, 0.9);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border-color);
+      padding: 1.25rem 2rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .header-title {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+    }
+
+    .badge-icon {
+      background: linear-gradient(135deg, #6366f1, #a855f7);
+      color: white;
+      font-weight: 800;
+      font-size: 1.15rem;
+      padding: 0.45rem 0.85rem;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.35);
+    }
+
+    h1 {
+      font-size: 1.4rem;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+    }
+
+    .header-subtitle {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .stats-bar {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+      background: rgba(19, 27, 46, 0.95);
+      padding: 0.5rem 1.25rem;
+      border-radius: 9999px;
+      border: 1px solid var(--border-color);
+    }
+
+    .stat-item {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    .stat-val {
+      color: var(--accent-cyan);
+    }
+
+    .stat-progress {
+      width: 120px;
+      height: 8px;
+      background: #1e293b;
+      border-radius: 9999px;
+      overflow: hidden;
+    }
+
+    .stat-progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #6366f1, #10b981);
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+
+    .roadmap-link-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: rgba(99, 102, 241, 0.15);
+      color: #a5b4fc;
+      border: 1px solid rgba(99, 102, 241, 0.3);
+      padding: 0.45rem 0.9rem;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+
+    .roadmap-link-btn:hover {
+      background: var(--accent-primary);
+      color: white;
+    }
+
+    /* Controls Bar */
+    .controls-bar {
+      max-width: 1400px;
+      margin: 1.5rem auto 0 auto;
+      padding: 0 1.5rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .search-input {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      padding: 0.6rem 1rem;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      min-width: 280px;
+      outline: none;
+      transition: border 0.2s;
+    }
+
+    .search-input:focus {
+      border-color: var(--accent-primary);
+      box-shadow: 0 0 0 2px var(--glow-blue);
+    }
+
+    .view-toggles {
+      display: flex;
+      background: var(--bg-card);
+      padding: 0.25rem;
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+    }
+
+    .toggle-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      padding: 0.5rem 1rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .toggle-btn.active {
+      background: var(--accent-primary);
+      color: white;
+    }
+
+    .level-filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+    }
+
+    .level-filter-btn {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      color: var(--text-muted);
+      padding: 0.35rem 0.75rem;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .level-filter-btn:hover, .level-filter-btn.active {
+      background: var(--border-color);
+      color: var(--text-main);
+      border-color: var(--accent-cyan);
+    }
+
+    /* Main Container */
+    main {
+      max-width: 1400px;
+      margin: 1.5rem auto;
+      padding: 0 1.5rem 4rem 1.5rem;
+    }
+
+    /* Visual Tree / Graph View */
+    #visual-view {
+      background: rgba(15, 23, 42, 0.65);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 2rem;
+      position: relative;
+      overflow-x: auto;
+      min-height: 980px;
+    }
+
+    .visual-tree-container {
+      position: relative;
+      width: 1040px;
+      margin: 0 auto;
+      min-height: 960px;
+    }
+
+    svg#connections-svg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .tree-edge {
+      stroke: #334155;
+      stroke-width: 2.5;
+      fill: none;
+      transition: stroke 0.3s ease, stroke-width 0.3s ease;
+    }
+
+    .tree-edge.highlight-upstream {
+      stroke: var(--accent-amber);
+      stroke-width: 3.5;
+      stroke-dasharray: 6 3;
+      animation: dash 1s linear infinite;
+    }
+
+    .tree-edge.highlight-downstream {
+      stroke: var(--accent-cyan);
+      stroke-width: 3.5;
+      stroke-dasharray: 6 3;
+      animation: dash 1s linear infinite;
+    }
+
+    @keyframes dash {
+      to {
+        stroke-dashoffset: -9;
+      }
+    }
+
+    .tree-node {
+      position: absolute;
+      z-index: 2;
+      width: 185px;
+      background: var(--bg-node);
+      border: 2px solid var(--border-color);
+      border-radius: 12px;
+      padding: 0.8rem 0.9rem;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      user-select: none;
+    }
+
+    .tree-node:hover {
+      transform: translateY(-3px) scale(1.02);
+      border-color: var(--accent-primary);
+      box-shadow: 0 12px 24px var(--glow-blue);
+    }
+
+    .tree-node.selected {
+      border-color: #ffffff;
+      box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.4), 0 12px 24px rgba(0, 0, 0, 0.6);
+    }
+
+    .tree-node.is-upstream {
+      border-color: var(--accent-amber);
+      box-shadow: 0 0 15px rgba(245, 158, 11, 0.4);
+    }
+
+    .tree-node.is-downstream {
+      border-color: var(--accent-cyan);
+      box-shadow: 0 0 15px rgba(6, 182, 212, 0.4);
+    }
+
+    .tree-node.dimmed {
+      opacity: 0.25;
+      filter: grayscale(0.8);
+    }
+
+    .node-header {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 0.4rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .node-level-tag {
+      font-size: 0.65rem;
+      padding: 0.15rem 0.45rem;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 4px;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    .node-pills {
+      display: flex;
+      gap: 0.3rem;
+      font-size: 0.7rem;
+    }
+
+    .diff-pill {
+      padding: 0.1rem 0.35rem;
+      border-radius: 4px;
+      font-weight: 600;
+    }
+
+    .pill-easy { background: rgba(34, 197, 94, 0.15); color: var(--easy-color); }
+    .pill-med { background: rgba(234, 179, 8, 0.15); color: var(--med-color); }
+    .pill-hard { background: rgba(239, 68, 68, 0.15); color: var(--hard-color); }
+
+    .node-completion {
+      margin-top: 0.5rem;
+      height: 4px;
+      background: #0f172a;
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .node-completion-bar {
+      height: 100%;
+      background: var(--easy-color);
+      width: 0%;
+      transition: width 0.3s;
+    }
+
+    /* Tree Legend */
+    .tree-legend {
+      position: absolute;
+      top: 1.5rem;
+      right: 1.5rem;
+      background: rgba(15, 23, 42, 0.95);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 0.85rem 1.15rem;
+      font-size: 0.75rem;
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .legend-row {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .legend-color {
+      width: 12px;
+      height: 12px;
+      border-radius: 3px;
+    }
+
+    /* List / Accordion Level Breakdown View */
+    #breakdown-view {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .level-block {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      overflow: hidden;
+      transition: border-color 0.2s;
+    }
+
+    .level-block:hover {
+      border-color: #3b4d71;
+    }
+
+    .level-header {
+      padding: 1.25rem 1.5rem;
+      background: rgba(255, 255, 255, 0.02);
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      gap: 1rem;
+    }
+
+    .level-title-group {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .level-num-badge {
+      background: var(--accent-primary);
+      color: white;
+      font-size: 0.8rem;
+      font-weight: 700;
+      padding: 0.25rem 0.6rem;
+      border-radius: 6px;
+    }
+
+    .level-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+    }
+
+    .level-subtitle {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-top: 0.2rem;
+    }
+
+    .level-topics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+      gap: 1.25rem;
+      padding: 1.5rem;
+    }
+
+    .topic-card {
+      background: var(--bg-node);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      transition: all 0.2s ease;
+    }
+
+    .topic-card:hover {
+      border-color: var(--accent-primary);
+      transform: translateY(-2px);
+    }
+
+    .topic-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+
+    .topic-name {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .topic-desc {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      line-height: 1.45;
+    }
+
+    .concepts-wrap {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+    }
+
+    .concept-tag {
+      font-size: 0.7rem;
+      background: rgba(99, 102, 241, 0.12);
+      color: #818cf8;
+      border: 1px solid rgba(99, 102, 241, 0.25);
+      padding: 0.15rem 0.5rem;
+      border-radius: 4px;
+    }
+
+    .prereq-info {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      padding-top: 0.5rem;
+      border-top: 1px dashed var(--border-color);
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    .prereq-pill {
+      color: var(--accent-amber);
+      font-weight: 600;
+    }
+
+    .next-pill {
+      color: var(--accent-cyan);
+      font-weight: 600;
+    }
+
+    .topic-actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: auto;
+      padding-top: 0.5rem;
+    }
+
+    .btn-view-problems {
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--text-main);
+      border: 1px solid var(--border-color);
+      padding: 0.35rem 0.75rem;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .btn-view-problems:hover {
+      background: var(--accent-primary);
+      border-color: var(--accent-primary);
+      color: white;
+    }
+
+    /* Modal / Drawer for Problems */
+    .modal-backdrop {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(6px);
+      z-index: 200;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+    }
+
+    .modal-backdrop.open {
+      display: flex;
+    }
+
+    .modal-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      width: 100%;
+      max-width: 680px;
+      max-height: 85vh;
+      overflow-y: auto;
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+
+    .modal-close-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-size: 1.5rem;
+      cursor: pointer;
+      line-height: 1;
+      padding: 0.2rem 0.5rem;
+    }
+
+    .modal-close-btn:hover {
+      color: white;
+    }
+
+    .problems-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+
+    .problem-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.65rem 0.85rem;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      transition: background 0.15s;
+    }
+
+    .problem-row:hover {
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    .problem-left {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .problem-checkbox {
+      width: 18px;
+      height: 18px;
+      cursor: pointer;
+      accent-color: var(--accent-emerald);
+    }
+
+    .problem-link {
+      color: var(--text-main);
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 0.9rem;
+    }
+
+    .problem-link:hover {
+      color: var(--accent-cyan);
+      text-decoration: underline;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .level-topics-grid {
+        grid-template-columns: 1fr;
+      }
+      .controls-bar {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .search-input {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="header-title">
+      <div class="badge-icon">NC</div>
+      <div>
+        <h1>DSA Roadmap: Tree-Level Categorization</h1>
+        <div class="header-subtitle">Prerequisite DAG & Progressive Topic Mastery (18 Topics &bull; 150 Core Problems)</div>
+      </div>
+    </div>
+    <div style="display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;">
+      <a href="https://neetcode.io/roadmap" target="_blank" class="roadmap-link-btn">
+        <span>View Live on NeetCode.io</span> &nearr;
+      </a>
+      <div class="stats-bar">
+        <div class="stat-item">
+          <span>Solved:</span>
+          <span class="stat-val" id="total-solved-text">0 / 150</span>
+        </div>
+        <div class="stat-progress">
+          <div class="stat-progress-fill" id="total-progress-bar"></div>
+        </div>
+        <div class="stat-item">
+          <span id="percent-text" style="color: var(--easy-color); font-size: 0.8rem;">0%</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="controls-bar">
+    <input type="text" class="search-input" id="search-box" placeholder="Search topic, concept, or problem...">
+    
+    <div class="level-filters" id="level-filters-wrap">
+      <button class="level-filter-btn active" data-filter="all">All Levels</button>
+      <button class="level-filter-btn" data-filter="0">L0: Foundation</button>
+      <button class="level-filter-btn" data-filter="1">L1: Linear</button>
+      <button class="level-filter-btn" data-filter="2">L2: Search/Window</button>
+      <button class="level-filter-btn" data-filter="3">L3: Tree Pivot</button>
+      <button class="level-filter-btn" data-filter="4">L4: Tree Specializations</button>
+      <button class="level-filter-btn" data-filter="5">L5: Optimization</button>
+      <button class="level-filter-btn" data-filter="6">L6: Advanced DP/Graphs</button>
+      <button class="level-filter-btn" data-filter="7">L7: Math/Geometry</button>
+    </div>
+
+    <div class="view-toggles">
+      <button class="toggle-btn active" id="btn-view-visual" onclick="switchView('visual')">Visual Tree Graph</button>
+      <button class="toggle-btn" id="btn-view-breakdown" onclick="switchView('breakdown')">Detailed Matrix</button>
+    </div>
+  </div>
+
+  <main>
+    <!-- Visual Tree View -->
+    <div id="visual-view">
+      <div class="tree-legend">
+        <div class="legend-row">
+          <div class="legend-color" style="background: var(--accent-amber);"></div>
+          <span>Prerequisite (Upstream)</span>
+        </div>
+        <div class="legend-row">
+          <div class="legend-color" style="background: var(--accent-cyan);"></div>
+          <span>Unlocked Topic (Downstream)</span>
+        </div>
+        <div class="legend-row">
+          <div class="legend-color" style="background: #ffffff;"></div>
+          <span>Selected Topic</span>
+        </div>
+        <div style="font-size: 0.7rem; color: var(--text-muted); margin-top: 0.2rem;">
+          Click any node to isolate dependency paths &bull; Double click to open problems
+        </div>
+      </div>
+
+      <div class="visual-tree-container" id="visual-tree">
+        <svg id="connections-svg"></svg>
+        <!-- Nodes injected via JS -->
+      </div>
+    </div>
+
+    <!-- Detailed Level Breakdown View -->
+    <div id="breakdown-view" style="display: none;">
+      <!-- Level blocks injected via JS -->
+    </div>
+  </main>
+
+  <!-- Problem Modal -->
+  <div class="modal-backdrop" id="problem-modal">
+    <div class="modal-box">
+      <div class="modal-header">
+        <div>
+          <h2 id="modal-topic-name" style="font-size: 1.35rem; font-weight: 700;">Topic Name</h2>
+          <p id="modal-topic-level" style="font-size: 0.85rem; color: var(--accent-cyan); margin-top: 0.2rem;">Level X</p>
+        </div>
+        <button class="modal-close-btn" onclick="closeModal()">&times;</button>
+      </div>
+      <p id="modal-topic-desc" style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.5;"></p>
+      
+      <div>
+        <h4 style="font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-muted); margin-bottom: 0.5rem;">Core Concepts</h4>
+        <div class="concepts-wrap" id="modal-topic-concepts"></div>
+      </div>
+
+      <div>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.6rem;">
+          <h4 style="font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-muted);">
+            Practice Problems (<span id="modal-problem-count">0</span>)
+          </h4>
+          <span style="font-size: 0.75rem; color: var(--text-muted);">Check to mark as solved</span>
+        </div>
+        <div class="problems-list" id="modal-problems-container"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const topics = [{"id": "arrays-hashing", "name": "Arrays & Hashing", "level": 0, "level_name": "Level 0: Absolute Foundations", "parents": [], "children": ["two-pointers", "stack"], "problems_count": 9, "difficulties": {"easy": 2, "medium": 6, "hard": 1}, "description": "Core data structures. Hashing gives O(1) average lookup, insertion, and deletion. Crucial for frequency counting, duplicate detection, and fast index mapping.", "key_concepts": ["Hash Maps & Hash Sets", "Prefix Sums", "Frequency Counting", "Array Manipulation"], "problems": [{"title": "Contains Duplicate", "diff": "Easy", "url": "https://neetcode.io/problems/duplicate-integer"}, {"title": "Valid Anagram", "diff": "Easy", "url": "https://neetcode.io/problems/is-anagram"}, {"title": "Two Sum", "diff": "Easy", "url": "https://neetcode.io/problems/two-integer-sum"}, {"title": "Group Anagrams", "diff": "Medium", "url": "https://neetcode.io/problems/anagram-groups"}, {"title": "Top K Frequent Elements", "diff": "Medium", "url": "https://neetcode.io/problems/top-k-elements-in-list"}, {"title": "Product of Array Except Self", "diff": "Medium", "url": "https://neetcode.io/problems/products-of-array-discluding-self"}, {"title": "Valid Sudoku", "diff": "Medium", "url": "https://neetcode.io/problems/valid-sudoku"}, {"title": "Encode and Decode Strings", "diff": "Medium", "url": "https://neetcode.io/problems/string-encode-and-decode"}, {"title": "Longest Consecutive Sequence", "diff": "Medium", "url": "https://neetcode.io/problems/longest-consecutive-sequence"}]}, {"id": "two-pointers", "name": "Two Pointers", "level": 1, "level_name": "Level 1: Linear Navigation", "parents": ["arrays-hashing"], "children": ["binary-search", "sliding-window", "linked-list"], "problems_count": 5, "difficulties": {"easy": 1, "medium": 3, "hard": 1}, "description": "Technique using two index pointers moving towards each other or in parallel to reduce O(N^2) searches to O(N) on sorted or indexed collections.", "key_concepts": ["Converging Pointers", "Fast & Slow Pointers", "Sorted Array Searching", "Palindrome Checking"], "problems": [{"title": "Valid Palindrome", "diff": "Easy", "url": "https://neetcode.io/problems/is-palindrome"}, {"title": "Two Sum II", "diff": "Medium", "url": "https://neetcode.io/problems/two-integer-sum-ii"}, {"title": "3Sum", "diff": "Medium", "url": "https://neetcode.io/problems/three-integer-sum"}, {"title": "Container With Most Water", "diff": "Medium", "url": "https://neetcode.io/problems/max-water-container"}, {"title": "Trapping Rain Water", "diff": "Hard", "url": "https://neetcode.io/problems/trapping-rain-water"}]}, {"id": "stack", "name": "Stack", "level": 1, "level_name": "Level 1: Linear Navigation", "parents": ["arrays-hashing"], "children": [], "problems_count": 7, "difficulties": {"easy": 1, "medium": 5, "hard": 1}, "description": "LIFO (Last-In-First-Out) structure essential for nested evaluations, tracking state history, and monotonic search patterns.", "key_concepts": ["LIFO Semantics", "Monotonic Stack", "Expression Parsing", "Matching Brackets"], "problems": [{"title": "Valid Parentheses", "diff": "Easy", "url": "https://neetcode.io/problems/validate-parentheses"}, {"title": "Min Stack", "diff": "Medium", "url": "https://neetcode.io/problems/minimum-stack"}, {"title": "Evaluate Reverse Polish Notation", "diff": "Medium", "url": "https://neetcode.io/problems/evaluate-reverse-polish-notation"}, {"title": "Generate Parentheses", "diff": "Medium", "url": "https://neetcode.io/problems/generate-parentheses"}, {"title": "Daily Temperatures", "diff": "Medium", "url": "https://neetcode.io/problems/daily-temperatures"}, {"title": "Car Fleet", "diff": "Medium", "url": "https://neetcode.io/problems/car-fleet"}, {"title": "Largest Rectangle In Histogram", "diff": "Hard", "url": "https://neetcode.io/problems/largest-rectangle-in-histogram"}]}, {"id": "binary-search", "name": "Binary Search", "level": 2, "level_name": "Level 2: Pointer & Search Specialization", "parents": ["two-pointers"], "children": ["trees"], "problems_count": 7, "difficulties": {"easy": 1, "medium": 5, "hard": 1}, "description": "Divide-and-conquer search technique achieving O(log N) runtime over monotonic search spaces or rotated sorted arrays.", "key_concepts": ["Search Space Reduction", "Lower & Upper Bounds", "Binary Search on Answer Space", "Rotated Arrays"], "problems": [{"title": "Binary Search", "diff": "Easy", "url": "https://neetcode.io/problems/binary-search"}, {"title": "Search a 2D Matrix", "diff": "Medium", "url": "https://neetcode.io/problems/search-2d-matrix"}, {"title": "Koko Eating Bananas", "diff": "Medium", "url": "https://neetcode.io/problems/eating-bananas"}, {"title": "Find Minimum in Rotated Sorted Array", "diff": "Medium", "url": "https://neetcode.io/problems/find-minimum-in-rotated-sorted-array"}, {"title": "Search in Rotated Sorted Array", "diff": "Medium", "url": "https://neetcode.io/problems/find-target-in-rotated-sorted-array"}, {"title": "Time Based Key-Value Store", "diff": "Medium", "url": "https://neetcode.io/problems/time-based-key-value-store"}, {"title": "Median of Two Sorted Arrays", "diff": "Hard", "url": "https://neetcode.io/problems/median-of-two-sorted-arrays"}]}, {"id": "sliding-window", "name": "Sliding Window", "level": 2, "level_name": "Level 2: Pointer & Search Specialization", "parents": ["two-pointers"], "children": ["trees"], "problems_count": 6, "difficulties": {"easy": 1, "medium": 3, "hard": 2}, "description": "Dynamic or fixed subsegment tracking technique that optimizes contiguous range calculations from O(N^2) to O(N).", "key_concepts": ["Fixed Window", "Dynamic Expanding/Shrinking Window", "Auxiliary Frequency Counters", "Monotonic Deque"], "problems": [{"title": "Best Time to Buy And Sell Stock", "diff": "Easy", "url": "https://neetcode.io/problems/buy-and-sell-crypto"}, {"title": "Longest Substring Without Repeating Characters", "diff": "Medium", "url": "https://neetcode.io/problems/longest-substring-without-duplicates"}, {"title": "Longest Repeating Character Replacement", "diff": "Medium", "url": "https://neetcode.io/problems/longest-repeating-substring-with-replacement"}, {"title": "Permutation In String", "diff": "Medium", "url": "https://neetcode.io/problems/permutation-string"}, {"title": "Minimum Window Substring", "diff": "Hard", "url": "https://neetcode.io/problems/minimum-window-with-characters"}, {"title": "Sliding Window Maximum", "diff": "Hard", "url": "https://neetcode.io/problems/sliding-window-maximum"}]}, {"id": "linked-list", "name": "Linked List", "level": 2, "level_name": "Level 2: Pointer & Search Specialization", "parents": ["two-pointers"], "children": ["trees"], "problems_count": 11, "difficulties": {"easy": 2, "medium": 7, "hard": 2}, "description": "Chained node structures requiring reference manipulation without indexing. Builds intuition for non-contiguous memory and recursion.", "key_concepts": ["Pointer Reversal", "Sentinel / Dummy Nodes", "Floyd's Cycle Finding", "Merge & Reorder Patterns"], "problems": [{"title": "Reverse Linked List", "diff": "Easy", "url": "https://neetcode.io/problems/reverse-a-linked-list"}, {"title": "Merge Two Sorted Lists", "diff": "Easy", "url": "https://neetcode.io/problems/merge-two-sorted-linked-lists"}, {"title": "Reorder List", "diff": "Medium", "url": "https://neetcode.io/problems/reorder-linked-list"}, {"title": "Remove Nth Node From End of List", "diff": "Medium", "url": "https://neetcode.io/problems/remove-node-from-end-of-linked-list"}, {"title": "Copy List With Random Pointer", "diff": "Medium", "url": "https://neetcode.io/problems/copy-linked-list-with-random-pointer"}, {"title": "Add Two Numbers", "diff": "Medium", "url": "https://neetcode.io/problems/add-two-numbers"}, {"title": "Linked List Cycle", "diff": "Easy", "url": "https://neetcode.io/problems/linked-list-cycle-detection"}, {"title": "Find The Duplicate Number", "diff": "Medium", "url": "https://neetcode.io/problems/find-duplicate-integer"}, {"title": "LRU Cache", "diff": "Medium", "url": "https://neetcode.io/problems/lru-cache"}, {"title": "Merge K Sorted Lists", "diff": "Hard", "url": "https://neetcode.io/problems/merge-k-sorted-linked-lists"}, {"title": "Reverse Nodes in K-Group", "diff": "Hard", "url": "https://neetcode.io/problems/reverse-nodes-in-k-group"}]}, {"id": "trees", "name": "Trees", "level": 3, "level_name": "Level 3: The Central Tree Pivot", "parents": ["binary-search", "sliding-window", "linked-list"], "children": ["tries", "heap-priority-queue", "backtracking"], "problems_count": 15, "difficulties": {"easy": 5, "medium": 8, "hard": 2}, "description": "Hierarchical node structure branching in non-linear dimensions. Mastering DFS, BFS, and tree properties unlocks graphs, tries, and backtracking.", "key_concepts": ["DFS (Pre/In/Post-order)", "BFS / Level-Order Traversal", "Binary Search Trees (BST)", "Lowest Common Ancestor", "Tree Recursion"], "problems": [{"title": "Invert Binary Tree", "diff": "Easy", "url": "https://neetcode.io/problems/invert-a-binary-tree"}, {"title": "Maximum Depth of Binary Tree", "diff": "Easy", "url": "https://neetcode.io/problems/depth-of-binary-tree"}, {"title": "Diameter of Binary Tree", "diff": "Easy", "url": "https://neetcode.io/problems/binary-tree-diameter"}, {"title": "Balanced Binary Tree", "diff": "Easy", "url": "https://neetcode.io/problems/balanced-binary-tree"}, {"title": "Same Tree", "diff": "Easy", "url": "https://neetcode.io/problems/same-binary-tree"}, {"title": "Subtree of Another Tree", "diff": "Easy", "url": "https://neetcode.io/problems/subtree-of-a-binary-tree"}, {"title": "Lowest Common Ancestor of a BST", "diff": "Medium", "url": "https://neetcode.io/problems/lowest-common-ancestor-in-binary-search-tree"}, {"title": "Binary Tree Level Order Traversal", "diff": "Medium", "url": "https://neetcode.io/problems/level-order-traversal-of-binary-tree"}, {"title": "Binary Tree Right Side View", "diff": "Medium", "url": "https://neetcode.io/problems/binary-tree-right-side-view"}, {"title": "Count Good Nodes In Binary Tree", "diff": "Medium", "url": "https://neetcode.io/problems/count-good-nodes-in-binary-tree"}, {"title": "Validate Binary Search Tree", "diff": "Medium", "url": "https://neetcode.io/problems/valid-binary-search-tree"}, {"title": "Kth Smallest Element In a BST", "diff": "Medium", "url": "https://neetcode.io/problems/kth-smallest-integer-in-bst"}, {"title": "Construct Binary Tree from Preorder and Inorder", "diff": "Medium", "url": "https://neetcode.io/problems/construct-binary-tree-from-preorder-and-inorder-traversal"}, {"title": "Binary Tree Maximum Path Sum", "diff": "Hard", "url": "https://neetcode.io/problems/binary-tree-maximum-path-sum"}, {"title": "Serialize And Deserialize Binary Tree", "diff": "Hard", "url": "https://neetcode.io/problems/serialize-and-deserialize-binary-tree"}]}, {"id": "tries", "name": "Tries", "level": 4, "level_name": "Level 4: Tree Specializations & State Exploration", "parents": ["trees"], "children": [], "problems_count": 3, "difficulties": {"easy": 0, "medium": 2, "hard": 1}, "description": "Prefix tree specialized for fast string search, prefix lookups, and auto-complete with O(L) operation complexity.", "key_concepts": ["Prefix Node Traversal", "Character Branching", "Wildcard Searching", "Trie + Backtracking"], "problems": [{"title": "Implement Trie (Prefix Tree)", "diff": "Medium", "url": "https://neetcode.io/problems/implement-prefix-tree"}, {"title": "Design Add And Search Words Data Structure", "diff": "Medium", "url": "https://neetcode.io/problems/design-word-search-data-structure"}, {"title": "Word Search II", "diff": "Hard", "url": "https://neetcode.io/problems/word-search-ii"}]}, {"id": "heap-priority-queue", "name": "Heap / Priority Queue", "level": 4, "level_name": "Level 4: Tree Specializations & State Exploration", "parents": ["trees"], "children": ["intervals", "greedy", "advanced-graphs"], "problems_count": 7, "difficulties": {"easy": 2, "medium": 4, "hard": 1}, "description": "Complete binary tree backed by array representation that guarantees logarithmic retrieval of minimum or maximum elements.", "key_concepts": ["Min-Heap / Max-Heap", "K-way Merge", "Running Stream Medians", "Top-K Selection"], "problems": [{"title": "Kth Largest Element in a Stream", "diff": "Easy", "url": "https://neetcode.io/problems/kth-largest-element-in-a-stream"}, {"title": "Last Stone Weight", "diff": "Easy", "url": "https://neetcode.io/problems/last-stone-weight"}, {"title": "K Closest Points to Origin", "diff": "Medium", "url": "https://neetcode.io/problems/k-closest-points-to-origin"}, {"title": "Kth Largest Element In An Array", "diff": "Medium", "url": "https://neetcode.io/problems/kth-largest-element-in-an-array"}, {"title": "Task Scheduler", "diff": "Medium", "url": "https://neetcode.io/problems/task-scheduler"}, {"title": "Design Twitter", "diff": "Medium", "url": "https://neetcode.io/problems/design-twitter-feed"}, {"title": "Find Median From Data Stream", "diff": "Hard", "url": "https://neetcode.io/problems/find-median-in-a-data-stream"}]}, {"id": "backtracking", "name": "Backtracking", "level": 4, "level_name": "Level 4: Tree Specializations & State Exploration", "parents": ["trees"], "children": ["graphs", "1-d-dynamic-programming"], "problems_count": 9, "difficulties": {"easy": 0, "medium": 8, "hard": 1}, "description": "Systematic state-space exploration (DFS over decision trees) with aggressive pruning when constraints are violated.", "key_concepts": ["Decision Tree Traversal", "Choose-Explore-Unchoose", "Pruning Branches", "Combinations & Permutations"], "problems": [{"title": "Subsets", "diff": "Medium", "url": "https://neetcode.io/problems/subsets"}, {"title": "Combination Sum", "diff": "Medium", "url": "https://neetcode.io/problems/combination-target-sum"}, {"title": "Permutations", "diff": "Medium", "url": "https://neetcode.io/problems/permutations"}, {"title": "Subsets II", "diff": "Medium", "url": "https://neetcode.io/problems/subsets-ii"}, {"title": "Combination Sum II", "diff": "Medium", "url": "https://neetcode.io/problems/combination-target-sum-ii"}, {"title": "Word Search", "diff": "Medium", "url": "https://neetcode.io/problems/search-for-word"}, {"title": "Palindrome Partitioning", "diff": "Medium", "url": "https://neetcode.io/problems/palindrome-partitioning"}, {"title": "Letter Combinations of a Phone Number", "diff": "Medium", "url": "https://neetcode.io/problems/combinations-of-a-phone-number"}, {"title": "N-Queens", "diff": "Hard", "url": "https://neetcode.io/problems/n-queens"}]}, {"id": "intervals", "name": "Intervals", "level": 5, "level_name": "Level 5: Intermediate Graphs & Optimization", "parents": ["heap-priority-queue"], "children": [], "problems_count": 6, "difficulties": {"easy": 1, "medium": 4, "hard": 1}, "description": "Range overlap management, boundary comparisons, and coordinate compression often solved via sorting and greedy interval scanning.", "key_concepts": ["Interval Sorting", "Overlap Merging", "Boundary Point Sweeps", "Min-Heap Room Allocation"], "problems": [{"title": "Insert Interval", "diff": "Medium", "url": "https://neetcode.io/problems/insert-new-interval"}, {"title": "Merge Intervals", "diff": "Medium", "url": "https://neetcode.io/problems/merge-overlapping-intervals"}, {"title": "Non-overlapping Intervals", "diff": "Medium", "url": "https://neetcode.io/problems/non-overlapping-intervals"}, {"title": "Meeting Rooms", "diff": "Easy", "url": "https://neetcode.io/problems/meeting-schedule"}, {"title": "Meeting Rooms II", "diff": "Medium", "url": "https://neetcode.io/problems/meeting-schedule-ii"}, {"title": "Minimum Interval to Include Each Query", "diff": "Hard", "url": "https://neetcode.io/problems/minimum-interval-including-query"}]}, {"id": "greedy", "name": "Greedy", "level": 5, "level_name": "Level 5: Intermediate Graphs & Optimization", "parents": ["heap-priority-queue"], "children": [], "problems_count": 8, "difficulties": {"easy": 0, "medium": 8, "hard": 0}, "description": "Algorithms making locally optimal choices at each step with the assumption they lead to a global optimum.", "key_concepts": ["Locally Optimal Choices", "Exchange Arguments", "Kadane's Algorithm", "Lookahead Strategies"], "problems": [{"title": "Maximum Subarray", "diff": "Medium", "url": "https://neetcode.io/problems/maximum-subarray"}, {"title": "Jump Game", "diff": "Medium", "url": "https://neetcode.io/problems/jump-game"}, {"title": "Jump Game II", "diff": "Medium", "url": "https://neetcode.io/problems/jump-game-ii"}, {"title": "Gas Station", "diff": "Medium", "url": "https://neetcode.io/problems/gas-station"}, {"title": "Hand of Straights", "diff": "Medium", "url": "https://neetcode.io/problems/hand-of-straights"}, {"title": "Merge Triplets to Form Target Triplet", "diff": "Medium", "url": "https://neetcode.io/problems/merge-triplets-to-form-target"}, {"title": "Partition Labels", "diff": "Medium", "url": "https://neetcode.io/problems/partition-labels"}, {"title": "Valid Parenthesis String", "diff": "Medium", "url": "https://neetcode.io/problems/valid-parenthesis-string"}]}, {"id": "graphs", "name": "Graphs", "level": 5, "level_name": "Level 5: Intermediate Graphs & Optimization", "parents": ["backtracking"], "children": ["advanced-graphs", "2-d-dynamic-programming"], "problems_count": 13, "difficulties": {"easy": 0, "medium": 12, "hard": 1}, "description": "General interconnected networks of vertices and edges without hierarchical constraints. Foundation for mapping, pathing, and dependency resolution.", "key_concepts": ["Adjacency Lists/Matrices", "Grid Traversal (Matrix DFS/BFS)", "Topological Sort (Kahn's)", "Connected Components / Union-Find"], "problems": [{"title": "Number of Islands", "diff": "Medium", "url": "https://neetcode.io/problems/count-number-of-islands"}, {"title": "Max Area of Island", "diff": "Medium", "url": "https://neetcode.io/problems/max-area-of-island"}, {"title": "Clone Graph", "diff": "Medium", "url": "https://neetcode.io/problems/clone-graph"}, {"title": "Walls And Gates", "diff": "Medium", "url": "https://neetcode.io/problems/islands-and-treasure"}, {"title": "Rotting Oranges", "diff": "Medium", "url": "https://neetcode.io/problems/rotting-fruit"}, {"title": "Pacific Atlantic Water Flow", "diff": "Medium", "url": "https://neetcode.io/problems/pacific-atlantic-water-flow"}, {"title": "Surrounded Regions", "diff": "Medium", "url": "https://neetcode.io/problems/surrounded-regions"}, {"title": "Course Schedule", "diff": "Medium", "url": "https://neetcode.io/problems/course-schedule"}, {"title": "Course Schedule II", "diff": "Medium", "url": "https://neetcode.io/problems/course-schedule-ii"}, {"title": "Graph Valid Tree", "diff": "Medium", "url": "https://neetcode.io/problems/valid-tree"}, {"title": "Number of Connected Components", "diff": "Medium", "url": "https://neetcode.io/problems/count-connected-components"}, {"title": "Redundant Connection", "diff": "Medium", "url": "https://neetcode.io/problems/redundant-connection"}, {"title": "Word Ladder", "diff": "Hard", "url": "https://neetcode.io/problems/word-ladder"}]}, {"id": "1-d-dynamic-programming", "name": "1-D Dynamic Programming", "level": 5, "level_name": "Level 5: Intermediate Graphs & Optimization", "parents": ["backtracking"], "children": ["2-d-dynamic-programming", "bit-manipulation"], "problems_count": 12, "difficulties": {"easy": 3, "medium": 9, "hard": 0}, "description": "Optimizing recursive tree explorations by caching overlapping subproblems in a single dimension array or rolling variables.", "key_concepts": ["Memoization vs Tabulation", "Recurrence Relations", "Space Optimization (O(1) Memory)", "Knapsack 0/1 Variations"], "problems": [{"title": "Climbing Stairs", "diff": "Easy", "url": "https://neetcode.io/problems/climbing-stairs"}, {"title": "Min Cost Climbing Stairs", "diff": "Easy", "url": "https://neetcode.io/problems/min-cost-climbing-stairs"}, {"title": "House Robber", "diff": "Medium", "url": "https://neetcode.io/problems/house-robber"}, {"title": "House Robber II", "diff": "Medium", "url": "https://neetcode.io/problems/house-robber-ii"}, {"title": "Longest Palindromic Substring", "diff": "Medium", "url": "https://neetcode.io/problems/longest-palindromic-substring"}, {"title": "Palindromic Substrings", "diff": "Medium", "url": "https://neetcode.io/problems/palindromic-substrings"}, {"title": "Decode Ways", "diff": "Medium", "url": "https://neetcode.io/problems/decode-ways"}, {"title": "Coin Change", "diff": "Medium", "url": "https://neetcode.io/problems/coin-change"}, {"title": "Maximum Product Subarray", "diff": "Medium", "url": "https://neetcode.io/problems/maximum-product-subarray"}, {"title": "Word Break", "diff": "Medium", "url": "https://neetcode.io/problems/word-break"}, {"title": "Longest Increasing Subsequence", "diff": "Medium", "url": "https://neetcode.io/problems/longest-increasing-subsequence"}, {"title": "Partition Equal Subset Sum", "diff": "Medium", "url": "https://neetcode.io/problems/partition-equal-subset-sum"}]}, {"id": "advanced-graphs", "name": "Advanced Graphs", "level": 6, "level_name": "Level 6: Advanced Algorithms & Multi-Dimensional DP", "parents": ["heap-priority-queue", "graphs"], "children": [], "problems_count": 6, "difficulties": {"easy": 0, "medium": 2, "hard": 4}, "description": "Shortest path, minimum spanning trees, and network flow algorithms on weighted or directed graphs.", "key_concepts": ["Dijkstra's Algorithm", "Prim's & Kruskal's MST", "Bellman-Ford", "Hierholzer's Eulerian Path"], "problems": [{"title": "Reconstruct Itinerary", "diff": "Hard", "url": "https://neetcode.io/problems/reconstruct-flight-path"}, {"title": "Min Cost to Connect All Points", "diff": "Medium", "url": "https://neetcode.io/problems/min-cost-to-connect-points"}, {"title": "Network Delay Time", "diff": "Medium", "url": "https://neetcode.io/problems/network-delay-time"}, {"title": "Swim In Rising Water", "diff": "Hard", "url": "https://neetcode.io/problems/swim-in-rising-water"}, {"title": "Alien Dictionary", "diff": "Hard", "url": "https://neetcode.io/problems/foreign-dictionary"}, {"title": "Cheapest Flights Within K Stops", "diff": "Medium", "url": "https://neetcode.io/problems/cheapest-flight-path"}]}, {"id": "2-d-dynamic-programming", "name": "2-D Dynamic Programming", "level": 6, "level_name": "Level 6: Advanced Algorithms & Multi-Dimensional DP", "parents": ["graphs", "1-d-dynamic-programming"], "children": ["math-geometry"], "problems_count": 11, "difficulties": {"easy": 0, "medium": 7, "hard": 4}, "description": "Multi-dimensional state spaces involving two sequences, grids, state machines, or interval partitions.", "key_concepts": ["Grid Paths", "Longest Common Subsequence", "String Edit Distances", "Interval DP / Matrix Chain"], "problems": [{"title": "Unique Paths", "diff": "Medium", "url": "https://neetcode.io/problems/count-paths"}, {"title": "Longest Common Subsequence", "diff": "Medium", "url": "https://neetcode.io/problems/longest-common-subsequence"}, {"title": "Best Time to Buy/Sell Stock with Cooldown", "diff": "Medium", "url": "https://neetcode.io/problems/buy-and-sell-crypto-with-cooldown"}, {"title": "Coin Change II", "diff": "Medium", "url": "https://neetcode.io/problems/coin-change-ii"}, {"title": "Target Sum", "diff": "Medium", "url": "https://neetcode.io/problems/target-sum"}, {"title": "Interleaving String", "diff": "Medium", "url": "https://neetcode.io/problems/interleaving-string"}, {"title": "Longest Increasing Path in a Matrix", "diff": "Hard", "url": "https://neetcode.io/problems/longest-increasing-path-in-matrix"}, {"title": "Distinct Subsequences", "diff": "Hard", "url": "https://neetcode.io/problems/distinct-subsequences"}, {"title": "Edit Distance", "diff": "Medium", "url": "https://neetcode.io/problems/edit-distance"}, {"title": "Burst Balloons", "diff": "Hard", "url": "https://neetcode.io/problems/burst-balloons"}, {"title": "Regular Expression Matching", "diff": "Hard", "url": "https://neetcode.io/problems/regular-expression-matching"}]}, {"id": "bit-manipulation", "name": "Bit Manipulation", "level": 6, "level_name": "Level 6: Advanced Algorithms & Multi-Dimensional DP", "parents": ["1-d-dynamic-programming"], "children": ["math-geometry"], "problems_count": 7, "difficulties": {"easy": 4, "medium": 3, "hard": 0}, "description": "Low-level bitwise operations (AND, OR, XOR, NOT, shifts) for constant-time, constant-space bitmasking and arithmetic.", "key_concepts": ["XOR Cancellation", "Bitmasks & State Compression", "Two's Complement", "Bit Counting (Brian Kernighan)"], "problems": [{"title": "Single Number", "diff": "Easy", "url": "https://neetcode.io/problems/single-number"}, {"title": "Number of 1 Bits", "diff": "Easy", "url": "https://neetcode.io/problems/number-of-one-bits"}, {"title": "Counting Bits", "diff": "Easy", "url": "https://neetcode.io/problems/counting-bits"}, {"title": "Reverse Bits", "diff": "Easy", "url": "https://neetcode.io/problems/reverse-bits"}, {"title": "Missing Number", "diff": "Easy", "url": "https://neetcode.io/problems/missing-number"}, {"title": "Sum of Two Integers", "diff": "Medium", "url": "https://neetcode.io/problems/sum-of-two-integers"}, {"title": "Reverse Integer", "diff": "Medium", "url": "https://neetcode.io/problems/reverse-integer"}]}, {"id": "math-geometry", "name": "Math & Geometry", "level": 7, "level_name": "Level 7: Mathematical & Geometric Rigor", "parents": ["2-d-dynamic-programming", "bit-manipulation"], "children": [], "problems_count": 8, "difficulties": {"easy": 2, "medium": 6, "hard": 0}, "description": "Matrix rotations, spiral traversals, Euclidean coordinates, number theory, and fast exponentiation.", "key_concepts": ["Matrix Transformations", "Modular Arithmetic", "Fast Exponentiation (Binary Exponentiation)", "Geometric Projections"], "problems": [{"title": "Rotate Image", "diff": "Medium", "url": "https://neetcode.io/problems/rotate-matrix"}, {"title": "Spiral Matrix", "diff": "Medium", "url": "https://neetcode.io/problems/spiral-matrix"}, {"title": "Set Matrix Zeroes", "diff": "Medium", "url": "https://neetcode.io/problems/set-zeroes-in-matrix"}, {"title": "Happy Number", "diff": "Easy", "url": "https://neetcode.io/problems/non-cyclical-number"}, {"title": "Plus One", "diff": "Easy", "url": "https://neetcode.io/problems/plus-one"}, {"title": "Pow(x, n)", "diff": "Medium", "url": "https://neetcode.io/problems/pow-x-n"}, {"title": "Multiply Strings", "diff": "Medium", "url": "https://neetcode.io/problems/multiply-strings"}, {"title": "Detect Squares", "diff": "Medium", "url": "https://neetcode.io/problems/count-squares"}]}];
+
+    // Node layout coordinates [x, y] in visual container (1040px wide x 960px tall)
+    // Structured precisely according to NeetCode roadmap topology
+    const nodeCoordinates = {
+      "arrays-hashing": { x: 420, y: 25 },
+      "two-pointers": { x: 320, y: 125 },
+      "stack": { x: 530, y: 125 },
+      "binary-search": { x: 160, y: 240 },
+      "sliding-window": { x: 380, y: 240 },
+      "linked-list": { x: 600, y: 240 },
+      "trees": { x: 420, y: 360 },
+      "tries": { x: 230, y: 470 },
+      "heap-priority-queue": { x: 380, y: 555 },
+      "backtracking": { x: 590, y: 470 },
+      "intervals": { x: 90, y: 670 },
+      "greedy": { x: 270, y: 710 },
+      "graphs": { x: 570, y: 590 },
+      "1-d-dynamic-programming": { x: 770, y: 580 },
+      "advanced-graphs": { x: 440, y: 685 },
+      "2-d-dynamic-programming": { x: 650, y: 710 },
+      "bit-manipulation": { x: 830, y: 710 },
+      "math-geometry": { x: 760, y: 835 }
+    };
+
+    let selectedNodeId = null;
+    let solvedProblems = JSON.parse(localStorage.getItem("dsa_solved_problems") || "{}");
+
+    function saveSolved() {
+      localStorage.setItem("dsa_solved_problems", JSON.stringify(solvedProblems));
+      updateGlobalStats();
+      renderVisualNodes();
+    }
+
+    function toggleProblem(pTitle) {
+      if (solvedProblems[pTitle]) {
+        delete solvedProblems[pTitle];
+      } else {
+        solvedProblems[pTitle] = true;
+      }
+      saveSolved();
+    }
+
+    function updateGlobalStats() {
+      const totalProblems = 150;
+      const solvedCount = Object.keys(solvedProblems).length;
+      const percent = Math.round((solvedCount / totalProblems) * 100);
+      document.getElementById("total-solved-text").innerText = `${solvedCount} / ${totalProblems}`;
+      document.getElementById("total-progress-bar").style.width = `${percent}%`;
+      document.getElementById("percent-text").innerText = `${percent}%`;
+    }
+
+    function initVisualTree() {
+      const treeContainer = document.getElementById("visual-tree");
+      const svg = document.getElementById("connections-svg");
+      svg.innerHTML = "";
+
+      topics.forEach(t => {
+        const fromCoord = nodeCoordinates[t.id];
+        if (!fromCoord) return;
+        t.children.forEach(childId => {
+          const toCoord = nodeCoordinates[childId];
+          if (!toCoord) return;
+
+          const startX = fromCoord.x + 92;
+          const startY = fromCoord.y + 65;
+          const endX = toCoord.x + 92;
+          const endY = toCoord.y;
+
+          const midY = (startY + endY) / 2;
+          const pathD = `M ${startX} ${startY} C ${startX} ${midY}, ${endX} ${midY}, ${endX} ${endY}`;
+
+          const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+          path.setAttribute("d", pathD);
+          path.setAttribute("class", "tree-edge");
+          path.setAttribute("id", `edge-${t.id}-${childId}`);
+          path.dataset.from = t.id;
+          path.dataset.to = childId;
+          svg.appendChild(path);
+        });
+      });
+
+      renderVisualNodes();
+    }
+
+    function renderVisualNodes() {
+      const treeContainer = document.getElementById("visual-tree");
+      const existing = treeContainer.querySelectorAll(".tree-node");
+      existing.forEach(e => e.remove());
+
+      topics.forEach(t => {
+        const coord = nodeCoordinates[t.id];
+        if (!coord) return;
+
+        const node = document.createElement("div");
+        node.className = "tree-node";
+        node.id = `node-${t.id}`;
+        node.style.left = `${coord.x}px`;
+        node.style.top = `${coord.y}px`;
+
+        const topicSolved = t.problems.filter(p => solvedProblems[p.title]).length;
+        const topicPct = (topicSolved / t.problems.length) * 100;
+
+        node.innerHTML = `
+          <div class="node-header">
+            <span>${t.name}</span>
+            <span class="node-level-tag">L${t.level}</span>
+          </div>
+          <div class="node-pills">
+            <span class="diff-pill pill-easy">${t.difficulties.easy}E</span>
+            <span class="diff-pill pill-med">${t.difficulties.medium}M</span>
+            <span class="diff-pill pill-hard">${t.difficulties.hard}H</span>
+          </div>
+          <div class="node-completion">
+            <div class="node-completion-bar" style="width: ${topicPct}%"></div>
+          </div>
+        `;
+
+        node.addEventListener("click", (e) => {
+          e.stopPropagation();
+          handleNodeClick(t.id);
+        });
+
+        node.addEventListener("dblclick", () => {
+          openModal(t.id);
+        });
+
+        treeContainer.appendChild(node);
+      });
+    }
+
+    function handleNodeClick(nodeId) {
+      if (selectedNodeId === nodeId) {
+        selectedNodeId = null;
+        clearHighlights();
+        return;
+      }
+
+      selectedNodeId = nodeId;
+      clearHighlights();
+
+      const upstream = new Set();
+      function collectUpstream(id) {
+        const curr = topics.find(x => x.id === id);
+        if (!curr) return;
+        curr.parents.forEach(p => {
+          upstream.add(p);
+          collectUpstream(p);
+        });
+      }
+      collectUpstream(nodeId);
+
+      const downstream = new Set();
+      function collectDownstream(id) {
+        const curr = topics.find(x => x.id === id);
+        if (!curr) return;
+        curr.children.forEach(c => {
+          downstream.add(c);
+          collectDownstream(c);
+        });
+      }
+      collectDownstream(nodeId);
+
+      topics.forEach(t => {
+        const elem = document.getElementById(`node-${t.id}`);
+        if (!elem) return;
+
+        if (t.id === nodeId) {
+          elem.classList.add("selected");
+        } else if (upstream.has(t.id)) {
+          elem.classList.add("is-upstream");
+        } else if (downstream.has(t.id)) {
+          elem.classList.add("is-downstream");
+        } else {
+          elem.classList.add("dimmed");
+        }
+      });
+
+      const edges = document.querySelectorAll(".tree-edge");
+      edges.forEach(edge => {
+        const from = edge.dataset.from;
+        const to = edge.dataset.to;
+
+        if (upstream.has(from) && (upstream.has(to) || to === nodeId)) {
+          edge.classList.add("highlight-upstream");
+        } else if ((from === nodeId || downstream.has(from)) && downstream.has(to)) {
+          edge.classList.add("highlight-downstream");
+        } else {
+          edge.style.opacity = "0.15";
+        }
+      });
+    }
+
+    function clearHighlights() {
+      document.querySelectorAll(".tree-node").forEach(n => {
+        n.classList.remove("selected", "is-upstream", "is-downstream", "dimmed");
+      });
+      document.querySelectorAll(".tree-edge").forEach(e => {
+        e.classList.remove("highlight-upstream", "highlight-downstream");
+        e.style.opacity = "1";
+      });
+    }
+
+    document.getElementById("visual-view").addEventListener("click", () => {
+      selectedNodeId = null;
+      clearHighlights();
+    });
+
+    function renderBreakdownView() {
+      const container = document.getElementById("breakdown-view");
+      container.innerHTML = "";
+
+      const levelGroups = {};
+      topics.forEach(t => {
+        if (!levelGroups[t.level]) levelGroups[t.level] = [];
+        levelGroups[t.level].push(t);
+      });
+
+      const levelDescriptions = {
+        0: "Foundational data structures. Fast O(1) hash indexing and contiguous memory arrays.",
+        1: "Pointers and indexed traversals. Monotonic stacks and dual indices traversing arrays.",
+        2: "Specialized pointer movement. O(log N) divide-and-conquer search, contiguous sliding windows, and node-link traversals.",
+        3: "The central transition point of algorithm mastery. Non-linear recursive traversals (DFS/BFS) unlocking advanced trees and graphs.",
+        4: "Specialized tree topologies (Trie prefixes, complete binary heaps) and combinatorial decision tree exploration (Backtracking).",
+        5: "Greedy optimization, interval overlap arithmetic, general graph traversal (DFS/BFS grids), and memoized 1D recursive states.",
+        6: "Shortest paths (Dijkstra/MST), 2-dimensional memoization grids (LCS, Knapsack), and bitmask arithmetic.",
+        7: "Matrix coordinate transformations, geometry checks, and number-theoretic algorithms."
+      };
+
+      Object.keys(levelGroups).sort().forEach(lvl => {
+        const groupTopics = levelGroups[lvl];
+        const block = document.createElement("div");
+        block.className = "level-block";
+        block.dataset.level = lvl;
+
+        block.innerHTML = `
+          <div class="level-header">
+            <div class="level-title-group">
+              <div class="level-num-badge">LEVEL ${lvl}</div>
+              <div>
+                <div class="level-title">${groupTopics[0].level_name.split(':')[1] || groupTopics[0].level_name}</div>
+                <div class="level-subtitle">${levelDescriptions[lvl]}</div>
+              </div>
+            </div>
+            <div style="font-size: 0.85rem; color: var(--text-muted);">
+              ${groupTopics.length} Topics &bull; ${groupTopics.reduce((acc, c) => acc + c.problems_count, 0)} Problems
+            </div>
+          </div>
+          <div class="level-topics-grid">
+            ${groupTopics.map(t => {
+              const prereqs = t.parents.map(p => topics.find(x => x.id === p)?.name).filter(Boolean);
+              const unlocks = t.children.map(c => topics.find(x => x.id === c)?.name).filter(Boolean);
+              const solvedCount = t.problems.filter(p => solvedProblems[p.title]).length;
+
+              return `
+                <div class="topic-card" id="card-${t.id}">
+                  <div class="topic-card-header">
+                    <div>
+                      <div class="topic-name">${t.name}</div>
+                      <div style="font-size: 0.75rem; color: var(--accent-cyan); margin-top: 0.15rem;">
+                        ${t.problems_count} Problems (${solvedCount} solved)
+                      </div>
+                    </div>
+                    <div class="node-pills">
+                      <span class="diff-pill pill-easy">${t.difficulties.easy}E</span>
+                      <span class="diff-pill pill-med">${t.difficulties.medium}M</span>
+                      <span class="diff-pill pill-hard">${t.difficulties.hard}H</span>
+                    </div>
+                  </div>
+                  
+                  <div class="topic-desc">${t.description}</div>
+
+                  <div class="concepts-wrap">
+                    ${t.key_concepts.map(k => `<span class="concept-tag">${k}</span>`).join("")}
+                  </div>
+
+                  <div class="prereq-info">
+                    <div><span class="prereq-pill">Prerequisites:</span> ${prereqs.length > 0 ? prereqs.join(", ") : "None (Root Entry Point)"}</div>
+                    <div><span class="next-pill">Unlocks:</span> ${unlocks.length > 0 ? unlocks.join(", ") : "Terminal / Specialized Mastery"}</div>
+                  </div>
+
+                  <div class="topic-actions">
+                    <button class="btn-view-problems" onclick="openModal('${t.id}')">
+                      View ${t.problems.length} Practice Problems &rarr;
+                    </button>
+                    <a href="https://neetcode.io/roadmap" target="_blank" style="font-size: 0.75rem; color: var(--text-muted); text-decoration: none;">
+                      NeetCode &nearr;
+                    </a>
+                  </div>
+                </div>
+              `;
+            }).join("")}
+          </div>
+        `;
+        container.appendChild(block);
+      });
+    }
+
+    function openModal(topicId) {
+      const t = topics.find(x => x.id === topicId);
+      if (!t) return;
+
+      document.getElementById("modal-topic-name").innerText = t.name;
+      document.getElementById("modal-topic-level").innerText = `${t.level_name} (Level ${t.level})`;
+      document.getElementById("modal-topic-desc").innerText = t.description;
+      document.getElementById("modal-problem-count").innerText = t.problems.length;
+
+      const conceptsContainer = document.getElementById("modal-topic-concepts");
+      conceptsContainer.innerHTML = t.key_concepts.map(k => `<span class="concept-tag">${k}</span>`).join("");
+
+      const problemsContainer = document.getElementById("modal-problems-container");
+      problemsContainer.innerHTML = t.problems.map(p => {
+        const isChecked = !!solvedProblems[p.title];
+        let diffClass = "pill-easy";
+        if (p.diff === "Medium") diffClass = "pill-med";
+        if (p.diff === "Hard") diffClass = "pill-hard";
+
+        return `
+          <div class="problem-row">
+            <div class="problem-left">
+              <input type="checkbox" class="problem-checkbox" ${isChecked ? "checked" : ""} onchange="toggleProblem('${p.title.replace(/'/g, "\'")}')">
+              <a href="${p.url}" target="_blank" class="problem-link">${p.title}</a>
+            </div>
+            <span class="diff-pill ${diffClass}">${p.diff}</span>
+          </div>
+        `;
+      }).join("");
+
+      document.getElementById("problem-modal").classList.add("open");
+    }
+
+    function closeModal() {
+      document.getElementById("problem-modal").classList.remove("open");
+      renderBreakdownView();
+    }
+
+    function switchView(viewName) {
+      const visualView = document.getElementById("visual-view");
+      const breakdownView = document.getElementById("breakdown-view");
+      const btnVisual = document.getElementById("btn-view-visual");
+      const btnBreakdown = document.getElementById("btn-view-breakdown");
+
+      if (viewName === "visual") {
+        visualView.style.display = "block";
+        breakdownView.style.display = "none";
+        btnVisual.classList.add("active");
+        btnBreakdown.classList.remove("active");
+        initVisualTree();
+      } else {
+        visualView.style.display = "none";
+        breakdownView.style.display = "flex";
+        btnVisual.classList.remove("active");
+        btnBreakdown.classList.add("active");
+        renderBreakdownView();
+      }
+    }
+
+    document.querySelectorAll(".level-filter-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll(".level-filter-btn").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        const filter = btn.dataset.filter;
+
+        if (filter === "all") {
+          document.querySelectorAll(".level-block").forEach(b => b.style.display = "block");
+          document.querySelectorAll(".tree-node").forEach(n => n.classList.remove("dimmed"));
+        } else {
+          document.querySelectorAll(".level-block").forEach(b => {
+            b.style.display = b.dataset.level === filter ? "block" : "none";
+          });
+          document.querySelectorAll(".tree-node").forEach(n => {
+            const t = topics.find(x => `node-${x.id}` === n.id);
+            if (t && t.level.toString() === filter) {
+              n.classList.remove("dimmed");
+            } else {
+              n.classList.add("dimmed");
+            }
+          });
+        }
+      });
+    });
+
+    document.getElementById("search-box").addEventListener("input", (e) => {
+      const q = e.target.value.toLowerCase().trim();
+      if (!q) {
+        document.querySelectorAll(".tree-node, .topic-card, .level-block").forEach(el => {
+          el.style.display = "";
+          el.classList.remove("dimmed");
+        });
+        return;
+      }
+
+      topics.forEach(t => {
+        const matches = t.name.toLowerCase().includes(q) ||
+          t.description.toLowerCase().includes(q) ||
+          t.key_concepts.some(k => k.toLowerCase().includes(q)) ||
+          t.problems.some(p => p.title.toLowerCase().includes(q));
+
+        const node = document.getElementById(`node-${t.id}`);
+        if (node) {
+          if (matches) node.classList.remove("dimmed");
+          else node.classList.add("dimmed");
+        }
+
+        const card = document.getElementById(`card-${t.id}`);
+        if (card) {
+          card.style.display = matches ? "flex" : "none";
+        }
+      });
+    });
+
+    window.addEventListener("DOMContentLoaded", () => {
+      updateGlobalStats();
+      initVisualTree();
+      renderBreakdownView();
+    });
+  </script>
+</body>
+</html>
