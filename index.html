@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Python 3 DSA Mastery — Home Page Index</title>
+  <title>Python 3 DSA Cheat Sheet & Topic Index</title>
   <style>
 
 :root {
@@ -82,26 +82,26 @@ body {
 }
 .open-guide-btn:hover { opacity: 0.9; }
 
-/* Hero Section */
+/* Hero Section (No progress bars, no race metrics) */
 .hero-section {
   max-width: 1200px;
-  margin: 2.5rem auto 1.5rem auto;
+  margin: 2.5rem auto 1rem auto;
   padding: 0 1.5rem;
 }
 
 .hero-card {
-  background: linear-gradient(135deg, #1e1e1e 0%, #262626 100%);
+  background: linear-gradient(135deg, #1e1e1e 0%, #252525 100%);
   border: 1px solid var(--lc-border);
   border-radius: 12px;
   padding: 2.25rem;
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
+  gap: 0.75rem;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
 }
 
 .hero-title {
-  font-size: 2rem;
+  font-size: 2.1rem;
   font-weight: 900;
   letter-spacing: -0.5px;
   color: #ffffff;
@@ -109,71 +109,10 @@ body {
 .hero-title span { color: var(--lc-orange); }
 
 .hero-subtitle {
-  font-size: 0.95rem;
+  font-size: 0.96rem;
   color: var(--lc-text-secondary);
-  max-width: 800px;
+  max-width: 780px;
   line-height: 1.6;
-}
-
-/* Overall Progress Dashboard */
-.progress-dashboard {
-  background: #181818;
-  border: 1px solid var(--lc-border);
-  border-radius: 8px;
-  padding: 1.25rem 1.5rem;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1.25rem;
-}
-
-.stat-group {
-  display: flex;
-  align-items: center;
-  gap: 2rem;
-  flex-wrap: wrap;
-}
-
-.stat-item {
-  display: flex;
-  flex-direction: column;
-  gap: 0.2rem;
-}
-
-.stat-label {
-  font-size: 0.74rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  color: var(--lc-text-muted);
-}
-
-.stat-value {
-  font-size: 1.35rem;
-  font-weight: 800;
-  color: var(--lc-cyan);
-}
-
-.dashboard-progress-wrap {
-  flex: 1;
-  min-width: 240px;
-  display: flex;
-  flex-direction: column;
-  gap: 0.4rem;
-}
-
-.dash-prog-bar {
-  height: 10px;
-  background: #111111;
-  border-radius: 9999px;
-  overflow: hidden;
-}
-.dash-prog-fill {
-  height: 100%;
-  background: linear-gradient(90deg, var(--lc-orange), var(--lc-cyan));
-  width: 0%;
-  transition: width 0.4s ease;
 }
 
 /* Topics Grid Section */
@@ -206,12 +145,11 @@ body {
   background: var(--lc-bg-surface);
   border: 1px solid var(--lc-border);
   border-radius: 10px;
-  padding: 1.25rem;
+  padding: 1.35rem;
   display: flex;
   flex-direction: column;
-  gap: 0.85rem;
+  gap: 1rem;
   transition: all 0.2s ease;
-  position: relative;
 }
 .topic-index-card:hover {
   transform: translateY(-3px);
@@ -228,14 +166,14 @@ body {
 .card-icon-title {
   display: flex;
   align-items: center;
-  gap: 0.65rem;
+  gap: 0.75rem;
 }
 
 .card-icon {
   font-size: 1.4rem;
   background: #252525;
-  width: 40px;
-  height: 40px;
+  width: 42px;
+  height: 42px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -244,7 +182,7 @@ body {
 }
 
 .card-title-text h3 {
-  font-size: 1.05rem;
+  font-size: 1.1rem;
   font-weight: 700;
   color: #ffffff;
 }
@@ -254,56 +192,39 @@ body {
   font-weight: 700;
   color: var(--lc-orange);
   text-transform: uppercase;
-}
-
-.card-status-badge {
-  font-size: 0.72rem;
-  font-weight: 700;
-  padding: 0.15rem 0.5rem;
-  border-radius: 9999px;
-  background: rgba(255, 255, 255, 0.08);
-  color: var(--lc-text-secondary);
-}
-.card-status-badge.done {
-  background: rgba(0, 184, 163, 0.15);
-  color: var(--lc-cyan);
+  letter-spacing: 0.5px;
 }
 
 .card-subtopics-list {
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
-  padding-left: 0.5rem;
-  font-size: 0.78rem;
+  gap: 0.35rem;
+  padding-left: 0.25rem;
+  font-size: 0.82rem;
   color: var(--lc-text-secondary);
 }
 .card-subtopic-item::before { content: "• "; color: var(--lc-orange); }
 
 .card-footer-row {
   margin-top: auto;
-  padding-top: 0.75rem;
+  padding-top: 0.85rem;
   border-top: 1px solid var(--lc-border);
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   align-items: center;
-}
-
-.card-diff-summary {
-  display: flex;
-  gap: 0.35rem;
 }
 
 .card-go-btn {
   display: inline-flex;
   align-items: center;
-  gap: 0.3rem;
+  gap: 0.35rem;
   color: var(--lc-orange);
   text-decoration: none;
-  font-size: 0.78rem;
+  font-size: 0.82rem;
   font-weight: 700;
   transition: gap 0.15s;
 }
-.card-go-btn:hover { gap: 0.5rem; text-decoration: underline; }
+.card-go-btn:hover { gap: 0.55rem; text-decoration: underline; }
 
 /* Home Footer */
 .home-footer {
@@ -317,7 +238,6 @@ body {
 
 @media (max-width: 768px) {
   .topics-grid { grid-template-columns: 1fr; }
-  .stat-group { width: 100%; justify-content: space-between; }
 }
 
   </style>
@@ -328,60 +248,32 @@ body {
   <header class="home-header">
     <div class="home-header-inner">
       <a href="index.html" class="home-logo">
-        <div>DSA <span>Mastery</span></div>
+        <div>DSA <span>Cheat Sheet</span></div>
       </a>
       <a href="dsa_revision.html" class="open-guide-btn">
-        <span>📖 Open Revision Guide</span>
+        <span>📖 Open Reference Guide</span>
         <span>→</span>
       </a>
     </div>
   </header>
 
-  <!-- Hero Section -->
+  <!-- Hero Section: Clean Cheat Sheet Header, No Progress/Race Bars -->
   <section class="hero-section">
     <div class="hero-card">
-      <h1 class="hero-title">Python 3 <span>DSA Revision</span> Index</h1>
+      <h1 class="hero-title">Python 3 <span>DSA Cheat Sheet</span> & Problem Reference</h1>
       <p class="hero-subtitle">
-        Structured preparation guide covering 18 core topics and 150 essential LeetCode problems.
-        Features short-circuit Python 3 blueprints, 1 to 5 star difficulty levels, and automatic local progress tracking.
+        A concise algorithmic reference guide covering all 18 core DSA topics.
+        Contains pattern recognition triggers, short-circuit Python 3 blueprints, and 1 to 5 star difficulty tiers.
       </p>
-
-      <!-- Progress Overview Dashboard -->
-      <div class="progress-dashboard">
-        <div class="stat-group">
-          <div class="stat-item">
-            <span class="stat-label">Total Problems</span>
-            <span class="stat-value">150</span>
-          </div>
-          <div class="stat-item">
-            <span class="stat-label">Solved</span>
-            <span class="stat-value" id="home-solved-count">0</span>
-          </div>
-          <div class="stat-item">
-            <span class="stat-label">Topics Done</span>
-            <span class="stat-value" id="home-topics-done">0 / 18</span>
-          </div>
-        </div>
-
-        <div class="dashboard-progress-wrap">
-          <div style="display:flex; justify-content:space-between; font-size:0.75rem; font-weight:700;">
-            <span style="color:var(--lc-text-muted);">OVERALL PROGRESS</span>
-            <span style="color:var(--lc-cyan);" id="home-pct-text">0%</span>
-          </div>
-          <div class="dash-prog-bar">
-            <div class="dash-prog-fill" id="home-prog-fill"></div>
-          </div>
-        </div>
-      </div>
     </div>
   </section>
 
   <!-- Topics Grid Section -->
   <section class="topics-grid-section">
     <div class="section-heading-row">
-      <h2 class="section-title">All 18 Topics (Direct Access)</h2>
+      <h2 class="section-title">All 18 Topics</h2>
       <a href="dsa_revision.html" style="color:var(--lc-orange); text-decoration:none; font-size:0.84rem; font-weight:700;">
-        View Continuous Document →
+        Open Continuous Cheat Sheet →
       </a>
     </div>
 
@@ -396,7 +288,6 @@ body {
               <h3>Arrays &amp; Hashing</h3>
             </div>
           </div>
-          <span class="card-status-badge" id="card-status-arrays-hashing">0/9</span>
         </div>
 
         <div class="card-subtopics-list">
@@ -406,11 +297,6 @@ body {
         </div>
 
         <div class="card-footer-row">
-          <div class="card-diff-summary">
-            <span class="diff-badge Easy" style="font-size:0.68rem;">3E</span>
-            <span class="diff-badge Medium" style="font-size:0.68rem;">6M</span>
-            <span class="diff-badge Hard" style="font-size:0.68rem;">0H</span>
-          </div>
           <a href="dsa_revision.html#arrays-hashing" class="card-go-btn">
             <span>Revise Topic</span>
             <span>→</span>
@@ -427,7 +313,6 @@ body {
               <h3>Two Pointers</h3>
             </div>
           </div>
-          <span class="card-status-badge" id="card-status-two-pointers">0/5</span>
         </div>
 
         <div class="card-subtopics-list">
@@ -437,11 +322,6 @@ body {
         </div>
 
         <div class="card-footer-row">
-          <div class="card-diff-summary">
-            <span class="diff-badge Easy" style="font-size:0.68rem;">1E</span>
-            <span class="diff-badge Medium" style="font-size:0.68rem;">3M</span>
-            <span class="diff-badge Hard" style="font-size:0.68rem;">1H</span>
-          </div>
           <a href="dsa_revision.html#two-pointers" class="card-go-btn">
             <span>Revise Topic</span>
             <span>→</span>
@@ -458,7 +338,6 @@ body {
               <h3>Sliding Window</h3>
             </div>
           </div>
-          <span class="card-status-badge" id="card-status-sliding-window">0/6</span>
         </div>
 
         <div class="card-subtopics-list">
@@ -468,11 +347,6 @@ body {
         </div>
 
         <div class="card-footer-row">
-          <div class="card-diff-summary">
-            <span class="diff-badge Easy" style="font-size:0.68rem;">1E</span>
-            <span class="diff-badge Medium" style="font-size:0.68rem;">3M</span>
-            <span class="diff-badge Hard" style="font-size:0.68rem;">2H</span>
-          </div>
           <a href="dsa_revision.html#sliding-window" class="card-go-btn">
             <span>Revise Topic</span>
             <span>→</span>
@@ -489,7 +363,6 @@ body {
               <h3>Stack</h3>
             </div>
           </div>
-          <span class="card-status-badge" id="card-status-stack">0/7</span>
         </div>
 
         <div class="card-subtopics-list">
@@ -499,11 +372,6 @@ body {
         </div>
 
         <div class="card-footer-row">
-          <div class="card-diff-summary">
-            <span class="diff-badge Easy" style="font-size:0.68rem;">1E</span>
-            <span class="diff-badge Medium" style="font-size:0.68rem;">5M</span>
-            <span class="diff-badge Hard" style="font-size:0.68rem;">1H</span>
-          </div>
           <a href="dsa_revision.html#stack" class="card-go-btn">
             <span>Revise Topic</span>
             <span>→</span>
@@ -520,7 +388,6 @@ body {
               <h3>Binary Search</h3>
             </div>
           </div>
-          <span class="card-status-badge" id="card-status-binary-search">0/7</span>
         </div>
 
         <div class="card-subtopics-list">
@@ -530,11 +397,6 @@ body {
         </div>
 
         <div class="card-footer-row">
-          <div class="card-diff-summary">
-            <span class="diff-badge Easy" style="font-size:0.68rem;">1E</span>
-            <span class="diff-badge Medium" style="font-size:0.68rem;">5M</span>
-            <span class="diff-badge Hard" style="font-size:0.68rem;">1H</span>
-          </div>
           <a href="dsa_revision.html#binary-search" class="card-go-btn">
             <span>Revise Topic</span>
             <span>→</span>
@@ -551,7 +413,6 @@ body {
               <h3>Linked List</h3>
             </div>
           </div>
-          <span class="card-status-badge" id="card-status-linked-list">0/11</span>
         </div>
 
         <div class="card-subtopics-list">
@@ -561,11 +422,6 @@ body {
         </div>
 
         <div class="card-footer-row">
-          <div class="card-diff-summary">
-            <span class="diff-badge Easy" style="font-size:0.68rem;">3E</span>
-            <span class="diff-badge Medium" style="font-size:0.68rem;">6M</span>
-            <span class="diff-badge Hard" style="font-size:0.68rem;">2H</span>
-          </div>
           <a href="dsa_revision.html#linked-list" class="card-go-btn">
             <span>Revise Topic</span>
             <span>→</span>
@@ -582,7 +438,6 @@ body {
               <h3>Trees</h3>
             </div>
           </div>
-          <span class="card-status-badge" id="card-status-trees">0/15</span>
         </div>
 
         <div class="card-subtopics-list">
@@ -593,11 +448,6 @@ body {
         </div>
 
         <div class="card-footer-row">
-          <div class="card-diff-summary">
-            <span class="diff-badge Easy" style="font-size:0.68rem;">6E</span>
-            <span class="diff-badge Medium" style="font-size:0.68rem;">7M</span>
-            <span class="diff-badge Hard" style="font-size:0.68rem;">2H</span>
-          </div>
           <a href="dsa_revision.html#trees" class="card-go-btn">
             <span>Revise Topic</span>
             <span>→</span>
@@ -614,7 +464,6 @@ body {
               <h3>Tries</h3>
             </div>
           </div>
-          <span class="card-status-badge" id="card-status-tries">0/3</span>
         </div>
 
         <div class="card-subtopics-list">
@@ -624,11 +473,6 @@ body {
         </div>
 
         <div class="card-footer-row">
-          <div class="card-diff-summary">
-            <span class="diff-badge Easy" style="font-size:0.68rem;">0E</span>
-            <span class="diff-badge Medium" style="font-size:0.68rem;">2M</span>
-            <span class="diff-badge Hard" style="font-size:0.68rem;">1H</span>
-          </div>
           <a href="dsa_revision.html#tries" class="card-go-btn">
             <span>Revise Topic</span>
             <span>→</span>
@@ -645,7 +489,6 @@ body {
               <h3>Heap / Priority Queue</h3>
             </div>
           </div>
-          <span class="card-status-badge" id="card-status-heap-priority-queue">0/7</span>
         </div>
 
         <div class="card-subtopics-list">
@@ -655,11 +498,6 @@ body {
         </div>
 
         <div class="card-footer-row">
-          <div class="card-diff-summary">
-            <span class="diff-badge Easy" style="font-size:0.68rem;">2E</span>
-            <span class="diff-badge Medium" style="font-size:0.68rem;">4M</span>
-            <span class="diff-badge Hard" style="font-size:0.68rem;">1H</span>
-          </div>
           <a href="dsa_revision.html#heap-priority-queue" class="card-go-btn">
             <span>Revise Topic</span>
             <span>→</span>
@@ -676,7 +514,6 @@ body {
               <h3>Backtracking</h3>
             </div>
           </div>
-          <span class="card-status-badge" id="card-status-backtracking">0/9</span>
         </div>
 
         <div class="card-subtopics-list">
@@ -686,11 +523,6 @@ body {
         </div>
 
         <div class="card-footer-row">
-          <div class="card-diff-summary">
-            <span class="diff-badge Easy" style="font-size:0.68rem;">0E</span>
-            <span class="diff-badge Medium" style="font-size:0.68rem;">8M</span>
-            <span class="diff-badge Hard" style="font-size:0.68rem;">1H</span>
-          </div>
           <a href="dsa_revision.html#backtracking" class="card-go-btn">
             <span>Revise Topic</span>
             <span>→</span>
@@ -707,7 +539,6 @@ body {
               <h3>Intervals</h3>
             </div>
           </div>
-          <span class="card-status-badge" id="card-status-intervals">0/6</span>
         </div>
 
         <div class="card-subtopics-list">
@@ -717,11 +548,6 @@ body {
         </div>
 
         <div class="card-footer-row">
-          <div class="card-diff-summary">
-            <span class="diff-badge Easy" style="font-size:0.68rem;">1E</span>
-            <span class="diff-badge Medium" style="font-size:0.68rem;">4M</span>
-            <span class="diff-badge Hard" style="font-size:0.68rem;">1H</span>
-          </div>
           <a href="dsa_revision.html#intervals" class="card-go-btn">
             <span>Revise Topic</span>
             <span>→</span>
@@ -738,7 +564,6 @@ body {
               <h3>Greedy</h3>
             </div>
           </div>
-          <span class="card-status-badge" id="card-status-greedy">0/8</span>
         </div>
 
         <div class="card-subtopics-list">
@@ -748,11 +573,6 @@ body {
         </div>
 
         <div class="card-footer-row">
-          <div class="card-diff-summary">
-            <span class="diff-badge Easy" style="font-size:0.68rem;">0E</span>
-            <span class="diff-badge Medium" style="font-size:0.68rem;">8M</span>
-            <span class="diff-badge Hard" style="font-size:0.68rem;">0H</span>
-          </div>
           <a href="dsa_revision.html#greedy" class="card-go-btn">
             <span>Revise Topic</span>
             <span>→</span>
@@ -769,7 +589,6 @@ body {
               <h3>Graphs</h3>
             </div>
           </div>
-          <span class="card-status-badge" id="card-status-graphs">0/13</span>
         </div>
 
         <div class="card-subtopics-list">
@@ -779,11 +598,6 @@ body {
         </div>
 
         <div class="card-footer-row">
-          <div class="card-diff-summary">
-            <span class="diff-badge Easy" style="font-size:0.68rem;">0E</span>
-            <span class="diff-badge Medium" style="font-size:0.68rem;">12M</span>
-            <span class="diff-badge Hard" style="font-size:0.68rem;">1H</span>
-          </div>
           <a href="dsa_revision.html#graphs" class="card-go-btn">
             <span>Revise Topic</span>
             <span>→</span>
@@ -800,7 +614,6 @@ body {
               <h3>1-D Dynamic Programming</h3>
             </div>
           </div>
-          <span class="card-status-badge" id="card-status-1-d-dynamic-programming">0/12</span>
         </div>
 
         <div class="card-subtopics-list">
@@ -810,11 +623,6 @@ body {
         </div>
 
         <div class="card-footer-row">
-          <div class="card-diff-summary">
-            <span class="diff-badge Easy" style="font-size:0.68rem;">2E</span>
-            <span class="diff-badge Medium" style="font-size:0.68rem;">10M</span>
-            <span class="diff-badge Hard" style="font-size:0.68rem;">0H</span>
-          </div>
           <a href="dsa_revision.html#1-d-dynamic-programming" class="card-go-btn">
             <span>Revise Topic</span>
             <span>→</span>
@@ -831,7 +639,6 @@ body {
               <h3>Advanced Graphs</h3>
             </div>
           </div>
-          <span class="card-status-badge" id="card-status-advanced-graphs">0/6</span>
         </div>
 
         <div class="card-subtopics-list">
@@ -841,11 +648,6 @@ body {
         </div>
 
         <div class="card-footer-row">
-          <div class="card-diff-summary">
-            <span class="diff-badge Easy" style="font-size:0.68rem;">0E</span>
-            <span class="diff-badge Medium" style="font-size:0.68rem;">3M</span>
-            <span class="diff-badge Hard" style="font-size:0.68rem;">3H</span>
-          </div>
           <a href="dsa_revision.html#advanced-graphs" class="card-go-btn">
             <span>Revise Topic</span>
             <span>→</span>
@@ -862,7 +664,6 @@ body {
               <h3>2-D Dynamic Programming</h3>
             </div>
           </div>
-          <span class="card-status-badge" id="card-status-2-d-dynamic-programming">0/11</span>
         </div>
 
         <div class="card-subtopics-list">
@@ -872,11 +673,6 @@ body {
         </div>
 
         <div class="card-footer-row">
-          <div class="card-diff-summary">
-            <span class="diff-badge Easy" style="font-size:0.68rem;">0E</span>
-            <span class="diff-badge Medium" style="font-size:0.68rem;">7M</span>
-            <span class="diff-badge Hard" style="font-size:0.68rem;">4H</span>
-          </div>
           <a href="dsa_revision.html#2-d-dynamic-programming" class="card-go-btn">
             <span>Revise Topic</span>
             <span>→</span>
@@ -893,7 +689,6 @@ body {
               <h3>Bit Manipulation</h3>
             </div>
           </div>
-          <span class="card-status-badge" id="card-status-bit-manipulation">0/7</span>
         </div>
 
         <div class="card-subtopics-list">
@@ -903,11 +698,6 @@ body {
         </div>
 
         <div class="card-footer-row">
-          <div class="card-diff-summary">
-            <span class="diff-badge Easy" style="font-size:0.68rem;">5E</span>
-            <span class="diff-badge Medium" style="font-size:0.68rem;">2M</span>
-            <span class="diff-badge Hard" style="font-size:0.68rem;">0H</span>
-          </div>
           <a href="dsa_revision.html#bit-manipulation" class="card-go-btn">
             <span>Revise Topic</span>
             <span>→</span>
@@ -924,7 +714,6 @@ body {
               <h3>Math &amp; Geometry</h3>
             </div>
           </div>
-          <span class="card-status-badge" id="card-status-math-geometry">0/8</span>
         </div>
 
         <div class="card-subtopics-list">
@@ -934,11 +723,6 @@ body {
         </div>
 
         <div class="card-footer-row">
-          <div class="card-diff-summary">
-            <span class="diff-badge Easy" style="font-size:0.68rem;">2E</span>
-            <span class="diff-badge Medium" style="font-size:0.68rem;">6M</span>
-            <span class="diff-badge Hard" style="font-size:0.68rem;">0H</span>
-          </div>
           <a href="dsa_revision.html#math-geometry" class="card-go-btn">
             <span>Revise Topic</span>
             <span>→</span>
@@ -950,59 +734,7 @@ body {
 
   <!-- Home Footer -->
   <footer class="home-footer">
-    <p>DSA Revision Index • 18 Topics • 150 LeetCode Problems • Pure Python 3</p>
-    <p style="margin-top:0.35rem; font-size:0.78rem;">Progress automatically saved in browser local storage.</p>
+    <p>Python 3 DSA Cheat Sheet & Problem Reference • 18 Topics • LeetCode Links</p>
   </footer>
-
-  <script>
-    const TOPIC_IDS = ["arrays-hashing", "two-pointers", "sliding-window", "stack", "binary-search", "linked-list", "trees", "tries", "heap-priority-queue", "backtracking", "intervals", "greedy", "graphs", "1-d-dynamic-programming", "advanced-graphs", "2-d-dynamic-programming", "bit-manipulation", "math-geometry"];
-    const TOPIC_PROBS = {"arrays-hashing": ["contains-duplicate", "valid-anagram", "two-sum", "group-anagrams", "top-k-frequent-elements", "product-of-array-except-self", "valid-sudoku", "encode-and-decode-strings", "longest-consecutive-sequence"], "two-pointers": ["valid-palindrome", "two-sum-ii-input-array-is-sorted", "3sum", "container-with-most-water", "trapping-rain-water"], "sliding-window": ["best-time-to-buy-and-sell-stock", "longest-substring-without-repeating-characters", "longest-repeating-character-replacement", "permutation-in-string", "minimum-window-substring", "sliding-window-maximum"], "stack": ["valid-parentheses", "min-stack", "evaluate-reverse-polish-notation", "generate-parentheses", "daily-temperatures", "car-fleet", "largest-rectangle-in-histogram"], "binary-search": ["binary-search", "search-a-2d-matrix", "koko-eating-bananas", "find-minimum-in-rotated-sorted-array", "search-in-rotated-sorted-array", "time-based-key-value-store", "median-of-two-sorted-arrays"], "linked-list": ["reverse-linked-list", "merge-two-sorted-lists", "reorder-list", "remove-nth-node-from-end-of-list", "copy-list-with-random-pointer", "add-two-numbers", "linked-list-cycle", "find-duplicate-integer", "lru-cache", "merge-k-sorted-lists", "reverse-nodes-in-k-group"], "trees": ["invert-binary-tree", "maximum-depth-of-binary-tree", "diameter-of-binary-tree", "balanced-binary-tree", "same-tree", "subtree-of-another-tree", "lowest-common-ancestor-of-a-binary-search-tree", "binary-tree-level-order-traversal", "binary-tree-right-side-view", "count-good-nodes-in-binary-tree", "validate-binary-search-tree", "kth-smallest-element-in-a-bst", "construct-binary-tree-from-preorder-and-inorder-traversal", "binary-tree-maximum-path-sum", "serialize-and-deserialize-binary-tree"], "tries": ["implement-trie-prefix-tree", "design-add-and-search-words-data-structure", "word-search-ii"], "heap-priority-queue": ["kth-largest-element-in-a-stream", "last-stone-weight", "k-closest-points-to-origin", "kth-largest-element-in-an-array", "task-scheduler", "design-twitter", "find-median-from-data-stream"], "backtracking": ["subsets", "combination-sum", "permutations", "subsets-ii", "combination-sum-ii", "word-search", "palindrome-partitioning", "letter-combinations-of-a-phone-number", "n-queens"], "intervals": ["insert-interval", "merge-intervals", "non-overlapping-intervals", "meeting-rooms", "meeting-rooms-ii", "minimum-interval-to-include-each-query"], "greedy": ["maximum-subarray", "jump-game", "jump-game-ii", "gas-station", "hand-of-straights", "merge-triplets-to-form-target-triplet", "partition-labels", "valid-parenthesis-string"], "graphs": ["number-of-islands", "max-area-of-island", "clone-graph", "walls-and-gates", "rotting-oranges", "pacific-atlantic-water-flow", "surrounded-regions", "course-schedule", "course-schedule-ii", "graph-valid-tree", "number-of-connected-components-in-an-undirected-graph", "redundant-connection", "word-ladder"], "1-d-dynamic-programming": ["climbing-stairs", "min-cost-climbing-stairs", "house-robber", "house-robber-ii", "longest-palindromic-substring", "palindromic-substrings", "decode-ways", "coin-change", "maximum-product-subarray", "word-break", "longest-increasing-subsequence", "partition-equal-subset-sum"], "advanced-graphs": ["reconstruct-itinerary", "min-cost-to-connect-all-points", "network-delay-time", "swim-in-rising-water", "alien-dictionary", "cheapest-flights-within-k-stops"], "2-d-dynamic-programming": ["unique-paths", "longest-common-subsequence", "best-time-to-buy-and-sell-stock-with-cooldown", "coin-change-ii", "target-sum", "interleaving-string", "longest-increasing-path-in-a-matrix", "distinct-subsequences", "edit-distance", "burst-balloons", "regular-expression-matching"], "bit-manipulation": ["single-number", "number-of-1-bits", "counting-bits", "reverse-bits", "missing-number", "sum-of-two-integers", "reverse-integer"], "math-geometry": ["rotate-image", "spiral-matrix", "set-matrix-zeroes", "happy-number", "plus-one", "powx-n", "multiply-strings", "detect-squares"]};
-    const STORAGE_KEY = "dsa_solved_v4";
-    let solvedMap = {};
-
-    try {
-      solvedMap = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
-    } catch(e) {
-      solvedMap = {};
-    }
-
-    function updateHomeDashboard() {
-      const totalProblems = 150;
-      const solvedCount = Object.keys(solvedMap).length;
-      const pct = Math.round((solvedCount / totalProblems) * 100);
-
-      document.getElementById("home-solved-count").textContent = solvedCount;
-      document.getElementById("home-pct-text").textContent = pct + "%";
-      document.getElementById("home-prog-fill").style.width = pct + "%";
-
-      let topicsDoneCount = 0;
-
-      TOPIC_IDS.forEach(tid => {
-        const slugs = TOPIC_PROBS[tid] || [];
-        const solvedInTopic = slugs.filter(s => solvedMap[s]).length;
-        const totalInTopic = slugs.length;
-        const isDone = (solvedInTopic === totalInTopic && totalInTopic > 0);
-
-        if (isDone) topicsDoneCount++;
-
-        const badge = document.getElementById(`card-status-${tid}`);
-        if (badge) {
-          if (isDone) {
-            badge.textContent = "✓ Done";
-            badge.classList.add("done");
-          } else {
-            badge.textContent = `${solvedInTopic}/${totalInTopic}`;
-            badge.classList.remove("done");
-          }
-        }
-      });
-
-      document.getElementById("home-topics-done").textContent = `${topicsDoneCount} / 18`;
-    }
-
-    document.addEventListener("DOMContentLoaded", () => {
-      updateHomeDashboard();
-    });
-  </script>
 </body>
 </html>
