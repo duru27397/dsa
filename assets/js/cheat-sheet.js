@@ -1,9 +1,30 @@
 (() => {
   const sidebar = document.getElementById("sidebar");
   const menuButton = document.getElementById("menu-button");
+  const sidebarBackdrop = document.getElementById("sidebar-backdrop");
   const currentTopic = document.getElementById("current-topic");
   const pages = [...document.querySelectorAll(".page-view")];
   const navItems = [...document.querySelectorAll(".nav-item")];
+
+  const closeSidebar = () => {
+    sidebar?.classList.remove("open");
+    sidebarBackdrop?.classList.remove("active");
+    menuButton?.setAttribute("aria-expanded", "false");
+  };
+
+  const openSidebar = () => {
+    sidebar?.classList.add("open");
+    sidebarBackdrop?.classList.add("active");
+    menuButton?.setAttribute("aria-expanded", "true");
+  };
+
+  const toggleSidebar = () => {
+    if (sidebar?.classList.contains("open")) {
+      closeSidebar();
+    } else {
+      openSidebar();
+    }
+  };
 
   const pageAliases = {
     "arrays-hashing": "arrays-blueprint",
@@ -22,7 +43,10 @@
     "binary-search": "bs-blueprint",
     "bs-l1": "bs-arrays-sub",
     "bs-l2": "bs-rotated-sub",
-    "bs-l3": "bs-answer-sub"
+    "bs-l3": "bs-answer-sub",
+    "union-find": "uf-blueprint",
+    "uf-l1": "uf-components-sub",
+    "uf-l2": "uf-advanced-sub"
   };
 
   const showPage = (rawTargetId, updateUrl = true, subTargetId = null) => {
@@ -47,9 +71,13 @@
 
     // Update breadcrumb in topbar
     if (currentTopic && targetPage) {
-      const topicTitle = targetPage.dataset.topicTitle || "DSA Cheat Sheet";
+      const topicTitle = targetPage.dataset.topicTitle || "DSA";
       const pageTitle = targetPage.dataset.pageTitle || "";
-      currentTopic.textContent = pageTitle ? `${topicTitle} / ${pageTitle}` : topicTitle;
+      if (pageTitle) {
+        currentTopic.innerHTML = `<span class="breadcrumb-category">${topicTitle}</span><span class="breadcrumb-divider" aria-hidden="true"><svg class="breadcrumb-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg></span><span class="breadcrumb-page">${pageTitle}</span>`;
+      } else {
+        currentTopic.innerHTML = `<span class="breadcrumb-category">${topicTitle}</span>`;
+      }
     }
 
     // Update active state in sidebar nav items
@@ -90,7 +118,7 @@
       history.replaceState(null, "", newHash);
     }
 
-    sidebar?.classList.remove("open");
+    closeSidebar();
   };
 
   // Toggle tree node expansion
@@ -127,9 +155,14 @@
     });
   });
 
-  // Mobile menu toggle
-  menuButton?.addEventListener("click", () => {
-    sidebar?.classList.toggle("open");
+  // Mobile menu toggle & backdrop dismissal
+  menuButton?.addEventListener("click", toggleSidebar);
+  sidebarBackdrop?.addEventListener("click", closeSidebar);
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && sidebar?.classList.contains("open")) {
+      closeSidebar();
+    }
   });
 
   // Copy button logic (preserves file:// fallback)
