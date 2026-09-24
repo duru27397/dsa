@@ -1449,21 +1449,41 @@ Mechanism: "Target Transposition"
                   <p style="font-size: 0.8rem; line-height: 1.5; color: var(--text); margin: 0.4rem 0;">
                     Technically, <strong>Left Shift</strong>, <strong>Right Shift</strong>, and <strong>Sorting/Transformation</strong> are the <em>exact same algorithm</em>. Every cycle in a permutation graph is resolved by following the directed target function <code>nxtIdx = getTarget(currIdx)</code> and depositing/swapping the displaced element into its destination. Only the definition of <code>getTarget</code> changes:
                   </p>
-                  <pre class="trace-diagram" style="font-size: 0.74rem; margin-top: 0.5rem;"><code># ========================================================
-# THE UNIVERSAL PERMUTATION CYCLE TEMPLATE
-# ========================================================
+                  <pre class="trace-diagram" style="font-size: 0.74rem; margin-top: 0.5rem;"><code><span class="comment"># =========================================================================</span>
+<span class="comment"># THE EXACT SAME REUSABLE PERMUTATION ENGINE (Single Unified Function)</span>
+<span class="comment"># =========================================================================</span>
+<span class="kw-def">def</span> <span class="fn">applyPermutation</span><span class="punct">(</span><span class="param">nums</span><span class="punct">:</span> <span class="type">List</span><span class="punct">[</span><span class="type">int</span><span class="punct">],</span> <span class="param">getTargetIdx</span><span class="punct">)</span> <span class="punct">-&gt;</span> <span class="type">int</span><span class="punct">:</span>
+    <span class="var">n</span><span class="punct">,</span> <span class="var">swaps</span> <span class="punct">=</span> <span class="fn">len</span><span class="punct">(</span><span class="param">nums</span><span class="punct">),</span> <span class="num">0</span>
+    <span class="var">visited</span> <span class="punct">=</span> <span class="punct">[</span><span class="kw-def">False</span><span class="punct">]</span> <span class="punct">*</span> <span class="var">n</span>
 
-# 1. RIGHT SHIFT by k:
-nxtIdx = (currIdx + k) % n
-prevVal, nums[nxtIdx], currIdx = nums[nxtIdx], prevVal, nxtIdx
+    <span class="flow">for</span> <span class="var">cycleStartIdx</span> <span class="flow">in</span> <span class="fn">range</span><span class="punct">(</span><span class="var">n</span><span class="punct">):</span>
+        <span class="comment"># Skip if element was already processed in a previous cycle</span>
+        <span class="flow">if</span> <span class="var">visited</span><span class="punct">[</span><span class="var">cycleStartIdx</span><span class="punct">]</span> <span class="flow">or</span> <span class="param">getTargetIdx</span><span class="punct">(</span><span class="var">cycleStartIdx</span><span class="punct">)</span> <span class="punct">==</span> <span class="var">cycleStartIdx</span><span class="punct">:</span>
+            <span class="flow">continue</span>
 
-# 2. LEFT SHIFT by k:
-nxtIdx = (currIdx - k) % n          # &lt;--- ONLY CHANGE: -k instead of +k
-prevVal, nums[nxtIdx], currIdx = nums[nxtIdx], prevVal, nxtIdx
+        <span class="var">currIdx</span><span class="punct">,</span> <span class="var">prevVal</span> <span class="punct">=</span> <span class="var">cycleStartIdx</span><span class="punct">,</span> <span class="param">nums</span><span class="punct">[</span><span class="var">cycleStartIdx</span><span class="punct">]</span>
 
-# 3. SORT / TRANSFORM A -&gt; B:
-nxtIdx = targetMap[currIdx]         # &lt;--- ONLY CHANGE: target lookup
-prevVal, nums[nxtIdx], currIdx = nums[nxtIdx], prevVal, nxtIdx</code></pre>
+        <span class="flow">while</span> <span class="kw-def">True</span><span class="punct">:</span>
+            <span class="var">visited</span><span class="punct">[</span><span class="var">currIdx</span><span class="punct">]</span> <span class="punct">=</span> <span class="kw-def">True</span>
+            <span class="var">nxtIdx</span> <span class="punct">=</span> <span class="param">getTargetIdx</span><span class="punct">(</span><span class="var">currIdx</span><span class="punct">)</span>
+            <span class="var">prevVal</span><span class="punct">,</span> <span class="param">nums</span><span class="punct">[</span><span class="var">nxtIdx</span><span class="punct">],</span> <span class="var">currIdx</span> <span class="punct">=</span> <span class="param">nums</span><span class="punct">[</span><span class="var">nxtIdx</span><span class="punct">],</span> <span class="var">prevVal</span><span class="punct">,</span> <span class="var">nxtIdx</span>
+            <span class="var">swaps</span> <span class="punct">+=</span> <span class="num">1</span>
+
+            <span class="flow">if</span> <span class="var">currIdx</span> <span class="punct">==</span> <span class="var">cycleStartIdx</span><span class="punct">:</span>
+                <span class="flow">break</span>
+
+        <span class="var">swaps</span> <span class="punct">-=</span> <span class="num">1</span>  <span class="comment"># Exactly L - 1 swaps per cycle of length L</span>
+
+    <span class="flow">return</span> <span class="var">swaps</span>
+
+<span class="comment"># 1. ROTATE RIGHT: nxtIdx = (sourceIdx + k) % n</span>
+<span class="fn">applyPermutation</span><span class="punct">(</span><span class="var">nums</span><span class="punct">,</span> <span class="kw-def">lambda</span> <span class="param">sourceIdx</span><span class="punct">:</span> <span class="punct">(</span><span class="param">sourceIdx</span> <span class="punct">+</span> <span class="var">k</span><span class="punct">)</span> <span class="punct">%</span> <span class="fn">len</span><span class="punct">(</span><span class="var">nums</span><span class="punct">))</span>
+
+<span class="comment"># 2. ROTATE LEFT:  nxtIdx = (sourceIdx - k) % n</span>
+<span class="fn">applyPermutation</span><span class="punct">(</span><span class="var">nums</span><span class="punct">,</span> <span class="kw-def">lambda</span> <span class="param">sourceIdx</span><span class="punct">:</span> <span class="punct">(</span><span class="param">sourceIdx</span> <span class="punct">-</span> <span class="var">k</span><span class="punct">)</span> <span class="punct">%</span> <span class="fn">len</span><span class="punct">(</span><span class="var">nums</span><span class="punct">))</span>
+
+<span class="comment"># 3. SORT ARRAY:   nxtIdx = destinations[sourceIdx]</span>
+<span class="var">swaps</span> <span class="punct">=</span> <span class="fn">applyPermutation</span><span class="punct">(</span><span class="var">nums</span><span class="punct">,</span> <span class="kw-def">lambda</span> <span class="param">sourceIdx</span><span class="punct">:</span> <span class="var">destinations</span><span class="punct">[</span><span class="param">sourceIdx</span><span class="punct">])</span></code></pre>
                 </div>
               </div>
             </div>
