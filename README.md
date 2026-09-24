@@ -1,11 +1,14 @@
 # DSA
 
-A compact, dependency-free Python 3 revision guide featuring a 3-level hierarchical navigation tree (Category $\to$ Subcategory $\to$ Topic/Technique), LeetCode Monaco editor syntax highlighting, and discrete non-scrolling page views across four core domains:
+A compact, dependency-free Python 3 revision guide featuring a 3-level hierarchical navigation tree (Category $\to$ Subcategory $\to$ Topic/Technique), LeetCode Monaco editor syntax highlighting, and discrete non-scrolling page views across core algorithmic domains:
 
 1. Arrays & Hashing
 2. Dynamic Programming
 3. Stack & Queue
 4. Binary Search
+5. Union-Find (DSU)
+6. Special Algorithms (KMP Pattern Matching)
+7. Intervals (Clustering, Scheduling & Line Sweep)
 
 ---
 
@@ -33,9 +36,9 @@ A compact, dependency-free Python 3 revision guide featuring a 3-level hierarchi
 
 The sidebar is organized into a clean 3-level taxonomy without artificial badges:
 
-- **Level 1 (Category - A)**: Arrays & Hashing, Dynamic Programming, Stack & Queue, Binary Search
-- **Level 2 (Subcategory - B)**: Overview & Blueprint, Hash Maps & Sets, Prefix & Suffix Accumulation, Two Pointers & Sliding Window, LIFO & FIFO Fundamentals, Monotonic Stack, Monotonic Queue & Deque, Search in Arrays & Bisect, Rotated Arrays & Invariants, Solution Space & Monotonic Functions, Practice Problems
-- **Level 3 (Topic / Technique - C)**: Specific sub-techniques (e.g., Hash Set Lookups, Complement Map, Product Except Self, Two Pointers, Climbing Stairs, 0/1 Knapsack Bounded, Unbounded Knapsack, Word Break, LIS Quadratic, LIS Bisect, Decode Ways, Next Greater Element, Histogram & Trapping, Sliding Window Maximum, Monotonic Prefix Deque, Bisect Insertion Point, Rotated Array Search, Peak Element Invariant, Koko Bananas Minimization, Split Array Largest Sum)
+- **Level 1 (Category - A)**: Arrays & Hashing, Dynamic Programming, Stack & Queue, Binary Search, Union-Find (DSU), Special Algorithms, Intervals
+- **Level 2 (Subcategory - B)**: Overview & Blueprint, Hash Maps & Sets, Prefix & Suffix Accumulation, Two Pointers & Sliding Window, Permutation Cycles & Swapping, LIFO & FIFO Fundamentals, Monotonic Stack, Monotonic Queue & Deque, Search in Arrays & Bisect, Rotated Arrays & Invariants, Solution Space & Monotonic Functions, Connected Components & Cycles, Dynamic Grid DSU, KMP Pattern Matching, Merging & Inserting Intervals, Scheduling & Greedy Selection, Sweep-Line & Gaps, Practice Problems
+- **Level 3 (Topic / Technique - C)**: Specific sub-techniques (e.g., Cyclic Replacements, Minimum Swaps to Transform, Merge Intervals, Insert Interval, Interval Intersections, Non-Overlapping Greedy, Meeting Rooms Min-Heap, Burst Balloons Arrow Stabbing, Chronological Line Sweep, Employee Free Time Gap Mining, Remove Covered Intervals)
 
 ---
 

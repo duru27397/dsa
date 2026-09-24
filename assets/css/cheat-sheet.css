@@ -671,6 +671,7 @@ h1 {
   border-top: 3px solid #ef4444;
 }
 
+.visual-card.optimal-card,
 .visual-card.kmp-card {
   border-top: 3px solid var(--easy);
 }
@@ -906,6 +907,43 @@ h1 {
   height: 50px;
   display: block;
   overflow: visible;
+}
+
+/* Permutation Cycle Visual Diagrams */
+.svg-cycle-diagram {
+  width: 100%;
+  max-width: 580px;
+  height: auto;
+  display: block;
+  margin: 0.6rem auto;
+  overflow: visible;
+}
+
+.cycle-principle-banner {
+  background: linear-gradient(135deg, rgba(255, 161, 22, 0.12) 0%, rgba(45, 212, 191, 0.1) 100%);
+  border: 1px solid rgba(255, 161, 22, 0.35);
+  border-radius: 8px;
+  padding: 0.9rem 1.1rem;
+  margin-bottom: 1rem;
+}
+
+.cycle-principle-title {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--orange);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin-bottom: 0.4rem;
+}
+
+.cycle-principle-text {
+  font-size: 0.82rem;
+  line-height: 1.55;
+  color: var(--text);
+  margin: 0;
 }
 
 /* LPS Stepper Table */

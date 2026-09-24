@@ -34,6 +34,9 @@
     "arrays-l1": "arrays-hash",
     "arrays-l2": "arrays-prefix-sub",
     "arrays-l3": "arrays-pointers",
+    "arrays-l4": "arrays-cycles-sub",
+    "arrays-cycles": "arrays-cycles-sub",
+    "arrays-cycles-sub": "arrays-cycles-sub",
     "dp-l1": "dp-state-sub",
     "dp-l2": "dp-knapsack-sub",
     "dp-l3": "dp-sequence-sub",
@@ -50,7 +53,16 @@
     "special-algorithms": "special-blueprint",
     "spl-algo": "special-blueprint",
     "special-l1": "special-kmp-sub",
-    "kmp": "special-kmp-sub"
+    "kmp": "special-kmp-sub",
+    "intervals": "intervals-blueprint",
+    "intervals-l1": "intervals-merge-sub",
+    "intervals-l2": "intervals-scheduling-sub",
+    "intervals-l3": "intervals-sweepline-sub",
+    "intervals-blueprint": "intervals-blueprint",
+    "intervals-merge-sub": "intervals-merge-sub",
+    "intervals-scheduling-sub": "intervals-scheduling-sub",
+    "intervals-sweepline-sub": "intervals-sweepline-sub",
+    "intervals-reference": "intervals-reference"
   };
 
   const showPage = (rawTargetId, updateUrl = true, subTargetId = null) => {
