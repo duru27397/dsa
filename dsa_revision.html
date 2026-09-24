@@ -1436,6 +1436,35 @@ Mechanism: "Target Transposition"
                     </div>
                   </div>
                 </div>
+
+                <!-- THE UNIFIED 1:1 CODE TEMPLATE COMPARISON -->
+                <div class="visual-card optimal-card" style="margin-top: 1rem; border: 1px solid var(--orange);">
+                  <div class="visual-card-head">
+                    <div class="visual-card-title">
+                      <span>⚡</span>
+                      <span>The 1:1 Unified Code Template: Right Shift, Left Shift &amp; Sorting</span>
+                    </div>
+                    <span class="visual-card-badge" style="background: rgba(255,161,22,0.15); color: var(--orange);">Universal Engine</span>
+                  </div>
+                  <p style="font-size: 0.8rem; line-height: 1.5; color: var(--text); margin: 0.4rem 0;">
+                    Technically, <strong>Left Shift</strong>, <strong>Right Shift</strong>, and <strong>Sorting/Transformation</strong> are the <em>exact same algorithm</em>. Every cycle in a permutation graph is resolved by following the directed target function <code>nxtIdx = getTarget(currIdx)</code> and depositing/swapping the displaced element into its destination. Only the definition of <code>getTarget</code> changes:
+                  </p>
+                  <pre class="trace-diagram" style="font-size: 0.74rem; margin-top: 0.5rem;"><code># ========================================================
+# THE UNIVERSAL PERMUTATION CYCLE TEMPLATE
+# ========================================================
+
+# 1. RIGHT SHIFT by k:
+nxtIdx = (currIdx + k) % n
+prevVal, nums[nxtIdx], currIdx = nums[nxtIdx], prevVal, nxtIdx
+
+# 2. LEFT SHIFT by k:
+nxtIdx = (currIdx - k) % n          # &lt;--- ONLY CHANGE: -k instead of +k
+prevVal, nums[nxtIdx], currIdx = nums[nxtIdx], prevVal, nxtIdx
+
+# 3. SORT / TRANSFORM A -&gt; B:
+nxtIdx = targetMap[currIdx]         # &lt;--- ONLY CHANGE: target lookup
+prevVal, nums[nxtIdx], currIdx = nums[nxtIdx], prevVal, nxtIdx</code></pre>
+                </div>
               </div>
             </div>
           </article>
