@@ -1420,15 +1420,15 @@ Mechanism: "Displace &amp; Carry"
                       <span class="visual-card-badge badge-success">O(N log N) Sort · O(N) Space</span>
                     </div>
                     <div class="why-box" style="margin: 0; background: transparent; padding: 0;">
-                      <pre class="trace-diagram" style="font-size: 0.72rem;"><code>Mapping: &pi;(i) = targetIdx = arr[i][1]
+                      <pre class="trace-diagram" style="font-size: 0.72rem;"><code>Mapping: &pi;(i) = getTargetIdx(currIdx)
 Disjoint Cycles: C cycles of lengths L_1, L_2, ...
 Swaps Invariant: Exactly (L - 1) swaps per cycle
 
-Mechanism: "Target Transposition"
-&bull; If arr[i][1] != i, swap arr[i] with arr[target]
-&bull; 1 swap resolves 1 node into its final position
-&bull; Reduces cycle length L to L - 1
-&bull; When arr[i][1] == i, node fixed; advance i += 1
+Mechanism: "Target Cycle Traversal"
+&bull; Follow nxtIdx = getTargetIdx(currIdx) around cycle
+&bull; Mark visited[currIdx] = True to track traversed paths
+&bull; Cycle of length L requires exactly L - 1 swaps
+&bull; Advance cycleStartIdx; skip already visited nodes
 &bull; Total Swaps = &Sigma;(L - 1) = N - C</code></pre>
                     </div>
                     <div class="visual-annotation alert-info">
@@ -1581,7 +1581,7 @@ Mechanism: "Target Transposition"
             <p class="use-when"><strong>Use when:</strong> Calculating the minimal number of element swaps required to sort an array or transform array A into target array B.</p>
             <div class="why-box">
               <strong>Why it works &amp; Graphical Cycle Shrinkage Invariant</strong>
-              <p>Each cycle of length L represents a closed loop of mismatched elements. Swapping an element at index i with the element at its destination arr[i][1] puts that element into its target box immediately. This single swap peels off 1 node (fixing it permanently as a 1-node cycle) and shrinks the remaining cycle to L - 1 nodes. Hence, <strong>exactly L - 1 swaps are required per cycle of length L</strong>. For an entire array with C disjoint cycles, Total Swaps = &Sigma;(L<sub>i</sub> - 1) = N - C.</p>
+              <p>Each cycle of length L represents a closed loop of mismatched elements. Traversing the directed orbit <code>nxtIdx = getTargetIdx(currIdx)</code> uncovers all elements belonging to that disjoint cycle. Resolving a cycle of length L requires <strong>exactly L - 1 swaps</strong> (or transpositions). With <code>visited</code> tracking preventing duplicate traversals across irregular cycles, Total Swaps = &Sigma;(L<sub>i</sub> - 1) = N - C.</p>
 
               <!-- SVG 3: Graphical Cycle Shrinkage Trace with Circles and Boxes -->
               <svg class="svg-cycle-diagram" viewBox="0 0 540 330" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Cycle Decomposition Minimum Swaps Graphical Trace">
