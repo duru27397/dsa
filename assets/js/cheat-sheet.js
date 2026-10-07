@@ -1053,7 +1053,7 @@
 
     if (!canvasEl) return;
 
-    let baseNums = [3, 2, 4, 5, 1, 6, 2, 8];
+    let baseNums = [3, 1, 4, 1, 5, 9, 2];
     let currentMode = "segtree";
 
     const setLog = (msg) => {
@@ -1082,18 +1082,37 @@
       let hitNodes = queryResult ? (queryResult.nodes || []) : [];
       let updatedNode = queryResult ? queryResult.updated : null;
 
-      const levels = [
-        [1],
-        [2, 3],
-        [4, 5, 6, 7],
-        [8, 9, 10, 11, 12, 13, 14, 15]
-      ];
+      // Dynamically compute levels for any arbitrary N (including prime length N = 7)
+      const levels = [];
+      let levelStart = 1;
+      while (levelStart < 2 * n) {
+        const lvl = [];
+        const levelEnd = Math.min(2 * n - 1, levelStart * 2 - 1);
+        for (let i = levelStart; i <= levelEnd; i++) lvl.push(i);
+        levels.push(lvl);
+        levelStart *= 2;
+      }
 
-      const nodeRanges = {
-        1: "[0..7]",
-        2: "[0..3]", 3: "[4..7]",
-        4: "[0..1]", 5: "[2..3]", 6: "[4..5]", 7: "[6..7]",
-        8: "[0]", 9: "[1]", 10: "[2]", 11: "[3]", 12: "[4]", 13: "[5]", 14: "[6]", 15: "[7]"
+      // Dynamically determine leaf coverage for any node ID
+      const getNodeRangeLabel = (nodeId) => {
+        let q = [nodeId];
+        let leaves = [];
+        while (q.length > 0) {
+          let curr = q.shift();
+          if (curr >= n) {
+            leaves.push(curr - n);
+          } else {
+            if (curr * 2 < 2 * n) q.push(curr * 2);
+            if (curr * 2 + 1 < 2 * n) q.push(curr * 2 + 1);
+          }
+        }
+        leaves.sort((a, b) => a - b);
+        if (leaves.length === 0) return "--";
+        if (leaves.length === 1) return `[${leaves[0]}]`;
+        if (leaves[leaves.length - 1] - leaves[0] === leaves.length - 1) {
+          return `[${leaves[0]}..${leaves[leaves.length - 1]}]`;
+        }
+        return `[${leaves[0]},${leaves[1]}..${leaves[leaves.length - 1]}]`;
       };
 
       let html = `<div style="font-size: 0.72rem; color: var(--muted); font-weight: 700; text-transform: uppercase;">2N Segment Tree Dyadic Intervals:</div>`;
@@ -1102,9 +1121,10 @@
         lvl.forEach(nodeId => {
           const isHit = hitNodes.includes(nodeId);
           const isUpd = updatedNode === nodeId;
+          const rangeLabel = getNodeRangeLabel(nodeId);
           html += `
-            <div class="rq-tree-node ${isHit ? 'is-hit' : ''} ${isUpd ? 'is-updated' : ''}" id="rq-node-${nodeId}" title="Node ${nodeId} covering ${nodeRanges[nodeId]}">
-              <div class="rq-tree-range">${nodeRanges[nodeId]}</div>
+            <div class="rq-tree-node ${isHit ? 'is-hit' : ''} ${isUpd ? 'is-updated' : ''}" id="rq-node-${nodeId}" title="Node ${nodeId} covering ${rangeLabel}">
+              <div class="rq-tree-range">${rangeLabel}</div>
               <div class="rq-tree-val">${tree[nodeId]}</div>
               <div class="rq-tree-node-id">N:${nodeId}</div>
             </div>
@@ -1310,14 +1330,14 @@
     btnQuery?.addEventListener("click", handleQuery);
     btnUpdate?.addEventListener("click", handleUpdate);
     btnReset?.addEventListener("click", () => {
-      baseNums = [3, 2, 4, 5, 1, 6, 2, 8];
+      baseNums = [3, 1, 4, 1, 5, 9, 2];
       if (inputQLeft) inputQLeft.value = "1";
       if (inputQRight) inputQRight.value = "5";
-      if (inputUIdx) inputUIdx.value = "3";
+      if (inputUIdx) inputUIdx.value = "4";
       if (inputUVal) inputUVal.value = "10";
       if (opsVal) opsVal.textContent = "Ready";
       if (resultVal) resultVal.textContent = "--";
-      setLog(`Reset array to default state <code>[3, 2, 4, 5, 1, 6, 2, 8]</code>.`);
+      setLog(`Reset array to default prime length N = 7 values: <code>[3, 1, 4, 1, 5, 9, 2]</code>.`);
       render();
     });
 

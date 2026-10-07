@@ -8315,7 +8315,7 @@ Result: len(tails) = 3  (Optimal nesting: [2,3] -&gt; [5,4] -&gt; [6,7])</code><
             <div class="kmp-sim-telemetry">
               <div class="telemetry-chip">
                 <span class="tele-lbl">Array Size:</span>
-                <span class="tele-chip-val" id="rq-size-val">8</span>
+                <span class="tele-chip-val" id="rq-size-val">7</span>
               </div>
               <div class="telemetry-chip">
                 <span class="tele-lbl">Active View:</span>
@@ -8333,7 +8333,7 @@ Result: len(tails) = 3  (Optimal nesting: [2,3] -&gt; [5,4] -&gt; [6,7])</code><
 
             <!-- Base Array Row -->
             <div class="rq-array-container">
-              <div class="rq-array-label">Base Array <code>nums[0..7]</code>:</div>
+              <div class="rq-array-label">Base Array <code>nums[0..6]</code> (Prime N = 7):</div>
               <div class="rq-array-cells" id="rq-array-cells">
                 <!-- Populated dynamically by initRangeQuerySimulator() -->
               </div>
@@ -8348,9 +8348,9 @@ Result: len(tails) = 3  (Optimal nesting: [2,3] -&gt; [5,4] -&gt; [6,7])</code><
             <div class="rq-sim-controls-bar">
               <div class="rq-ctrl-group">
                 <label for="rq-q-left">Query [L, R]:</label>
-                <input type="number" id="rq-q-left" min="0" max="7" value="1" class="rq-num-input" />
+                <input type="number" id="rq-q-left" min="0" max="6" value="1" class="rq-num-input" />
                 <span>to</span>
-                <input type="number" id="rq-q-right" min="0" max="7" value="5" class="rq-num-input" />
+                <input type="number" id="rq-q-right" min="0" max="6" value="5" class="rq-num-input" />
                 <button type="button" class="rq-btn rq-btn-query" id="rq-btn-query">
                   <span>🔍 Query Range</span>
                 </button>
@@ -8358,7 +8358,7 @@ Result: len(tails) = 3  (Optimal nesting: [2,3] -&gt; [5,4] -&gt; [6,7])</code><
 
               <div class="rq-ctrl-group">
                 <label for="rq-u-idx">Point Update:</label>
-                <input type="number" id="rq-u-idx" min="0" max="7" value="3" class="rq-num-input" placeholder="i" />
+                <input type="number" id="rq-u-idx" min="0" max="6" value="4" class="rq-num-input" placeholder="i" />
                 <input type="number" id="rq-u-val" min="-99" max="99" value="10" class="rq-num-input" placeholder="val" />
                 <button type="button" class="rq-btn rq-btn-update" id="rq-btn-update">
                   <span>⚡ Update nums[i]</span>
@@ -8415,11 +8415,18 @@ Result: len(tails) = 3  (Optimal nesting: [2,3] -&gt; [5,4] -&gt; [6,7])</code><
                 </div>
               </div>
 
-              <!-- PROPER HTML VISUAL TREE HIERARCHY BOX DIAGRAM -->
+                            <!-- PROPER HTML VISUAL TREE HIERARCHY BOX DIAGRAM (PRIME LENGTH N=5) -->
               <div class="rq-visual-tree-container">
                 <div class="rq-tree-diagram-header">
-                  <span class="rq-diagram-badge">Visual Dyadic Interval Hierarchy</span>
-                  <span class="rq-diagram-note">Nums: [2, 1, 5, 3] &bull; 1-Indexed Tree Structure</span>
+                  <span class="rq-diagram-badge">Prime Length Edge Case: N = 5 Elements</span>
+                  <span class="rq-diagram-note">Nums: [3, 1, 4, 1, 5] &bull; Multi-Depth Leaves &bull; Uneven Dyadic Splits</span>
+                </div>
+
+                <div class="rq-bracket-math-summary" style="margin-bottom: 0.85rem;">
+                  <strong>Why Prime Lengths Matter (The Non-Power-of-2 Edge Cases):</strong>
+                  When <em>n</em> is not a power of 2 (e.g., prime <em>n</em> = 5), the binary tree splits unevenly (<code>mid = (1 + 5) // 2 = 3</code>).
+                  The left subtree holds 3 elements <code>[1..3]</code>, while the right holds 2 elements <code>[4..5]</code>.
+                  Leaves end up on <strong>different depths</strong> (some at depth 2, some at depth 3)!
                 </div>
 
                 <div class="rq-tree-diagram-body">
@@ -8428,115 +8435,112 @@ Result: len(tails) = 3  (Optimal nesting: [2,3] -&gt; [5,4] -&gt; [6,7])</code><
                     <div class="rq-node-box rq-node-root">
                       <div class="rq-node-top">
                         <span class="rq-badge-id">Node 1</span>
-                        <span class="rq-badge-range">[1..4]</span>
+                        <span class="rq-badge-range">Root [1..5]</span>
                       </div>
-                      <div class="rq-node-val">Sum: 11</div>
+                      <div class="rq-node-val">Sum: 14</div>
                     </div>
                   </div>
 
                   <!-- SVG branch connectors L0 -> L1 -->
                   <svg class="rq-tree-svg-branches" viewBox="0 0 500 40" preserveAspectRatio="none">
-                    <line x1="250" y1="0" x2="135" y2="40" stroke="#ffa116" stroke-width="2" stroke-dasharray="3,3" />
-                    <line x1="250" y1="0" x2="365" y2="40" stroke="#ffa116" stroke-width="2" stroke-dasharray="3,3" />
+                    <line x1="250" y1="0" x2="140" y2="40" stroke="#ffa116" stroke-width="2" stroke-dasharray="3,3" />
+                    <line x1="250" y1="0" x2="360" y2="40" stroke="#ffa116" stroke-width="2" stroke-dasharray="3,3" />
                   </svg>
 
-                  <!-- Level 1 -->
+                  <!-- Level 1: Uneven Left [1..3] vs Right [4..5] -->
                   <div class="rq-tree-row rq-row-lvl1">
                     <div class="rq-node-box rq-node-internal">
                       <div class="rq-node-top">
                         <span class="rq-badge-id">Node 2</span>
-                        <span class="rq-badge-range">[1..2]</span>
+                        <span class="rq-badge-range">Uneven Left [1..3]</span>
                       </div>
-                      <div class="rq-node-val">Sum: 3</div>
+                      <div class="rq-node-val">Sum: 8 (3 items)</div>
                       <div class="rq-node-formula">2 * 1 (Left Child)</div>
                     </div>
 
                     <div class="rq-node-box rq-node-internal">
                       <div class="rq-node-top">
                         <span class="rq-badge-id">Node 3</span>
-                        <span class="rq-badge-range">[3..4]</span>
+                        <span class="rq-badge-range">Uneven Right [4..5]</span>
                       </div>
-                      <div class="rq-node-val">Sum: 8</div>
+                      <div class="rq-node-val">Sum: 6 (2 items)</div>
                       <div class="rq-node-formula">2 * 1 + 1 (Right Child)</div>
                     </div>
                   </div>
 
                   <!-- SVG branch connectors L1 -> L2 -->
                   <svg class="rq-tree-svg-branches" viewBox="0 0 500 40" preserveAspectRatio="none">
-                    <line x1="135" y1="0" x2="70" y2="40" stroke="#2dd4bf" stroke-width="1.8" />
-                    <line x1="135" y1="0" x2="190" y2="40" stroke="#2dd4bf" stroke-width="1.8" />
-                    <line x1="365" y1="0" x2="310" y2="40" stroke="#2dd4bf" stroke-width="1.8" />
-                    <line x1="365" y1="0" x2="430" y2="40" stroke="#2dd4bf" stroke-width="1.8" />
+                    <line x1="140" y1="0" x2="70" y2="40" stroke="#2dd4bf" stroke-width="1.8" />
+                    <line x1="140" y1="0" x2="180" y2="40" stroke="#2dd4bf" stroke-width="1.8" />
+                    <line x1="360" y1="0" x2="310" y2="40" stroke="#2dd4bf" stroke-width="1.8" />
+                    <line x1="360" y1="0" x2="430" y2="40" stroke="#2dd4bf" stroke-width="1.8" />
                   </svg>
 
-                  <!-- Level 2: Leaves -->
+                  <!-- Level 2: Mixed Internal + Leaves at Depth 2! -->
                   <div class="rq-tree-row rq-row-lvl2">
-                    <div class="rq-node-box rq-node-leaf">
+                    <div class="rq-node-box rq-node-internal">
                       <div class="rq-node-top">
                         <span class="rq-badge-id">Node 4</span>
-                        <span class="rq-badge-range">[1..1]</span>
+                        <span class="rq-badge-range">[1..2]</span>
                       </div>
-                      <div class="rq-node-val">Val: 2</div>
-                      <div class="rq-node-formula">nums[0]</div>
+                      <div class="rq-node-val">Sum: 4</div>
                     </div>
 
                     <div class="rq-node-box rq-node-leaf">
                       <div class="rq-node-top">
                         <span class="rq-badge-id">Node 5</span>
-                        <span class="rq-badge-range">[2..2]</span>
+                        <span class="rq-badge-range">[3..3] &bull; Depth 2 Leaf</span>
                       </div>
-                      <div class="rq-node-val">Val: 1</div>
-                      <div class="rq-node-formula">nums[1]</div>
+                      <div class="rq-node-val">nums[2] = 4</div>
                     </div>
 
                     <div class="rq-node-box rq-node-leaf">
                       <div class="rq-node-top">
                         <span class="rq-badge-id">Node 6</span>
-                        <span class="rq-badge-range">[3..3]</span>
+                        <span class="rq-badge-range">[4..4] &bull; Depth 2 Leaf</span>
                       </div>
-                      <div class="rq-node-val">Val: 5</div>
-                      <div class="rq-node-formula">nums[2]</div>
+                      <div class="rq-node-val">nums[3] = 1</div>
                     </div>
 
                     <div class="rq-node-box rq-node-leaf">
                       <div class="rq-node-top">
                         <span class="rq-badge-id">Node 7</span>
-                        <span class="rq-badge-range">[4..4]</span>
+                        <span class="rq-badge-range">[5..5] &bull; Depth 2 Leaf</span>
                       </div>
-                      <div class="rq-node-val">Val: 3</div>
-                      <div class="rq-node-formula">nums[3]</div>
+                      <div class="rq-node-val">nums[4] = 5</div>
+                    </div>
+                  </div>
+
+                  <!-- SVG branch connectors L2 -> L3 (Only Node 4 branches further!) -->
+                  <svg class="rq-tree-svg-branches" viewBox="0 0 500 40" preserveAspectRatio="none">
+                    <line x1="70" y1="0" x2="35" y2="40" stroke="#2dd4bf" stroke-width="1.8" />
+                    <line x1="70" y1="0" x2="105" y2="40" stroke="#2dd4bf" stroke-width="1.8" />
+                  </svg>
+
+                  <!-- Level 3: Depth 3 Leaves! -->
+                  <div class="rq-tree-row rq-row-lvl3">
+                    <div class="rq-node-box rq-node-leaf">
+                      <div class="rq-node-top">
+                        <span class="rq-badge-id">Node 8</span>
+                        <span class="rq-badge-range">[1..1] &bull; Depth 3 Leaf</span>
+                      </div>
+                      <div class="rq-node-val">nums[0] = 3</div>
+                    </div>
+
+                    <div class="rq-node-box rq-node-leaf">
+                      <div class="rq-node-top">
+                        <span class="rq-badge-id">Node 9</span>
+                        <span class="rq-badge-range">[2..2] &bull; Depth 3 Leaf</span>
+                      </div>
+                      <div class="rq-node-val">nums[1] = 1</div>
                     </div>
                   </div>
                 </div>
 
-                <!-- 3 Query Overlap Cases visual boxes -->
-                <div class="rq-overlap-cases-grid">
-                  <div class="rq-case-card rq-case-contain">
-                    <div class="rq-case-header">
-                      <span class="rq-case-icon">🟢</span>
-                      <strong>Case 1: Total Containment</strong>
-                    </div>
-                    <div class="rq-case-condition"><code>qLeft &le; left && right &le; qRight</code></div>
-                    <p>Node range is 100% inside query range. Return <code>tree[nodeIdx]</code> instantly in <strong>O(1)</strong>!</p>
-                  </div>
-
-                  <div class="rq-case-card rq-case-disjoint">
-                    <div class="rq-case-header">
-                      <span class="rq-case-icon">🔴</span>
-                      <strong>Case 2: Complete Disjoint</strong>
-                    </div>
-                    <div class="rq-case-condition"><code>qRight &lt; left || qLeft &gt; right</code></div>
-                    <p>Node range does not touch query range at all. Return identity element (<code>0</code> for sum, <code>&infin;</code> for min).</p>
-                  </div>
-
-                  <div class="rq-case-card rq-case-overlap">
-                    <div class="rq-case-header">
-                      <span class="rq-case-icon">🟡</span>
-                      <strong>Case 3: Partial Overlap</strong>
-                    </div>
-                    <div class="rq-case-condition"><code>left &le; mid &lt; right</code> (Crosses Midpoint)</div>
-                    <p>Recurse down both children: Left Child <code>[left, mid]</code> + Right Child <code>[mid+1, right]</code>.</p>
-                  </div>
+                <div class="rq-dyn-metric-row" style="margin-top: 1rem;">
+                  <div class="rq-dyn-chip"><span class="dyn-lbl">Leaves at Depth 2:</span> <strong>3 Leaves (Nodes 5, 6, 7)</strong></div>
+                  <div class="rq-dyn-chip"><span class="dyn-lbl">Leaves at Depth 3:</span> <strong>2 Leaves (Nodes 8, 9)</strong></div>
+                  <div class="rq-dyn-chip"><span class="dyn-lbl">Max Node Index:</span> <strong style="color: var(--orange);">Node 9 &le; 4(N+1) = 24</strong></div>
                 </div>
               </div>
             </div>
@@ -8765,17 +8769,17 @@ Result: len(tails) = 3  (Optimal nesting: [2,3] -&gt; [5,4] -&gt; [6,7])</code><
                 </li>
               </ul>
 
-                            <!-- MATHEMATICAL PROOF & TOURNAMENT BRACKET BOX DIAGRAM -->
+                                          <!-- MATHEMATICAL PROOF & TOURNAMENT BRACKET BOX DIAGRAM (PRIME LENGTH N=5) -->
               <div class="rq-bracket-container">
                 <div class="rq-tree-diagram-header">
                   <span class="rq-diagram-badge">Mathematical Proof: Tournament Bracket Structure</span>
-                  <span class="rq-diagram-note">n Leaves (Array) + (n - 1) Non-Leaves (Matches) = Exactly 2n - 1 Active Nodes</span>
+                  <span class="rq-diagram-note">Prime N = 5 Leaves &bull; (5 - 1 = 4) Internal Matches &bull; Exactly 2(5) - 1 = 9 Active Nodes</span>
                 </div>
 
                 <div class="rq-bracket-math-summary">
-                  <strong>The Knockout Sports Tournament Analogy:</strong> Think of a single-elimination tournament with <em>n</em> teams. Every single match eliminates exactly 1 team. To crown 1 champion at the root, exactly <em>n</em> &minus; 1 matches must be played.
+                  <strong>The Knockout Sports Tournament Invariant:</strong> In any knockout tournament with <em>n</em> teams, every single match eliminates exactly 1 team. To find 1 champion at the root, exactly <em>n</em> &minus; 1 matches must be played &mdash; regardless of whether <em>n</em> is prime, odd, or a power of 2!
                   <br>
-                  <div class="rq-bracket-math-display" style="margin: 0.6rem 0; font-size: 0.88rem; font-weight: 600;">Leaves (Elements) = <em>n</em> &nbsp;+&nbsp; Internal Parents (Matches) = <em>n</em> &minus; 1 &nbsp;=&nbsp; <strong style="color: var(--orange);">2n &minus; 1 Total Active Nodes</strong></div>
+                  <div class="rq-bracket-math-display" style="margin: 0.6rem 0; font-size: 0.88rem; font-weight: 600;">Leaves (Elements) = 5 &nbsp;+&nbsp; Internal Matches = 4 &nbsp;=&nbsp; <strong style="color: var(--orange);">9 Total Active Nodes (2N &minus; 1 = 9)</strong></div>
                 </div>
 
                 <div class="rq-bracket-diagram">
@@ -8783,11 +8787,11 @@ Result: len(tails) = 3  (Optimal nesting: [2,3] -&gt; [5,4] -&gt; [6,7])</code><
                   <div class="rq-tree-row">
                     <div class="rq-node-box rq-node-root">
                       <div class="rq-node-top">
-                        <span class="rq-badge-id">Node 1</span>
-                        <span class="rq-badge-range">Root Champion [0..3]</span>
+                        <span class="rq-badge-id">Index 1</span>
+                        <span class="rq-badge-range">Root Champion [1..5]</span>
                       </div>
-                      <div class="rq-node-val">Final Winner Sum: 11</div>
-                      <div class="rq-node-formula">Match #1 (1 Root)</div>
+                      <div class="rq-node-val">Final Winner Sum: 14</div>
+                      <div class="rq-node-formula">Match #1</div>
                     </div>
                   </div>
 
@@ -8797,124 +8801,167 @@ Result: len(tails) = 3  (Optimal nesting: [2,3] -&gt; [5,4] -&gt; [6,7])</code><
                     <line x1="250" y1="0" x2="360" y2="40" stroke="#ffa116" stroke-width="2" />
                   </svg>
 
-                  <!-- Semi-finals -->
+                  <!-- Internal Matches Level 1 -->
                   <div class="rq-tree-row rq-row-lvl1">
                     <div class="rq-node-box rq-node-internal">
                       <div class="rq-node-top">
-                        <span class="rq-badge-id">Node 2</span>
-                        <span class="rq-badge-range">Semi-Final [0..1]</span>
+                        <span class="rq-badge-id">Index 2</span>
+                        <span class="rq-badge-range">Internal Match #2</span>
                       </div>
-                      <div class="rq-node-val">Sub-Sum: 3</div>
-                      <div class="rq-node-formula">Match #2</div>
+                      <div class="rq-node-val">Sub-Sum: 8</div>
                     </div>
 
                     <div class="rq-node-box rq-node-internal">
                       <div class="rq-node-top">
-                        <span class="rq-badge-id">Node 3</span>
-                        <span class="rq-badge-range">Semi-Final [2..3]</span>
+                        <span class="rq-badge-id">Index 3</span>
+                        <span class="rq-badge-range">Internal Match #3</span>
                       </div>
-                      <div class="rq-node-val">Sub-Sum: 8</div>
-                      <div class="rq-node-formula">Match #3</div>
+                      <div class="rq-node-val">Sub-Sum: 6</div>
                     </div>
                   </div>
 
                   <!-- SVG branch connectors -->
                   <svg class="rq-tree-svg-branches" viewBox="0 0 500 40" preserveAspectRatio="none">
                     <line x1="140" y1="0" x2="70" y2="40" stroke="#2dd4bf" stroke-width="1.8" />
-                    <line x1="140" y1="0" x2="190" y2="40" stroke="#2dd4bf" stroke-width="1.8" />
+                    <line x1="140" y1="0" x2="180" y2="40" stroke="#2dd4bf" stroke-width="1.8" />
                     <line x1="360" y1="0" x2="310" y2="40" stroke="#2dd4bf" stroke-width="1.8" />
                     <line x1="360" y1="0" x2="430" y2="40" stroke="#2dd4bf" stroke-width="1.8" />
                   </svg>
 
-                  <!-- 4 Leaves (Original Array) -->
+                  <!-- Level 2: 1 Internal Match + 3 Direct Leaves -->
                   <div class="rq-tree-row rq-row-lvl2">
-                    <div class="rq-node-box rq-node-leaf">
+                    <div class="rq-node-box rq-node-internal">
                       <div class="rq-node-top">
                         <span class="rq-badge-id">Index 4</span>
-                        <span class="rq-badge-range">Player #0</span>
+                        <span class="rq-badge-range">Internal Match #4</span>
                       </div>
-                      <div class="rq-node-val">nums[0] = 2</div>
+                      <div class="rq-node-val">Sub-Sum: 4</div>
                     </div>
+
                     <div class="rq-node-box rq-node-leaf">
                       <div class="rq-node-top">
                         <span class="rq-badge-id">Index 5</span>
-                        <span class="rq-badge-range">Player #1</span>
+                        <span class="rq-badge-range">Player #2</span>
                       </div>
-                      <div class="rq-node-val">nums[1] = 1</div>
+                      <div class="rq-node-val">nums[2] = 4</div>
                     </div>
+
                     <div class="rq-node-box rq-node-leaf">
                       <div class="rq-node-top">
                         <span class="rq-badge-id">Index 6</span>
-                        <span class="rq-badge-range">Player #2</span>
+                        <span class="rq-badge-range">Player #3</span>
                       </div>
-                      <div class="rq-node-val">nums[2] = 5</div>
+                      <div class="rq-node-val">nums[3] = 1</div>
                     </div>
+
                     <div class="rq-node-box rq-node-leaf">
                       <div class="rq-node-top">
                         <span class="rq-badge-id">Index 7</span>
-                        <span class="rq-badge-range">Player #3</span>
+                        <span class="rq-badge-range">Player #4</span>
                       </div>
-                      <div class="rq-node-val">nums[3] = 3</div>
+                      <div class="rq-node-val">nums[4] = 5</div>
+                    </div>
+                  </div>
+
+                  <!-- SVG branch connectors to lowest leaves -->
+                  <svg class="rq-tree-svg-branches" viewBox="0 0 500 40" preserveAspectRatio="none">
+                    <line x1="70" y1="0" x2="35" y2="40" stroke="#2dd4bf" stroke-width="1.8" />
+                    <line x1="70" y1="0" x2="105" y2="40" stroke="#2dd4bf" stroke-width="1.8" />
+                  </svg>
+
+                  <!-- Lowest Leaves from Match 4 -->
+                  <div class="rq-tree-row rq-row-lvl3">
+                    <div class="rq-node-box rq-node-leaf">
+                      <div class="rq-node-top">
+                        <span class="rq-badge-id">Index 8</span>
+                        <span class="rq-badge-range">Player #0</span>
+                      </div>
+                      <div class="rq-node-val">nums[0] = 3</div>
+                    </div>
+
+                    <div class="rq-node-box rq-node-leaf">
+                      <div class="rq-node-top">
+                        <span class="rq-badge-id">Index 9</span>
+                        <span class="rq-badge-range">Player #1</span>
+                      </div>
+                      <div class="rq-node-val">nums[1] = 1</div>
                     </div>
                   </div>
                 </div>
               </div>
 
-              <!-- PROPER HTML 2N MEMORY GRID BOX DIAGRAM -->
+                            <!-- PROPER HTML 2N MEMORY GRID BOX DIAGRAM (PRIME LENGTH N=5) -->
               <div class="rq-memory-box-container">
                 <div class="rq-tree-diagram-header">
-                  <span class="rq-diagram-badge">2N Array Flat Contiguous Memory Layout</span>
-                  <span class="rq-diagram-note">Zero Recursion &bull; Flat Cache-Line Access &bull; Exactly 2N Memory</span>
+                  <span class="rq-diagram-badge">2N Array Flat Memory Layout (Prime Length N = 5, Size 2N = 10)</span>
+                  <span class="rq-diagram-note">Zero Gaps &bull; 4 Internal Matches + 5 Original Leaves = 9 Active Nodes &bull; Exactly 2N Memory</span>
                 </div>
 
-                <div class="rq-memory-grid">
+                <div class="rq-memory-grid" style="grid-template-columns: repeat(auto-fit, minmax(88px, 1fr));">
                   <div class="rq-mem-cell rq-cell-unused">
                     <div class="rq-mem-idx">Index 0</div>
                     <div class="rq-mem-val">[-]</div>
-                    <div class="rq-mem-role">Unused Slot</div>
+                    <div class="rq-mem-role">Unused Dummy</div>
                   </div>
 
                   <div class="rq-mem-cell rq-cell-parent">
                     <div class="rq-mem-idx">Index 1</div>
-                    <div class="rq-mem-val">11</div>
-                    <div class="rq-mem-role">Root [1..4]</div>
+                    <div class="rq-mem-val">14</div>
+                    <div class="rq-mem-role">Root [1..5]</div>
                   </div>
 
                   <div class="rq-mem-cell rq-cell-parent">
                     <div class="rq-mem-idx">Index 2</div>
-                    <div class="rq-mem-val">3</div>
-                    <div class="rq-mem-role">Parent [1..2]</div>
+                    <div class="rq-mem-val">8</div>
+                    <div class="rq-mem-role">Parent [1..3]</div>
                   </div>
 
                   <div class="rq-mem-cell rq-cell-parent">
                     <div class="rq-mem-idx">Index 3</div>
-                    <div class="rq-mem-val">8</div>
-                    <div class="rq-mem-role">Parent [3..4]</div>
+                    <div class="rq-mem-val">6</div>
+                    <div class="rq-mem-role">Parent [4..5]</div>
                   </div>
 
-                  <div class="rq-mem-cell rq-cell-leaf">
+                  <div class="rq-mem-cell rq-cell-parent">
                     <div class="rq-mem-idx">Index 4</div>
-                    <div class="rq-mem-val">2</div>
-                    <div class="rq-mem-role">Leaf (nums[0])</div>
+                    <div class="rq-mem-val">4</div>
+                    <div class="rq-mem-role">Parent [1..2]</div>
                   </div>
 
                   <div class="rq-mem-cell rq-cell-leaf">
                     <div class="rq-mem-idx">Index 5</div>
-                    <div class="rq-mem-val">1</div>
-                    <div class="rq-mem-role">Leaf (nums[1])</div>
+                    <div class="rq-mem-val">4</div>
+                    <div class="rq-mem-role">Leaf nums[2]</div>
                   </div>
 
                   <div class="rq-mem-cell rq-cell-leaf">
                     <div class="rq-mem-idx">Index 6</div>
-                    <div class="rq-mem-val">5</div>
-                    <div class="rq-mem-role">Leaf (nums[2])</div>
+                    <div class="rq-mem-val">1</div>
+                    <div class="rq-mem-role">Leaf nums[3]</div>
                   </div>
 
                   <div class="rq-mem-cell rq-cell-leaf">
                     <div class="rq-mem-idx">Index 7</div>
-                    <div class="rq-mem-val">3</div>
-                    <div class="rq-mem-role">Leaf (nums[3])</div>
+                    <div class="rq-mem-val">5</div>
+                    <div class="rq-mem-role">Leaf nums[4]</div>
                   </div>
+
+                  <div class="rq-mem-cell rq-cell-leaf">
+                    <div class="rq-mem-idx">Index 8</div>
+                    <div class="rq-mem-val">3</div>
+                    <div class="rq-mem-role">Leaf nums[0]</div>
+                  </div>
+
+                  <div class="rq-mem-cell rq-cell-leaf">
+                    <div class="rq-mem-idx">Index 9</div>
+                    <div class="rq-mem-val">1</div>
+                    <div class="rq-mem-role">Leaf nums[1]</div>
+                  </div>
+                </div>
+
+                <div class="rq-bracket-math-summary" style="margin-top: 0.85rem; font-size: 0.77rem;">
+                  <strong>Takeaway:</strong> Notice how prime <em>n</em> = 5 fills indices 1 through 9 with <strong>zero gaps</strong>!
+                  Indices 1..4 hold the 4 internal parents, and indices 5..9 hold the 5 leaves. Exactly 2N = 10 slots allocated.
                 </div>
               </div>
             </div>
@@ -9533,6 +9580,105 @@ Result: len(tails) = 3  (Optimal nesting: [2,3] -&gt; [5,4] -&gt; [6,7])</code><
                 </div>
               </div>
 
+              <!-- PROPER HTML FENWICK PRIME N = 7 COVERAGE & 3-HOP TRAVERSAL BOX DIAGRAM -->
+              <div class="rq-bit-diagram-container" style="margin-top: 1.1rem;">
+                <div class="rq-tree-diagram-header">
+                  <span class="rq-diagram-badge">Prime Length Edge Case: Prime N = 7 Binary Indexed Tree</span>
+                  <span class="rq-diagram-note">Nums: [3, 1, 4, 1, 5, 9, 2] &bull; Odd Indices = 1 Element &bull; 3-Hop Prefix Query</span>
+                </div>
+
+                <div class="rq-bracket-math-summary" style="margin-bottom: 0.85rem;">
+                  <strong>Why Prime Length N = 7 Exposes Fenwick Edge Cases:</strong>
+                  In power-of-2 sizes (N = 8), symmetry hides asymmetric hopping. With prime <em>n</em> = 7:
+                  Odd indices (1, 3, 5, 7) have <code>lowbit = 1</code> and store <strong>only their own leaf element</strong>.
+                  Powers of 2 (1, 2, 4) aggregate full prefix sums from index 1.
+                  Querying the full prime array <code>query(7)</code> executes a <strong>3-hop binary path</strong>: <code>7 &rarr; 6 &rarr; 4 &rarr; 0</code>!
+                </div>
+
+                <!-- 7-Index Coverage Grid -->
+                <div class="rq-bit-row" style="grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); display: grid; gap: 0.5rem;">
+                  <div class="rq-bit-card" title="BIT[1] covers [1..1]">
+                    <div style="font-size: 0.65rem; color: var(--faint);">1 (001&sub2;) &bull; lb: 1</div>
+                    <div style="font-size: 0.68rem; color: var(--muted);">Interval [1..1]</div>
+                    <div style="font-size: 0.95rem; font-weight: 700; color: #fff; margin: 0.2rem 0;">3</div>
+                    <div style="font-size: 0.62rem; color: var(--orange);">BIT[1] = nums[0]</div>
+                  </div>
+
+                  <div class="rq-bit-card" style="border-color: #3b82f6;" title="BIT[2] covers [1..2]">
+                    <div style="font-size: 0.65rem; color: var(--faint);">2 (010&sub2;) &bull; lb: 2</div>
+                    <div style="font-size: 0.68rem; color: var(--cyan);">Interval [1..2]</div>
+                    <div style="font-size: 0.95rem; font-weight: 700; color: #fff; margin: 0.2rem 0;">4</div>
+                    <div style="font-size: 0.62rem; color: #3b82f6;">BIT[2] = 3 + 1</div>
+                  </div>
+
+                  <div class="rq-bit-card" title="BIT[3] covers [3..3]">
+                    <div style="font-size: 0.65rem; color: var(--faint);">3 (011&sub2;) &bull; lb: 1</div>
+                    <div style="font-size: 0.68rem; color: var(--muted);">Interval [3..3]</div>
+                    <div style="font-size: 0.95rem; font-weight: 700; color: #fff; margin: 0.2rem 0;">4</div>
+                    <div style="font-size: 0.62rem; color: var(--orange);">BIT[3] = nums[2]</div>
+                  </div>
+
+                  <div class="rq-bit-card" style="border-color: var(--orange); background: #1c1813;" title="BIT[4] covers [1..4]">
+                    <div style="font-size: 0.65rem; color: var(--orange);">4 (100&sub2;) &bull; lb: 4</div>
+                    <div style="font-size: 0.68rem; color: var(--orange);">Interval [1..4]</div>
+                    <div style="font-size: 0.95rem; font-weight: 700; color: var(--orange); margin: 0.2rem 0;">9</div>
+                    <div style="font-size: 0.62rem; color: var(--orange);">BIT[4] = prefix(4)</div>
+                  </div>
+
+                  <div class="rq-bit-card" title="BIT[5] covers [5..5]">
+                    <div style="font-size: 0.65rem; color: var(--faint);">5 (101&sub2;) &bull; lb: 1</div>
+                    <div style="font-size: 0.68rem; color: var(--muted);">Interval [5..5]</div>
+                    <div style="font-size: 0.95rem; font-weight: 700; color: #fff; margin: 0.2rem 0;">5</div>
+                    <div style="font-size: 0.62rem; color: var(--orange);">BIT[5] = nums[4]</div>
+                  </div>
+
+                  <div class="rq-bit-card" style="border-color: #3b82f6;" title="BIT[6] covers [5..6]">
+                    <div style="font-size: 0.65rem; color: var(--faint);">6 (110&sub2;) &bull; lb: 2</div>
+                    <div style="font-size: 0.68rem; color: var(--cyan);">Interval [5..6]</div>
+                    <div style="font-size: 0.95rem; font-weight: 700; color: #fff; margin: 0.2rem 0;">14</div>
+                    <div style="font-size: 0.62rem; color: #3b82f6;">BIT[6] = 5 + 9</div>
+                  </div>
+
+                  <div class="rq-bit-card" title="BIT[7] covers [7..7]">
+                    <div style="font-size: 0.65rem; color: var(--faint);">7 (111&sub2;) &bull; lb: 1</div>
+                    <div style="font-size: 0.68rem; color: var(--muted);">Interval [7..7]</div>
+                    <div style="font-size: 0.95rem; font-weight: 700; color: #fff; margin: 0.2rem 0;">2</div>
+                    <div style="font-size: 0.62rem; color: var(--orange);">BIT[7] = nums[6]</div>
+                  </div>
+                </div>
+
+                <!-- 3-Hop Query Trace Walkthrough -->
+                <div class="rq-sqrt-query-trace-box" style="margin-top: 0.85rem;">
+                  <div class="rq-trace-title">
+                    <strong>Query Trace for Full Prime Array: <code>query(7)</code> (Descend by <code>x -= lowbit(x)</code>):</strong>
+                  </div>
+                  <div class="rq-trace-steps">
+                    <div class="rq-step-box step-head">
+                      <span class="step-badge">Hop 1 (x = 7)</span>
+                      <span><code>BIT[7]</code> = <strong>2</strong> &bull; 7 &minus; 1 = <strong>6</strong></span>
+                    </div>
+                    <div class="rq-step-box step-mid">
+                      <span class="step-badge">Hop 2 (x = 6)</span>
+                      <span><code>BIT[6]</code> = <strong>14</strong> &bull; 6 &minus; 2 = <strong>4</strong></span>
+                    </div>
+                    <div class="rq-step-box step-tail" style="border-color: var(--orange);">
+                      <span class="step-badge" style="color: var(--orange);">Hop 3 (x = 4)</span>
+                      <span><code>BIT[4]</code> = <strong>9</strong> &bull; 4 &minus; 4 = <strong>0</strong> (Terminates!)</span>
+                    </div>
+                  </div>
+                  <div class="rq-trace-total">
+                    Total Prefix Sum = 2 + 14 + 9 = <strong>25</strong> &bull; Exactly matches 3 + 1 + 4 + 1 + 5 + 9 + 2 in 3 hops (O(log n))!
+                  </div>
+                </div>
+
+                <!-- Point Update Out-of-Bounds Edge Case Trace -->
+                <div style="margin-top: 0.65rem; background: #1a1814; border: 1px solid #3c3222; border-radius: 6px; padding: 0.65rem 0.85rem; font-size: 0.76rem; color: var(--muted); line-height: 1.55;">
+                  <strong style="color: var(--orange);">Update Edge Case on Prime Length (x += lowbit(x)):</strong>
+                  Updating index 3 (nums[2] += &Delta;): Hop 1 updates <code>BIT[3]</code> (3 + 1 = 4); Hop 2 updates <code>BIT[4]</code> (4 + 4 = 8).
+                  Because 8 &gt; <em>n</em> (8 &gt; 7), the loop terminates immediately! Fenwick never exceeds the allocated prime length <em>n</em>.
+                </div>
+              </div>
+
               <ul style="line-height: 1.65; margin-top: 1rem;">
                 <li><strong>Update:</strong> To add &Delta; to element at index <em>x</em>, ascend the responsibility tree by adding lowbit: <code>idx += idx &amp; (-idx)</code>.</li>
                 <li><strong>Prefix Query:</strong> To sum elements in [1, x], descend by stripping lowest set bits: <code>idx -= idx &amp; (-idx)</code>.</li>
@@ -9979,18 +10125,26 @@ Result: len(tails) = 3  (Optimal nesting: [2,3] -&gt; [5,4] -&gt; [6,7])</code><
                 Divide an array of size <em>n</em> into blocks of size <code>B = &lceil;&radic;n&rceil;</code>. The total number of blocks is &asymp; &radic;n.
               </p>
 
-              <!-- PROPER HTML SQRT CHUNK BLOCKS DIAGRAM -->
+                            <!-- PROPER HTML SQRT CHUNK BLOCKS DIAGRAM (PRIME LENGTH N = 7) -->
               <div class="rq-sqrt-diagram-container">
                 <div class="rq-tree-diagram-header">
-                  <span class="rq-diagram-badge">Square Root Block Decomposition (N = 9, Block Size B = 3)</span>
-                  <span class="rq-diagram-note">Balance O(1) Updates with O(&radic;N) Query Complexity</span>
+                  <span class="rq-diagram-badge">Prime Length Edge Case: N = 7 Elements (Block Size B = 3)</span>
+                  <span class="rq-diagram-note">Nums: [3, 1, 4, 1, 5, 9, 2] &bull; 2 Full Blocks + 1 Incomplete Tail Block!</span>
+                </div>
+
+                <div class="rq-bracket-math-summary" style="margin-bottom: 0.95rem;">
+                  <strong>The Real-World SQRT Edge Case: Partial / Incomplete Tail Block</strong>
+                  Because 7 is prime and not a multiple of 3 (<code>7 = 2 &times; 3 + 1</code>), the array divides into:
+                  <strong>Block 0</strong> (3 items, full), <strong>Block 1</strong> (3 items, full), and <strong>Block 2</strong> (<strong>ONLY 1 ITEM!</strong>).
+                  Loop bounds MUST be clamped with <code>min((b + 1) * B, n)</code> to prevent index out-of-bounds!
                 </div>
 
                 <div class="rq-sqrt-chunks-grid">
+                  <!-- Block 0: Full -->
                   <div class="rq-chunk-card">
                     <div class="rq-chunk-head">
                       <span>Block #0 [0..2]</span>
-                      <span class="rq-chunk-sum">Sum: 8</span>
+                      <span class="rq-chunk-sum">Sum: 8 (Full)</span>
                     </div>
                     <div class="rq-chunk-cells">
                       <div class="rq-chip"><span class="chip-idx">#0</span> <span class="chip-val">3</span></div>
@@ -9999,10 +10153,11 @@ Result: len(tails) = 3  (Optimal nesting: [2,3] -&gt; [5,4] -&gt; [6,7])</code><
                     </div>
                   </div>
 
+                  <!-- Block 1: Full -->
                   <div class="rq-chunk-card">
                     <div class="rq-chunk-head">
                       <span>Block #1 [3..5]</span>
-                      <span class="rq-chunk-sum">Sum: 15</span>
+                      <span class="rq-chunk-sum">Sum: 15 (Full)</span>
                     </div>
                     <div class="rq-chunk-cells">
                       <div class="rq-chip"><span class="chip-idx">#3</span> <span class="chip-val">1</span></div>
@@ -10011,39 +10166,64 @@ Result: len(tails) = 3  (Optimal nesting: [2,3] -&gt; [5,4] -&gt; [6,7])</code><
                     </div>
                   </div>
 
-                  <div class="rq-chunk-card">
+                  <!-- Block 2: Incomplete Tail Block! -->
+                  <div class="rq-chunk-card" style="border: 1.5px dashed var(--orange); background: #1c1813;">
                     <div class="rq-chunk-head">
-                      <span>Block #2 [6..8]</span>
-                      <span class="rq-chunk-sum">Sum: 13</span>
+                      <span style="color: var(--orange); font-weight: 700;">Block #2 [6..6]</span>
+                      <span class="rq-chunk-sum">Sum: 2 (Tail)</span>
                     </div>
                     <div class="rq-chunk-cells">
-                      <div class="rq-chip"><span class="chip-idx">#6</span> <span class="chip-val">2</span></div>
-                      <div class="rq-chip"><span class="chip-idx">#7</span> <span class="chip-val">6</span></div>
-                      <div class="rq-chip"><span class="chip-idx">#8</span> <span class="chip-val">5</span></div>
+                      <div class="rq-chip" style="border-color: var(--orange);"><span class="chip-idx">#6</span> <span class="chip-val">2</span></div>
                     </div>
+                    <div style="font-size: 0.65rem; color: var(--muted); font-style: italic;">Incomplete block: only 1 item!</div>
                   </div>
                 </div>
 
+                <!-- 3 Query Edge Cases Traces -->
                 <div class="rq-sqrt-query-trace-box">
                   <div class="rq-trace-title">
-                    <strong>Visual Query Trace for Range [1, 7]:</strong>
+                    <strong>3 Key Query Edge Cases on Prime Length Array:</strong>
                   </div>
-                  <div class="rq-trace-steps">
-                    <div class="rq-step-box step-head">
-                      <span class="step-badge">1. Left Partial</span>
-                      <span>Block 0: <code>nums[1] + nums[2]</code> = 1 + 4 = <strong>5</strong></span>
+
+                  <!-- Edge Case 1: Spanning to Incomplete Tail Block [2, 6] -->
+                  <div style="margin-top: 0.65rem; border-bottom: 1px solid #292929; padding-bottom: 0.65rem;">
+                    <div style="font-size: 0.77rem; font-weight: 700; color: var(--text);">Edge Case A: Cross-Block Spanning to Incomplete Tail [2 .. 6]</div>
+                    <div class="rq-trace-steps">
+                      <div class="rq-step-box step-head">
+                        <span class="step-badge">1. Left Partial</span>
+                        <span>Block 0: <code>nums[2]</code> = <strong>4</strong></span>
+                      </div>
+                      <div class="rq-step-box step-mid">
+                        <span class="step-badge">2. Full Middle</span>
+                        <span>Block 1: <code>blocks[1]</code> = <strong>15</strong> (O(1) read)</span>
+                      </div>
+                      <div class="rq-step-box step-tail" style="border-color: var(--orange);">
+                        <span class="step-badge" style="color: var(--orange);">3. Incomplete Tail</span>
+                        <span>Block 2: <code>nums[6]</code> = <strong>2</strong> (stops at n=7)</span>
+                      </div>
                     </div>
-                    <div class="rq-step-box step-mid">
-                      <span class="step-badge">2. Full Middle</span>
-                      <span>Block 1: <code>blocks[1]</code> = <strong>15</strong> (O(1) read!)</span>
-                    </div>
-                    <div class="rq-step-box step-tail">
-                      <span class="step-badge">3. Right Partial</span>
-                      <span>Block 2: <code>nums[6] + nums[7]</code> = 2 + 6 = <strong>8</strong></span>
+                    <div class="rq-trace-total">
+                      Total Sum = 4 + 15 + 2 = <strong>21</strong> (Safely handles incomplete block).
                     </div>
                   </div>
-                  <div class="rq-trace-total">
-                    Total Sum = 5 + 15 + 8 = <strong>28</strong> (Visited at most 2B + &radic;N = 3&radic;N operations!)
+
+                  <!-- Edge Case 2: Intra-Block Query [1, 2] -->
+                  <div style="margin-top: 0.65rem; border-bottom: 1px solid #292929; padding-bottom: 0.65rem;">
+                    <div style="font-size: 0.77rem; font-weight: 700; color: var(--text);">Edge Case B: Intra-Block Query [1 .. 2] (startBlock == endBlock)</div>
+                    <div style="font-size: 0.75rem; color: var(--muted); margin: 0.35rem 0;">
+                      Range falls strictly inside Block 0. <strong>Zero middle full blocks are touched!</strong>
+                      Evaluated directly as <code>nums[1] + nums[2] = 1 + 4 = 5</code> in O(B) time.
+                    </div>
+                  </div>
+
+                  <!-- Edge Case 3: Adjacent Cross-Block Query [2, 3] -->
+                  <div style="margin-top: 0.65rem;">
+                    <div style="font-size: 0.77rem; font-weight: 700; color: var(--text);">Edge Case C: Adjacent Cross-Block Query [2 .. 3] (Zero Middle Blocks)</div>
+                    <div style="font-size: 0.75rem; color: var(--muted); margin: 0.35rem 0;">
+                      Query starts at the end of Block 0 and ends at the start of Block 1.
+                      Middle full blocks loop (<code>range(startBlock + 1, endBlock) = range(1, 1)</code>) is empty!
+                      Directly sums left partial (<code>nums[2] = 4</code>) + right partial (<code>nums[3] = 1</code>) = <strong>5</strong>.
+                    </div>
                   </div>
                 </div>
               </div>
