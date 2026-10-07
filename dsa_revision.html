@@ -5715,11 +5715,11 @@ Union(4, neighbor) dynamically consolidates adjacent land clusters!</code></pre>
             <div class="pattern-card-head">
               <h3>The Universal Physics of Intervals</h3>
             </div>
-            <p class="use-when"><strong>Core principle:</strong> an interval $[s, e]$ is a continuous 1D range. Without ordering, detecting overlap requires checking every pair against each other ($O(n^2)$). Sorting imposes a geometric arrow of time, establishing invariants that guarantee local greedy choices are globally optimal.</p>
+            <p class="use-when"><strong>Core principle:</strong> an interval [s, e] is a continuous 1D range. Without ordering, detecting overlap requires checking every pair against each other (O(n<sup>2</sup>)). Sorting imposes a geometric arrow of time, establishing invariants that guarantee local greedy choices are globally optimal.</p>
 
             <div class="why-box">
               <strong>The 3 Spatial Overlap Archetypes</strong>
-              <p>For any two intervals $A = [s_A, e_A]$ and $B = [s_B, e_B]$ with $s_A \le s_B$:</p>
+              <p>For any two intervals A = [s<sub>A</sub>, e<sub>A</sub>] and B = [s<sub>B</sub>, e<sub>B</sub>] with s<sub>A</sub> &le; s<sub>B</sub>:</p>
               <pre class="trace-diagram"><code>1. MUTUALLY DISJOINT (s_B &gt; e_A):
    A: [=========]
    B:             [=======]
@@ -5745,9 +5745,9 @@ Union(4, neighbor) dynamically consolidates adjacent land clusters!</code></pre>
               <strong>Strategic Decision Matrix: Sort by Start vs Sort by End</strong>
               <p>The choice of sorting dimension completely dictates the algorithmic engine:</p>
               <ul style="color: var(--muted); font-size: 0.88rem; line-height: 1.6; padding-left: 1.25rem;">
-                <li><strong style="color: var(--cyan);">Sort by Start ($s \uparrow$)</strong>: Used for <em>Union &amp; Clustering</em> (Merge Intervals, Insert Interval, Meeting Room Concurrency, Line Sweep). Guarantees $s_{curr} \ge s_{prev}$, so overlap simplifies to $s_{curr} \le e_{prev}$.</li>
-                <li><strong style="color: var(--orange);">Sort by End ($e \uparrow$)</strong>: Used for <em>Greedy Activity Selection</em> (Non-Overlapping Intervals, Burst Balloons). Earliest finish time leaves maximum possible free time for subsequent intervals, minimizing conflicts.</li>
-                <li><strong style="color: var(--easy);">Sort by Start Ascending, End Descending ($s \uparrow, e \downarrow$)</strong>: Used for <em>Enclosure &amp; Nesting</em> (Remove Covered Intervals). Ensures that when start times tie, the widest covering interval is evaluated first.</li>
+                <li><strong style="color: var(--cyan);">Sort by Start (s &uarr;)</strong>: Used for <em>Union &amp; Clustering</em> (Merge Intervals, Insert Interval, Meeting Room Concurrency, Line Sweep). Guarantees s<sub>curr</sub> &ge; s<sub>prev</sub>, so overlap simplifies to s<sub>curr</sub> &le; e<sub>prev</sub>.</li>
+                <li><strong style="color: var(--orange);">Sort by End (e &uarr;)</strong>: Used for <em>Greedy Activity Selection</em> (Non-Overlapping Intervals, Burst Balloons). Earliest finish time leaves maximum possible free time for subsequent intervals, minimizing conflicts.</li>
+                <li><strong style="color: var(--easy);">Sort by Start Ascending, End Descending (s &uarr;, e &darr;)</strong>: Used for <em>Enclosure &amp; Nesting</em> (Remove Covered Intervals). Ensures that when start times tie, the widest covering interval is evaluated first.</li>
               </ul>
             </div>
           </article>
@@ -5802,7 +5802,7 @@ Pass 3: Must restart comparison loop!
                     </div>
 
                     <div class="visual-annotation alert-danger">
-                      <strong>The Flaw:</strong> Without sorting, an interval might overlap with any element anywhere in the array. Merging two elements mutates list boundaries and forces repeated passes across previously visited items ($O(n^2)$ to $O(n^3)$).
+                      <strong>The Flaw:</strong> Without sorting, an interval might overlap with any element anywhere in the array. Merging two elements mutates list boundaries and forces repeated passes across previously visited items (O(n<sup>2</sup>) to O(n<sup>3</sup>)).
                     </div>
                   </div>
 
@@ -5832,7 +5832,7 @@ Step 4: Inspect [15, 18]
                     </div>
 
                     <div class="visual-annotation alert-success">
-                      <strong>Why Optimal Works:</strong> Sorting by start guarantees monotonic start times ($s_0 \le s_1 \dots \le s_{n-1}$). This collapses the 2D collision formula into a single scalar check: $s_{curr} \le e_{prev}$. If $s_{curr} > e_{prev}$, all future intervals have $s_{future} \ge s_{curr} > e_{prev}$, proving the current cluster can NEVER be merged again and is sealed permanently!
+                      <strong>Why Optimal Works:</strong> Sorting by start guarantees monotonic start times (s<sub>0</sub> &le; s<sub>1</sub> &hellip; &le; s<sub>n-1</sub>). This collapses the 2D collision formula into a single scalar check: s<sub>curr</sub> &le; e<sub>prev</sub>. If s<sub>curr</sub> &gt; e<sub>prev</sub>, all future intervals have s<sub>future</sub> &ge; s<sub>curr</sub> &gt; e<sub>prev</sub>, proving the current cluster can NEVER be merged again and is sealed permanently!
                     </div>
                   </div>
                 </div>
@@ -5885,7 +5885,7 @@ Phase 3 (Strictly Right): start &gt; newEnd (12 &gt; 10)
 
             <div class="why-box">
               <strong>Why it works: Two-Pointer Earliest-Finish Advance</strong>
-              <p>Two intervals $[s_1, e_1]$ and $[s_2, e_2]$ intersect if $\max(s_1, s_2) \le \min(e_1, e_2)$. The key optimization is pointer advancement: whichever interval finishes first ($e_1 < e_2$) cannot possibly intersect any future interval in the other list. Advancing its pointer in $O(1)$ guarantees complete coverage in $O(m + n)$ time.</p>
+              <p>Two intervals [s<sub>1</sub>, e<sub>1</sub>] and [s<sub>2</sub>, e<sub>2</sub>] intersect if max(s<sub>1</sub>, s<sub>2</sub>) &le; min(e<sub>1</sub>, e<sub>2</sub>). The key optimization is pointer advancement: whichever interval finishes first (e<sub>1</sub> &lt; e<sub>2</sub>) cannot possibly intersect any future interval in the other list. Advancing its pointer in O(1) guarantees complete coverage in O(m + n) time.</p>
             </div>
 
             <div class="mini-code-wrap">
@@ -6056,7 +6056,7 @@ interval that finishes later can never reduce future compatibility!</code></pre>
                 <li>The root of the heap <code>roomHeap[0]</code> represents the room that will be vacated earliest.</li>
                 <li>If <code>roomHeap[0] &lt;= currStart</code>, that room is already free! We pop the old finish time and reuse the room.</li>
                 <li>If <code>roomHeap[0] &gt; currStart</code>, then <strong>NO</strong> active room has finished yet! A new room must be allocated.</li>
-                <li>The size of the heap dynamically tracks concurrent room utilization in $O(n \log n)$ time.</li>
+                <li>The size of the heap dynamically tracks concurrent room utilization in O(n log n) time.</li>
               </ul>
             </div>
 
@@ -6206,7 +6206,7 @@ interval that finishes later can never reduce future compatibility!</code></pre>
 
             <div class="why-box">
               <strong>Why it works: Discrete Delta Accumulation</strong>
-              <p>Every interval $[s, e)$ is decomposed into two point events: <code>(s, +1)</code> (start/enter) and <code>(e, -1)</code> (end/exit). Sorting events chronologically and taking the running prefix sum tracks instantaneous load at every critical instant in $O(n \log n)$ time without maintaining large arrays.</p>
+              <p>Every interval [s, e) is decomposed into two point events: <code>(s, +1)</code> (start/enter) and <code>(e, -1)</code> (end/exit). Sorting events chronologically and taking the running prefix sum tracks instantaneous load at every critical instant in O(n log n) time without maintaining large arrays.</p>
               <pre class="trace-diagram"><code>Intervals: [1, 5], [2, 6], [4, 8], [9, 12]
 Events: (1, +1), (2, +1), (4, +1), (5, -1), (6, -1), (8, -1), (9, +1), (12, -1)
 
@@ -6249,15 +6249,15 @@ Time = 9: Active = 0 + 1 = 1</code></pre>
             <div class="pattern-card-head">
               <h3>Remove Covered Intervals (LeetCode 1288)</h3>
             </div>
-            <p class="use-when"><strong>Use when:</strong> filtering out intervals that are completely enclosed within another interval $[c, d]$ where $c \le a$ and $b \le d$.</p>
+            <p class="use-when"><strong>Use when:</strong> filtering out intervals that are completely enclosed within another interval [c, d] where c &le; a and b &le; d.</p>
 
             <div class="why-box">
               <strong>Why it works: Sort Start Ascending, End Descending</strong>
               <p>By sorting <code>start</code> ASCENDING and <code>end</code> DESCENDING: <code>intervals.sort(key=lambda x: (x[0], -x[1]))</code>:</p>
               <ul style="color: var(--muted); font-size: 0.88rem; line-height: 1.6; padding-left: 1.25rem;">
-                <li>For intervals with different start times, any previous interval starts earlier ($s_{prev} \le s_{curr}$). Thus, $curr$ is covered if and only if its end is within <code>maxEnd</code> ($e_{curr} \le \text{maxEnd}$).</li>
+                <li>For intervals with different start times, any previous interval starts earlier (s<sub>prev</sub> &le; s<sub>curr</sub>). Thus, <em>curr</em> is covered if and only if its end is within <code>maxEnd</code> (e<sub>curr</sub> &le; maxEnd).</li>
                 <li>For intervals with identical start times, sorting <code>end</code> descending guarantees that the widest interval is evaluated first! Any subsequent interval with the same start has a smaller end and is immediately caught as covered.</li>
-                <li>Eliminates lookahead and nested scans completely in $O(n \log n)$ time.</li>
+                <li>Eliminates lookahead and nested scans completely in O(n log n) time.</li>
               </ul>
             </div>
 
@@ -6771,7 +6771,7 @@ Time = 9: Active = 0 + 1 = 1</code></pre>
             <div class="pattern-card-head">
               <h3>Move &amp; Pop Endpoints</h3>
             </div>
-            <p class="use-when"><strong>Use when:</strong> building LRU/MRU caches, streaming unique data, managing window expiry queues, or moving prioritized keys to opposite ends in $O(1)$ time.</p>
+            <p class="use-when"><strong>Use when:</strong> building LRU/MRU caches, streaming unique data, managing window expiry queues, or moving prioritized keys to opposite ends in O(1) time.</p>
             <div class="why-box">
               <strong>Why it works &amp; API Breakdown</strong>
               <p>Under the hood, <code>OrderedDict</code> stores elements in an internal circular doubly linked list. The methods <code>move_to_end()</code> and <code>popitem()</code> accept a boolean parameter <code>last</code> (defaulting to <code>True</code>):</p>
@@ -6811,7 +6811,7 @@ Time = 9: Active = 0 + 1 = 1</code></pre>
             <p class="use-when"><strong>Use when:</strong> implementing caches with maximum capacity constraints where the least recently accessed element must be evicted upon overflow.</p>
             <div class="why-box">
               <strong>Invariant Maintenance</strong>
-              <p>Every lookup (<code>get</code>) or overwrite (<code>put</code>) marks the accessed key as Most Recently Used by invoking <code>move_to_end(key)</code>. When size exceeds capacity, <code>popitem(False)</code> strips the Least Recently Used key at the front in strictly $O(1)$ time.</p>
+              <p>Every lookup (<code>get</code>) or overwrite (<code>put</code>) marks the accessed key as Most Recently Used by invoking <code>move_to_end(key)</code>. When size exceeds capacity, <code>popitem(False)</code> strips the Least Recently Used key at the front in strictly O(1) time.</p>
             </div>
             <div class="mini-code-wrap">
               <button class="copy-button mini-copy" type="button" data-code="python-lru-cache-code">Copy</button>
@@ -6947,10 +6947,10 @@ Time = 9: Active = 0 + 1 = 1</code></pre>
             <div class="pattern-card-head">
               <h3>Dynamic Coordinate Sweep via SortedDict</h3>
             </div>
-            <p class="use-when"><strong>Use when:</strong> interval scheduling with continuous online bookings, dynamic range boundary updates, or queries requiring min/max keys in $O(1)$ and range iterations in $O(\log n + k)$.</p>
+            <p class="use-when"><strong>Use when:</strong> interval scheduling with continuous online bookings, dynamic range boundary updates, or queries requiring min/max keys in O(1) and range iterations in O(log n + k).</p>
             <div class="why-box">
               <strong>Why it works: Pure Python B-Tree Hybrid</strong>
-              <p>Unlike standard <code>dict</code> (which has no key ordering) or <code>list.sort()</code> ($O(n \log n)$ per insertion), <code>SortedDict</code> segments keys into sub-lists, yielding $O(\log n)$ updates and $O(1)$ <code>peekitem(0)</code> (minimum key) and <code>peekitem(-1)</code> (maximum key).</p>
+              <p>Unlike standard <code>dict</code> (which has no key ordering) or <code>list.sort()</code> (O(n log n) per insertion), <code>SortedDict</code> segments keys into sub-lists, yielding O(log n) updates and O(1) <code>peekitem(0)</code> (minimum key) and <code>peekitem(-1)</code> (maximum key).</p>
             </div>
             <div class="mini-code-wrap">
               <button class="copy-button mini-copy" type="button" data-code="python-sorted-dict-code">Copy</button>
@@ -6984,7 +6984,7 @@ Time = 9: Active = 0 + 1 = 1</code></pre>
             <p class="use-when"><strong>Use when:</strong> maintaining the dynamic median or k-th order statistic of a streaming or sliding window (LC 480).</p>
             <div class="why-box">
               <strong>Why it works: O(log k) Indexing vs Dual-Heap Boilerplate</strong>
-              <p>Dual-heap balancing with delayed removal requires 80+ lines of intricate pointer tracking. <code>SortedList</code> provides $O(\log k)$ <code>add()</code>, $O(\log k)$ <code>discard()</code>, and direct indexed access <code>sl[idx]</code> in $O(\log k)$ time!</p>
+              <p>Dual-heap balancing with delayed removal requires 80+ lines of intricate pointer tracking. <code>SortedList</code> provides O(log k) <code>add()</code>, O(log k) <code>discard()</code>, and direct indexed access <code>sl[idx]</code> in O(log k) time!</p>
             </div>
             <div class="mini-code-wrap">
               <button class="copy-button mini-copy" type="button" data-code="python-sorted-list-code">Copy</button>
@@ -7018,7 +7018,7 @@ Time = 9: Active = 0 + 1 = 1</code></pre>
                 <div class="technique-header">
                   <h4>SortedDict Boundary Sweeps</h4>
                 </div>
-                <p>Dynamically insert timeline events with $O(\log n)$ updates and iterate values in guaranteed chronological order without re-sorting.</p>
+                <p>Dynamically insert timeline events with O(log n) updates and iterate values in guaranteed chronological order without re-sorting.</p>
                 <div class="technique-problem">
                   <span>Practice:</span>
                   <a href="https://leetcode.com/problems/my-calendar-iii/" target="_blank" rel="noopener">My Calendar III ↗</a>
@@ -7040,7 +7040,7 @@ Time = 9: Active = 0 + 1 = 1</code></pre>
                 <div class="technique-header">
                   <h4>SortedSet Disjoint Merges</h4>
                 </div>
-                <p>Track dynamic disjoint intervals and unique coordinate boundaries with $O(\log n)$ binary search lookups via <code>bisect_left()</code>.</p>
+                <p>Track dynamic disjoint intervals and unique coordinate boundaries with O(log n) binary search lookups via <code>bisect_left()</code>.</p>
                 <div class="technique-problem">
                   <span>Practice:</span>
                   <a href="https://leetcode.com/problems/data-stream-as-disjoint-intervals/" target="_blank" rel="noopener">Disjoint Intervals ↗</a>
@@ -7069,7 +7069,7 @@ Time = 9: Active = 0 + 1 = 1</code></pre>
                   </div>
                 </div>
                 <p class="pattern-problem-takeaway">
-                  <strong>Pattern Takeaway:</strong> Discard leaving items and insert entering items in $O(\log k)$ using <code>SortedList</code>, querying middle indices directly.
+                  <strong>Pattern Takeaway:</strong> Discard leaving items and insert entering items in O(log k) using <code>SortedList</code>, querying middle indices directly.
                 </p>
               </div>
 
@@ -7108,7 +7108,7 @@ Time = 9: Active = 0 + 1 = 1</code></pre>
             <div class="pattern-card-head">
               <h3>Counter Multiset Arithmetic, Purging &amp; Top-K</h3>
             </div>
-            <p class="use-when"><strong>Use when:</strong> validating anagram windows (LC 438, LC 76, LC 567), tracking multiset differences without manual key deletion, or extracting top-$k$ elements in $O(n \log k)$ without writing custom heap tuples.</p>
+            <p class="use-when"><strong>Use when:</strong> validating anagram windows (LC 438, LC 76, LC 567), tracking multiset differences without manual key deletion, or extracting top-k elements in O(n log k) without writing custom heap tuples.</p>
             <div class="why-box">
               <strong>Why it works: C-Speed Multiset Semantics &amp; Unary Plus</strong>
               <p>Standard dictionaries retain keys with <code>0</code> or negative values when decremented (<code>d[k] -= 1</code>), breaking length checks and comparisons. <code>Counter</code> multiset subtraction (<code>c1 - c2</code>) computes set differences and <em>automatically discards non-positive keys</em>. Similarly, unary plus (<code>+c</code>) purges all keys with counts &le; 0 in a single C-speed pass!</p>
@@ -7154,7 +7154,7 @@ c = Counter({'x': 0, 'y': -2, 'z': 4})
             <p class="use-when"><strong>Use when:</strong> tracking shortest path weights with sentinel defaults (e.g. Dijkstra <code>dist[node]</code> initialized to infinity), or grouping graph adjacency lists and nested structures without guard checks.</p>
             <div class="why-box">
               <strong>Why it works: Zero-Cost Factory Initialization</strong>
-              <p>Passing a custom <code>lambda: float('inf')</code> prevents runtime <code>KeyError</code> and removes defensive <code>if u not in dist: dist[u] = float('inf')</code> checks. Python calls the factory callable on the first missing key query in $O(1)$ amortized time.</p>
+              <p>Passing a custom <code>lambda: float('inf')</code> prevents runtime <code>KeyError</code> and removes defensive <code>if u not in dist: dist[u] = float('inf')</code> checks. Python calls the factory callable on the first missing key query in O(1) amortized time.</p>
             </div>
             <div class="mini-code-wrap">
               <button class="copy-button mini-copy" type="button" data-code="python-defaultdict-code">Copy</button>
@@ -7307,7 +7307,7 @@ Query 'c' in root ──&gt; True (O(1)) | Query 'd' in root ──&gt; False (O
                   </div>
                 </div>
                 <p class="pattern-problem-takeaway">
-                  <strong>Pattern Takeaway:</strong> Extract the $k$ highest frequencies directly in $O(n \log k)$ using <code>Counter(nums).most_common(k)</code> without building manual priority queues.
+                  <strong>Pattern Takeaway:</strong> Extract the <em>k</em> highest frequencies directly in O(n log k) using <code>Counter(nums).most_common(k)</code> without building manual priority queues.
                 </p>
               </div>
 
@@ -7349,7 +7349,7 @@ Query 'c' in root ──&gt; True (O(1)) | Query 'd' in root ──&gt; False (O
             <p class="use-when"><strong>Use when:</strong> 2D interval or envelope nesting where the primary dimension is sorted ascending and the secondary dimension MUST be sorted descending (or vice versa) to prevent false-positive overlap or collapse 2D search into 1D LIS (LC 354, LC 1288).</p>
             <div class="why-box">
               <strong>Why it works: Negation Inverts Secondary Ordering</strong>
-              <p>In Russian Doll Envelopes (<code>[w, h]</code>), identical widths cannot nest. Sorting with <code>key=lambda x: (x[0], -x[1])</code> places identical widths in strictly descending height order. When running 1D Longest Increasing Subsequence (LIS) on heights, an envelope with the same width cannot extend the sequence of another envelope with the same width, reducing $O(n^2)$ 2D DP to $O(n \log n)$!</p>
+              <p>In Russian Doll Envelopes (<code>[w, h]</code>), identical widths cannot nest. Sorting with <code>key=lambda x: (x[0], -x[1])</code> places identical widths in strictly descending height order. When running 1D Longest Increasing Subsequence (LIS) on heights, an envelope with the same width cannot extend the sequence of another envelope with the same width, reducing O(n<sup>2</sup>) 2D DP to O(n log n)!</p>
               <pre class="trace-diagram"><code>Envelopes: [[5,4], [6,4], [6,7], [2,3]]
 
 Sorted with key=lambda x: (x[0], -x[1]):
@@ -7438,7 +7438,7 @@ Result: len(tails) = 3  (Optimal nesting: [2,3] -&gt; [5,4] -&gt; [6,7])</code><
             <p class="use-when"><strong>Use when:</strong> sorting order cannot be transformed into an independent 1D scalar key and requires pairwise comparison of two elements (LC 179 Largest Number).</p>
             <div class="why-box">
               <strong>Restoring 2-Argument Comparator Semantics</strong>
-              <p>Python 3 removed the legacy <code>cmp</code> parameter from <code>sort()</code>. <code>functools.cmp_to_key(fn)</code> converts a function returning $-1, 0, 1$ into a comparison key object with full $O(n \log n)$ correctness.</p>
+              <p>Python 3 removed the legacy <code>cmp</code> parameter from <code>sort()</code>. <code>functools.cmp_to_key(fn)</code> converts a function returning &minus;1, 0, 1 into a comparison key object with full O(n log n) correctness.</p>
             </div>
             <div class="mini-code-wrap">
               <button class="copy-button mini-copy" type="button" data-code="python-cmp-code">Copy</button>
@@ -7507,7 +7507,7 @@ Result: len(tails) = 3  (Optimal nesting: [2,3] -&gt; [5,4] -&gt; [6,7])</code><
                 <div class="technique-header">
                   <h4>Multi-Key Inverted Lambda Sort</h4>
                 </div>
-                <p>Sort primary dimension ascending and secondary dimension descending (<code>x[0], -x[1]</code>) to collapse 2D envelope nesting into 1D $O(n \log n)$ LIS.</p>
+                <p>Sort primary dimension ascending and secondary dimension descending (<code>x[0], -x[1]</code>) to collapse 2D envelope nesting into 1D O(n log n) LIS.</p>
                 <div class="technique-problem">
                   <span>Practice:</span>
                   <a href="https://leetcode.com/problems/russian-doll-envelopes/" target="_blank" rel="noopener">Russian Doll Envelopes ↗</a>
@@ -7540,7 +7540,7 @@ Result: len(tails) = 3  (Optimal nesting: [2,3] -&gt; [5,4] -&gt; [6,7])</code><
                 <div class="technique-header">
                   <h4>bisect(key=) &amp; Heap Ties</h4>
                 </div>
-                <p>Binary search 2D structures directly in $O(1)$ memory; protect heap tuples against <code>TypeError</code> using monotonic counters.</p>
+                <p>Binary search 2D structures directly in O(1) memory; protect heap tuples against <code>TypeError</code> using monotonic counters.</p>
                 <div class="technique-problem">
                   <span>Practice:</span>
                   <a href="https://leetcode.com/problems/merge-k-sorted-lists/" target="_blank" rel="noopener">Merge k Sorted Lists ↗</a>
@@ -7569,7 +7569,7 @@ Result: len(tails) = 3  (Optimal nesting: [2,3] -&gt; [5,4] -&gt; [6,7])</code><
                   </div>
                 </div>
                 <p class="pattern-problem-takeaway">
-                  <strong>Pattern Takeaway:</strong> Sort width ASC and height DESC via <code>key=lambda x: (x[0], -x[1])</code> to eliminate width collisions, reducing 2D DP to 1D $O(n \log n)$ LIS.
+                  <strong>Pattern Takeaway:</strong> Sort width ASC and height DESC via <code>key=lambda x: (x[0], -x[1])</code> to eliminate width collisions, reducing 2D DP to 1D O(n log n) LIS.
                 </p>
               </div>
 
@@ -7923,9 +7923,9 @@ Result: len(tails) = 3  (Optimal nesting: [2,3] -&gt; [5,4] -&gt; [6,7])</code><
                 <span class="c-chip c-fast">Space: O(Q log C)</span>
               </div>
               <ul class="rq-dcard-list">
-                <li><strong>Use when:</strong> Coordinate range is huge ($0 \le x \le 10^9$, e.g., timestamps or continuous intervals), but only $Q \le 10^5$ operations occur.</li>
-                <li><strong>Why 2N/4N fails here:</strong> Allocating a flat array of size $2 	imes 10^9$ requires $> 8	ext{ GB}$ RAM and causes Memory Limit Exceeded (MLE).</li>
-                <li><strong>Why it wins:</strong> Nodes are instantiated on-demand during <code>_pushDown()</code>. Uses only $pprox 20	ext{ MB}$ memory instead of 8 GB!</li>
+                <li><strong>Use when:</strong> Coordinate range is huge (0 &le; x &le; 10<sup>9</sup>, e.g., timestamps or continuous intervals), but only Q &le; 10<sup>5</sup> operations occur.</li>
+                <li><strong>Why 2N/4N fails here:</strong> Allocating a flat array of size 2 &times; 10<sup>9</sup> requires &gt; 8 GB RAM and causes Memory Limit Exceeded (MLE).</li>
+                <li><strong>Why it wins:</strong> Nodes are instantiated on-demand during <code>_pushDown()</code>. Uses only &asymp; 20 MB memory instead of 8 GB!</li>
               </ul>
               <a class="rq-dcard-link" href="#range-segment-tree-sub" data-target-sub="rq-segment-tree-dynamic">View Pointer Code &rarr;</a>
             </div>
@@ -8039,7 +8039,7 @@ Result: len(tails) = 3  (Optimal nesting: [2,3] -&gt; [5,4] -&gt; [6,7])</code><
                     <td>O(log C)</td>
                     <td><span style="color: var(--easy); font-weight: bold;">O(Q log C)</span></td>
                     <td>Any monoid over continuous universe [0 .. 10⁹]</td>
-                    <td>Eliminates MLE on $10^9$ domains. Allocates nodes dynamically on-demand.</td>
+                    <td>Eliminates MLE on 10<sup>9</sup> domains. Allocates nodes dynamically on-demand.</td>
                   </tr>
                 </tbody>
               </table>
@@ -8753,13 +8753,13 @@ Result: len(tails) = 3  (Optimal nesting: [2,3] -&gt; [5,4] -&gt; [6,7])</code><
                 Top competitive programmers prefer the <strong>Iterative 2N Segment Tree</strong> ("Short Code") because it executes in flat contiguous memory with zero call-stack frames. Here is why the compact syntax works:
               </p>
               <ul>
-                <li><strong>1. The 2N Flat Memory Trick:</strong> The original array leaves are stored at indices $[n, 2n - 1]$. Original element <code>nums[i]</code> sits at <code>tree[n + i]</code>. Internal parent nodes occupy indices $[1, n - 1]$, with root at index 1. Index 0 is unused. Total memory is strictly $2n$!</li>
+                <li><strong>1. The 2N Flat Memory Trick:</strong> The original array leaves are stored at indices [n, 2n &minus; 1]. Original element <code>nums[i]</code> sits at <code>tree[n + i]</code>. Internal parent nodes occupy indices [1, n &minus; 1], with root at index 1. Index 0 is unused. Total memory is strictly 2n!</li>
                 <li><strong>2. Binary Parity Rules:</strong> For any node at index <code>i</code>, its parent is <code>i // 2</code>. Its left child is <code>2 * i</code> (always an <em>EVEN</em> index); its right child is <code>2 * i + 1</code> (always an <em>ODD</em> index).</li>
-                <li><strong>3. O(n) Bottom-Up Build:</strong> Populating from $n - 1$ down to 1 ensures children <code>2 * i</code> and <code>2 * i + 1</code> are already initialized: <code>tree[i] = tree[2 * i] + tree[2 * i + 1]</code>.</li>
-                <li><strong>4. O(log n) Point Update:</strong> <code>idx += n; tree[idx] = val; while idx &gt; 1: idx //= 2; tree[idx] = tree[2*idx] + tree[2*idx+1]</code>. Directly mutates leaf and climbs ancestor path in $\log n$ loop cycles.</li>
+                <li><strong>3. O(n) Bottom-Up Build:</strong> Populating from n &minus; 1 down to 1 ensures children <code>2 * i</code> and <code>2 * i + 1</code> are already initialized: <code>tree[i] = tree[2 * i] + tree[2 * i + 1]</code>.</li>
+                <li><strong>4. O(log n) Point Update:</strong> <code>idx += n; tree[idx] = val; while idx &gt; 1: idx //= 2; tree[idx] = tree[2*idx] + tree[2*idx+1]</code>. Directly mutates leaf and climbs ancestor path in O(log n) loop cycles.</li>
                 <li><strong>5. O(log n) Converging Query Invariant:</strong>
                   <br>&bull; <code>left, right = left + n, right + n</code>
-                  <br>&bull; If <code>left % 2 == 1</code>: <code>left</code> is a <strong>right child</strong>. Its left sibling is <em>outside</em> our query range $[left, right]$! Therefore, its parent cannot be used. We must include <code>tree[left]</code> directly into the accumulator, and advance <code>left += 1</code> to enter the next parent range!
+                  <br>&bull; If <code>left % 2 == 1</code>: <code>left</code> is a <strong>right child</strong>. Its left sibling is <em>outside</em> our query range [left, right]! Therefore, its parent cannot be used. We must include <code>tree[left]</code> directly into the accumulator, and advance <code>left += 1</code> to enter the next parent range!
                   <br>&bull; If <code>right % 2 == 0</code>: <code>right</code> is a <strong>left child</strong>. Its right sibling is <em>outside</em> our query range! We must include <code>tree[right]</code> directly into the accumulator, and decrement <code>right -= 1</code> before ascending!
                   <br>&bull; Then ascend: <code>left //= 2; right //= 2</code> until pointers cross (<code>left &gt; right</code>).
                 </li>
@@ -8773,9 +8773,9 @@ Result: len(tails) = 3  (Optimal nesting: [2,3] -&gt; [5,4] -&gt; [6,7])</code><
                 </div>
 
                 <div class="rq-bracket-math-summary">
-                  <strong>The Knockout Sports Tournament Analogy:</strong> Think of a single-elimination tournament with $n$ teams. Every single match eliminates exactly $1$ team. To crown $1$ champion at the root, exactly $n - 1$ matches must be played.
+                  <strong>The Knockout Sports Tournament Analogy:</strong> Think of a single-elimination tournament with <em>n</em> teams. Every single match eliminates exactly 1 team. To crown 1 champion at the root, exactly <em>n</em> &minus; 1 matches must be played.
                   <br>
-                  $$\text{Leaves (Elements)} = n \quad+\quad \text{Internal Parents (Matches)} = n - 1 \quad=\quad \mathbf{2n - 1 \text{ Total Active Nodes}}$$
+                  <div class="rq-bracket-math-display" style="margin: 0.6rem 0; font-size: 0.88rem; font-weight: 600;">Leaves (Elements) = <em>n</em> &nbsp;+&nbsp; Internal Parents (Matches) = <em>n</em> &minus; 1 &nbsp;=&nbsp; <strong style="color: var(--orange);">2n &minus; 1 Total Active Nodes</strong></div>
                 </div>
 
                 <div class="rq-bracket-diagram">
@@ -9032,10 +9032,10 @@ Result: len(tails) = 3  (Optimal nesting: [2,3] -&gt; [5,4] -&gt; [6,7])</code><
             <div class="why-box" style="padding: 1.35rem;">
               <strong>Why it works: Deferred Subtree Propagation</strong>
               <p style="line-height: 1.65; margin-bottom: 0.8rem;">
-                Without lazy propagation, updating a range of size $k$ requires visiting $O(k)$ leaves, degrading to $O(n)$ worst-case. Lazy propagation defers updates: when a tree node's range $[left, right]$ is fully enclosed within query range $[qLeft, qRight]$, we immediately apply <code>tree[nodeIdx] += delta * (right - left + 1)</code> and store <code>lazy[nodeIdx] += delta</code>.
+                Without lazy propagation, updating a range of size <em>k</em> requires visiting O(k) leaves, degrading to O(n) worst-case. Lazy propagation defers updates: when a tree node's range [left, right] is fully enclosed within query range [qLeft, qRight], we immediately apply <code>tree[nodeIdx] += delta * (right - left + 1)</code> and store <code>lazy[nodeIdx] += delta</code>.
               </p>
               <p style="line-height: 1.65;">
-                Descendant children are only updated when a future query or update actually traverses through <code>nodeIdx</code>, executed via the <code>pushDown(nodeIdx, left, right)</code> routine. This preserves strictly $O(\log n)$ runtime for both range updates and range queries.
+                Descendant children are only updated when a future query or update actually traverses through <code>nodeIdx</code>, executed via the <code>pushDown(nodeIdx, left, right)</code> routine. This preserves strictly O(log n) runtime for both range updates and range queries.
               </p>
             </div>
 
@@ -9139,7 +9139,7 @@ Result: len(tails) = 3  (Optimal nesting: [2,3] -&gt; [5,4] -&gt; [6,7])</code><
             <div class="pattern-card-head">
               <h3>Pointer-Based Dynamic (Implicit) Segment Tree (Universe [0 .. 10⁹])</h3>
             </div>
-            <p class="use-when"><strong>Use when:</strong> The coordinate range is massive ($0 \le x \le 10^9$, such as timestamps or geometric intervals in LeetCode 715 <em>Range Module</em>, LeetCode 732 <em>My Calendar III</em>, LeetCode 699 <em>Falling Squares</em>), but only $Q \le 10^5$ operations are performed. Allocating a static $2N$ or $4N$ array requires &gt; 8 GB of RAM and triggers Memory Limit Exceeded (MLE).</p>
+            <p class="use-when"><strong>Use when:</strong> The coordinate range is massive (0 &le; x &le; 10<sup>9</sup>, such as timestamps or geometric intervals in LeetCode 715 <em>Range Module</em>, LeetCode 732 <em>My Calendar III</em>, LeetCode 699 <em>Falling Squares</em>), but only Q &le; 10<sup>5</sup> operations are performed. Allocating a static 2N or 4N array requires &gt; 8 GB of RAM and triggers Memory Limit Exceeded (MLE).</p>
 
             <div class="why-box" style="padding: 1.35rem;">
               <strong>Why it works: Lazy On-Demand Node Allocation</strong>
@@ -9205,7 +9205,7 @@ Result: len(tails) = 3  (Optimal nesting: [2,3] -&gt; [5,4] -&gt; [6,7])</code><
 
               <ul style="line-height: 1.65; margin-top: 1rem;">
                 <li><strong>Dynamic Instantiation:</strong> Child pointers are initially <code>None</code>. Only when an update or query splits into that half do we instantiate <code>SegmentTreeNode(leftBound, mid)</code>.</li>
-                <li><strong>Total Memory Complexity:</strong> Each query or update visits at most $\approx 2 \log_2(10^9) \approx 60$ nodes. For $Q = 10^5$ operations, at most $60 \times 10^5 \approx 6 \times 10^6$ nodes are created, which fits in $< 50\text{ MB}$.</li>
+                <li><strong>Total Memory Complexity:</strong> Each query or update visits at most &asymp; 2 log<sub>2</sub>(10<sup>9</sup>) &asymp; 60 nodes. For Q = 10<sup>5</sup> operations, at most 60 &times; 10<sup>5</sup> &asymp; 6 &times; 10<sup>6</sup> nodes are created, which fits in &lt; 50 MB.</li>
                 <li><strong>Deferred Lazy Tags:</strong> Lazy propagation works identically to the 4N recursive version: store the tag in <code>node.lazy</code> and push down only when descending.</li>
               </ul>
             </div>
@@ -9489,7 +9489,7 @@ Result: len(tails) = 3  (Optimal nesting: [2,3] -&gt; [5,4] -&gt; [6,7])</code><
             <div class="why-box" style="padding: 1.35rem;">
               <strong>Why it works: Bitwise 2's Complement Invariant</strong>
               <p style="line-height: 1.65; margin-bottom: 0.8rem;">
-                Invented by Peter Fenwick (1994). A Fenwick tree uses 1-based indexing. Every positive integer $x$ can be represented as a sum of powers of 2. The formula <code>lowbit(x) = x &amp; (-x)</code> isolates the lowest set 1-bit in binary representation because in 2's complement negation: <code>-x = ~x + 1</code>.
+                Invented by Peter Fenwick (1994). A Fenwick tree uses 1-based indexing. Every positive integer <em>x</em> can be represented as a sum of powers of 2. The formula <code>lowbit(x) = x &amp; (-x)</code> isolates the lowest set 1-bit in binary representation because in 2's complement negation: <code>-x = ~x + 1</code>.
               </p>
 
               <!-- PROPER HTML FENWICK LOWBIT BOX DIAGRAM -->
@@ -9534,9 +9534,9 @@ Result: len(tails) = 3  (Optimal nesting: [2,3] -&gt; [5,4] -&gt; [6,7])</code><
               </div>
 
               <ul style="line-height: 1.65; margin-top: 1rem;">
-                <li><strong>Update:</strong> To add $\Delta$ to element at index $x$, ascend the responsibility tree by adding lowbit: <code>idx += idx &amp; (-idx)</code>.</li>
-                <li><strong>Prefix Query:</strong> To sum elements in $[1, x]$, descend by stripping lowest set bits: <code>idx -= idx &amp; (-idx)</code>.</li>
-                <li><strong>Range Query $[L, R]$:</strong> By inclusion-exclusion, <code>query(R) - query(L - 1)</code> in $O(\log n)$.</li>
+                <li><strong>Update:</strong> To add &Delta; to element at index <em>x</em>, ascend the responsibility tree by adding lowbit: <code>idx += idx &amp; (-idx)</code>.</li>
+                <li><strong>Prefix Query:</strong> To sum elements in [1, x], descend by stripping lowest set bits: <code>idx -= idx &amp; (-idx)</code>.</li>
+                <li><strong>Range Query [L, R]:</strong> By inclusion-exclusion, <code>query(R) - query(L - 1)</code> in O(log n).</li>
               </ul>
             </div>
 
@@ -9610,8 +9610,8 @@ Result: len(tails) = 3  (Optimal nesting: [2,3] -&gt; [5,4] -&gt; [6,7])</code><
             <div class="why-box" style="padding: 1.35rem;">
               <strong>Why it works: Difference Array Coupling</strong>
               <p style="line-height: 1.65; margin-bottom: 0.8rem;">
-                Consider difference array $D[i] = A[i] - A[i - 1]$. Adding $\Delta$ to range $[l, r]$ alters only two differences: $D[l] \mathrel{+}= \Delta$ and $D[r + 1] \mathrel{-}= \Delta$.
-                The value at point $i$ is prefix sum $A[i] = \sum_{j=1}^i D[j] = 	ext{query}(i)$ in $O(\log n)$!
+                Consider difference array D[i] = A[i] &minus; A[i &minus; 1]. Adding &Delta; to range [l, r] alters only two differences: <code>D[l] += &Delta;</code> and <code>D[r + 1] -= &Delta;</code>.
+                The value at point <em>i</em> is prefix sum A[i] = &sum;<sub>j=1..i</sub> D[j] = <code>query(i)</code> in O(log n)!
               </p>
             </div>
 
@@ -9667,7 +9667,7 @@ Result: len(tails) = 3  (Optimal nesting: [2,3] -&gt; [5,4] -&gt; [6,7])</code><
             <div class="why-box" style="padding: 1.35rem;">
               <strong>Why it works: Mathematical Derivation via Difference Summation</strong>
               <p style="line-height: 1.65; margin-bottom: 0.8rem;">
-                Let $D[k] = A[k] - A[k-1]$ be the difference array. Then $A[j] = \sum_{{k=1}}^j D[k]$. The prefix sum up to index $i$ is:
+                Let D[k] = A[k] &minus; A[k &minus; 1] be the difference array. Then A[j] = &sum;<sub>k=1..j</sub> D[k]. The prefix sum up to index <em>i</em> is:
               </p>
               <div class="rq-math-box" style="background: #151515; border: 1px solid #333; border-radius: 6px; padding: 0.85rem; font-family: monospace; font-size: 0.82rem; line-height: 1.6; margin-bottom: 0.9rem;">
                 prefixSum(i) = &sum;<sub>j=1..i</sub> A[j]<br>
@@ -9819,8 +9819,8 @@ Result: len(tails) = 3  (Optimal nesting: [2,3] -&gt; [5,4] -&gt; [6,7])</code><
             <div class="why-box" style="padding: 1.35rem;">
               <strong>Why it works: Right-to-Left Frequency Sweeping</strong>
               <p style="line-height: 1.65;">
-                When input values can be negative or large (e.g., up to $10^9$), map them to compact ranks $[1, U]$ via <code>rankMap = {val: rank + 1 for rank, val in enumerate(sorted(set(nums)))}</code> in $O(n \log n)$.
-                Traversing from right to left, every element query <code>bit.query(currRank - 1)</code> counts all elements already inserted to its right with strictly smaller values in $O(\log n)$ time.
+                When input values can be negative or large (e.g., up to 10<sup>9</sup>), map them to compact ranks [1, U] via <code>rankMap = {val: rank + 1 for rank, val in enumerate(sorted(set(nums)))}</code> in O(n log n).
+                Traversing from right to left, every element query <code>bit.query(currRank - 1)</code> counts all elements already inserted to its right with strictly smaller values in O(log n) time.
               </p>
             </div>
 
@@ -9976,7 +9976,7 @@ Result: len(tails) = 3  (Optimal nesting: [2,3] -&gt; [5,4] -&gt; [6,7])</code><
             <div class="why-box" style="padding: 1.35rem;">
               <strong>Why it works: Square Root Block Partitioning</strong>
               <p style="line-height: 1.65; margin-bottom: 0.8rem;">
-                Divide an array of size $n$ into blocks of size $B = \lceil \sqrt{n} ceil$. The total number of blocks is $pprox \sqrt{n}$.
+                Divide an array of size <em>n</em> into blocks of size <code>B = &lceil;&radic;n&rceil;</code>. The total number of blocks is &asymp; &radic;n.
               </p>
 
               <!-- PROPER HTML SQRT CHUNK BLOCKS DIAGRAM -->
@@ -10050,7 +10050,7 @@ Result: len(tails) = 3  (Optimal nesting: [2,3] -&gt; [5,4] -&gt; [6,7])</code><
 
               <ul style="line-height: 1.65; margin-top: 1rem;">
                 <li><strong>O(1) Point Update:</strong> <code>blockIdx = idx // B; blocks[blockIdx] += val - nums[idx]; nums[idx] = val</code>. Only one block is affected.</li>
-                <li><strong>O(√n) Range Query:</strong> Sum partial left block ($\le B$ elements) + middle full blocks ($\le \sqrt{n}$ blocks) + partial right block ($\le B$ elements). Total work: $\le 3\sqrt{n} = O(\sqrt{n})$.</li>
+                <li><strong>O(√n) Range Query:</strong> Sum partial left block (&le; B elements) + middle full blocks (&le; &radic;n blocks) + partial right block (&le; B elements). Total work: &le; 3&radic;n = O(&radic;n).</li>
               </ul>
             </div>
 
@@ -10126,12 +10126,12 @@ Result: len(tails) = 3  (Optimal nesting: [2,3] -&gt; [5,4] -&gt; [6,7])</code><
             <div class="why-box" style="padding: 1.35rem;">
               <strong>Why it works: Partial Boundary Mutation + Full Block Deferred Tags</strong>
               <p style="line-height: 1.65; margin-bottom: 0.8rem;">
-                When an update spans multiple blocks, we divide the range $[L, R]$ into three phases:
+                When an update spans multiple blocks, we divide the range [L, R] into three phases:
               </p>
               <ul style="line-height: 1.65;">
-                <li><strong>1. Left Partial Block:</strong> Elements from $L$ to end of block $startBlock$. Add $\Delta$ directly to <code>nums[i]</code> and adjust <code>blockSums[startBlock] += &Delta;</code> in $O(\sqrt{n})$.</li>
-                <li><strong>2. Middle Full Blocks:</strong> Blocks strictly between $startBlock$ and $endBlock$. Apply deferred tag <code>blockLazy[b] += &Delta;</code> and update <code>blockSums[b] += &Delta; &times; blockSize</code> in <strong>$O(1)$ per block</strong>.</li>
-                <li><strong>3. Right Partial Block:</strong> Elements from start of block $endBlock$ to $R$. Add $\Delta$ directly to <code>nums[i]</code> and adjust <code>blockSums[endBlock] += &Delta;</code> in $O(\sqrt{n})$.</li>
+                <li><strong>1. Left Partial Block:</strong> Elements from <em>L</em> to end of block <em>startBlock</em>. Add &Delta; directly to <code>nums[i]</code> and adjust <code>blockSums[startBlock] += &Delta;</code> in O(&radic;n).</li>
+                <li><strong>2. Middle Full Blocks:</strong> Blocks strictly between <em>startBlock</em> and <em>endBlock</em>. Apply deferred tag <code>blockLazy[b] += &Delta;</code> and update <code>blockSums[b] += &Delta; &times; blockSize</code> in <strong>O(1) per block</strong>.</li>
+                <li><strong>3. Right Partial Block:</strong> Elements from start of block <em>endBlock</em> to <em>R</em>. Add &Delta; directly to <code>nums[i]</code> and adjust <code>blockSums[endBlock] += &Delta;</code> in O(&radic;n).</li>
               </ul>
 
               <!-- SQRT LAZY INTERACTION DIAGRAM -->
@@ -10143,15 +10143,15 @@ Result: len(tails) = 3  (Optimal nesting: [2,3] -&gt; [5,4] -&gt; [6,7])</code><
                 <div class="rq-trace-steps" style="margin-top: 0.8rem;">
                   <div class="rq-step-box step-head">
                     <span class="step-badge">Phase 1</span>
-                    <span>Left Partial: mutate <code>nums[L..end]</code> in $O(\sqrt{n})$</span>
+                    <span>Left Partial: mutate <code>nums[L..end]</code> in O(&radic;n)</span>
                   </div>
                   <div class="rq-step-box step-mid">
                     <span class="step-badge">Phase 2</span>
-                    <span>Middle Blocks: <code>blockLazy[b] += &Delta;</code> in $O(1)$ per block</span>
+                    <span>Middle Blocks: <code>blockLazy[b] += &Delta;</code> in O(1) per block</span>
                   </div>
                   <div class="rq-step-box step-tail">
                     <span class="step-badge">Phase 3</span>
-                    <span>Right Partial: mutate <code>nums[start..R]</code> in $O(\sqrt{n})$</span>
+                    <span>Right Partial: mutate <code>nums[start..R]</code> in O(&radic;n)</span>
                   </div>
                 </div>
               </div>
@@ -10300,8 +10300,8 @@ Result: len(tails) = 3  (Optimal nesting: [2,3] -&gt; [5,4] -&gt; [6,7])</code><
             <div class="why-box" style="padding: 1.35rem;">
               <strong>Why it works: Serpentine Parity Sorting Trick</strong>
               <p style="line-height: 1.65; margin-bottom: 0.8rem;">
-                If all $Q$ queries are known in advance, group queries by <code>q.left // B</code>, and sort <code>q.right</code> in alternating directions:
-                ascending on even blocks, descending on odd blocks. This eliminates pointer whip-back, bounding total window adjustments to $O((N + Q)\sqrt{N})$.
+                If all <em>Q</em> queries are known in advance, group queries by <code>q.left // B</code>, and sort <code>q.right</code> in alternating directions:
+                ascending on even blocks, descending on odd blocks. This eliminates pointer whip-back, bounding total window adjustments to O((N + Q)&radic;N).
               </p>
             </div>
 
