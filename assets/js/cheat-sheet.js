@@ -1326,6 +1326,37 @@
 
   initRangeQuerySimulator();
 
+  // Interactive Range Engine Decision Hub Pills
+  const initRangeDecisionHub = () => {
+    const pills = [...document.querySelectorAll(".rq-pill-btn")];
+    const cards = [...document.querySelectorAll(".rq-decision-card")];
+    if (!pills.length || !cards.length) return;
+
+    pills.forEach((pill) => {
+      pill.addEventListener("click", () => {
+        pills.forEach((p) => p.classList.remove("active"));
+        pill.classList.add("active");
+
+        const targetEngine = pill.getAttribute("data-engine");
+        cards.forEach((card) => {
+          const cardEngine = card.getAttribute("data-engine-id");
+          if (targetEngine === "all") {
+            card.classList.remove("card-dimmed", "card-highlighted");
+          } else if (cardEngine === targetEngine) {
+            card.classList.remove("card-dimmed");
+            card.classList.add("card-highlighted");
+          } else {
+            card.classList.remove("card-highlighted");
+            card.classList.add("card-dimmed");
+          }
+        });
+      });
+    });
+  };
+
+  initRangeDecisionHub();
+
+
   window.addEventListener("hashchange", handleHash);
   handleHash();
 })();
