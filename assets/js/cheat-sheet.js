@@ -211,7 +211,8 @@
       e.preventDefault();
       const href = link.getAttribute("href");
       if (!href) return;
-      showPage(href.slice(1), true);
+      const subTargetId = link.dataset.targetSub || null;
+      showPage(href.slice(1), true, subTargetId);
     });
   });
 

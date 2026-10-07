@@ -887,7 +887,7 @@
         </div>
       </div>
 
-            <!-- LEVEL 1 (Category 09): Range Queries & Trees -->
+                  <!-- LEVEL 1 (Category 09): Range Queries & Trees -->
       <div class="tree-node l1-node" data-topic="range-queries">
         <div class="tree-header l1-header">
           <button class="tree-toggle" type="button" aria-label="Toggle Range Queries & Trees">
@@ -937,6 +937,10 @@
               <a class="nav-item l3-link" href="#range-segment-tree-sub" data-target-sub="rq-segment-tree-lazy">
                 <span class="leaf-dot">•</span>
                 <span class="nav-title">Lazy Propagation Updates</span>
+              </a>
+              <a class="nav-item l3-link" href="#range-segment-tree-sub" data-target-sub="rq-segment-tree-dynamic">
+                <span class="leaf-dot">•</span>
+                <span class="nav-title">Pointer-Based Dynamic (10⁹)</span>
               </a>
             </div>
           </div>
@@ -7767,7 +7771,7 @@ Result: len(tails) = 3  (Optimal nesting: [2,3] -&gt; [5,4] -&gt; [6,7])</code><
         </section>
       </section>
 
-            <!-- ========================================== -->
+                  <!-- ========================================== -->
       <!-- TOPIC 09: RANGE QUERIES & TREES PAGES      -->
       <!-- ========================================== -->
 
@@ -7797,6 +7801,7 @@ Result: len(tails) = 3  (Optimal nesting: [2,3] -&gt; [5,4] -&gt; [6,7])</code><
             <button type="button" class="rq-pill-btn" data-engine="fenwick">Point Updates + Sum / XOR (Fastest / Shortest)</button>
             <button type="button" class="rq-pill-btn" data-engine="segtree-2n">Point Updates + Min / Max / GCD</button>
             <button type="button" class="rq-pill-btn" data-engine="segtree-lazy">Range Updates [L, R] += &Delta;</button>
+            <button type="button" class="rq-pill-btn" data-engine="dynamic">Massive Coordinates [0 .. 10⁹] (Dynamic Pointers)</button>
             <button type="button" class="rq-pill-btn" data-engine="sqrt">Heavy Frequencies / Offline Queries</button>
           </div>
 
@@ -7894,7 +7899,30 @@ Result: len(tails) = 3  (Optimal nesting: [2,3] -&gt; [5,4] -&gt; [6,7])</code><
               <a class="rq-dcard-link" href="#range-segment-tree-sub" data-target-sub="rq-segment-tree-lazy">View Lazy Code &rarr;</a>
             </div>
 
-            <!-- Card 5: SQRT Decomposition & Mo's Algorithm -->
+                        <!-- Card 5: Pointer-Based Dynamic (Implicit) Segment Tree -->
+            <div class="rq-decision-card" data-engine-id="dynamic">
+              <div class="rq-dcard-top">
+                <div class="rq-dcard-title">
+                  <span class="rq-dcard-icon">🌱</span>
+                  <h3>Pointer-Based Dynamic SegTree</h3>
+                </div>
+                <span class="rq-dcard-badge badge-universal">Massive Universe [0 .. 10⁹]</span>
+              </div>
+              <div class="rq-dcard-complexities">
+                <span class="c-chip c-fast">Build: O(1)</span>
+                <span class="c-chip c-fast">Query: O(log C)</span>
+                <span class="c-chip c-fast">Update: O(log C)</span>
+                <span class="c-chip c-fast">Space: O(Q log C)</span>
+              </div>
+              <ul class="rq-dcard-list">
+                <li><strong>Use when:</strong> Coordinate range is huge ($0 \le x \le 10^9$, e.g., timestamps or continuous intervals), but only $Q \le 10^5$ operations occur.</li>
+                <li><strong>Why 2N/4N fails here:</strong> Allocating a flat array of size $2 	imes 10^9$ requires $> 8	ext{ GB}$ RAM and causes Memory Limit Exceeded (MLE).</li>
+                <li><strong>Why it wins:</strong> Nodes are instantiated on-demand during <code>_pushDown()</code>. Uses only $pprox 20	ext{ MB}$ memory instead of 8 GB!</li>
+              </ul>
+              <a class="rq-dcard-link" href="#range-segment-tree-sub" data-target-sub="rq-segment-tree-dynamic">View Pointer Code &rarr;</a>
+            </div>
+
+            <!-- Card 6: SQRT Decomposition & Mo's Algorithm -->
             <div class="rq-decision-card" data-engine-id="sqrt">
               <div class="rq-dcard-top">
                 <div class="rq-dcard-title">
@@ -7994,6 +8022,16 @@ Result: len(tails) = 3  (Optimal nesting: [2,3] -&gt; [5,4] -&gt; [6,7])</code><
                     <td>O(4n)</td>
                     <td>Arbitrary monoids with lazy distribution</td>
                     <td>Universal range power: simultaneous range additions and range queries.</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Dynamic SegTree (Pointer)</strong></td>
+                    <td><span style="color: var(--easy); font-weight: bold;">O(1)</span></td>
+                    <td>O(log C)</td>
+                    <td>O(log C)</td>
+                    <td>O(log C)</td>
+                    <td><span style="color: var(--easy); font-weight: bold;">O(Q log C)</span></td>
+                    <td>Any monoid over continuous universe [0 .. 10⁹]</td>
+                    <td>Eliminates MLE on $10^9$ domains. Allocates nodes dynamically on-demand.</td>
                   </tr>
                 </tbody>
               </table>
@@ -8685,6 +8723,101 @@ Result: len(tails) = 3  (Optimal nesting: [2,3] -&gt; [5,4] -&gt; [6,7])</code><
                 </li>
               </ul>
 
+                            <!-- MATHEMATICAL PROOF & TOURNAMENT BRACKET BOX DIAGRAM -->
+              <div class="rq-bracket-container">
+                <div class="rq-tree-diagram-header">
+                  <span class="rq-diagram-badge">Mathematical Proof: Tournament Bracket Structure</span>
+                  <span class="rq-diagram-note">n Leaves (Array) + (n - 1) Non-Leaves (Matches) = Exactly 2n - 1 Active Nodes</span>
+                </div>
+
+                <div class="rq-bracket-math-summary">
+                  <strong>The Knockout Sports Tournament Analogy:</strong> Think of a single-elimination tournament with $n$ teams. Every single match eliminates exactly $1$ team. To crown $1$ champion at the root, exactly $n - 1$ matches must be played.
+                  <br>
+                  $$\text{Leaves (Elements)} = n \quad+\quad \text{Internal Parents (Matches)} = n - 1 \quad=\quad \mathbf{2n - 1 \text{ Total Active Nodes}}$$
+                </div>
+
+                <div class="rq-bracket-diagram">
+                  <!-- Root Match -->
+                  <div class="rq-tree-row">
+                    <div class="rq-node-box rq-node-root">
+                      <div class="rq-node-top">
+                        <span class="rq-badge-id">Node 1</span>
+                        <span class="rq-badge-range">Root Champion [0..3]</span>
+                      </div>
+                      <div class="rq-node-val">Final Winner Sum: 11</div>
+                      <div class="rq-node-formula">Match #1 (1 Root)</div>
+                    </div>
+                  </div>
+
+                  <!-- SVG branch connectors -->
+                  <svg class="rq-tree-svg-branches" viewBox="0 0 500 40" preserveAspectRatio="none">
+                    <line x1="250" y1="0" x2="140" y2="40" stroke="#ffa116" stroke-width="2" />
+                    <line x1="250" y1="0" x2="360" y2="40" stroke="#ffa116" stroke-width="2" />
+                  </svg>
+
+                  <!-- Semi-finals -->
+                  <div class="rq-tree-row rq-row-lvl1">
+                    <div class="rq-node-box rq-node-internal">
+                      <div class="rq-node-top">
+                        <span class="rq-badge-id">Node 2</span>
+                        <span class="rq-badge-range">Semi-Final [0..1]</span>
+                      </div>
+                      <div class="rq-node-val">Sub-Sum: 3</div>
+                      <div class="rq-node-formula">Match #2</div>
+                    </div>
+
+                    <div class="rq-node-box rq-node-internal">
+                      <div class="rq-node-top">
+                        <span class="rq-badge-id">Node 3</span>
+                        <span class="rq-badge-range">Semi-Final [2..3]</span>
+                      </div>
+                      <div class="rq-node-val">Sub-Sum: 8</div>
+                      <div class="rq-node-formula">Match #3</div>
+                    </div>
+                  </div>
+
+                  <!-- SVG branch connectors -->
+                  <svg class="rq-tree-svg-branches" viewBox="0 0 500 40" preserveAspectRatio="none">
+                    <line x1="140" y1="0" x2="70" y2="40" stroke="#2dd4bf" stroke-width="1.8" />
+                    <line x1="140" y1="0" x2="190" y2="40" stroke="#2dd4bf" stroke-width="1.8" />
+                    <line x1="360" y1="0" x2="310" y2="40" stroke="#2dd4bf" stroke-width="1.8" />
+                    <line x1="360" y1="0" x2="430" y2="40" stroke="#2dd4bf" stroke-width="1.8" />
+                  </svg>
+
+                  <!-- 4 Leaves (Original Array) -->
+                  <div class="rq-tree-row rq-row-lvl2">
+                    <div class="rq-node-box rq-node-leaf">
+                      <div class="rq-node-top">
+                        <span class="rq-badge-id">Index 4</span>
+                        <span class="rq-badge-range">Player #0</span>
+                      </div>
+                      <div class="rq-node-val">nums[0] = 2</div>
+                    </div>
+                    <div class="rq-node-box rq-node-leaf">
+                      <div class="rq-node-top">
+                        <span class="rq-badge-id">Index 5</span>
+                        <span class="rq-badge-range">Player #1</span>
+                      </div>
+                      <div class="rq-node-val">nums[1] = 1</div>
+                    </div>
+                    <div class="rq-node-box rq-node-leaf">
+                      <div class="rq-node-top">
+                        <span class="rq-badge-id">Index 6</span>
+                        <span class="rq-badge-range">Player #2</span>
+                      </div>
+                      <div class="rq-node-val">nums[2] = 5</div>
+                    </div>
+                    <div class="rq-node-box rq-node-leaf">
+                      <div class="rq-node-top">
+                        <span class="rq-badge-id">Index 7</span>
+                        <span class="rq-badge-range">Player #3</span>
+                      </div>
+                      <div class="rq-node-val">nums[3] = 3</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
               <!-- PROPER HTML 2N MEMORY GRID BOX DIAGRAM -->
               <div class="rq-memory-box-container">
                 <div class="rq-tree-diagram-header">
@@ -8954,6 +9087,246 @@ Result: len(tails) = 3  (Optimal nesting: [2,3] -&gt; [5,4] -&gt; [6,7])</code><
 <span class="line-text"></span>
 <span class="line-text">        <span class="var">leftSum</span> <span class="punct">=</span> <span class="param">self</span><span class="punct">.</span><span class="var">queryRange</span><span class="punct">(</span><span class="var">leftNodeIdx</span><span class="punct">,</span> <span class="param">left</span><span class="punct">,</span> <span class="var">mid</span><span class="punct">,</span> <span class="param">qLeft</span><span class="punct">,</span> <span class="param">qRight</span><span class="punct">)</span></span>
 <span class="line-text">        <span class="var">rightSum</span> <span class="punct">=</span> <span class="param">self</span><span class="punct">.</span><span class="var">queryRange</span><span class="punct">(</span><span class="var">rightNodeIdx</span><span class="punct">,</span> <span class="var">mid</span> <span class="punct">+</span> <span class="num">1</span><span class="punct">,</span> <span class="param">right</span><span class="punct">,</span> <span class="param">qLeft</span><span class="punct">,</span> <span class="param">qRight</span><span class="punct">)</span></span>
+<span class="line-text"></span>
+<span class="line-text">        <span class="flow">return</span> <span class="var">leftSum</span> <span class="punct">+</span> <span class="var">rightSum</span></span></code></pre>
+            </div>
+          </article>
+
+                    <!-- Pattern Card 5: Pointer-Based Dynamic (Implicit) Segment Tree -->
+          <article class="pattern-card" id="rq-segment-tree-dynamic">
+            <div class="pattern-card-head">
+              <h3>Pointer-Based Dynamic (Implicit) Segment Tree (Universe [0 .. 10⁹])</h3>
+            </div>
+            <p class="use-when"><strong>Use when:</strong> The coordinate range is massive ($0 \le x \le 10^9$, such as timestamps or geometric intervals in LeetCode 715 <em>Range Module</em>, LeetCode 732 <em>My Calendar III</em>, LeetCode 699 <em>Falling Squares</em>), but only $Q \le 10^5$ operations are performed. Allocating a static $2N$ or $4N$ array requires &gt; 8 GB of RAM and triggers Memory Limit Exceeded (MLE).</p>
+
+            <div class="why-box" style="padding: 1.35rem;">
+              <strong>Why it works: Lazy On-Demand Node Allocation</strong>
+              <p style="line-height: 1.65; margin-bottom: 0.8rem;">
+                Instead of pre-allocating an entire flat array upfront, we start with only a single root node: <code>root = SegmentTreeNode(0, 10**9)</code>.
+                As updates and queries traverse down the tree, <code>_pushDown()</code> spawns <code>node.left</code> and <code>node.right</code> dynamically only along the active paths.
+              </p>
+
+              <!-- DYNAMIC SEGMENT TREE BOX DIAGRAM -->
+              <div class="rq-dynamic-tree-container">
+                <div class="rq-tree-diagram-header">
+                  <span class="rq-diagram-badge">Dynamic Node Allocation on 10⁹ Coordinate Space</span>
+                  <span class="rq-diagram-note">Flat Array: 8 GB (MLE Crash) vs Pointer Tree: ~25 MB (Allocated On-Demand)</span>
+                </div>
+
+                <div class="rq-dyn-tree-body">
+                  <!-- Root -->
+                  <div class="rq-tree-row">
+                    <div class="rq-node-box rq-node-root">
+                      <div class="rq-node-top">
+                        <span class="rq-badge-id">Root Node</span>
+                        <span class="rq-badge-range">[0 .. 1,000,000,000]</span>
+                      </div>
+                      <div class="rq-node-val">Active Sum: 15</div>
+                      <div class="rq-node-status status-allocated">● Allocated at Start</div>
+                    </div>
+                  </div>
+
+                  <!-- SVG branch connectors -->
+                  <svg class="rq-tree-svg-branches" viewBox="0 0 500 40" preserveAspectRatio="none">
+                    <line x1="250" y1="0" x2="140" y2="40" stroke="#ffa116" stroke-width="2" />
+                    <line x1="250" y1="0" x2="360" y2="40" stroke="#555" stroke-width="2" stroke-dasharray="4,4" />
+                  </svg>
+
+                  <!-- Level 1 -->
+                  <div class="rq-tree-row rq-row-lvl1">
+                    <div class="rq-node-box rq-node-internal">
+                      <div class="rq-node-top">
+                        <span class="rq-badge-id">node.left</span>
+                        <span class="rq-badge-range">[0 .. 500,000,000]</span>
+                      </div>
+                      <div class="rq-node-val">Touched by [100 .. 200]</div>
+                      <div class="rq-node-status status-allocated">● Spawned by _pushDown()</div>
+                    </div>
+
+                    <div class="rq-node-box rq-node-virtual">
+                      <div class="rq-node-top">
+                        <span class="rq-badge-id">node.right</span>
+                        <span class="rq-badge-range">[500,000,001 .. 10⁹]</span>
+                      </div>
+                      <div class="rq-node-val" style="color: var(--faint);">None (0 Bytes)</div>
+                      <div class="rq-node-status status-unallocated">○ Not Yet Visited (0 Memory)</div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="rq-dyn-metric-row">
+                  <div class="rq-dyn-chip"><span class="dyn-lbl">Tree Depth:</span> <strong>30 Levels (log₂ 10⁹)</strong></div>
+                  <div class="rq-dyn-chip"><span class="dyn-lbl">Nodes per Query:</span> <strong>At most 60 nodes</strong></div>
+                  <div class="rq-dyn-chip"><span class="dyn-lbl">Memory Savings:</span> <strong style="color: var(--easy);">99.7% Memory Saved</strong></div>
+                </div>
+              </div>
+
+              <ul style="line-height: 1.65; margin-top: 1rem;">
+                <li><strong>Dynamic Instantiation:</strong> Child pointers are initially <code>None</code>. Only when an update or query splits into that half do we instantiate <code>SegmentTreeNode(leftBound, mid)</code>.</li>
+                <li><strong>Total Memory Complexity:</strong> Each query or update visits at most $\approx 2 \log_2(10^9) \approx 60$ nodes. For $Q = 10^5$ operations, at most $60 \times 10^5 \approx 6 \times 10^6$ nodes are created, which fits in $< 50\text{ MB}$.</li>
+                <li><strong>Deferred Lazy Tags:</strong> Lazy propagation works identically to the 4N recursive version: store the tag in <code>node.lazy</code> and push down only when descending.</li>
+              </ul>
+            </div>
+
+            <div class="mini-code-wrap">
+              <button class="copy-button mini-copy" type="button" data-code="rq-segment-tree-dynamic-code">Copy</button>
+              <pre class="mini-code" id="rq-segment-tree-dynamic-code"><code><span class="line-text"><span class="flow">from</span> <span class="var">typing</span> <span class="flow">import</span> <span class="type">Optional</span>
+</span>
+<span class="line-text"></span>
+<span class="line-text"><span class="kw-def">class</span> <span class="type">SegmentTreeNode</span><span class="punct">:</span>
+</span>
+<span class="line-text">    <span class="str">&quot;&quot;&quot;Dynamic pointer node maintaining interval [leftBound, rightBound].&quot;&quot;&quot;</span>
+</span>
+<span class="line-text">    <span class="kw-def">def</span> <span class="fn">__init__</span><span class="punct">(</span><span class="param">self</span><span class="punct">,</span> <span class="var">leftBound</span><span class="punct">:</span> <span class="type">int</span><span class="punct">,</span> <span class="var">rightBound</span><span class="punct">:</span> <span class="type">int</span><span class="punct">)</span><span class="punct">:</span>
+</span>
+<span class="line-text">        <span class="param">self</span><span class="punct">.</span><span class="var">leftBound</span><span class="punct">,</span> <span class="param">self</span><span class="punct">.</span><span class="var">rightBound</span> <span class="punct">=</span> <span class="var">leftBound</span><span class="punct">,</span> <span class="var">rightBound</span>
+</span>
+<span class="line-text">        <span class="param">self</span><span class="punct">.</span><span class="var">val</span> <span class="punct">=</span> <span class="num">0</span>
+</span>
+<span class="line-text">        <span class="param">self</span><span class="punct">.</span><span class="var">lazy</span> <span class="punct">=</span> <span class="num">0</span>
+</span>
+<span class="line-text">        <span class="param">self</span><span class="punct">.</span><span class="var">hasLazy</span> <span class="punct">=</span> <span class="kw-def">False</span>
+</span>
+<span class="line-text">        <span class="param">self</span><span class="punct">.</span><span class="var">left</span><span class="punct">:</span> <span class="type">Optional</span><span class="punct">[</span><span class="var">SegmentTreeNode</span><span class="punct">]</span> <span class="punct">=</span> <span class="kw-def">None</span>
+</span>
+<span class="line-text">        <span class="param">self</span><span class="punct">.</span><span class="var">right</span><span class="punct">:</span> <span class="type">Optional</span><span class="punct">[</span><span class="var">SegmentTreeNode</span><span class="punct">]</span> <span class="punct">=</span> <span class="kw-def">None</span>
+</span>
+<span class="line-text"></span>
+<span class="line-text"><span class="kw-def">class</span> <span class="type">DynamicSegmentTree</span><span class="punct">:</span>
+</span>
+<span class="line-text">    <span class="str">&quot;&quot;&quot;Pointer-Based Dynamic (Implicit) Segment Tree with Lazy Propagation.
+
+    Dynamically allocates nodes on-demand. Enables coordinate universes up to
+    10^9 without Memory Limit Exceeded (allocates at most O(Q log(MAX)) nodes).
+
+    Tree Invariant &amp; Dynamic Expansion Trace:
+    Min Coordinate: 0  -----------------------------&gt; Max Coordinate: 10^9
+    Root: [0 .. 10^9]  (Allocated on start)
+      ├── left:  [0 .. 5*10^8]       (Spawned dynamically on-demand during update)
+      └── right: [5*10^8 + 1 .. 10^9] (Unallocated: None until accessed!)
+    &quot;&quot;&quot;</span></span>
+<span class="line-text"></span>
+<span class="line-text">    Dynamically allocates nodes on-demand. Enables coordinate universes up to</span>
+<span class="line-text">    10^9 without Memory Limit Exceeded (allocates at most O(Q log(MAX)) nodes).</span>
+<span class="line-text"></span>
+<span class="line-text">    Tree Invariant &amp; Dynamic Expansion Trace:</span>
+<span class="line-text">    Min Coordinate: 0  -----------------------------&gt; Max Coordinate: 10^9</span>
+<span class="line-text">    Root: [0 .. 10^9]  (Allocated on start)</span>
+<span class="line-text">      ├── left:  [0 .. 5*10^8]       (Spawned dynamically on-demand during update)</span>
+<span class="line-text">      └── right: [5*10^8 + 1 .. 10^9] (Unallocated: None until accessed!)</span>
+<span class="line-text">
+</span>
+<span class="line-text">    <span class="kw-def">def</span> <span class="fn">__init__</span><span class="punct">(</span><span class="param">self</span><span class="punct">,</span> <span class="var">minCoord</span><span class="punct">:</span> <span class="type">int</span> <span class="punct">=</span> <span class="num">0</span><span class="punct">,</span> <span class="var">maxCoord</span><span class="punct">:</span> <span class="type">int</span> <span class="punct">=</span> <span class="num">10</span><span class="punct">**</span><span class="num">9</span><span class="punct">)</span><span class="punct">:</span>
+</span>
+<span class="line-text">        <span class="param">self</span><span class="punct">.</span><span class="var">root</span> <span class="punct">=</span> <span class="fn">SegmentTreeNode</span><span class="punct">(</span><span class="var">minCoord</span><span class="punct">,</span> <span class="var">maxCoord</span><span class="punct">)</span>
+</span>
+<span class="line-text"></span>
+<span class="line-text">    <span class="kw-def">def</span> <span class="fn">_pushDown</span><span class="punct">(</span><span class="param">self</span><span class="punct">,</span> <span class="var">node</span><span class="punct">:</span> <span class="var">SegmentTreeNode</span><span class="punct">)</span> <span class="punct">-&gt;</span> <span class="kw-def">None</span><span class="punct">:</span>
+</span>
+<span class="line-text">        <span class="flow">if</span> <span class="var">node</span><span class="punct">.</span><span class="var">leftBound</span> <span class="punct">==</span> <span class="var">node</span><span class="punct">.</span><span class="var">rightBound</span><span class="punct">:</span>
+</span>
+<span class="line-text">            <span class="flow">return</span>
+</span>
+<span class="line-text"></span>
+<span class="line-text">        <span class="var">mid</span> <span class="punct">=</span> <span class="punct">(</span><span class="var">node</span><span class="punct">.</span><span class="var">leftBound</span> <span class="punct">+</span> <span class="var">node</span><span class="punct">.</span><span class="var">rightBound</span><span class="punct">)</span> <span class="punct">//</span> <span class="num">2</span>
+</span>
+<span class="line-text"></span>
+<span class="line-text">        <span class="comment"># Dynamically spawn child nodes on-demand (O(1) memory per spawn)</span>
+</span>
+<span class="line-text">        <span class="flow">if</span> <span class="flow">not</span> <span class="var">node</span><span class="punct">.</span><span class="var">left</span><span class="punct">:</span>
+</span>
+<span class="line-text">            <span class="var">node</span><span class="punct">.</span><span class="var">left</span> <span class="punct">=</span> <span class="fn">SegmentTreeNode</span><span class="punct">(</span><span class="var">node</span><span class="punct">.</span><span class="var">leftBound</span><span class="punct">,</span> <span class="var">mid</span><span class="punct">)</span>
+</span>
+<span class="line-text">        <span class="flow">if</span> <span class="flow">not</span> <span class="var">node</span><span class="punct">.</span><span class="var">right</span><span class="punct">:</span>
+</span>
+<span class="line-text">            <span class="var">node</span><span class="punct">.</span><span class="var">right</span> <span class="punct">=</span> <span class="fn">SegmentTreeNode</span><span class="punct">(</span><span class="var">mid</span> <span class="punct">+</span> <span class="num">1</span><span class="punct">,</span> <span class="var">node</span><span class="punct">.</span><span class="var">rightBound</span><span class="punct">)</span>
+</span>
+<span class="line-text"></span>
+<span class="line-text">        <span class="flow">if</span> <span class="var">node</span><span class="punct">.</span><span class="var">hasLazy</span><span class="punct">:</span>
+</span>
+<span class="line-text">            <span class="comment"># Propagate deferred delta to left child</span>
+</span>
+<span class="line-text">            <span class="var">node</span><span class="punct">.</span><span class="var">left</span><span class="punct">.</span><span class="var">val</span> <span class="punct">+=</span> <span class="punct">(</span><span class="var">node</span><span class="punct">.</span><span class="var">left</span><span class="punct">.</span><span class="var">rightBound</span> <span class="punct">-</span> <span class="var">node</span><span class="punct">.</span><span class="var">left</span><span class="punct">.</span><span class="var">leftBound</span> <span class="punct">+</span> <span class="num">1</span><span class="punct">)</span> <span class="punct">*</span> <span class="var">node</span><span class="punct">.</span><span class="var">lazy</span>
+</span>
+<span class="line-text">            <span class="var">node</span><span class="punct">.</span><span class="var">left</span><span class="punct">.</span><span class="var">lazy</span> <span class="punct">+=</span> <span class="var">node</span><span class="punct">.</span><span class="var">lazy</span>
+</span>
+<span class="line-text">            <span class="var">node</span><span class="punct">.</span><span class="var">left</span><span class="punct">.</span><span class="var">hasLazy</span> <span class="punct">=</span> <span class="kw-def">True</span>
+</span>
+<span class="line-text"></span>
+<span class="line-text">            <span class="comment"># Propagate deferred delta to right child</span>
+</span>
+<span class="line-text">            <span class="var">node</span><span class="punct">.</span><span class="var">right</span><span class="punct">.</span><span class="var">val</span> <span class="punct">+=</span> <span class="punct">(</span><span class="var">node</span><span class="punct">.</span><span class="var">right</span><span class="punct">.</span><span class="var">rightBound</span> <span class="punct">-</span> <span class="var">node</span><span class="punct">.</span><span class="var">right</span><span class="punct">.</span><span class="var">leftBound</span> <span class="punct">+</span> <span class="num">1</span><span class="punct">)</span> <span class="punct">*</span> <span class="var">node</span><span class="punct">.</span><span class="var">lazy</span>
+</span>
+<span class="line-text">            <span class="var">node</span><span class="punct">.</span><span class="var">right</span><span class="punct">.</span><span class="var">lazy</span> <span class="punct">+=</span> <span class="var">node</span><span class="punct">.</span><span class="var">lazy</span>
+</span>
+<span class="line-text">            <span class="var">node</span><span class="punct">.</span><span class="var">right</span><span class="punct">.</span><span class="var">hasLazy</span> <span class="punct">=</span> <span class="kw-def">True</span>
+</span>
+<span class="line-text"></span>
+<span class="line-text">            <span class="comment"># Clear parent lazy tag</span>
+</span>
+<span class="line-text">            <span class="var">node</span><span class="punct">.</span><span class="var">lazy</span> <span class="punct">=</span> <span class="num">0</span>
+</span>
+<span class="line-text">            <span class="var">node</span><span class="punct">.</span><span class="var">hasLazy</span> <span class="punct">=</span> <span class="kw-def">False</span>
+</span>
+<span class="line-text"></span>
+<span class="line-text">    <span class="kw-def">def</span> <span class="fn">updateRange</span><span class="punct">(</span><span class="param">self</span><span class="punct">,</span> <span class="var">node</span><span class="punct">:</span> <span class="var">SegmentTreeNode</span><span class="punct">,</span> <span class="var">qLeft</span><span class="punct">:</span> <span class="type">int</span><span class="punct">,</span> <span class="var">qRight</span><span class="punct">:</span> <span class="type">int</span><span class="punct">,</span> <span class="var">delta</span><span class="punct">:</span> <span class="type">int</span><span class="punct">)</span> <span class="punct">-&gt;</span> <span class="kw-def">None</span><span class="punct">:</span>
+</span>
+<span class="line-text">        <span class="str">&quot;&quot;&quot;Adds delta to every element in contiguous range [qLeft, qRight].&quot;&quot;&quot;</span>
+</span>
+<span class="line-text">        <span class="comment"># Disjoint range: completely outside</span>
+</span>
+<span class="line-text">        <span class="flow">if</span> <span class="var">qRight</span> <span class="punct">&lt;</span> <span class="var">node</span><span class="punct">.</span><span class="var">leftBound</span> <span class="flow">or</span> <span class="var">qLeft</span> <span class="punct">&gt;</span> <span class="var">node</span><span class="punct">.</span><span class="var">rightBound</span><span class="punct">:</span>
+</span>
+<span class="line-text">            <span class="flow">return</span>
+</span>
+<span class="line-text"></span>
+<span class="line-text">        <span class="comment"># Complete overlap: current segment fully enclosed inside query window</span>
+</span>
+<span class="line-text">        <span class="flow">if</span> <span class="var">qLeft</span> <span class="punct">&lt;=</span> <span class="var">node</span><span class="punct">.</span><span class="var">leftBound</span> <span class="flow">and</span> <span class="var">node</span><span class="punct">.</span><span class="var">rightBound</span> <span class="punct">&lt;=</span> <span class="var">qRight</span><span class="punct">:</span>
+</span>
+<span class="line-text">            <span class="var">node</span><span class="punct">.</span><span class="var">val</span> <span class="punct">+=</span> <span class="punct">(</span><span class="var">node</span><span class="punct">.</span><span class="var">rightBound</span> <span class="punct">-</span> <span class="var">node</span><span class="punct">.</span><span class="var">leftBound</span> <span class="punct">+</span> <span class="num">1</span><span class="punct">)</span> <span class="punct">*</span> <span class="var">delta</span>
+</span>
+<span class="line-text">            <span class="var">node</span><span class="punct">.</span><span class="var">lazy</span> <span class="punct">+=</span> <span class="var">delta</span>
+</span>
+<span class="line-text">            <span class="var">node</span><span class="punct">.</span><span class="var">hasLazy</span> <span class="punct">=</span> <span class="kw-def">True</span>
+</span>
+<span class="line-text">            <span class="flow">return</span>
+</span>
+<span class="line-text"></span>
+<span class="line-text">        <span class="comment"># Partial overlap: spawn children and descend</span>
+</span>
+<span class="line-text">        <span class="param">self</span><span class="punct">.</span><span class="fn">_pushDown</span><span class="punct">(</span><span class="var">node</span><span class="punct">)</span>
+</span>
+<span class="line-text">        <span class="param">self</span><span class="punct">.</span><span class="fn">updateRange</span><span class="punct">(</span><span class="var">node</span><span class="punct">.</span><span class="var">left</span><span class="punct">,</span> <span class="var">qLeft</span><span class="punct">,</span> <span class="var">qRight</span><span class="punct">,</span> <span class="var">delta</span><span class="punct">)</span>
+</span>
+<span class="line-text">        <span class="param">self</span><span class="punct">.</span><span class="fn">updateRange</span><span class="punct">(</span><span class="var">node</span><span class="punct">.</span><span class="var">right</span><span class="punct">,</span> <span class="var">qLeft</span><span class="punct">,</span> <span class="var">qRight</span><span class="punct">,</span> <span class="var">delta</span><span class="punct">)</span>
+</span>
+<span class="line-text"></span>
+<span class="line-text">        <span class="comment"># Pull updated sum from children</span>
+</span>
+<span class="line-text">        <span class="var">node</span><span class="punct">.</span><span class="var">val</span> <span class="punct">=</span> <span class="punct">(</span><span class="var">node</span><span class="punct">.</span><span class="var">left</span><span class="punct">.</span><span class="var">val</span> <span class="flow">if</span> <span class="var">node</span><span class="punct">.</span><span class="var">left</span> <span class="flow">else</span> <span class="num">0</span><span class="punct">)</span> <span class="punct">+</span> <span class="punct">(</span><span class="var">node</span><span class="punct">.</span><span class="var">right</span><span class="punct">.</span><span class="var">val</span> <span class="flow">if</span> <span class="var">node</span><span class="punct">.</span><span class="var">right</span> <span class="flow">else</span> <span class="num">0</span><span class="punct">)</span>
+</span>
+<span class="line-text"></span>
+<span class="line-text">    <span class="kw-def">def</span> <span class="fn">queryRange</span><span class="punct">(</span><span class="param">self</span><span class="punct">,</span> <span class="var">node</span><span class="punct">:</span> <span class="var">SegmentTreeNode</span><span class="punct">,</span> <span class="var">qLeft</span><span class="punct">:</span> <span class="type">int</span><span class="punct">,</span> <span class="var">qRight</span><span class="punct">:</span> <span class="type">int</span><span class="punct">)</span> <span class="punct">-&gt;</span> <span class="type">int</span><span class="punct">:</span>
+</span>
+<span class="line-text">        <span class="str">&quot;&quot;&quot;Returns the sum of all elements in range [qLeft, qRight].&quot;&quot;&quot;</span>
+</span>
+<span class="line-text">        <span class="flow">if</span> <span class="flow">not</span> <span class="var">node</span> <span class="flow">or</span> <span class="var">qRight</span> <span class="punct">&lt;</span> <span class="var">node</span><span class="punct">.</span><span class="var">leftBound</span> <span class="flow">or</span> <span class="var">qLeft</span> <span class="punct">&gt;</span> <span class="var">node</span><span class="punct">.</span><span class="var">rightBound</span><span class="punct">:</span>
+</span>
+<span class="line-text">            <span class="flow">return</span> <span class="num">0</span>
+</span>
+<span class="line-text"></span>
+<span class="line-text">        <span class="flow">if</span> <span class="var">qLeft</span> <span class="punct">&lt;=</span> <span class="var">node</span><span class="punct">.</span><span class="var">leftBound</span> <span class="flow">and</span> <span class="var">node</span><span class="punct">.</span><span class="var">rightBound</span> <span class="punct">&lt;=</span> <span class="var">qRight</span><span class="punct">:</span>
+</span>
+<span class="line-text">            <span class="flow">return</span> <span class="var">node</span><span class="punct">.</span><span class="var">val</span>
+</span>
+<span class="line-text"></span>
+<span class="line-text">        <span class="param">self</span><span class="punct">.</span><span class="fn">_pushDown</span><span class="punct">(</span><span class="var">node</span><span class="punct">)</span>
+</span>
+<span class="line-text">        <span class="var">leftSum</span> <span class="punct">=</span> <span class="param">self</span><span class="punct">.</span><span class="fn">queryRange</span><span class="punct">(</span><span class="var">node</span><span class="punct">.</span><span class="var">left</span><span class="punct">,</span> <span class="var">qLeft</span><span class="punct">,</span> <span class="var">qRight</span><span class="punct">)</span>
+</span>
+<span class="line-text">        <span class="var">rightSum</span> <span class="punct">=</span> <span class="param">self</span><span class="punct">.</span><span class="fn">queryRange</span><span class="punct">(</span><span class="var">node</span><span class="punct">.</span><span class="var">right</span><span class="punct">,</span> <span class="var">qLeft</span><span class="punct">,</span> <span class="var">qRight</span><span class="punct">)</span>
+</span>
 <span class="line-text"></span>
 <span class="line-text">        <span class="flow">return</span> <span class="var">leftSum</span> <span class="punct">+</span> <span class="var">rightSum</span></span></code></pre>
             </div>
@@ -9636,7 +10009,7 @@ ceil$. The total number of blocks is $pprox \sqrt{n}$.
                 <span class="problem-tag">Segment Tree / Fenwick BIT</span>
                 <span class="badge-diff diff-medium">Medium</span>
                 <span class="actual-diff">Actual: <span class="diff-num">3.5/5</span></span>
-                <a class="pattern-ref-link" href="#range-segment-tree-sub">View Pattern →</a>
+                <a class="pattern-ref-link" href="#range-segment-tree-sub" data-target-sub="rq-segment-tree-dynamic">View Dynamic SegTree →</a>
               </div>
             </li>
             <li>
@@ -9658,7 +10031,7 @@ ceil$. The total number of blocks is $pprox \sqrt{n}$.
                 <span class="problem-tag">Coordinate Compression + Range Max</span>
                 <span class="badge-diff diff-hard">Hard</span>
                 <span class="actual-diff">Actual: <span class="diff-num">4/5</span></span>
-                <a class="pattern-ref-link" href="#range-segment-tree-sub">View Pattern →</a>
+                <a class="pattern-ref-link" href="#range-segment-tree-sub" data-target-sub="rq-segment-tree-dynamic">View Dynamic SegTree →</a>
               </div>
             </li>
             <li>
