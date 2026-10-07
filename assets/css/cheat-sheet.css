@@ -3521,3 +3521,96 @@ h1 {
 .dyn-lbl {
   color: var(--muted);
 }
+
+
+/* ========================================================================= */
+/* RANGE QUERIES TAXONOMY BANNERS & DUAL-BIT STYLES                          */
+/* ========================================================================= */
+
+.rq-taxonomy-banner {
+  background: #181818;
+  border: 1px solid #2e2e2e;
+  border-radius: 8px;
+  padding: 1.25rem;
+  margin-bottom: 1.8rem;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+}
+
+.rq-tax-head {
+  margin-bottom: 1rem;
+}
+
+.rq-tax-badge {
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--orange);
+  letter-spacing: 0.05em;
+  display: inline-block;
+  margin-bottom: 0.25rem;
+}
+
+.rq-tax-head h3 {
+  font-size: 1.05rem;
+  color: #fff;
+  margin: 0;
+}
+
+.rq-tax-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 0.95rem;
+}
+
+.rq-tax-card {
+  background: #1f1f1f;
+  border: 1px solid #363636;
+  border-radius: 6px;
+  padding: 0.95rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  transition: all 0.2s ease;
+}
+
+.rq-tax-card:hover {
+  border-color: var(--orange);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+}
+
+.tax-tag {
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--cyan);
+}
+
+.rq-tax-card h4 {
+  font-size: 0.88rem;
+  color: #fff;
+  margin: 0;
+}
+
+.rq-tax-card p {
+  font-size: 0.75rem;
+  color: var(--muted);
+  line-height: 1.5;
+  margin: 0;
+  flex-grow: 1;
+}
+
+.tax-link {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--orange);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  margin-top: 0.35rem;
+}
+
+.tax-link:hover {
+  text-decoration: underline;
+}

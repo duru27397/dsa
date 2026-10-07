@@ -887,7 +887,7 @@
         </div>
       </div>
 
-                  <!-- LEVEL 1 (Category 09): Range Queries & Trees -->
+                        <!-- LEVEL 1 (Category 09): Range Queries & Trees -->
       <div class="tree-node l1-node" data-topic="range-queries">
         <div class="tree-header l1-header">
           <button class="tree-toggle" type="button" aria-label="Toggle Range Queries & Trees">
@@ -963,11 +963,15 @@
               </a>
               <a class="nav-item l3-link" href="#range-fenwick-tree-sub" data-target-sub="rq-fenwick-range-diff">
                 <span class="leaf-dot">•</span>
-                <span class="nav-title">Range Update via Difference BIT</span>
+                <span class="nav-title">Range Update via Diff BIT</span>
+              </a>
+              <a class="nav-item l3-link" href="#range-fenwick-tree-sub" data-target-sub="rq-fenwick-two-bit">
+                <span class="leaf-dot">•</span>
+                <span class="nav-title">Range Update + Query (2 BITs)</span>
               </a>
               <a class="nav-item l3-link" href="#range-fenwick-tree-sub" data-target-sub="rq-fenwick-inversions">
                 <span class="leaf-dot">•</span>
-                <span class="nav-title">Frequency BIT &amp; Inversions</span>
+                <span class="nav-title">Frequency BIT &amp; Binary Lifting</span>
               </a>
             </div>
           </div>
@@ -987,6 +991,10 @@
               <a class="nav-item l3-link" href="#range-sqrt-decomp-sub" data-target-sub="rq-sqrt-blocks">
                 <span class="leaf-dot">•</span>
                 <span class="nav-title">Block Decomposition (Sum &amp; Min)</span>
+              </a>
+              <a class="nav-item l3-link" href="#range-sqrt-decomp-sub" data-target-sub="rq-sqrt-range-lazy">
+                <span class="leaf-dot">•</span>
+                <span class="nav-title">Range Updates &amp; Lazy Block Tags</span>
               </a>
               <a class="nav-item l3-link" href="#range-sqrt-decomp-sub" data-target-sub="rq-mos-algorithm">
                 <span class="leaf-dot">•</span>
@@ -7771,7 +7779,7 @@ Result: len(tails) = 3  (Optimal nesting: [2,3] -&gt; [5,4] -&gt; [6,7])</code><
         </section>
       </section>
 
-                  <!-- ========================================== -->
+                        <!-- ========================================== -->
       <!-- TOPIC 09: RANGE QUERIES & TREES PAGES      -->
       <!-- ========================================== -->
 
@@ -8249,6 +8257,40 @@ Result: len(tails) = 3  (Optimal nesting: [2,3] -&gt; [5,4] -&gt; [6,7])</code><
           <h1><span>🌴</span> Segment Trees &amp; Lazy Propagation</h1>
           <p class="topic-summary" style="max-width: 860px; line-height: 1.65; font-size: 0.94rem;">Deconstruct continuous 1D arrays into a balanced binary tree of dyadic intervals. Execute point updates, range aggregations, and deferred lazy propagation in guaranteed O(log n) time.</p>
         </header>
+
+                <!-- SEGMENT TREE TEMPLATE SPECTRUM BANNER -->
+        <div class="rq-taxonomy-banner">
+          <div class="rq-tax-head">
+            <span class="rq-tax-badge">Segment Tree Template Taxonomy</span>
+            <h3>The 4 Segment Tree Templates: Spectrum &amp; Decision Flow</h3>
+          </div>
+          <div class="rq-tax-grid">
+            <div class="rq-tax-card">
+              <span class="tax-tag">Type 1 · Contest Speed</span>
+              <h4>Iterative 2N "Short Code"</h4>
+              <p>Flat 2N contiguous array. <strong>Optimal for:</strong> Point updates + Range queries on any monoid (Min, Max, GCD, Sum). Zero recursion overhead.</p>
+              <a class="tax-link" href="#range-segment-tree-sub" data-target-sub="rq-segment-tree-iterative">Go to 2N Iterative &darr;</a>
+            </div>
+            <div class="rq-tax-card">
+              <span class="tax-tag">Type 2 · Interview Standard</span>
+              <h4>1-Indexed (N + 1) Recursive</h4>
+              <p>Root at 1, left child <code>2*i</code>, right child <code>2*i+1</code>. <strong>Optimal for:</strong> Standard interview divide-and-conquer implementation with clean math.</p>
+              <a class="tax-link" href="#range-segment-tree-sub" data-target-sub="rq-segment-tree-n1">Go to N+1 Template &darr;</a>
+            </div>
+            <div class="rq-tax-card">
+              <span class="tax-tag">Type 3 · Range Updates</span>
+              <h4>4(N + 1) Lazy Propagation</h4>
+              <p>Maintains deferred <code>lazy[node]</code> tags. <strong>Optimal for:</strong> Adding &Delta; or setting values over contiguous range [L, R] in O(log n).</p>
+              <a class="tax-link" href="#range-segment-tree-sub" data-target-sub="rq-segment-tree-lazy">Go to Lazy Propagation &darr;</a>
+            </div>
+            <div class="rq-tax-card">
+              <span class="tax-tag">Type 4 · Infinite Domain</span>
+              <h4>Pointer Dynamic (10⁹)</h4>
+              <p>Allocates <code>SegmentTreeNode</code> on-demand during <code>pushDown</code>. <strong>Optimal for:</strong> Coordinates up to 10⁹ (LC 715), saving 99.7% RAM (no MLE).</p>
+              <a class="tax-link" href="#range-segment-tree-sub" data-target-sub="rq-segment-tree-dynamic">Go to Dynamic Tree &darr;</a>
+            </div>
+          </div>
+        </div>
 
         <section class="patterns-section">
           <!-- LIVE INTERACTIVE RANGE QUERY SIMULATOR -->
@@ -9402,6 +9444,40 @@ Result: len(tails) = 3  (Optimal nesting: [2,3] -&gt; [5,4] -&gt; [6,7])</code><
           <p class="topic-summary" style="max-width: 860px; line-height: 1.65; font-size: 0.94rem;">Exploit the binary representation of integers using lowbit = x &amp; (-x). Maintain prefix sums and dynamic frequency counts in strictly O(n) space and ultra-fast cache lines.</p>
         </header>
 
+                <!-- FENWICK TREE TEMPLATE SPECTRUM BANNER -->
+        <div class="rq-taxonomy-banner">
+          <div class="rq-tax-head">
+            <span class="rq-tax-badge">Fenwick Tree Template Taxonomy</span>
+            <h3>The 4 Fenwick (BIT) Templates: Spectrum &amp; Decision Flow</h3>
+          </div>
+          <div class="rq-tax-grid">
+            <div class="rq-tax-card">
+              <span class="tax-tag">Type 1 · Point &rarr; Range</span>
+              <h4>Standard Point Update &amp; Prefix Sum</h4>
+              <p>Single array of size N+1. Ascends via <code>idx += lowbit</code>, descends via <code>idx -= lowbit</code>. <strong>Optimal for:</strong> Dynamic point updates &amp; prefix sums in ~15 lines.</p>
+              <a class="tax-link" href="#range-fenwick-tree-sub" data-target-sub="rq-fenwick-basic">Go to Standard BIT &darr;</a>
+            </div>
+            <div class="rq-tax-card">
+              <span class="tax-tag">Type 2 · Range &rarr; Point</span>
+              <h4>Difference Array BIT</h4>
+              <p>Maintains D[i] = A[i] - A[i-1]. <strong>Optimal for:</strong> Range updates [L, R] += &Delta; in O(log n) (2 point updates) with single element query in O(log n).</p>
+              <a class="tax-link" href="#range-fenwick-tree-sub" data-target-sub="rq-fenwick-range-diff">Go to Diff BIT &darr;</a>
+            </div>
+            <div class="rq-tax-card">
+              <span class="tax-tag">Type 3 · Range &rarr; Range</span>
+              <h4>Two-BIT Engine (Range + Range)</h4>
+              <p>Tracks D[i] on BIT₁ and D[i]*(i-1) on BIT₂. <strong>Optimal for:</strong> BOTH Range Updates AND Range Queries in O(log n) with zero tree pointer overhead.</p>
+              <a class="tax-link" href="#range-fenwick-tree-sub" data-target-sub="rq-fenwick-two-bit">Go to Two-BIT Engine &darr;</a>
+            </div>
+            <div class="rq-tax-card">
+              <span class="tax-tag">Type 4 · Dynamic Ranks</span>
+              <h4>Frequency BIT &amp; Binary Lifting</h4>
+              <p>Coordinate compression + power-of-2 jumps. <strong>Optimal for:</strong> Inversions (LC 315) and finding k-th smallest dynamic element in O(log n) without binary search.</p>
+              <a class="tax-link" href="#range-fenwick-tree-sub" data-target-sub="rq-fenwick-inversions">Go to Binary Lifting &darr;</a>
+            </div>
+          </div>
+        </div>
+
         <section class="patterns-section">
           <!-- Pattern Card 1: Fenwick Point Update & Prefix Sum -->
           <article class="pattern-card" id="rq-fenwick-basic">
@@ -9581,7 +9657,159 @@ Result: len(tails) = 3  (Optimal nesting: [2,3] -&gt; [5,4] -&gt; [6,7])</code><
             </div>
           </article>
 
-          <!-- Pattern Card 3: Coordinate Compression & Frequency BIT -->
+                    <!-- Pattern Card 3: Two-BIT Engine (Range Update & Range Query) -->
+          <article class="pattern-card" id="rq-fenwick-two-bit">
+            <div class="pattern-card-head">
+              <h3>Two-BIT Engine: Range Updates [L, R] += &Delta; AND Range Queries [L, R] in O(log n)</h3>
+            </div>
+            <p class="use-when"><strong>Use when:</strong> Both range updates AND range queries are required, but you prefer the minimal constant factor, flat contiguous array, and compact code of Fenwick Trees over Segment Trees.</p>
+
+            <div class="why-box" style="padding: 1.35rem;">
+              <strong>Why it works: Mathematical Derivation via Difference Summation</strong>
+              <p style="line-height: 1.65; margin-bottom: 0.8rem;">
+                Let $D[k] = A[k] - A[k-1]$ be the difference array. Then $A[j] = \sum_{{k=1}}^j D[k]$. The prefix sum up to index $i$ is:
+              </p>
+              <div class="rq-math-box" style="background: #151515; border: 1px solid #333; border-radius: 6px; padding: 0.85rem; font-family: monospace; font-size: 0.82rem; line-height: 1.6; margin-bottom: 0.9rem;">
+                prefixSum(i) = &sum;<sub>j=1..i</sub> A[j]<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= &sum;<sub>j=1..i</sub> &sum;<sub>k=1..j</sub> D[k]<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= &sum;<sub>k=1..i</sub> D[k] &times; (i - k + 1)<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= (i + 1) &times; &sum;<sub>k=1..i</sub> D[k] - &sum;<sub>k=1..i</sub> (D[k] &times; k)<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <strong>i &times; query(bit1, i) - query(bit2, i)</strong>
+              </div>
+
+              <!-- TWO-BIT INTERACTION DIAGRAM -->
+              <div class="rq-bit-diagram-container">
+                <div class="rq-tree-diagram-header">
+                  <span class="rq-diagram-badge">Dual-BIT Difference Coordination Layout</span>
+                  <span class="rq-diagram-note">BIT₁ tracks D[k] &bull; BIT₂ tracks D[k] &times; (k - 1) &bull; Both updated in 4 lowbit steps</span>
+                </div>
+                <div class="rq-dual-bit-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; margin-top: 0.75rem;">
+                  <div class="rq-bit-card" style="background: #1b1b1b; border: 1px solid #353535; border-radius: 6px; padding: 0.85rem;">
+                    <div style="font-size: 0.78rem; font-weight: 700; color: var(--cyan); margin-bottom: 0.4rem;">BIT₁ (Tracks D[k])</div>
+                    <div style="font-size: 0.74rem; color: var(--muted); line-height: 1.5;">
+                      &bull; <code>add(bit1, left, delta)</code><br>
+                      &bull; <code>add(bit1, right + 1, -delta)</code><br>
+                      Provides &sum; D[k] directly.
+                    </div>
+                  </div>
+                  <div class="rq-bit-card" style="background: #1b1b1b; border: 1px solid #353535; border-radius: 6px; padding: 0.85rem;">
+                    <div style="font-size: 0.78rem; font-weight: 700; color: var(--orange); margin-bottom: 0.4rem;">BIT₂ (Tracks D[k] &times; (k - 1))</div>
+                    <div style="font-size: 0.74rem; color: var(--muted); line-height: 1.5;">
+                      &bull; <code>add(bit2, left, delta * (left - 1))</code><br>
+                      &bull; <code>add(bit2, right + 1, -delta * right)</code><br>
+                      Compensates for the triangular offset.
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="mini-code-wrap">
+              <button class="copy-button mini-copy" type="button" data-code="rq-fenwick-two-bit-code">Copy</button>
+              <pre class="mini-code" id="rq-fenwick-two-bit-code"><code><span class="line-text"><span class="flow">from</span> <span class="var">typing</span> <span class="flow">import</span> <span class="type">List</span>
+</span>
+<span class="line-text"></span>
+<span class="line-text"><span class="kw-def">class</span> <span class="type">FenwickRangeUpdateRangeQuery</span><span class="punct">:</span>
+</span>
+<span class="line-text">    <span class="str">&quot;&quot;&quot;Two-BIT Engine: Supports BOTH Range Updates and Range Queries in O(log n).
+
+    Maintains two BITs over the difference array D[i] = A[i] - A[i-1]:
+    - bit1 tracks: D[i]
+    - bit2 tracks: D[i] * (i - 1)
+
+    Mathematical Derivation &amp; Invariant:
+    A[i] = sum_{k=1..i} D[k]
+    prefixSum(i) = sum_{j=1..i} A[j]
+                 = sum_{j=1..i} sum_{k=1..j} D[k]
+                 = sum_{k=1..i} D[k] * (i - k + 1)
+                 = (i + 1) * sum_{k=1..i} D[k] - sum_{k=1..i} (D[k] * k)
+                 = i * sum D[k] - sum (D[k] * (k - 1))
+                 = i * query(bit1, i) - query(bit2, i)
+    &quot;&quot;&quot;</span></span>
+<span class="line-text"></span>
+<span class="line-text">    Maintains two BITs over the difference array D[i] = A[i] - A[i-1]:</span>
+<span class="line-text">    - bit1 tracks: D[i]</span>
+<span class="line-text">    - bit2 tracks: D[i] * (i - 1)</span>
+<span class="line-text"></span>
+<span class="line-text">    Mathematical Derivation &amp; Invariant:</span>
+<span class="line-text">    A[i] = sum_{k=1..i} D[k]</span>
+<span class="line-text">    prefixSum(i) = sum_{j=1..i} A[j]</span>
+<span class="line-text">                 = sum_{j=1..i} sum_{k=1..j} D[k]</span>
+<span class="line-text">                 = sum_{k=1..i} D[k] * (i - k + 1)</span>
+<span class="line-text">                 = (i + 1) * sum_{k=1..i} D[k] - sum_{k=1..i} (D[k] * k)</span>
+<span class="line-text">                 = i * sum D[k] - sum (D[k] * (k - 1))</span>
+<span class="line-text">                 = i * query(bit1, i) - query(bit2, i)</span>
+<span class="line-text">
+</span>
+<span class="line-text">    <span class="kw-def">def</span> <span class="fn">__init__</span><span class="punct">(</span><span class="param">self</span><span class="punct">,</span> <span class="var">n</span><span class="punct">:</span> <span class="type">int</span><span class="punct">)</span><span class="punct">:</span>
+</span>
+<span class="line-text">        <span class="param">self</span><span class="punct">.</span><span class="var">n</span> <span class="punct">=</span> <span class="var">n</span>
+</span>
+<span class="line-text">        <span class="param">self</span><span class="punct">.</span><span class="var">bit1</span> <span class="punct">=</span> <span class="punct">[</span><span class="num">0</span><span class="punct">]</span> <span class="punct">*</span> <span class="punct">(</span><span class="var">n</span> <span class="punct">+</span> <span class="num">1</span><span class="punct">)</span>
+</span>
+<span class="line-text">        <span class="param">self</span><span class="punct">.</span><span class="var">bit2</span> <span class="punct">=</span> <span class="punct">[</span><span class="num">0</span><span class="punct">]</span> <span class="punct">*</span> <span class="punct">(</span><span class="var">n</span> <span class="punct">+</span> <span class="num">1</span><span class="punct">)</span>
+</span>
+<span class="line-text"></span>
+<span class="line-text">    <span class="kw-def">def</span> <span class="fn">_add</span><span class="punct">(</span><span class="param">self</span><span class="punct">,</span> <span class="var">bit</span><span class="punct">:</span> <span class="type">List</span><span class="punct">[</span><span class="type">int</span><span class="punct">]</span><span class="punct">,</span> <span class="var">idx</span><span class="punct">:</span> <span class="type">int</span><span class="punct">,</span> <span class="var">delta</span><span class="punct">:</span> <span class="type">int</span><span class="punct">)</span> <span class="punct">-&gt;</span> <span class="kw-def">None</span><span class="punct">:</span>
+</span>
+<span class="line-text">        <span class="str">&quot;&quot;&quot;Adds delta to target BIT at index idx (1-based).&quot;&quot;&quot;</span>
+</span>
+<span class="line-text">        <span class="flow">while</span> <span class="var">idx</span> <span class="punct">&lt;=</span> <span class="param">self</span><span class="punct">.</span><span class="var">n</span><span class="punct">:</span>
+</span>
+<span class="line-text">            <span class="var">bit</span><span class="punct">[</span><span class="var">idx</span><span class="punct">]</span> <span class="punct">+=</span> <span class="var">delta</span>
+</span>
+<span class="line-text">            <span class="var">idx</span> <span class="punct">+=</span> <span class="var">idx</span> <span class="punct">&amp;</span> <span class="punct">(</span><span class="punct">-</span><span class="var">idx</span><span class="punct">)</span>
+</span>
+<span class="line-text"></span>
+<span class="line-text">    <span class="kw-def">def</span> <span class="fn">_query</span><span class="punct">(</span><span class="param">self</span><span class="punct">,</span> <span class="var">bit</span><span class="punct">:</span> <span class="type">List</span><span class="punct">[</span><span class="type">int</span><span class="punct">]</span><span class="punct">,</span> <span class="var">idx</span><span class="punct">:</span> <span class="type">int</span><span class="punct">)</span> <span class="punct">-&gt;</span> <span class="type">int</span><span class="punct">:</span>
+</span>
+<span class="line-text">        <span class="str">&quot;&quot;&quot;Returns prefix sum of target BIT up to index idx (1-based).&quot;&quot;&quot;</span>
+</span>
+<span class="line-text">        <span class="var">total</span> <span class="punct">=</span> <span class="num">0</span>
+</span>
+<span class="line-text">        <span class="flow">while</span> <span class="var">idx</span> <span class="punct">&gt;</span> <span class="num">0</span><span class="punct">:</span>
+</span>
+<span class="line-text">            <span class="var">total</span> <span class="punct">+=</span> <span class="var">bit</span><span class="punct">[</span><span class="var">idx</span><span class="punct">]</span>
+</span>
+<span class="line-text">            <span class="var">idx</span> <span class="punct">-=</span> <span class="var">idx</span> <span class="punct">&amp;</span> <span class="punct">(</span><span class="punct">-</span><span class="var">idx</span><span class="punct">)</span>
+</span>
+<span class="line-text">        <span class="flow">return</span> <span class="var">total</span>
+</span>
+<span class="line-text"></span>
+<span class="line-text">    <span class="kw-def">def</span> <span class="fn">updateRange</span><span class="punct">(</span><span class="param">self</span><span class="punct">,</span> <span class="var">left</span><span class="punct">:</span> <span class="type">int</span><span class="punct">,</span> <span class="var">right</span><span class="punct">:</span> <span class="type">int</span><span class="punct">,</span> <span class="var">delta</span><span class="punct">:</span> <span class="type">int</span><span class="punct">)</span> <span class="punct">-&gt;</span> <span class="kw-def">None</span><span class="punct">:</span>
+</span>
+<span class="line-text">        <span class="str">&quot;&quot;&quot;Adds delta to all elements in range [left, right] (1-based).&quot;&quot;&quot;</span>
+</span>
+<span class="line-text">        <span class="comment"># Maintain bit1 (stores D[k])</span>
+</span>
+<span class="line-text">        <span class="param">self</span><span class="punct">.</span><span class="fn">_add</span><span class="punct">(</span><span class="param">self</span><span class="punct">.</span><span class="var">bit1</span><span class="punct">,</span> <span class="var">left</span><span class="punct">,</span> <span class="var">delta</span><span class="punct">)</span>
+</span>
+<span class="line-text">        <span class="param">self</span><span class="punct">.</span><span class="fn">_add</span><span class="punct">(</span><span class="param">self</span><span class="punct">.</span><span class="var">bit1</span><span class="punct">,</span> <span class="var">right</span> <span class="punct">+</span> <span class="num">1</span><span class="punct">,</span> <span class="punct">-</span><span class="var">delta</span><span class="punct">)</span>
+</span>
+<span class="line-text"></span>
+<span class="line-text">        <span class="comment"># Maintain bit2 (stores D[k] * (k - 1))</span>
+</span>
+<span class="line-text">        <span class="param">self</span><span class="punct">.</span><span class="fn">_add</span><span class="punct">(</span><span class="param">self</span><span class="punct">.</span><span class="var">bit2</span><span class="punct">,</span> <span class="var">left</span><span class="punct">,</span> <span class="var">delta</span> <span class="punct">*</span> <span class="punct">(</span><span class="var">left</span> <span class="punct">-</span> <span class="num">1</span><span class="punct">)</span><span class="punct">)</span>
+</span>
+<span class="line-text">        <span class="param">self</span><span class="punct">.</span><span class="fn">_add</span><span class="punct">(</span><span class="param">self</span><span class="punct">.</span><span class="var">bit2</span><span class="punct">,</span> <span class="var">right</span> <span class="punct">+</span> <span class="num">1</span><span class="punct">,</span> <span class="punct">-</span><span class="var">delta</span> <span class="punct">*</span> <span class="var">right</span><span class="punct">)</span>
+</span>
+<span class="line-text"></span>
+<span class="line-text">    <span class="kw-def">def</span> <span class="fn">prefixSum</span><span class="punct">(</span><span class="param">self</span><span class="punct">,</span> <span class="var">idx</span><span class="punct">:</span> <span class="type">int</span><span class="punct">)</span> <span class="punct">-&gt;</span> <span class="type">int</span><span class="punct">:</span>
+</span>
+<span class="line-text">        <span class="str">&quot;&quot;&quot;Computes prefix sum of array from index 1 to idx in O(log n).&quot;&quot;&quot;</span>
+</span>
+<span class="line-text">        <span class="flow">return</span> <span class="var">idx</span> <span class="punct">*</span> <span class="param">self</span><span class="punct">.</span><span class="fn">_query</span><span class="punct">(</span><span class="param">self</span><span class="punct">.</span><span class="var">bit1</span><span class="punct">,</span> <span class="var">idx</span><span class="punct">)</span> <span class="punct">-</span> <span class="param">self</span><span class="punct">.</span><span class="fn">_query</span><span class="punct">(</span><span class="param">self</span><span class="punct">.</span><span class="var">bit2</span><span class="punct">,</span> <span class="var">idx</span><span class="punct">)</span>
+</span>
+<span class="line-text"></span>
+<span class="line-text">    <span class="kw-def">def</span> <span class="fn">queryRange</span><span class="punct">(</span><span class="param">self</span><span class="punct">,</span> <span class="var">left</span><span class="punct">:</span> <span class="type">int</span><span class="punct">,</span> <span class="var">right</span><span class="punct">:</span> <span class="type">int</span><span class="punct">)</span> <span class="punct">-&gt;</span> <span class="type">int</span><span class="punct">:</span>
+</span>
+<span class="line-text">        <span class="str">&quot;&quot;&quot;Returns sum of elements in range [left, right] in O(log n).&quot;&quot;&quot;</span>
+</span>
+<span class="line-text">        <span class="flow">return</span> <span class="param">self</span><span class="punct">.</span><span class="fn">prefixSum</span><span class="punct">(</span><span class="var">right</span><span class="punct">)</span> <span class="punct">-</span> <span class="param">self</span><span class="punct">.</span><span class="fn">prefixSum</span><span class="punct">(</span><span class="var">left</span> <span class="punct">-</span> <span class="num">1</span><span class="punct">)</span></span></code></pre>
+            </div>
+          </article>
+
+          <!-- Pattern Card 4: Coordinate Compression + BIT (Inversion Count & Binary Lifting) -->
           <article class="pattern-card" id="rq-fenwick-inversions">
             <div class="pattern-card-head">
               <h3>Coordinate Compression &amp; Dynamic Inversion Counting</h3>
@@ -9709,6 +9937,34 @@ Result: len(tails) = 3  (Optimal nesting: [2,3] -&gt; [5,4] -&gt; [6,7])</code><
           <p class="topic-summary" style="max-width: 860px; line-height: 1.65; font-size: 0.94rem;">Partition array into blocks of size B = ceil(sqrt(n)). Balance constant-time point mutations with sub-linear O(sqrt(n)) queries, and reorder offline queries with Mo's serpentine sorting.</p>
         </header>
 
+                <!-- SQRT DECOMPOSITION TEMPLATE SPECTRUM BANNER -->
+        <div class="rq-taxonomy-banner">
+          <div class="rq-tax-head">
+            <span class="rq-tax-badge">SQRT Decomposition Template Taxonomy</span>
+            <h3>The 3 SQRT Decomposition Templates: Spectrum &amp; Decision Flow</h3>
+          </div>
+          <div class="rq-tax-grid">
+            <div class="rq-tax-card">
+              <span class="tax-tag">Type 1 · Point &rarr; Range</span>
+              <h4>Classical Block Decomposition (Sum &amp; Min)</h4>
+              <p>Array partitioned into &radic;N blocks of size B = &lceil;&radic;N&rceil;. <strong>Optimal for:</strong> O(1) point updates with O(&radic;N) range queries on any semigroup (sum, min, max, mode).</p>
+              <a class="tax-link" href="#range-sqrt-decomp-sub" data-target-sub="rq-sqrt-blocks">Go to Classical Blocks &darr;</a>
+            </div>
+            <div class="rq-tax-card">
+              <span class="tax-tag">Type 2 · Range &rarr; Range</span>
+              <h4>Block Range Updates &amp; Lazy Block Tags</h4>
+              <p>Boundary elements updated directly in O(&radic;N); full middle blocks absorb &Delta; into <code>blockLazy[b]</code> in O(1). <strong>Optimal for:</strong> Range updates + queries without trees.</p>
+              <a class="tax-link" href="#range-sqrt-decomp-sub" data-target-sub="rq-sqrt-range-lazy">Go to Lazy Block Updates &darr;</a>
+            </div>
+            <div class="rq-tax-card">
+              <span class="tax-tag">Type 3 · Offline Serpentine</span>
+              <h4>Mo's Algorithm (Offline Query Reordering)</h4>
+              <p>Reorders Q queries by (L // B, R) serpentine order. <strong>Optimal for:</strong> Complex non-monoid offline queries (number of distinct elements, frequency counts) in O((N+Q)&radic;N).</p>
+              <a class="tax-link" href="#range-sqrt-decomp-sub" data-target-sub="rq-mos-algorithm">Go to Mo's Algorithm &darr;</a>
+            </div>
+          </div>
+        </div>
+
         <section class="patterns-section">
           <!-- Pattern Card 1: Block Decomposition -->
           <article class="pattern-card" id="rq-sqrt-blocks">
@@ -9720,8 +9976,7 @@ Result: len(tails) = 3  (Optimal nesting: [2,3] -&gt; [5,4] -&gt; [6,7])</code><
             <div class="why-box" style="padding: 1.35rem;">
               <strong>Why it works: Square Root Block Partitioning</strong>
               <p style="line-height: 1.65; margin-bottom: 0.8rem;">
-                Divide an array of size $n$ into blocks of size $B = \lceil \sqrt{n}
-ceil$. The total number of blocks is $pprox \sqrt{n}$.
+                Divide an array of size $n$ into blocks of size $B = \lceil \sqrt{n} ceil$. The total number of blocks is $pprox \sqrt{n}$.
               </p>
 
               <!-- PROPER HTML SQRT CHUNK BLOCKS DIAGRAM -->
@@ -9861,7 +10116,181 @@ ceil$. The total number of blocks is $pprox \sqrt{n}$.
             </div>
           </article>
 
-          <!-- Pattern Card 2: Mo's Algorithm -->
+                    <!-- Pattern Card 2: Range Update & Range Query with Lazy Block Tags -->
+          <article class="pattern-card" id="rq-sqrt-range-lazy">
+            <div class="pattern-card-head">
+              <h3>Range Updates [L, R] += &Delta; AND Range Queries [L, R] with Lazy Block Tags in O(&radic;n)</h3>
+            </div>
+            <p class="use-when"><strong>Use when:</strong> Both range updates and range queries are required, but you prefer a simple, flat square-root array structure over complex pointer or segment tree implementations.</p>
+
+            <div class="why-box" style="padding: 1.35rem;">
+              <strong>Why it works: Partial Boundary Mutation + Full Block Deferred Tags</strong>
+              <p style="line-height: 1.65; margin-bottom: 0.8rem;">
+                When an update spans multiple blocks, we divide the range $[L, R]$ into three phases:
+              </p>
+              <ul style="line-height: 1.65;">
+                <li><strong>1. Left Partial Block:</strong> Elements from $L$ to end of block $startBlock$. Add $\Delta$ directly to <code>nums[i]</code> and adjust <code>blockSums[startBlock] += &Delta;</code> in $O(\sqrt{n})$.</li>
+                <li><strong>2. Middle Full Blocks:</strong> Blocks strictly between $startBlock$ and $endBlock$. Apply deferred tag <code>blockLazy[b] += &Delta;</code> and update <code>blockSums[b] += &Delta; &times; blockSize</code> in <strong>$O(1)$ per block</strong>.</li>
+                <li><strong>3. Right Partial Block:</strong> Elements from start of block $endBlock$ to $R$. Add $\Delta$ directly to <code>nums[i]</code> and adjust <code>blockSums[endBlock] += &Delta;</code> in $O(\sqrt{n})$.</li>
+              </ul>
+
+              <!-- SQRT LAZY INTERACTION DIAGRAM -->
+              <div class="rq-sqrt-diagram-container">
+                <div class="rq-tree-diagram-header">
+                  <span class="rq-diagram-badge">Square Root Block Lazy Tag Architecture</span>
+                  <span class="rq-diagram-note">Partial Blocks: Direct Mutation &bull; Middle Blocks: O(1) Deferred lazy[b] Tag</span>
+                </div>
+                <div class="rq-trace-steps" style="margin-top: 0.8rem;">
+                  <div class="rq-step-box step-head">
+                    <span class="step-badge">Phase 1</span>
+                    <span>Left Partial: mutate <code>nums[L..end]</code> in $O(\sqrt{n})$</span>
+                  </div>
+                  <div class="rq-step-box step-mid">
+                    <span class="step-badge">Phase 2</span>
+                    <span>Middle Blocks: <code>blockLazy[b] += &Delta;</code> in $O(1)$ per block</span>
+                  </div>
+                  <div class="rq-step-box step-tail">
+                    <span class="step-badge">Phase 3</span>
+                    <span>Right Partial: mutate <code>nums[start..R]</code> in $O(\sqrt{n})$</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="mini-code-wrap">
+              <button class="copy-button mini-copy" type="button" data-code="rq-sqrt-lazy-code">Copy</button>
+              <pre class="mini-code" id="rq-sqrt-lazy-code"><code><span class="line-text"><span class="flow">from</span> <span class="var">typing</span> <span class="flow">import</span> <span class="type">List</span>
+</span>
+<span class="line-text"></span>
+<span class="line-text"><span class="kw-def">class</span> <span class="type">SqrtDecompositionLazy</span><span class="punct">:</span>
+</span>
+<span class="line-text">    <span class="str">&quot;&quot;&quot;SQRT Decomposition supporting Range Updates and Range Queries in O(sqrt(n)).
+
+    Maintains block sums and deferred lazy addition tags on blocks of size B = ceil(sqrt(n)).
+    &quot;&quot;&quot;</span></span>
+<span class="line-text"></span>
+<span class="line-text">    Maintains block sums and deferred lazy addition tags on blocks of size B = ceil(sqrt(n)).</span>
+<span class="line-text">
+</span>
+<span class="line-text">    <span class="kw-def">def</span> <span class="fn">__init__</span><span class="punct">(</span><span class="param">self</span><span class="punct">,</span> <span class="var">nums</span><span class="punct">:</span> <span class="type">List</span><span class="punct">[</span><span class="type">int</span><span class="punct">]</span><span class="punct">)</span><span class="punct">:</span>
+</span>
+<span class="line-text">        <span class="param">self</span><span class="punct">.</span><span class="var">n</span> <span class="punct">=</span> <span class="fn">len</span><span class="punct">(</span><span class="var">nums</span><span class="punct">)</span>
+</span>
+<span class="line-text">        <span class="param">self</span><span class="punct">.</span><span class="var">nums</span> <span class="punct">=</span> <span class="var">nums</span><span class="punct">[</span><span class="punct">:</span><span class="punct">]</span>
+</span>
+<span class="line-text">        <span class="param">self</span><span class="punct">.</span><span class="var">blockSize</span> <span class="punct">=</span> <span class="fn">max</span><span class="punct">(</span><span class="num">1</span><span class="punct">,</span> <span class="type">int</span><span class="punct">(</span><span class="param">self</span><span class="punct">.</span><span class="var">n</span> <span class="punct">**</span> <span class="num">0.5</span><span class="punct">)</span><span class="punct">)</span>
+</span>
+<span class="line-text">        <span class="param">self</span><span class="punct">.</span><span class="var">numBlocks</span> <span class="punct">=</span> <span class="punct">(</span><span class="param">self</span><span class="punct">.</span><span class="var">n</span> <span class="punct">+</span> <span class="param">self</span><span class="punct">.</span><span class="var">blockSize</span> <span class="punct">-</span> <span class="num">1</span><span class="punct">)</span> <span class="punct">//</span> <span class="param">self</span><span class="punct">.</span><span class="var">blockSize</span>
+</span>
+<span class="line-text">        <span class="param">self</span><span class="punct">.</span><span class="var">blockSums</span> <span class="punct">=</span> <span class="punct">[</span><span class="num">0</span><span class="punct">]</span> <span class="punct">*</span> <span class="param">self</span><span class="punct">.</span><span class="var">numBlocks</span>
+</span>
+<span class="line-text">        <span class="param">self</span><span class="punct">.</span><span class="var">blockLazy</span> <span class="punct">=</span> <span class="punct">[</span><span class="num">0</span><span class="punct">]</span> <span class="punct">*</span> <span class="param">self</span><span class="punct">.</span><span class="var">numBlocks</span>
+</span>
+<span class="line-text"></span>
+<span class="line-text">        <span class="comment"># Precompute initial block sums in O(n)</span>
+</span>
+<span class="line-text">        <span class="flow">for</span> <span class="var">i</span><span class="punct">,</span> <span class="var">val</span> <span class="flow">in</span> <span class="fn">enumerate</span><span class="punct">(</span><span class="param">self</span><span class="punct">.</span><span class="var">nums</span><span class="punct">)</span><span class="punct">:</span>
+</span>
+<span class="line-text">            <span class="param">self</span><span class="punct">.</span><span class="var">blockSums</span><span class="punct">[</span><span class="var">i</span> <span class="punct">//</span> <span class="param">self</span><span class="punct">.</span><span class="var">blockSize</span><span class="punct">]</span> <span class="punct">+=</span> <span class="var">val</span>
+</span>
+<span class="line-text"></span>
+<span class="line-text">    <span class="kw-def">def</span> <span class="fn">updateRange</span><span class="punct">(</span><span class="param">self</span><span class="punct">,</span> <span class="var">left</span><span class="punct">:</span> <span class="type">int</span><span class="punct">,</span> <span class="var">right</span><span class="punct">:</span> <span class="type">int</span><span class="punct">,</span> <span class="var">delta</span><span class="punct">:</span> <span class="type">int</span><span class="punct">)</span> <span class="punct">-&gt;</span> <span class="kw-def">None</span><span class="punct">:</span>
+</span>
+<span class="line-text">        <span class="str">&quot;&quot;&quot;Adds delta to all elements in range [left, right] in O(sqrt(n)).&quot;&quot;&quot;</span>
+</span>
+<span class="line-text">        <span class="var">startBlock</span><span class="punct">,</span> <span class="var">endBlock</span> <span class="punct">=</span> <span class="var">left</span> <span class="punct">//</span> <span class="param">self</span><span class="punct">.</span><span class="var">blockSize</span><span class="punct">,</span> <span class="var">right</span> <span class="punct">//</span> <span class="param">self</span><span class="punct">.</span><span class="var">blockSize</span>
+</span>
+<span class="line-text"></span>
+<span class="line-text">        <span class="comment"># Case 1: Range strictly inside a single block</span>
+</span>
+<span class="line-text">        <span class="flow">if</span> <span class="var">startBlock</span> <span class="punct">==</span> <span class="var">endBlock</span><span class="punct">:</span>
+</span>
+<span class="line-text">            <span class="flow">for</span> <span class="var">i</span> <span class="flow">in</span> <span class="fn">range</span><span class="punct">(</span><span class="var">left</span><span class="punct">,</span> <span class="var">right</span> <span class="punct">+</span> <span class="num">1</span><span class="punct">)</span><span class="punct">:</span>
+</span>
+<span class="line-text">                <span class="param">self</span><span class="punct">.</span><span class="var">nums</span><span class="punct">[</span><span class="var">i</span><span class="punct">]</span> <span class="punct">+=</span> <span class="var">delta</span>
+</span>
+<span class="line-text">                <span class="param">self</span><span class="punct">.</span><span class="var">blockSums</span><span class="punct">[</span><span class="var">startBlock</span><span class="punct">]</span> <span class="punct">+=</span> <span class="var">delta</span>
+</span>
+<span class="line-text">            <span class="flow">return</span>
+</span>
+<span class="line-text"></span>
+<span class="line-text">        <span class="comment"># Case 2: Multi-block range</span>
+</span>
+<span class="line-text">        <span class="comment"># Step A: Left partial block</span>
+</span>
+<span class="line-text">        <span class="flow">for</span> <span class="var">i</span> <span class="flow">in</span> <span class="fn">range</span><span class="punct">(</span><span class="var">left</span><span class="punct">,</span> <span class="punct">(</span><span class="var">startBlock</span> <span class="punct">+</span> <span class="num">1</span><span class="punct">)</span> <span class="punct">*</span> <span class="param">self</span><span class="punct">.</span><span class="var">blockSize</span><span class="punct">)</span><span class="punct">:</span>
+</span>
+<span class="line-text">            <span class="param">self</span><span class="punct">.</span><span class="var">nums</span><span class="punct">[</span><span class="var">i</span><span class="punct">]</span> <span class="punct">+=</span> <span class="var">delta</span>
+</span>
+<span class="line-text">            <span class="param">self</span><span class="punct">.</span><span class="var">blockSums</span><span class="punct">[</span><span class="var">startBlock</span><span class="punct">]</span> <span class="punct">+=</span> <span class="var">delta</span>
+</span>
+<span class="line-text"></span>
+<span class="line-text">        <span class="comment"># Step B: Full middle blocks (apply O(1) lazy tag per block)</span>
+</span>
+<span class="line-text">        <span class="flow">for</span> <span class="var">b</span> <span class="flow">in</span> <span class="fn">range</span><span class="punct">(</span><span class="var">startBlock</span> <span class="punct">+</span> <span class="num">1</span><span class="punct">,</span> <span class="var">endBlock</span><span class="punct">)</span><span class="punct">:</span>
+</span>
+<span class="line-text">            <span class="param">self</span><span class="punct">.</span><span class="var">blockLazy</span><span class="punct">[</span><span class="var">b</span><span class="punct">]</span> <span class="punct">+=</span> <span class="var">delta</span>
+</span>
+<span class="line-text">            <span class="param">self</span><span class="punct">.</span><span class="var">blockSums</span><span class="punct">[</span><span class="var">b</span><span class="punct">]</span> <span class="punct">+=</span> <span class="var">delta</span> <span class="punct">*</span> <span class="param">self</span><span class="punct">.</span><span class="var">blockSize</span>
+</span>
+<span class="line-text"></span>
+<span class="line-text">        <span class="comment"># Step C: Right partial block</span>
+</span>
+<span class="line-text">        <span class="flow">for</span> <span class="var">i</span> <span class="flow">in</span> <span class="fn">range</span><span class="punct">(</span><span class="var">endBlock</span> <span class="punct">*</span> <span class="param">self</span><span class="punct">.</span><span class="var">blockSize</span><span class="punct">,</span> <span class="var">right</span> <span class="punct">+</span> <span class="num">1</span><span class="punct">)</span><span class="punct">:</span>
+</span>
+<span class="line-text">            <span class="param">self</span><span class="punct">.</span><span class="var">nums</span><span class="punct">[</span><span class="var">i</span><span class="punct">]</span> <span class="punct">+=</span> <span class="var">delta</span>
+</span>
+<span class="line-text">            <span class="param">self</span><span class="punct">.</span><span class="var">blockSums</span><span class="punct">[</span><span class="var">endBlock</span><span class="punct">]</span> <span class="punct">+=</span> <span class="var">delta</span>
+</span>
+<span class="line-text"></span>
+<span class="line-text">    <span class="kw-def">def</span> <span class="fn">queryRange</span><span class="punct">(</span><span class="param">self</span><span class="punct">,</span> <span class="var">left</span><span class="punct">:</span> <span class="type">int</span><span class="punct">,</span> <span class="var">right</span><span class="punct">:</span> <span class="type">int</span><span class="punct">)</span> <span class="punct">-&gt;</span> <span class="type">int</span><span class="punct">:</span>
+</span>
+<span class="line-text">        <span class="str">&quot;&quot;&quot;Returns sum of elements in range [left, right] in O(sqrt(n)).&quot;&quot;&quot;</span>
+</span>
+<span class="line-text">        <span class="var">startBlock</span><span class="punct">,</span> <span class="var">endBlock</span> <span class="punct">=</span> <span class="var">left</span> <span class="punct">//</span> <span class="param">self</span><span class="punct">.</span><span class="var">blockSize</span><span class="punct">,</span> <span class="var">right</span> <span class="punct">//</span> <span class="param">self</span><span class="punct">.</span><span class="var">blockSize</span>
+</span>
+<span class="line-text">        <span class="var">total</span> <span class="punct">=</span> <span class="num">0</span>
+</span>
+<span class="line-text"></span>
+<span class="line-text">        <span class="comment"># Case 1: Single block query</span>
+</span>
+<span class="line-text">        <span class="flow">if</span> <span class="var">startBlock</span> <span class="punct">==</span> <span class="var">endBlock</span><span class="punct">:</span>
+</span>
+<span class="line-text">            <span class="flow">for</span> <span class="var">i</span> <span class="flow">in</span> <span class="fn">range</span><span class="punct">(</span><span class="var">left</span><span class="punct">,</span> <span class="var">right</span> <span class="punct">+</span> <span class="num">1</span><span class="punct">)</span><span class="punct">:</span>
+</span>
+<span class="line-text">                <span class="var">total</span> <span class="punct">+=</span> <span class="param">self</span><span class="punct">.</span><span class="var">nums</span><span class="punct">[</span><span class="var">i</span><span class="punct">]</span> <span class="punct">+</span> <span class="param">self</span><span class="punct">.</span><span class="var">blockLazy</span><span class="punct">[</span><span class="var">startBlock</span><span class="punct">]</span>
+</span>
+<span class="line-text">            <span class="flow">return</span> <span class="var">total</span>
+</span>
+<span class="line-text"></span>
+<span class="line-text">        <span class="comment"># Case 2: Multi-block query</span>
+</span>
+<span class="line-text">        <span class="comment"># Step A: Left partial block</span>
+</span>
+<span class="line-text">        <span class="flow">for</span> <span class="var">i</span> <span class="flow">in</span> <span class="fn">range</span><span class="punct">(</span><span class="var">left</span><span class="punct">,</span> <span class="punct">(</span><span class="var">startBlock</span> <span class="punct">+</span> <span class="num">1</span><span class="punct">)</span> <span class="punct">*</span> <span class="param">self</span><span class="punct">.</span><span class="var">blockSize</span><span class="punct">)</span><span class="punct">:</span>
+</span>
+<span class="line-text">            <span class="var">total</span> <span class="punct">+=</span> <span class="param">self</span><span class="punct">.</span><span class="var">nums</span><span class="punct">[</span><span class="var">i</span><span class="punct">]</span> <span class="punct">+</span> <span class="param">self</span><span class="punct">.</span><span class="var">blockLazy</span><span class="punct">[</span><span class="var">startBlock</span><span class="punct">]</span>
+</span>
+<span class="line-text"></span>
+<span class="line-text">        <span class="comment"># Step B: Full middle blocks (O(1) read from precomputed blockSums)</span>
+</span>
+<span class="line-text">        <span class="flow">for</span> <span class="var">b</span> <span class="flow">in</span> <span class="fn">range</span><span class="punct">(</span><span class="var">startBlock</span> <span class="punct">+</span> <span class="num">1</span><span class="punct">,</span> <span class="var">endBlock</span><span class="punct">)</span><span class="punct">:</span>
+</span>
+<span class="line-text">            <span class="var">total</span> <span class="punct">+=</span> <span class="param">self</span><span class="punct">.</span><span class="var">blockSums</span><span class="punct">[</span><span class="var">b</span><span class="punct">]</span>
+</span>
+<span class="line-text"></span>
+<span class="line-text">        <span class="comment"># Step C: Right partial block</span>
+</span>
+<span class="line-text">        <span class="flow">for</span> <span class="var">i</span> <span class="flow">in</span> <span class="fn">range</span><span class="punct">(</span><span class="var">endBlock</span> <span class="punct">*</span> <span class="param">self</span><span class="punct">.</span><span class="var">blockSize</span><span class="punct">,</span> <span class="var">right</span> <span class="punct">+</span> <span class="num">1</span><span class="punct">)</span><span class="punct">:</span>
+</span>
+<span class="line-text">            <span class="var">total</span> <span class="punct">+=</span> <span class="param">self</span><span class="punct">.</span><span class="var">nums</span><span class="punct">[</span><span class="var">i</span><span class="punct">]</span> <span class="punct">+</span> <span class="param">self</span><span class="punct">.</span><span class="var">blockLazy</span><span class="punct">[</span><span class="var">endBlock</span><span class="punct">]</span>
+</span>
+<span class="line-text"></span>
+<span class="line-text">        <span class="flow">return</span> <span class="var">total</span></span></code></pre>
+            </div>
+          </article>
+
+          <!-- Pattern Card 3: Mo's Algorithm (Offline Range Query Reordering) -->
           <article class="pattern-card" id="rq-mos-algorithm">
             <div class="pattern-card-head">
               <h3>Mo's Algorithm (Offline Range Query Reordering)</h3>
