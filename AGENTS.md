@@ -207,7 +207,7 @@ All code snippets use semantic span classes matching Monaco / VS Code Dark:
 After making any change:
 1. Run `git diff --check`.
 2. Open `dsa_revision.html` directly in Safari, Chrome, and Firefox via `file://`.
-3. Verify tab favicon displays the orange DSA tree icon (not the default compass).
+3. Verify tab favicon displays the orange DSA code chevrons & speed spark icon (not the default compass).
 4. Verify absence of redundant header bars on blueprint cards; verify top-right copy button.
 5. Verify mobile drawer behavior: tap `☰ Topics`, verify backdrop, tap backdrop to close, press `Escape` to close.
 6. Verify discrete page switching (no vertical scrolling between sections, resets scroll to top).
