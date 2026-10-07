@@ -8086,11 +8086,6 @@ Result: len(tails) = 3  (Optimal nesting: [2,3] -&gt; [5,4] -&gt; [6,7])</code><
     Time:  Build O(n) | Point Update O(log n) | Range Query O(log n)
     Space: O(4 * (n + 1))
     &quot;&quot;&quot;</span></span>
-<span class="line-text">    1-Indexed (N + 1) Segment Tree:</span>
-<span class="line-text">    Root is 1; Left child = 2*i; Right child = 2*i + 1; Parent = i // 2.</span>
-<span class="line-text">    Time:  Build O(n) | Point Update O(log n) | Range Query O(log n)</span>
-<span class="line-text">    Space: O(4 * (n + 1))</span>
-<span class="line-text">       </span>
 <span class="line-text">    <span class="kw-def">def</span> <span class="fn">__init__</span><span class="punct">(</span><span class="param">self</span><span class="punct">,</span> <span class="param">nums</span><span class="punct">:</span> <span class="type">List</span><span class="punct">[</span><span class="type">int</span><span class="punct">]</span><span class="punct">)</span><span class="punct">:</span></span>
 <span class="line-text">        <span class="param">self</span><span class="punct">.</span><span class="var">n</span> <span class="punct">=</span> <span class="fn">len</span><span class="punct">(</span><span class="param">nums</span><span class="punct">)</span></span>
 <span class="line-text">        <span class="param">self</span><span class="punct">.</span><span class="param">nums</span> <span class="punct">=</span> <span class="punct">[</span><span class="num">0</span><span class="punct">]</span> <span class="punct">+</span> <span class="param">nums</span><span class="punct">[</span><span class="punct">:</span><span class="punct">]</span></span>
@@ -8152,10 +8147,6 @@ Result: len(tails) = 3  (Optimal nesting: [2,3] -&gt; [5,4] -&gt; [6,7])</code><
     Time:  Build O(n) | Point Update O(log n) | Range Query O(log n)
     Space: O(2n) flat contiguous array (no recursive overhead!)
     &quot;&quot;&quot;</span></span>
-<span class="line-text">    Iterative 2N Segment Tree: leaves at [n, 2n-1], parents at [1, n-1].</span>
-<span class="line-text">    Time:  Build O(n) | Point Update O(log n) | Range Query O(log n)</span>
-<span class="line-text">    Space: O(2n) flat contiguous array (no recursive overhead!)</span>
-<span class="line-text">       </span>
 <span class="line-text">    <span class="kw-def">def</span> <span class="fn">__init__</span><span class="punct">(</span><span class="param">self</span><span class="punct">,</span> <span class="param">nums</span><span class="punct">:</span> <span class="type">List</span><span class="punct">[</span><span class="type">int</span><span class="punct">]</span><span class="punct">)</span><span class="punct">:</span></span>
 <span class="line-text">        <span class="param">self</span><span class="punct">.</span><span class="var">n</span> <span class="punct">=</span> <span class="fn">len</span><span class="punct">(</span><span class="param">nums</span><span class="punct">)</span></span>
 <span class="line-text">        <span class="param">self</span><span class="punct">.</span><span class="var">tree</span> <span class="punct">=</span> <span class="punct">[</span><span class="num">0</span><span class="punct">]</span> <span class="punct">*</span> <span class="punct">(</span><span class="num">2</span> <span class="punct">*</span> <span class="param">self</span><span class="punct">.</span><span class="var">n</span><span class="punct">)</span></span>
@@ -8202,10 +8193,6 @@ Result: len(tails) = 3  (Optimal nesting: [2,3] -&gt; [5,4] -&gt; [6,7])</code><
     Time:  Point Update O(log n) | Range Query O(log n)
     Space: O(n) exact memory with minimal constant factor
     &quot;&quot;&quot;</span></span>
-<span class="line-text">    Binary Indexed Tree (BIT) for prefix and range sums.</span>
-<span class="line-text">    Time:  Point Update O(log n) | Range Query O(log n)</span>
-<span class="line-text">    Space: O(n) exact memory with minimal constant factor</span>
-<span class="line-text">       </span>
 <span class="line-text">    <span class="kw-def">def</span> <span class="fn">__init__</span><span class="punct">(</span><span class="param">self</span><span class="punct">,</span> <span class="var">n</span><span class="punct">:</span> <span class="type">int</span><span class="punct">)</span><span class="punct">:</span></span>
 <span class="line-text">        <span class="param">self</span><span class="punct">.</span><span class="var">n</span> <span class="punct">=</span> <span class="var">n</span></span>
 <span class="line-text">        <span class="param">self</span><span class="punct">.</span><span class="var">tree</span> <span class="punct">=</span> <span class="punct">[</span><span class="num">0</span><span class="punct">]</span> <span class="punct">*</span> <span class="punct">(</span><span class="var">n</span> <span class="punct">+</span> <span class="num">1</span><span class="punct">)</span></span>
@@ -8237,10 +8224,6 @@ Result: len(tails) = 3  (Optimal nesting: [2,3] -&gt; [5,4] -&gt; [6,7])</code><
     Time:  Build O(n) | Point Update O(1) | Range Query O(sqrt(n))
     Space: O(n + sqrt(n))
     &quot;&quot;&quot;</span></span>
-<span class="line-text">    Square Root Decomposition: balances O(1) point updates with O(sqrt(n)) queries.</span>
-<span class="line-text">    Time:  Build O(n) | Point Update O(1) | Range Query O(sqrt(n))</span>
-<span class="line-text">    Space: O(n + sqrt(n))</span>
-<span class="line-text">       </span>
 <span class="line-text">    <span class="kw-def">def</span> <span class="fn">__init__</span><span class="punct">(</span><span class="param">self</span><span class="punct">,</span> <span class="param">nums</span><span class="punct">:</span> <span class="type">List</span><span class="punct">[</span><span class="type">int</span><span class="punct">]</span><span class="punct">)</span><span class="punct">:</span></span>
 <span class="line-text">        <span class="param">self</span><span class="punct">.</span><span class="var">n</span><span class="punct">,</span> <span class="param">self</span><span class="punct">.</span><span class="param">nums</span> <span class="punct">=</span> <span class="fn">len</span><span class="punct">(</span><span class="param">nums</span><span class="punct">)</span><span class="punct">,</span> <span class="param">nums</span><span class="punct">[</span><span class="punct">:</span><span class="punct">]</span></span>
 <span class="line-text">        <span class="param">self</span><span class="punct">.</span><span class="var">blockSize</span> <span class="punct">=</span> <span class="fn">max</span><span class="punct">(</span><span class="num">1</span><span class="punct">,</span> <span class="type">int</span><span class="punct">(</span><span class="var">math</span><span class="punct">.</span><span class="var">isqrt</span><span class="punct">(</span><span class="param">self</span><span class="punct">.</span><span class="var">n</span><span class="punct">)</span><span class="punct">)</span><span class="punct">)</span></span>
@@ -8921,23 +8904,6 @@ Result: len(tails) = 3  (Optimal nesting: [2,3] -&gt; [5,4] -&gt; [6,7])</code><
     Time:  Build O(n) | Point Update O(log n) | Range Query O(log n)
     Space: Exactly 2n elements (half the memory of 4n recursive tree!)
     &quot;&quot;&quot;</span></span>
-<span class="line-text">    Iterative 2N &quot;Short Code&quot; Segment Tree:</span>
-<span class="line-text">    High-performance, cache-friendly segment tree without recursion.</span>
-<span class="line-text">    </span>
-<span class="line-text">    Memory Layout for n = 4 (nums = [2, 1, 5, 3]):</span>
-<span class="line-text">    Index:  0    1     2     3     4     5     6     7</span>
-<span class="line-text">    Node:  [-] [0..3] [0..1] [2..3] [0]   [1]   [2]   [3]</span>
-<span class="line-text">    Value:  0    11     3     8     2     1     5     3</span>
-<span class="line-text">           Unused  &lt;-- Parents --&gt;  &lt;--- Leaves (n..2n-1) ---&gt;</span>
-<span class="line-text">    </span>
-<span class="line-text">    Tree Invariants:</span>
-<span class="line-text">    - Leaves live at indices [n, 2n - 1] -&gt; leaf for nums[i] is at n + i</span>
-<span class="line-text">    - Parent of node i is i // 2 (or i &gt;&gt; 1)</span>
-<span class="line-text">    - Left children always have EVEN index; Right children always have ODD index</span>
-<span class="line-text">    </span>
-<span class="line-text">    Time:  Build O(n) | Point Update O(log n) | Range Query O(log n)</span>
-<span class="line-text">    Space: Exactly 2n elements (half the memory of 4n recursive tree!)</span>
-<span class="line-text">       </span>
 <span class="line-text">    <span class="kw-def">def</span> <span class="fn">__init__</span><span class="punct">(</span><span class="param">self</span><span class="punct">,</span> <span class="param">nums</span><span class="punct">:</span> <span class="type">List</span><span class="punct">[</span><span class="type">int</span><span class="punct">]</span><span class="punct">)</span><span class="punct">:</span></span>
 <span class="line-text">        <span class="param">self</span><span class="punct">.</span><span class="var">n</span> <span class="punct">=</span> <span class="fn">len</span><span class="punct">(</span><span class="param">nums</span><span class="punct">)</span></span>
 <span class="line-text">        <span class="param">self</span><span class="punct">.</span><span class="var">tree</span> <span class="punct">=</span> <span class="punct">[</span><span class="num">0</span><span class="punct">]</span> <span class="punct">*</span> <span class="punct">(</span><span class="num">2</span> <span class="punct">*</span> <span class="param">self</span><span class="punct">.</span><span class="var">n</span><span class="punct">)</span></span>
@@ -8955,9 +8921,6 @@ Result: len(tails) = 3  (Optimal nesting: [2,3] -&gt; [5,4] -&gt; [6,7])</code><
         Point update: Climb ancestor chain in O(log n).
         Zero recursion, direct linear array jumps.
         &quot;&quot;&quot;</span></span>
-<span class="line-text">        Point update: Climb ancestor chain in O(log n).</span>
-<span class="line-text">        Zero recursion, direct linear array jumps.</span>
-<span class="line-text">           </span>
 <span class="line-text">        <span class="param">idx</span> <span class="punct">+=</span> <span class="param">self</span><span class="punct">.</span><span class="var">n</span></span>
 <span class="line-text">        <span class="param">self</span><span class="punct">.</span><span class="var">tree</span><span class="punct">[</span><span class="param">idx</span><span class="punct">]</span> <span class="punct">=</span> <span class="param">val</span></span>
 <span class="line-text"></span>
@@ -8975,13 +8938,6 @@ Result: len(tails) = 3  (Optimal nesting: [2,3] -&gt; [5,4] -&gt; [6,7])</code><
           Include tree[right] directly, then decrement right to enter next parent.
         - Divide both by 2 to ascend one level.
         &quot;&quot;&quot;</span></span>
-<span class="line-text">        Range query [left, right] inclusive in O(log n):</span>
-<span class="line-text">        - If left is odd: right child -&gt; left sibling is outside range!</span>
-<span class="line-text">          Include tree[left] directly, then increment left to enter next parent.</span>
-<span class="line-text">        - If right is even: left child -&gt; right sibling is outside range!</span>
-<span class="line-text">          Include tree[right] directly, then decrement right to enter next parent.</span>
-<span class="line-text">        - Divide both by 2 to ascend one level.</span>
-<span class="line-text">           </span>
 <span class="line-text">        <span class="var">res</span> <span class="punct">=</span> <span class="num">0</span></span>
 <span class="line-text">        <span class="param">left</span><span class="punct">,</span> <span class="param">right</span> <span class="punct">=</span> <span class="param">left</span> <span class="punct">+</span> <span class="param">self</span><span class="punct">.</span><span class="var">n</span><span class="punct">,</span> <span class="param">right</span> <span class="punct">+</span> <span class="param">self</span><span class="punct">.</span><span class="var">n</span></span>
 <span class="line-text"></span>
@@ -9030,12 +8986,6 @@ Result: len(tails) = 3  (Optimal nesting: [2,3] -&gt; [5,4] -&gt; [6,7])</code><
     Time:  Build O(n) | Range Update O(log n) | Range Query O(log n)
     Space: O(4 * (n + 1))
     &quot;&quot;&quot;</span></span>
-<span class="line-text">    1-Indexed (N + 1) Segment Tree with Lazy Propagation:</span>
-<span class="line-text">    Range Updates [qLeft, qRight] += delta and Range Queries in O(log n).</span>
-<span class="line-text">    </span>
-<span class="line-text">    Time:  Build O(n) | Range Update O(log n) | Range Query O(log n)</span>
-<span class="line-text">    Space: O(4 * (n + 1))</span>
-<span class="line-text">       </span>
 <span class="line-text">    <span class="kw-def">def</span> <span class="fn">__init__</span><span class="punct">(</span><span class="param">self</span><span class="punct">,</span> <span class="param">nums</span><span class="punct">:</span> <span class="type">List</span><span class="punct">[</span><span class="type">int</span><span class="punct">]</span><span class="punct">)</span><span class="punct">:</span></span>
 <span class="line-text">        <span class="param">self</span><span class="punct">.</span><span class="var">n</span> <span class="punct">=</span> <span class="fn">len</span><span class="punct">(</span><span class="param">nums</span><span class="punct">)</span></span>
 <span class="line-text">        <span class="param">self</span><span class="punct">.</span><span class="param">nums</span> <span class="punct">=</span> <span class="punct">[</span><span class="num">0</span><span class="punct">]</span> <span class="punct">+</span> <span class="param">nums</span><span class="punct">[</span><span class="punct">:</span><span class="punct">]</span></span>
@@ -9226,17 +9176,6 @@ Result: len(tails) = 3  (Optimal nesting: [2,3] -&gt; [5,4] -&gt; [6,7])</code><
       ├── left:  [0 .. 5*10^8]       (Spawned dynamically on-demand during update)
       └── right: [5*10^8 + 1 .. 10^9] (Unallocated: None until accessed!)
     &quot;&quot;&quot;</span></span>
-<span class="line-text"></span>
-<span class="line-text">    Dynamically allocates nodes on-demand. Enables coordinate universes up to</span>
-<span class="line-text">    10^9 without Memory Limit Exceeded (allocates at most O(Q log(MAX)) nodes).</span>
-<span class="line-text"></span>
-<span class="line-text">    Tree Invariant &amp; Dynamic Expansion Trace:</span>
-<span class="line-text">    Min Coordinate: 0  -----------------------------&gt; Max Coordinate: 10^9</span>
-<span class="line-text">    Root: [0 .. 10^9]  (Allocated on start)</span>
-<span class="line-text">      ├── left:  [0 .. 5*10^8]       (Spawned dynamically on-demand during update)</span>
-<span class="line-text">      └── right: [5*10^8 + 1 .. 10^9] (Unallocated: None until accessed!)</span>
-<span class="line-text">
-</span>
 <span class="line-text">    <span class="kw-def">def</span> <span class="fn">__init__</span><span class="punct">(</span><span class="param">self</span><span class="punct">,</span> <span class="var">minCoord</span><span class="punct">:</span> <span class="type">int</span> <span class="punct">=</span> <span class="num">0</span><span class="punct">,</span> <span class="var">maxCoord</span><span class="punct">:</span> <span class="type">int</span> <span class="punct">=</span> <span class="num">10</span><span class="punct">**</span><span class="num">9</span><span class="punct">)</span><span class="punct">:</span>
 </span>
 <span class="line-text">        <span class="param">self</span><span class="punct">.</span><span class="var">root</span> <span class="punct">=</span> <span class="fn">SegmentTreeNode</span><span class="punct">(</span><span class="var">minCoord</span><span class="punct">,</span> <span class="var">maxCoord</span><span class="punct">)</span>
@@ -9631,15 +9570,6 @@ Result: len(tails) = 3  (Optimal nesting: [2,3] -&gt; [5,4] -&gt; [6,7])</code><
     Time:  Point Update O(log n) | Prefix Query O(log n) | Range Query O(log n)
     Space: O(n) exact memory (no overhead!)
     &quot;&quot;&quot;</span></span>
-<span class="line-text">    Binary Indexed Tree (BIT / Fenwick Tree):</span>
-<span class="line-text">    Maintains prefix sums with O(log n) updates and queries in strictly O(n) space.</span>
-<span class="line-text">    </span>
-<span class="line-text">    lowbit Invariant: lowbit(x) = x &amp; (-x)</span>
-<span class="line-text">    Tree Node x covers length lowbit(x), specifically range [x - lowbit(x) + 1, x].</span>
-<span class="line-text">    </span>
-<span class="line-text">    Time:  Point Update O(log n) | Prefix Query O(log n) | Range Query O(log n)</span>
-<span class="line-text">    Space: O(n) exact memory (no overhead!)</span>
-<span class="line-text">       </span>
 <span class="line-text">    <span class="kw-def">def</span> <span class="fn">__init__</span><span class="punct">(</span><span class="param">self</span><span class="punct">,</span> <span class="var">n</span><span class="punct">:</span> <span class="type">int</span><span class="punct">)</span><span class="punct">:</span></span>
 <span class="line-text">        <span class="param">self</span><span class="punct">.</span><span class="var">n</span> <span class="punct">=</span> <span class="var">n</span></span>
 <span class="line-text">        <span class="param">self</span><span class="punct">.</span><span class="var">tree</span> <span class="punct">=</span> <span class="punct">[</span><span class="num">0</span><span class="punct">]</span> <span class="punct">*</span> <span class="punct">(</span><span class="var">n</span> <span class="punct">+</span> <span class="num">1</span><span class="punct">)</span></span>
@@ -9649,9 +9579,6 @@ Result: len(tails) = 3  (Optimal nesting: [2,3] -&gt; [5,4] -&gt; [6,7])</code><
         Add delta to element at 1-based index idx.
         Climbs up the tree by adding the lowest set bit.
         &quot;&quot;&quot;</span></span>
-<span class="line-text">        Add delta to element at 1-based index idx.</span>
-<span class="line-text">        Climbs up the tree by adding the lowest set bit.</span>
-<span class="line-text">           </span>
 <span class="line-text">        <span class="flow">while</span> <span class="param">idx</span> <span class="punct">&lt;=</span> <span class="param">self</span><span class="punct">.</span><span class="var">n</span><span class="punct">:</span></span>
 <span class="line-text">            <span class="param">self</span><span class="punct">.</span><span class="var">tree</span><span class="punct">[</span><span class="param">idx</span><span class="punct">]</span> <span class="punct">+=</span> <span class="param">delta</span></span>
 <span class="line-text">            <span class="param">idx</span> <span class="punct">+=</span> <span class="param">idx</span> <span class="punct">&amp;</span> <span class="punct">(</span><span class="punct">-</span><span class="param">idx</span><span class="punct">)</span></span>
@@ -9661,9 +9588,6 @@ Result: len(tails) = 3  (Optimal nesting: [2,3] -&gt; [5,4] -&gt; [6,7])</code><
         Compute prefix sum nums[1..idx].
         Descends down the tree by stripping the lowest set bit.
         &quot;&quot;&quot;</span></span>
-<span class="line-text">        Compute prefix sum nums[1..idx].</span>
-<span class="line-text">        Descends down the tree by stripping the lowest set bit.</span>
-<span class="line-text">           </span>
 <span class="line-text">        <span class="var">total</span> <span class="punct">=</span> <span class="num">0</span></span>
 <span class="line-text"></span>
 <span class="line-text">        <span class="flow">while</span> <span class="param">idx</span> <span class="punct">&gt;</span> <span class="num">0</span><span class="punct">:</span></span>
@@ -9710,19 +9634,6 @@ Result: len(tails) = 3  (Optimal nesting: [2,3] -&gt; [5,4] -&gt; [6,7])</code><
     Time:  Range Update O(log n), Point Query O(log n)
     Space: O(n)
     &quot;&quot;&quot;</span></span>
-<span class="line-text">    Range Update &amp; Point Query via Difference Array BIT:</span>
-<span class="line-text">    Applies D[i] = A[i] - A[i - 1] so range updates become two point updates.</span>
-<span class="line-text">    </span>
-<span class="line-text">    Range Update [l, r] += delta:</span>
-<span class="line-text">      bit.update(l, delta)</span>
-<span class="line-text">      bit.update(r + 1, -delta)</span>
-<span class="line-text">    </span>
-<span class="line-text">    Point Query at idx:</span>
-<span class="line-text">      sum(D[1..idx]) = bit.query(idx)</span>
-<span class="line-text">    </span>
-<span class="line-text">    Time:  Range Update O(log n), Point Query O(log n)</span>
-<span class="line-text">    Space: O(n)</span>
-<span class="line-text">       </span>
 <span class="line-text">    <span class="kw-def">def</span> <span class="fn">__init__</span><span class="punct">(</span><span class="param">self</span><span class="punct">,</span> <span class="var">n</span><span class="punct">:</span> <span class="type">int</span><span class="punct">)</span><span class="punct">:</span></span>
 <span class="line-text">        <span class="param">self</span><span class="punct">.</span><span class="var">bit</span> <span class="punct">=</span> <span class="var">FenwickTree</span><span class="punct">(</span><span class="var">n</span><span class="punct">)</span></span>
 <span class="line-text"></span>
@@ -9804,21 +9715,6 @@ Result: len(tails) = 3  (Optimal nesting: [2,3] -&gt; [5,4] -&gt; [6,7])</code><
                  = i * sum D[k] - sum (D[k] * (k - 1))
                  = i * query(bit1, i) - query(bit2, i)
     &quot;&quot;&quot;</span></span>
-<span class="line-text"></span>
-<span class="line-text">    Maintains two BITs over the difference array D[i] = A[i] - A[i-1]:</span>
-<span class="line-text">    - bit1 tracks: D[i]</span>
-<span class="line-text">    - bit2 tracks: D[i] * (i - 1)</span>
-<span class="line-text"></span>
-<span class="line-text">    Mathematical Derivation &amp; Invariant:</span>
-<span class="line-text">    A[i] = sum_{k=1..i} D[k]</span>
-<span class="line-text">    prefixSum(i) = sum_{j=1..i} A[j]</span>
-<span class="line-text">                 = sum_{j=1..i} sum_{k=1..j} D[k]</span>
-<span class="line-text">                 = sum_{k=1..i} D[k] * (i - k + 1)</span>
-<span class="line-text">                 = (i + 1) * sum_{k=1..i} D[k] - sum_{k=1..i} (D[k] * k)</span>
-<span class="line-text">                 = i * sum D[k] - sum (D[k] * (k - 1))</span>
-<span class="line-text">                 = i * query(bit1, i) - query(bit2, i)</span>
-<span class="line-text">
-</span>
 <span class="line-text">    <span class="kw-def">def</span> <span class="fn">__init__</span><span class="punct">(</span><span class="param">self</span><span class="punct">,</span> <span class="var">n</span><span class="punct">:</span> <span class="type">int</span><span class="punct">)</span><span class="punct">:</span>
 </span>
 <span class="line-text">        <span class="param">self</span><span class="punct">.</span><span class="var">n</span> <span class="punct">=</span> <span class="var">n</span>
@@ -9914,12 +9810,6 @@ Result: len(tails) = 3  (Optimal nesting: [2,3] -&gt; [5,4] -&gt; [6,7])</code><
     Time:  O(n log n)
     Space: O(n)
     &quot;&quot;&quot;</span></span>
-<span class="line-text">    LeetCode 315: Count of Smaller Numbers After Self.</span>
-<span class="line-text">    Traverse right to left with Coordinate Compression + Fenwick Frequency Tree.</span>
-<span class="line-text">    </span>
-<span class="line-text">    Time:  O(n log n)</span>
-<span class="line-text">    Space: O(n)</span>
-<span class="line-text">       </span>
 <span class="line-text">    <span class="flow">if</span> <span class="flow">not</span> <span class="param">nums</span><span class="punct">:</span></span>
 <span class="line-text">        <span class="flow">return</span> <span class="punct">[</span><span class="punct">]</span></span>
 <span class="line-text"></span>
@@ -10179,12 +10069,6 @@ Result: len(tails) = 3  (Optimal nesting: [2,3] -&gt; [5,4] -&gt; [6,7])</code><
     Time:  Point Update O(1) | Range Query O(sqrt(n)) | Build O(n)
     Space: O(n) array storage + O(sqrt(n)) block summaries
     &quot;&quot;&quot;</span></span>
-<span class="line-text">    Square Root Decomposition:</span>
-<span class="line-text">    Partitions array into blocks of size B = ceil(sqrt(n)).</span>
-<span class="line-text">    </span>
-<span class="line-text">    Time:  Point Update O(1) | Range Query O(sqrt(n)) | Build O(n)</span>
-<span class="line-text">    Space: O(n) array storage + O(sqrt(n)) block summaries</span>
-<span class="line-text">       </span>
 <span class="line-text">    <span class="kw-def">def</span> <span class="fn">__init__</span><span class="punct">(</span><span class="param">self</span><span class="punct">,</span> <span class="param">nums</span><span class="punct">:</span> <span class="type">List</span><span class="punct">[</span><span class="type">int</span><span class="punct">]</span><span class="punct">)</span><span class="punct">:</span></span>
 <span class="line-text">        <span class="param">self</span><span class="punct">.</span><span class="var">n</span><span class="punct">,</span> <span class="param">self</span><span class="punct">.</span><span class="param">nums</span> <span class="punct">=</span> <span class="fn">len</span><span class="punct">(</span><span class="param">nums</span><span class="punct">)</span><span class="punct">,</span> <span class="param">nums</span><span class="punct">[</span><span class="punct">:</span><span class="punct">]</span></span>
 <span class="line-text">        <span class="param">self</span><span class="punct">.</span><span class="var">blockSize</span> <span class="punct">=</span> <span class="fn">max</span><span class="punct">(</span><span class="num">1</span><span class="punct">,</span> <span class="type">int</span><span class="punct">(</span><span class="var">math</span><span class="punct">.</span><span class="var">isqrt</span><span class="punct">(</span><span class="param">self</span><span class="punct">.</span><span class="var">n</span><span class="punct">)</span><span class="punct">)</span><span class="punct">)</span></span>
@@ -10205,9 +10089,6 @@ Result: len(tails) = 3  (Optimal nesting: [2,3] -&gt; [5,4] -&gt; [6,7])</code><
         O(sqrt(n)) Range Query [left, right] inclusive:
         Aggregates partial left block, full middle blocks, and partial right block.
         &quot;&quot;&quot;</span></span>
-<span class="line-text">        O(sqrt(n)) Range Query [left, right] inclusive:</span>
-<span class="line-text">        Aggregates partial left block, full middle blocks, and partial right block.</span>
-<span class="line-text">           </span>
 <span class="line-text">        <span class="var">startBlock</span><span class="punct">,</span> <span class="var">endBlock</span> <span class="punct">=</span> <span class="param">left</span> <span class="punct">//</span> <span class="param">self</span><span class="punct">.</span><span class="var">blockSize</span><span class="punct">,</span> <span class="param">right</span> <span class="punct">//</span> <span class="param">self</span><span class="punct">.</span><span class="var">blockSize</span></span>
 <span class="line-text"></span>
 <span class="line-text">        <span class="flow">if</span> <span class="var">startBlock</span> <span class="punct">==</span> <span class="var">endBlock</span><span class="punct">:</span></span>
@@ -10280,10 +10161,6 @@ Result: len(tails) = 3  (Optimal nesting: [2,3] -&gt; [5,4] -&gt; [6,7])</code><
 
     Maintains block sums and deferred lazy addition tags on blocks of size B = ceil(sqrt(n)).
     &quot;&quot;&quot;</span></span>
-<span class="line-text"></span>
-<span class="line-text">    Maintains block sums and deferred lazy addition tags on blocks of size B = ceil(sqrt(n)).</span>
-<span class="line-text">
-</span>
 <span class="line-text">    <span class="kw-def">def</span> <span class="fn">__init__</span><span class="punct">(</span><span class="param">self</span><span class="punct">,</span> <span class="var">nums</span><span class="punct">:</span> <span class="type">List</span><span class="punct">[</span><span class="type">int</span><span class="punct">]</span><span class="punct">)</span><span class="punct">:</span>
 </span>
 <span class="line-text">        <span class="param">self</span><span class="punct">.</span><span class="var">n</span> <span class="punct">=</span> <span class="fn">len</span><span class="punct">(</span><span class="var">nums</span><span class="punct">)</span>
@@ -10427,9 +10304,7 @@ Result: len(tails) = 3  (Optimal nesting: [2,3] -&gt; [5,4] -&gt; [6,7])</code><
     Mo&#x27;s Algorithm: Offline Range Query Optimization in O((N + Q) * sqrt(N)).
     Reorders queries so two pointers (currL, currR) move minimal total distance.
     &quot;&quot;&quot;</span></span>
-<span class="line-text">    Mo&#x27;s Algorithm: Offline Range Query Optimization in O((N + Q) * sqrt(N)).</span>
-<span class="line-text">    Reorders queries so two pointers (currL, currR) move minimal total distance.</span>
-<span class="line-text">       </span>
+<span class="line-text"></span>
 <span class="line-text">    <span class="kw-def">def</span> <span class="fn">__init__</span><span class="punct">(</span><span class="param">self</span><span class="punct">,</span> <span class="param">nums</span><span class="punct">:</span> <span class="type">List</span><span class="punct">[</span><span class="type">int</span><span class="punct">]</span><span class="punct">)</span><span class="punct">:</span></span>
 <span class="line-text">        <span class="param">self</span><span class="punct">.</span><span class="param">nums</span> <span class="punct">=</span> <span class="param">nums</span></span>
 <span class="line-text">        <span class="param">self</span><span class="punct">.</span><span class="var">n</span> <span class="punct">=</span> <span class="fn">len</span><span class="punct">(</span><span class="param">nums</span><span class="punct">)</span></span>
