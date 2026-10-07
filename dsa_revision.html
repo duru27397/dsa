@@ -276,7 +276,34 @@
             </div>
           </div>
 
-          <!-- Subcategory 4: Practice Problems -->
+                    <!-- Subcategory 4: Sparse Table (Static O(1) RMQ) -->
+          <div class="tree-node l2-node">
+            <div class="tree-header l2-header">
+              <button class="tree-toggle" type="button" aria-label="Toggle Sparse Table">
+                <span class="chevron">▸</span>
+              </button>
+              <a class="nav-item l2-link" href="#range-sparse-table-sub">
+                <span class="nav-title">Sparse Table (O(1) RMQ)</span>
+              </a>
+            </div>
+            <!-- LEVEL 3 (Topic / Technique C) -->
+            <div class="tree-children l3-children">
+              <a class="nav-item l3-link" href="#range-sparse-table-sub" data-target-sub="rq-sparse-rmq">
+                <span class="leaf-dot">•</span>
+                <span class="nav-title">Static RMQ &amp; Idempotency</span>
+              </a>
+              <a class="nav-item l3-link" href="#range-sparse-table-sub" data-target-sub="rq-sparse-gcd">
+                <span class="leaf-dot">•</span>
+                <span class="nav-title">Range GCD &amp; Bitwise Monoids</span>
+              </a>
+              <a class="nav-item l3-link" href="#range-sparse-table-sub" data-target-sub="rq-sparse-sum">
+                <span class="leaf-dot">•</span>
+                <span class="nav-title">Disjoint Sums (O(log n))</span>
+              </a>
+            </div>
+          </div>
+
+          <!-- Subcategory 5: Practice Problems -->
           <div class="tree-node l2-node">
             <div class="tree-header l2-header">
               <a class="nav-item l2-link" href="#dp-reference">
@@ -7805,7 +7832,7 @@ Result: len(tails) = 3  (Optimal nesting: [2,3] -&gt; [5,4] -&gt; [6,7])</code><
           <!-- Interactive Filter Scenario Pills -->
           <div class="rq-scenario-pills" id="rq-scenario-nav">
             <button type="button" class="rq-pill-btn active" data-engine="all">Show All Engines</button>
-            <button type="button" class="rq-pill-btn" data-engine="prefix">Static Range Sums</button>
+            <button type="button" class="rq-pill-btn" data-engine="sparse">Static RMQ / Min / Max / GCD (Sparse Table)</button>
             <button type="button" class="rq-pill-btn" data-engine="fenwick">Point Updates + Sum / XOR (Fastest / Shortest)</button>
             <button type="button" class="rq-pill-btn" data-engine="segtree-2n">Point Updates + Min / Max / GCD</button>
             <button type="button" class="rq-pill-btn" data-engine="segtree-lazy">Range Updates [L, R] += &Delta;</button>
@@ -7815,27 +7842,27 @@ Result: len(tails) = 3  (Optimal nesting: [2,3] -&gt; [5,4] -&gt; [6,7])</code><
 
           <!-- 5 Visual Decision Cards -->
           <div class="rq-decision-cards-grid" id="rq-decision-cards">
-            <!-- Card 1: Prefix Sums -->
-            <div class="rq-decision-card" data-engine-id="prefix">
+                        <!-- Card 1: Sparse Table (Static O(1) RMQ) -->
+            <div class="rq-decision-card" data-engine-id="sparse">
               <div class="rq-dcard-top">
                 <div class="rq-dcard-title">
-                  <span class="rq-dcard-icon">📊</span>
-                  <h3>Prefix Sum Array</h3>
+                  <span class="rq-dcard-icon">🗂️</span>
+                  <h3>Sparse Table</h3>
                 </div>
-                <span class="rq-dcard-badge badge-static">Static Arrays Only</span>
+                <span class="rq-dcard-badge badge-static">Static O(1) RMQ</span>
               </div>
               <div class="rq-dcard-complexities">
-                <span class="c-chip">Build: O(N)</span>
+                <span class="c-chip">Build: O(N log N)</span>
                 <span class="c-chip c-fast">Query: O(1)</span>
-                <span class="c-chip c-slow">Update: O(N)</span>
-                <span class="c-chip">Space: O(N)</span>
+                <span class="c-chip c-slow">Update: O(N log N) (Static)</span>
+                <span class="c-chip">Space: O(N log N)</span>
               </div>
               <ul class="rq-dcard-list">
-                <li><strong>Use when:</strong> The array is completely immutable (no updates whatsoever) and you need thousands of range queries.</li>
-                <li><strong>Supported operations:</strong> Any group with a subtractive inverse (+, &oplus;). Cannot support range min/max!</li>
-                <li><strong>Why it wins:</strong> True O(1) query time with zero pointer or tree overhead. Ideal for 2D submatrix queries.</li>
+                <li><strong>Use when:</strong> The array is completely immutable (no updates whatsoever) and you need millions of Range Minimum / Maximum / GCD queries in strictly O(1) time.</li>
+                <li><strong>Supported operations:</strong> Any idempotent monoid (x &star; x = x: min, max, gcd, bitwise AND/OR). Overlapping intervals do not alter the answer!</li>
+                <li><strong>Why it wins:</strong> True O(1) query time via overlapping dyadic intervals [L, L + 2ʲ - 1] and [R - 2ʲ + 1, R]. Zero recursion or pointer overhead.</li>
               </ul>
-              <a class="rq-dcard-link" href="#arrays-prefix-sub">Go to Prefix Sums &rarr;</a>
+              <a class="rq-dcard-link" href="#range-sparse-table-sub">Go to Sparse Table &rarr;</a>
             </div>
 
             <!-- Card 2: Fenwick Tree (BIT) -->
@@ -7981,15 +8008,15 @@ Result: len(tails) = 3  (Optimal nesting: [2,3] -&gt; [5,4] -&gt; [6,7])</code><
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td><strong>Prefix Sum Array</strong></td>
-                    <td>O(n)</td>
-                    <td>O(n)</td>
+                                    <tr>
+                    <td><strong>Sparse Table</strong></td>
+                    <td>O(n log n)</td>
+                    <td>O(n log n) (Static)</td>
                     <td><span style="color: var(--easy); font-weight: bold;">O(1)</span></td>
-                    <td>O(n)</td>
-                    <td>O(n)</td>
-                    <td>Invertible sums, XOR</td>
-                    <td>Ultra-fast static queries; zero overhead.</td>
+                    <td>O(n log n)</td>
+                    <td>O(n log n)</td>
+                    <td>Idempotent monoids (&min;, &max;, gcd, &amp;, &vert;)</td>
+                    <td>Unbeatable O(1) static RMQ; zero tree/pointer overhead.</td>
                   </tr>
                   <tr>
                     <td><strong>SQRT Decomposition</strong></td>
@@ -10600,7 +10627,263 @@ Result: len(tails) = 3  (Optimal nesting: [2,3] -&gt; [5,4] -&gt; [6,7])</code><
         </section>
       </section>
 
-      <!-- PAGE 5: Advanced Range Query Structures Practice Problems Reference -->
+            <!-- PAGE 5: Sparse Table Subcategory -->
+      <section class="page-view" id="range-sparse-table-sub" data-topic-title="Advanced Range Query Structures" data-page-title="Sparse Table (O(1) RMQ)">
+        <header class="topic-heading">
+          <span class="level-tag">Topic 09 &middot; Subcategory 04</span>
+          <h1><span>🗂️</span> Sparse Table &amp; Idempotent Monoids</h1>
+          <p class="topic-summary" style="max-width: 860px; line-height: 1.65; font-size: 0.94rem;">Static Range Minimum Query (RMQ) engine answering queries in strictly O(1) time and O(n log n) precomputation. Exploits the algebraic property of idempotency (x &star; x = x) to cover arbitrary intervals using two overlapping dyadic power-of-2 blocks.</p>
+        </header>
+
+        <!-- TAXONOMY / SELECTION BANNER -->
+        <div class="why-box" style="margin-top: 1.5rem; padding: 1.25rem; border-left: 4px solid var(--orange);">
+          <strong>Sparse Table Architecture &amp; Use Cases:</strong>
+          <div class="taxonomy-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 0.85rem; margin-top: 0.85rem;">
+            <div class="taxonomy-card" style="background: #181818; border: 1px solid #333; border-radius: 6px; padding: 0.85rem;">
+              <span class="badge-diff diff-easy">O(1) Query</span>
+              <h4 style="margin: 0.4rem 0; color: #fff; font-size: 0.88rem;">1. Static RMQ &amp; Idempotency</h4>
+              <p style="font-size: 0.77rem; color: var(--muted); margin: 0; line-height: 1.5;">Range Min/Max queries in O(1) time. Overlapping power-of-2 intervals cover the range without distorting results.</p>
+              <a class="tax-link" href="#rq-sparse-rmq" style="display: inline-block; margin-top: 0.5rem; font-size: 0.75rem; color: var(--orange);">Jump to RMQ &rarr;</a>
+            </div>
+
+            <div class="taxonomy-card" style="background: #181818; border: 1px solid #333; border-radius: 6px; padding: 0.85rem;">
+              <span class="badge-diff diff-medium">O(1) Lookups</span>
+              <h4 style="margin: 0.4rem 0; color: #fff; font-size: 0.88rem;">2. Range GCD &amp; Bitwise AND/OR</h4>
+              <p style="font-size: 0.77rem; color: var(--muted); margin: 0; line-height: 1.5;">Greatest Common Divisor (gcd(a, a) = a) and bitwise operations evaluated in O(1) table lookups.</p>
+              <a class="tax-link" href="#rq-sparse-gcd" style="display: inline-block; margin-top: 0.5rem; font-size: 0.75rem; color: var(--orange);">Jump to Range GCD &rarr;</a>
+            </div>
+
+            <div class="taxonomy-card" style="background: #181818; border: 1px solid #333; border-radius: 6px; padding: 0.85rem;">
+              <span class="badge-diff diff-hard">O(log n) Disjoint</span>
+              <h4 style="margin: 0.4rem 0; color: #fff; font-size: 0.88rem;">3. Disjoint Sums (Non-Idempotent)</h4>
+              <p style="font-size: 0.77rem; color: var(--muted); margin: 0; line-height: 1.5;">Non-idempotent operations (Range Sum) evaluated by greedy binary jumping into disjoint powers of 2.</p>
+              <a class="tax-link" href="#rq-sparse-sum" style="display: inline-block; margin-top: 0.5rem; font-size: 0.75rem; color: var(--orange);">Jump to Disjoint Sums &rarr;</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="patterns-section">
+          <!-- Pattern Card 1: Static RMQ -->
+          <article class="pattern-card" id="rq-sparse-rmq">
+            <div class="pattern-card-head">
+              <h3>Static RMQ via Overlapping Dyadic Intervals</h3>
+            </div>
+            <p class="use-when"><strong>Use when:</strong> The array is immutable (zero updates) and you need ultra-fast O(1) Range Minimum or Range Maximum queries across up to 10⁶ queries.</p>
+
+            <div class="why-box" style="padding: 1.35rem;">
+              <strong>Why it works: Idempotency &amp; Dyadic Doubling Invariant</strong>
+              <p style="line-height: 1.65; margin-bottom: 0.8rem;">
+                An algebraic operation &star; is <strong>idempotent</strong> if <code>x &star; x = x</code>. For example: <code>min(5, 5) = 5</code>, <code>gcd(12, 12) = 12</code>, <code>14 &amp; 14 = 14</code>.
+                Because duplicating elements has zero effect on the result, we do not need disjoint partitions like Segment Trees.
+                Any range <code>[L, R]</code> of length <em>k</em> = <em>R</em> &minus; <em>L</em> + 1 is completely covered by two overlapping blocks of size <code>2ʲ</code>, where <code>j = &lfloor;log&sub2;(k)&rfloor;</code>:
+                <br>
+                <code>Block 1: [L, L + 2ʲ &minus; 1]</code> &nbsp;&bull;&nbsp; <code>Block 2: [R &minus; 2ʲ + 1, R]</code>
+              </p>
+
+              <!-- PROPER HTML SPARSE TABLE PRIME N=7 BOX DIAGRAM -->
+              <div class="rq-visual-tree-container">
+                <div class="rq-tree-diagram-header">
+                  <span class="rq-diagram-badge">Prime Length Edge Case: Prime N = 7 Sparse Table (RMQ)</span>
+                  <span class="rq-diagram-note">Nums: [3, 1, 4, 1, 5, 9, 2] &bull; Query [1..5] &bull; 2 Overlapping Length-4 Blocks</span>
+                </div>
+
+                <div class="rq-bracket-math-summary" style="margin-bottom: 0.85rem;">
+                  <strong>Dyadic Table Construction: <code>st[j][i] = min(st[j-1][i], st[j-1][i + 2ʲ⁻¹])</code></strong>
+                  Dimensions: <code>K &times; N</code> where <code>K = n.bit_length() = 7.bit_length() = 3</code> (powers 2⁰=1, 2¹=2, 2²=4).
+                </div>
+
+                <!-- Table Rows Representation -->
+                <div style="display: flex; flex-direction: column; gap: 0.6rem;">
+                  <!-- Row 0: 2^0 = 1 -->
+                  <div style="background: #181818; border: 1px solid #333; border-radius: 6px; padding: 0.65rem;">
+                    <div style="font-size: 0.72rem; color: var(--orange); font-weight: 700; margin-bottom: 0.35rem;">Level j = 0 (Length 2⁰ = 1 element):</div>
+                    <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+                      <span class="bit-cell" style="width: auto; padding: 0 8px;">#0: 3</span>
+                      <span class="bit-cell" style="width: auto; padding: 0 8px; border-color: var(--cyan); color: #fff;">#1: 1</span>
+                      <span class="bit-cell" style="width: auto; padding: 0 8px; border-color: var(--cyan); color: #fff;">#2: 4</span>
+                      <span class="bit-cell" style="width: auto; padding: 0 8px; border-color: var(--cyan); color: #fff;">#3: 1</span>
+                      <span class="bit-cell" style="width: auto; padding: 0 8px; border-color: var(--cyan); color: #fff;">#4: 5</span>
+                      <span class="bit-cell" style="width: auto; padding: 0 8px; border-color: var(--cyan); color: #fff;">#5: 9</span>
+                      <span class="bit-cell" style="width: auto; padding: 0 8px;">#6: 2</span>
+                    </div>
+                  </div>
+
+                  <!-- Row 1: 2^1 = 2 -->
+                  <div style="background: #181818; border: 1px solid #333; border-radius: 6px; padding: 0.65rem;">
+                    <div style="font-size: 0.72rem; color: var(--cyan); font-weight: 700; margin-bottom: 0.35rem;">Level j = 1 (Length 2¹ = 2 elements):</div>
+                    <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+                      <span class="bit-cell" style="width: auto; padding: 0 8px;">[0..1]: 1</span>
+                      <span class="bit-cell" style="width: auto; padding: 0 8px;">[1..2]: 1</span>
+                      <span class="bit-cell" style="width: auto; padding: 0 8px;">[2..3]: 1</span>
+                      <span class="bit-cell" style="width: auto; padding: 0 8px;">[3..4]: 1</span>
+                      <span class="bit-cell" style="width: auto; padding: 0 8px;">[4..5]: 5</span>
+                      <span class="bit-cell" style="width: auto; padding: 0 8px;">[5..6]: 2</span>
+                    </div>
+                  </div>
+
+                  <!-- Row 2: 2^2 = 4 -->
+                  <div style="background: #1c1813; border: 1px solid #3c3222; border-radius: 6px; padding: 0.65rem;">
+                    <div style="font-size: 0.72rem; color: var(--orange); font-weight: 700; margin-bottom: 0.35rem;">Level j = 2 (Length 2² = 4 elements):</div>
+                    <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+                      <span class="bit-cell" style="width: auto; padding: 0 8px;">[0..3]: 1</span>
+                      <span class="bit-cell" style="width: auto; padding: 0 8px; border-color: var(--orange); color: #fff; background: #2a2015;">[1..4]: 1 (Left Block)</span>
+                      <span class="bit-cell" style="width: auto; padding: 0 8px; border-color: var(--orange); color: #fff; background: #2a2015;">[2..5]: 1 (Right Block)</span>
+                      <span class="bit-cell" style="width: auto; padding: 0 8px;">[3..6]: 1</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Overlap Visual Trace -->
+                <div class="rq-sqrt-query-trace-box" style="margin-top: 0.85rem;">
+                  <div class="rq-trace-title">
+                    <strong>Query Trace for Range [1 .. 5] (Length = 5, j = &lfloor;log&sub2;(5)&rfloor; = 2, Block Size = 4):</strong>
+                  </div>
+                  <div class="rq-trace-steps">
+                    <div class="rq-step-box step-head" style="border-color: var(--orange);">
+                      <span class="step-badge" style="color: var(--orange);">Block 1: [1 .. 4]</span>
+                      <span><code>st[2][1]</code> = <strong>1</strong> (Length 4)</span>
+                    </div>
+                    <div class="rq-step-box step-mid" style="border-color: var(--cyan);">
+                      <span class="step-badge" style="color: var(--cyan);">Overlap: [2 .. 4]</span>
+                      <span>Evaluated in both blocks, invariant safe!</span>
+                    </div>
+                    <div class="rq-step-box step-tail" style="border-color: var(--orange);">
+                      <span class="step-badge" style="color: var(--orange);">Block 2: [2 .. 5]</span>
+                      <span><code>st[2][2]</code> = <strong>1</strong> (Length 4)</span>
+                    </div>
+                  </div>
+                  <div class="rq-trace-total">
+                    O(1) Result = min(st[2][1], st[2][2]) = min(1, 1) = <strong>1</strong> (Exactly 2 memory lookups in O(1) time!).
+                  </div>
+                </div>
+              </div>
+
+              <ul style="line-height: 1.65; margin-top: 1rem;">
+                <li><strong>O(1) Query Time:</strong> Precomputing power-of-2 interval answers enables 2-lookup coverage for any interval length in O(1).</li>
+                <li><strong>O(n log n) Build Time &amp; Space:</strong> Dynamic programming builds each level <em>j</em> from level <em>j</em> &minus; 1 in O(n) per level.</li>
+                <li><strong>Static Arrays Only:</strong> Any mutation to base array requires rebuilding the table (or O(n) adjustments).</li>
+              </ul>
+            </div>
+
+            <div class="mini-code-wrap">
+              <button class="copy-button mini-copy" type="button" data-code="rq-sparse-rmq-code">Copy</button>
+              <pre class="mini-code" id="rq-sparse-rmq-code"><code><span class="line-text"><span class="flow">from</span> <span class="var">typing</span> <span class="flow">import</span> <span class="type">List</span><span class="punct">,</span> <span class="type">Callable</span></span>
+<span class="line-text"><span class="flow">import</span> <span class="var">math</span></span>
+<span class="line-text"></span>
+<span class="line-text"><span class="kw-class">class</span> <span class="type">SparseTable</span><span class="punct">:</span></span>
+<span class="line-text">    <span class="docstr">&quot;&quot;&quot;</span></span>
+<span class="line-text">    <span class="docstr">Sparse Table Range Minimum Query (RMQ) Engine.</span></span>
+<span class="line-text">    <span class="docstr">Builds in O(n log n) time and space.</span></span>
+<span class="line-text">    <span class="docstr">Answers static queries in strictly O(1) time for idempotent operations (min, max, gcd).</span></span>
+<span class="line-text">    <span class="docstr">&quot;&quot;&quot;</span></span>
+<span class="line-text">    <span class="kw-def">def</span> <span class="fn">__init__</span><span class="punct">(</span><span class="param">self</span><span class="punct">,</span> <span class="param">nums</span><span class="punct">:</span> <span class="type">List</span><span class="punct">[</span><span class="type">int</span><span class="punct">]</span><span class="punct">,</span> <span class="param">op</span><span class="punct">:</span> <span class="type">Callable</span><span class="punct">[</span><span class="punct">[</span><span class="type">int</span><span class="punct">,</span> <span class="type">int</span><span class="punct">]</span><span class="punct">,</span> <span class="type">int</span><span class="punct">]</span> <span class="punct">=</span> <span class="fn">min</span><span class="punct">)</span> <span class="punct">-</span><span class="punct">&gt;</span> <span class="kw-def">None</span><span class="punct">:</span></span>
+<span class="line-text">        <span class="flow">if</span> <span class="flow">not</span> <span class="param">nums</span><span class="punct">:</span></span>
+<span class="line-text">            <span class="param">self</span><span class="punct">.</span><span class="var">st</span><span class="punct">,</span> <span class="param">self</span><span class="punct">.</span><span class="param">op</span> <span class="punct">=</span> <span class="punct">[</span><span class="punct">]</span><span class="punct">,</span> <span class="param">op</span></span>
+<span class="line-text">            <span class="flow">return</span></span>
+<span class="line-text"></span>
+<span class="line-text">        <span class="param">n</span><span class="punct">,</span> <span class="param">self</span><span class="punct">.</span><span class="param">op</span> <span class="punct">=</span> <span class="fn">len</span><span class="punct">(</span><span class="param">nums</span><span class="punct">)</span><span class="punct">,</span> <span class="param">op</span></span>
+<span class="line-text">        <span class="param">k</span> <span class="punct">=</span> <span class="param">n</span><span class="punct">.</span><span class="var">bit_length</span><span class="punct">(</span><span class="punct">)</span></span>
+<span class="line-text">        <span class="param">self</span><span class="punct">.</span><span class="var">st</span> <span class="punct">=</span> <span class="punct">[</span><span class="punct">[</span><span class="num">0</span><span class="punct">]</span> <span class="punct">*</span> <span class="param">n</span> <span class="flow">for</span> <span class="var">_</span> <span class="flow">in</span> <span class="fn">range</span><span class="punct">(</span><span class="param">k</span><span class="punct">)</span><span class="punct">]</span></span>
+<span class="line-text">        <span class="param">self</span><span class="punct">.</span><span class="var">st</span><span class="punct">[</span><span class="num">0</span><span class="punct">]</span> <span class="punct">=</span> <span class="fn">list</span><span class="punct">(</span><span class="param">nums</span><span class="punct">)</span></span>
+<span class="line-text"></span>
+<span class="line-text">        <span class="comment"># Tabulate interval lengths of powers of 2</span></span>
+<span class="line-text">        <span class="flow">for</span> <span class="var">j</span> <span class="flow">in</span> <span class="fn">range</span><span class="punct">(</span><span class="num">1</span><span class="punct">,</span> <span class="param">k</span><span class="punct">)</span><span class="punct">:</span></span>
+<span class="line-text">            <span class="param">step</span> <span class="punct">=</span> <span class="num">1</span> <span class="punct">&lt;</span><span class="punct">&lt;</span> <span class="punct">(</span><span class="var">j</span> <span class="punct">-</span> <span class="num">1</span><span class="punct">)</span></span>
+<span class="line-text">            <span class="flow">for</span> <span class="var">i</span> <span class="flow">in</span> <span class="fn">range</span><span class="punct">(</span><span class="param">n</span> <span class="punct">-</span> <span class="punct">(</span><span class="num">1</span> <span class="punct">&lt;</span><span class="punct">&lt;</span> <span class="var">j</span><span class="punct">)</span> <span class="punct">+</span> <span class="num">1</span><span class="punct">)</span><span class="punct">:</span></span>
+<span class="line-text">                <span class="param">self</span><span class="punct">.</span><span class="var">st</span><span class="punct">[</span><span class="var">j</span><span class="punct">]</span><span class="punct">[</span><span class="var">i</span><span class="punct">]</span> <span class="punct">=</span> <span class="param">op</span><span class="punct">(</span><span class="param">self</span><span class="punct">.</span><span class="var">st</span><span class="punct">[</span><span class="var">j</span> <span class="punct">-</span> <span class="num">1</span><span class="punct">]</span><span class="punct">[</span><span class="var">i</span><span class="punct">]</span><span class="punct">,</span> <span class="param">self</span><span class="punct">.</span><span class="var">st</span><span class="punct">[</span><span class="var">j</span> <span class="punct">-</span> <span class="num">1</span><span class="punct">]</span><span class="punct">[</span><span class="var">i</span> <span class="punct">+</span> <span class="param">step</span><span class="punct">]</span><span class="punct">)</span></span>
+<span class="line-text"></span>
+<span class="line-text">    <span class="kw-def">def</span> <span class="fn">query</span><span class="punct">(</span><span class="param">self</span><span class="punct">,</span> <span class="param">left</span><span class="punct">:</span> <span class="type">int</span><span class="punct">,</span> <span class="param">right</span><span class="punct">:</span> <span class="type">int</span><span class="punct">)</span> <span class="punct">-</span><span class="punct">&gt;</span> <span class="type">int</span><span class="punct">:</span></span>
+<span class="line-text">        <span class="docstr">&quot;&quot;&quot;</span></span>
+<span class="line-text">        <span class="docstr">O(1) Idempotent Range Query on [left .. right].</span></span>
+<span class="line-text">        <span class="docstr">Uses two overlapping blocks of size 2^j to cover the range.</span></span>
+<span class="line-text">        <span class="docstr">Because op(x, x) == x, overlapping elements do not distort the result.</span></span>
+<span class="line-text">        <span class="docstr">&quot;&quot;&quot;</span></span>
+<span class="line-text">        <span class="var">j</span> <span class="punct">=</span> <span class="punct">(</span><span class="param">right</span> <span class="punct">-</span> <span class="param">left</span> <span class="punct">+</span> <span class="num">1</span><span class="punct">)</span><span class="punct">.</span><span class="var">bit_length</span><span class="punct">(</span><span class="punct">)</span> <span class="punct">-</span> <span class="num">1</span></span>
+<span class="line-text">        <span class="flow">return</span> <span class="param">self</span><span class="punct">.</span><span class="param">op</span><span class="punct">(</span><span class="param">self</span><span class="punct">.</span><span class="var">st</span><span class="punct">[</span><span class="var">j</span><span class="punct">]</span><span class="punct">[</span><span class="param">left</span><span class="punct">]</span><span class="punct">,</span> <span class="param">self</span><span class="punct">.</span><span class="var">st</span><span class="punct">[</span><span class="var">j</span><span class="punct">]</span><span class="punct">[</span><span class="param">right</span> <span class="punct">-</span> <span class="punct">(</span><span class="num">1</span> <span class="punct">&lt;</span><span class="punct">&lt;</span> <span class="var">j</span><span class="punct">)</span> <span class="punct">+</span> <span class="num">1</span><span class="punct">]</span><span class="punct">)</span></span>
+<span class="line-text"></span>
+<span class="line-text">    <span class="kw-def">def</span> <span class="fn">queryDisjointSum</span><span class="punct">(</span><span class="param">self</span><span class="punct">,</span> <span class="param">left</span><span class="punct">:</span> <span class="type">int</span><span class="punct">,</span> <span class="param">right</span><span class="punct">:</span> <span class="type">int</span><span class="punct">)</span> <span class="punct">-</span><span class="punct">&gt;</span> <span class="type">int</span><span class="punct">:</span></span>
+<span class="line-text">        <span class="docstr">&quot;&quot;&quot;</span></span>
+<span class="line-text">        <span class="docstr">O(log n) Non-Idempotent Range Sum on [left .. right].</span></span>
+<span class="line-text">        <span class="docstr">Decomposes range into disjoint dyadic binary powers of 2.</span></span>
+<span class="line-text">        <span class="docstr">&quot;&quot;&quot;</span></span>
+<span class="line-text">        <span class="var">res</span><span class="punct">,</span> <span class="param">currIdx</span> <span class="punct">=</span> <span class="num">0</span><span class="punct">,</span> <span class="param">left</span></span>
+<span class="line-text"></span>
+<span class="line-text">        <span class="flow">for</span> <span class="var">j</span> <span class="flow">in</span> <span class="fn">range</span><span class="punct">(</span><span class="fn">len</span><span class="punct">(</span><span class="param">self</span><span class="punct">.</span><span class="var">st</span><span class="punct">)</span> <span class="punct">-</span> <span class="num">1</span><span class="punct">,</span> <span class="punct">-</span><span class="num">1</span><span class="punct">,</span> <span class="punct">-</span><span class="num">1</span><span class="punct">)</span><span class="punct">:</span></span>
+<span class="line-text">            <span class="flow">if</span> <span class="param">currIdx</span> <span class="punct">+</span> <span class="punct">(</span><span class="num">1</span> <span class="punct">&lt;</span><span class="punct">&lt;</span> <span class="var">j</span><span class="punct">)</span> <span class="punct">-</span> <span class="num">1</span> <span class="punct">&lt;</span><span class="punct">=</span> <span class="param">right</span><span class="punct">:</span></span>
+<span class="line-text">                <span class="var">res</span> <span class="punct">+</span><span class="punct">=</span> <span class="param">self</span><span class="punct">.</span><span class="var">st</span><span class="punct">[</span><span class="var">j</span><span class="punct">]</span><span class="punct">[</span><span class="param">currIdx</span><span class="punct">]</span></span>
+<span class="line-text">                <span class="param">currIdx</span> <span class="punct">+</span><span class="punct">=</span> <span class="num">1</span> <span class="punct">&lt;</span><span class="punct">&lt;</span> <span class="var">j</span></span>
+<span class="line-text"></span>
+<span class="line-text">        <span class="flow">return</span> <span class="var">res</span></span>
+<span class="line-text"></span></code></pre>
+            </div>
+          </article>
+
+          <!-- Pattern Card 2: Range GCD -->
+          <article class="pattern-card" id="rq-sparse-gcd">
+            <div class="pattern-card-head">
+              <h3>Range GCD &amp; Bitwise Monoids (AND / OR)</h3>
+            </div>
+            <p class="use-when"><strong>Use when:</strong> Range Greatest Common Divisor or bitwise operations (&amp;, &vert;) over static arrays where queries must execute in O(1) table lookups.</p>
+
+            <div class="why-box" style="padding: 1.35rem;">
+              <strong>Why it works: Idempotence of GCD and Bitwise Logic</strong>
+              <p style="line-height: 1.65; margin-bottom: 0.8rem;">
+                Because <code>gcd(a, a) = a</code>, overlapping segments do not alter the greatest common divisor.
+                The exact same two-block query engine applies:
+                <code>j = (right - left + 1).bit_length() - 1</code>, then <code>math.gcd(st[j][left], st[j][right - (1 &lt;&lt; j) + 1])</code>.
+              </p>
+            </div>
+
+            <div class="mini-code-wrap">
+              <button class="copy-button mini-copy" type="button" data-code="rq-sparse-gcd-code">Copy</button>
+              <pre class="mini-code" id="rq-sparse-gcd-code"><code><span class="line-text"><span class="flow">from</span> <span class="var">typing</span> <span class="flow">import</span> <span class="type">List</span></span>
+<span class="line-text"><span class="flow">import</span> <span class="var">math</span></span>
+<span class="line-text"></span>
+<span class="line-text"><span class="kw-class">class</span> <span class="type">SparseTableGCD</span><span class="punct">:</span></span>
+<span class="line-text">    <span class="docstr">&quot;&quot;&quot;</span></span>
+<span class="line-text">    <span class="docstr">Sparse Table for static Range Greatest Common Divisor (GCD).</span></span>
+<span class="line-text">    <span class="docstr">GCD is associative and idempotent: gcd(a, a) == a.</span></span>
+<span class="line-text">    <span class="docstr">Answers range GCD in strictly O(1) table lookups (excluding gcd math).</span></span>
+<span class="line-text">    <span class="docstr">&quot;&quot;&quot;</span></span>
+<span class="line-text">    <span class="kw-def">def</span> <span class="fn">__init__</span><span class="punct">(</span><span class="param">self</span><span class="punct">,</span> <span class="param">nums</span><span class="punct">:</span> <span class="type">List</span><span class="punct">[</span><span class="type">int</span><span class="punct">]</span><span class="punct">)</span> <span class="punct">-</span><span class="punct">&gt;</span> <span class="kw-def">None</span><span class="punct">:</span></span>
+<span class="line-text">        <span class="param">n</span> <span class="punct">=</span> <span class="fn">len</span><span class="punct">(</span><span class="param">nums</span><span class="punct">)</span></span>
+<span class="line-text">        <span class="param">k</span> <span class="punct">=</span> <span class="param">n</span><span class="punct">.</span><span class="var">bit_length</span><span class="punct">(</span><span class="punct">)</span></span>
+<span class="line-text">        <span class="param">self</span><span class="punct">.</span><span class="var">st</span> <span class="punct">=</span> <span class="punct">[</span><span class="punct">[</span><span class="num">0</span><span class="punct">]</span> <span class="punct">*</span> <span class="param">n</span> <span class="flow">for</span> <span class="var">_</span> <span class="flow">in</span> <span class="fn">range</span><span class="punct">(</span><span class="param">k</span><span class="punct">)</span><span class="punct">]</span></span>
+<span class="line-text">        <span class="param">self</span><span class="punct">.</span><span class="var">st</span><span class="punct">[</span><span class="num">0</span><span class="punct">]</span> <span class="punct">=</span> <span class="fn">list</span><span class="punct">(</span><span class="param">nums</span><span class="punct">)</span></span>
+<span class="line-text"></span>
+<span class="line-text">        <span class="flow">for</span> <span class="var">j</span> <span class="flow">in</span> <span class="fn">range</span><span class="punct">(</span><span class="num">1</span><span class="punct">,</span> <span class="param">k</span><span class="punct">)</span><span class="punct">:</span></span>
+<span class="line-text">            <span class="param">step</span> <span class="punct">=</span> <span class="num">1</span> <span class="punct">&lt;</span><span class="punct">&lt;</span> <span class="punct">(</span><span class="var">j</span> <span class="punct">-</span> <span class="num">1</span><span class="punct">)</span></span>
+<span class="line-text">            <span class="flow">for</span> <span class="var">i</span> <span class="flow">in</span> <span class="fn">range</span><span class="punct">(</span><span class="param">n</span> <span class="punct">-</span> <span class="punct">(</span><span class="num">1</span> <span class="punct">&lt;</span><span class="punct">&lt;</span> <span class="var">j</span><span class="punct">)</span> <span class="punct">+</span> <span class="num">1</span><span class="punct">)</span><span class="punct">:</span></span>
+<span class="line-text">                <span class="param">self</span><span class="punct">.</span><span class="var">st</span><span class="punct">[</span><span class="var">j</span><span class="punct">]</span><span class="punct">[</span><span class="var">i</span><span class="punct">]</span> <span class="punct">=</span> <span class="var">math</span><span class="punct">.</span><span class="var">gcd</span><span class="punct">(</span><span class="param">self</span><span class="punct">.</span><span class="var">st</span><span class="punct">[</span><span class="var">j</span> <span class="punct">-</span> <span class="num">1</span><span class="punct">]</span><span class="punct">[</span><span class="var">i</span><span class="punct">]</span><span class="punct">,</span> <span class="param">self</span><span class="punct">.</span><span class="var">st</span><span class="punct">[</span><span class="var">j</span> <span class="punct">-</span> <span class="num">1</span><span class="punct">]</span><span class="punct">[</span><span class="var">i</span> <span class="punct">+</span> <span class="param">step</span><span class="punct">]</span><span class="punct">)</span></span>
+<span class="line-text"></span>
+<span class="line-text">    <span class="kw-def">def</span> <span class="fn">queryGCD</span><span class="punct">(</span><span class="param">self</span><span class="punct">,</span> <span class="param">left</span><span class="punct">:</span> <span class="type">int</span><span class="punct">,</span> <span class="param">right</span><span class="punct">:</span> <span class="type">int</span><span class="punct">)</span> <span class="punct">-</span><span class="punct">&gt;</span> <span class="type">int</span><span class="punct">:</span></span>
+<span class="line-text">        <span class="docstr">&quot;&quot;&quot;Answers range GCD on [left .. right] in O(1) table access.&quot;&quot;&quot;</span></span>
+<span class="line-text">        <span class="var">j</span> <span class="punct">=</span> <span class="punct">(</span><span class="param">right</span> <span class="punct">-</span> <span class="param">left</span> <span class="punct">+</span> <span class="num">1</span><span class="punct">)</span><span class="punct">.</span><span class="var">bit_length</span><span class="punct">(</span><span class="punct">)</span> <span class="punct">-</span> <span class="num">1</span></span>
+<span class="line-text">        <span class="flow">return</span> <span class="var">math</span><span class="punct">.</span><span class="var">gcd</span><span class="punct">(</span><span class="param">self</span><span class="punct">.</span><span class="var">st</span><span class="punct">[</span><span class="var">j</span><span class="punct">]</span><span class="punct">[</span><span class="param">left</span><span class="punct">]</span><span class="punct">,</span> <span class="param">self</span><span class="punct">.</span><span class="var">st</span><span class="punct">[</span><span class="var">j</span><span class="punct">]</span><span class="punct">[</span><span class="param">right</span> <span class="punct">-</span> <span class="punct">(</span><span class="num">1</span> <span class="punct">&lt;</span><span class="punct">&lt;</span> <span class="var">j</span><span class="punct">)</span> <span class="punct">+</span> <span class="num">1</span><span class="punct">]</span><span class="punct">)</span></span>
+<span class="line-text"></span></code></pre>
+            </div>
+          </article>
+
+          <!-- Pattern Card 3: Disjoint Sums -->
+          <article class="pattern-card" id="rq-sparse-sum">
+            <div class="pattern-card-head">
+              <h3>Disjoint Binary Decomposition for Non-Idempotent Sums (O(log n))</h3>
+            </div>
+            <p class="use-when"><strong>Use when:</strong> Evaluating non-idempotent operations (such as Range Sum) on a Sparse Table without double-counting overlapping elements.</p>
+
+            <div class="why-box" style="padding: 1.35rem;">
+              <strong>Why it works: Greedy Binary Partitioning</strong>
+              <p style="line-height: 1.65; margin-bottom: 0.8rem;">
+                Addition is NOT idempotent (<code>x + x &ne; x</code>). To compute range sums using a Sparse Table without double-counting, we decompose <code>[left .. right]</code> into <strong>disjoint</strong> binary powers of 2 (similar to Fenwick tree decomposition).
+                We jump from <code>left</code> to <code>right</code> using the largest power of 2 that fits without exceeding <code>right</code>.
+                Takes <strong>O(log n)</strong> additions and guarantees zero overlap!
+              </p>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- PAGE 6: Advanced Range Query Structures Practice Problems Reference -->
       <section class="page-view" id="range-queries-reference" data-topic-title="Advanced Range Query Structures" data-page-title="Practice Problems">
         <header class="topic-heading">
           <span class="level-tag">Topic 09 · Practice Problems</span>
