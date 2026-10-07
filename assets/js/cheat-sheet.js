@@ -62,7 +62,46 @@
     "intervals-merge-sub": "intervals-merge-sub",
     "intervals-scheduling-sub": "intervals-scheduling-sub",
     "intervals-sweepline-sub": "intervals-sweepline-sub",
-    "intervals-reference": "intervals-reference"
+    "intervals-reference": "intervals-reference",
+    "advanced-python": "python-blueprint",
+    "advanced-python-3": "python-blueprint",
+    "python": "python-blueprint",
+    "python-blueprint": "python-blueprint",
+    "python-l1": "python-ordered-dict-sub",
+    "python-ordered-dict": "python-ordered-dict-sub",
+    "python-ordered-dict-sub": "python-ordered-dict-sub",
+    "python-l2": "python-sorted-containers-sub",
+    "python-sorted-containers": "python-sorted-containers-sub",
+    "python-sorted-containers-sub": "python-sorted-containers-sub",
+    "python-sorted-dict": "python-sorted-containers-sub",
+    "python-sorted-set": "python-sorted-containers-sub",
+    "python-l3": "python-collections-sub",
+    "python-collections": "python-collections-sub",
+    "python-collections-sub": "python-collections-sub",
+    "python-counter": "python-collections-sub",
+    "python-defaultdict": "python-collections-sub",
+    "python-l4": "python-quirks-sub",
+    "python-quirks": "python-quirks-sub",
+    "python-quirks-sub": "python-quirks-sub",
+    "python-regex": "python-quirks-sub",
+    "python-reference": "python-reference",
+    "range-queries": "range-queries-blueprint",
+    "range-queries-blueprint": "range-queries-blueprint",
+    "range-l1": "range-segment-tree-sub",
+    "range-segment-tree": "range-segment-tree-sub",
+    "range-segment-tree-sub": "range-segment-tree-sub",
+    "segment-tree": "range-segment-tree-sub",
+    "range-l2": "range-fenwick-tree-sub",
+    "range-fenwick-tree": "range-fenwick-tree-sub",
+    "range-fenwick-tree-sub": "range-fenwick-tree-sub",
+    "fenwick-tree": "range-fenwick-tree-sub",
+    "bit": "range-fenwick-tree-sub",
+    "range-l3": "range-sqrt-decomp-sub",
+    "range-sqrt-decomp": "range-sqrt-decomp-sub",
+    "range-sqrt-decomp-sub": "range-sqrt-decomp-sub",
+    "sqrt-decomposition": "range-sqrt-decomp-sub",
+    "range-queries-reference": "range-queries-reference",
+    "range-reference": "range-queries-reference"
   };
 
   const showPage = (rawTargetId, updateUrl = true, subTargetId = null) => {
@@ -748,6 +787,544 @@
   };
 
   initKmpSimulator();
+
+  /* =========================================================================
+     LIVE INTERACTIVE ORDEREDDICT DLL & EVICTION SIMULATOR ENGINE
+     ========================================================================= */
+  const initOrderedDictSimulator = () => {
+    const simRoot = document.getElementById("ordered-dict-sim");
+    if (!simRoot) return;
+
+    const chainEl = document.getElementById("od-dll-chain");
+    const countVal = document.getElementById("od-count-val");
+    const capVal = document.getElementById("od-cap-val");
+    const headVal = document.getElementById("od-head-val");
+    const tailVal = document.getElementById("od-tail-val");
+    const logEl = document.getElementById("od-log-text");
+    const keySelect = document.getElementById("od-key-select");
+    const inputKey = document.getElementById("od-input-key");
+    const inputVal = document.getElementById("od-input-val");
+    const presetSelect = document.getElementById("od-preset-select");
+
+    const btnMoveEnd = document.getElementById("od-btn-move-end");
+    const btnMoveFront = document.getElementById("od-btn-move-front");
+    const btnPopLast = document.getElementById("od-btn-pop-last");
+    const btnPopFirst = document.getElementById("od-btn-pop-first");
+    const btnPut = document.getElementById("od-btn-put");
+    const btnReset = document.getElementById("od-btn-reset");
+
+    let capacity = 4;
+    let items = [
+      { key: "alpha", val: "10" },
+      { key: "beta", val: "20" },
+      { key: "gamma", val: "30" }
+    ];
+
+    const setLog = (msg, isAlert = false) => {
+      if (!logEl) return;
+      logEl.innerHTML = isAlert
+        ? `<span style="color: #f87171; font-weight: bold;">⚠</span> ${msg}`
+        : `<span style="color: var(--easy); font-weight: bold;">✓</span> ${msg}`;
+    };
+
+    const updateControls = () => {
+      if (keySelect) {
+        keySelect.innerHTML = items.length === 0
+          ? `<option value="">(Empty)</option>`
+          : items.map(it => `<option value="${it.key}">${it.key}</option>`).join("");
+      }
+      if (countVal) countVal.textContent = `${items.length} / ${capacity}`;
+      if (capVal) capVal.textContent = `${capacity}`;
+      if (headVal) headVal.textContent = items.length ? `'${items[0].key}'` : "None";
+      if (tailVal) tailVal.textContent = items.length ? `'${items[items.length - 1].key}'` : "None";
+    };
+
+    const render = (highlightKey = null) => {
+      if (!chainEl) return;
+      if (items.length === 0) {
+        chainEl.innerHTML = `<div style="color: var(--muted); font-style: italic; padding: 1rem;">OrderedDict is currently empty. Use the input below to insert keys!</div>`;
+        updateControls();
+        return;
+      }
+
+      let html = "";
+      items.forEach((item, idx) => {
+        const isHead = idx === 0;
+        const isTail = idx === items.length - 1;
+        const isHighlight = item.key === highlightKey;
+
+        let roleClass = "od-role-mid";
+        let roleText = `Node #${idx}`;
+        let cardClass = "od-node-card";
+
+        if (isHead && isTail) {
+          roleClass = "od-role-head";
+          roleText = "Head & Tail";
+          cardClass += " active-head active-tail";
+        } else if (isHead) {
+          roleClass = "od-role-head";
+          roleText = "Head (LRU)";
+          cardClass += " active-head";
+        } else if (isTail) {
+          roleClass = "od-role-tail";
+          roleText = "Tail (MRU)";
+          cardClass += " active-tail";
+        }
+
+        if (isHighlight) {
+          cardClass += " flash-action";
+        }
+
+        html += `
+          <div class="od-node-wrap" data-key="${item.key}" title="Click node to move_to_end('${item.key}')">
+            <span class="od-node-role ${roleClass}">${roleText}</span>
+            <div class="${cardClass}">
+              <div class="od-node-key">'${item.key}'</div>
+              <div class="od-node-val">val: ${item.val}</div>
+            </div>
+          </div>
+        `;
+
+        if (idx < items.length - 1) {
+          html += `
+            <div class="od-connector" aria-hidden="true">
+              <span class="od-arrow-next">── next ──▶</span>
+              <span class="od-arrow-prev">◀── prev ──</span>
+            </div>
+          `;
+        }
+      });
+
+      chainEl.innerHTML = html;
+      updateControls();
+    };
+
+    const moveToEnd = (key, last = true) => {
+      const idx = items.findIndex(it => it.key === key);
+      if (idx === -1) {
+        setLog(`Key '${key}' not found in OrderedDict!`, true);
+        return;
+      }
+      const [item] = items.splice(idx, 1);
+      if (last) {
+        items.push(item);
+        setLog(`<code>d.move_to_end('${key}')</code>: Spliced node to TAIL (Most Recently Used / MRU).`);
+      } else {
+        items.unshift(item);
+        setLog(`<code>d.move_to_end('${key}', False)</code>: Spliced node to HEAD (Least Recently Used / LRU).`);
+      }
+      render(key);
+    };
+
+    const popItem = (last = true) => {
+      if (items.length === 0) {
+        setLog(`<code>d.popitem()</code>: KeyError - OrderedDict is empty!`, true);
+        return;
+      }
+      const popped = last ? items.pop() : items.shift();
+      if (last) {
+        setLog(`<code>d.popitem()</code>: Popped TAIL node ('${popped.key}', ${popped.val}) in O(1) LIFO order.`);
+      } else {
+        setLog(`<code>d.popitem(False)</code>: Popped HEAD node ('${popped.key}', ${popped.val}) in O(1) FIFO / LRU eviction!`);
+      }
+      render();
+    };
+
+    const putItem = (key, val) => {
+      if (!key) return;
+      const idx = items.findIndex(it => it.key === key);
+      if (idx !== -1) {
+        items[idx].val = val;
+        const [updated] = items.splice(idx, 1);
+        items.push(updated);
+        setLog(`<code>d['${key}'] = ${val}</code>: Existing key updated &amp; refreshed to TAIL (MRU).`);
+      } else {
+        items.push({ key, val });
+        if (items.length > capacity) {
+          const evicted = items.shift();
+          setLog(`<code>d['${key}'] = ${val}</code>: Capacity ${capacity} exceeded -> Evicted LRU HEAD ('${evicted.key}', ${evicted.val}) via <code>popitem(False)</code>!`, true);
+        } else {
+          setLog(`<code>d['${key}'] = ${val}</code>: Appended new node to TAIL in O(1) time.`);
+        }
+      }
+      render(key);
+    };
+
+    chainEl?.addEventListener("click", (e) => {
+      const nodeWrap = e.target.closest(".od-node-wrap");
+      if (nodeWrap) {
+        const key = nodeWrap.dataset.key;
+        if (key) {
+          moveToEnd(key, true);
+        }
+      }
+    });
+
+    btnMoveEnd?.addEventListener("click", () => {
+      const k = keySelect?.value;
+      if (k) moveToEnd(k, true);
+    });
+
+    btnMoveFront?.addEventListener("click", () => {
+      const k = keySelect?.value;
+      if (k) moveToEnd(k, false);
+    });
+
+    btnPopLast?.addEventListener("click", () => {
+      popItem(true);
+    });
+
+    btnPopFirst?.addEventListener("click", () => {
+      popItem(false);
+    });
+
+    btnPut?.addEventListener("click", () => {
+      const k = inputKey?.value.trim() || `k${items.length + 1}`;
+      const v = inputVal?.value.trim() || `${(items.length + 1) * 10}`;
+      putItem(k, v);
+      if (inputKey) inputKey.value = "";
+    });
+
+    presetSelect?.addEventListener("change", (e) => {
+      const val = e.target.value;
+      if (val === "lru") {
+        capacity = 3;
+        items = [
+          { key: "A", val: "1" },
+          { key: "B", val: "2" },
+          { key: "C", val: "3" }
+        ];
+        setLog(`Loaded LRU Cache preset (Capacity: 3). Try inserting 'D' to see eviction!`);
+      } else if (val === "fifo") {
+        capacity = 5;
+        items = [
+          { key: "msg1", val: "100" },
+          { key: "msg2", val: "200" },
+          { key: "msg3", val: "300" }
+        ];
+        setLog(`Loaded FIFO stream preset. Use <code>popitem(False)</code> to consume in arrival order.`);
+      } else if (val === "custom") {
+        capacity = 4;
+        items = [
+          { key: "alpha", val: "10" },
+          { key: "beta", val: "20" },
+          { key: "gamma", val: "30" }
+        ];
+        setLog(`Reset to standard 3-node state.`);
+      }
+      render();
+    });
+
+    btnReset?.addEventListener("click", () => {
+      capacity = 4;
+      items = [
+        { key: "alpha", val: "10" },
+        { key: "beta", val: "20" },
+        { key: "gamma", val: "30" }
+      ];
+      setLog(`OrderedDict simulator reset to initial state.`);
+      render();
+    });
+
+    render();
+  };
+
+  initOrderedDictSimulator();
+
+  const initRangeQuerySimulator = () => {
+    const modeSelect = document.getElementById("rq-mode-select");
+    const sizeVal = document.getElementById("rq-size-val");
+    const modeLbl = document.getElementById("rq-mode-lbl");
+    const resultVal = document.getElementById("rq-result-val");
+    const opsVal = document.getElementById("rq-ops-val");
+    const arrayCells = document.getElementById("rq-array-cells");
+    const canvasEl = document.getElementById("rq-sim-canvas");
+    const logEl = document.getElementById("rq-log-text");
+
+    const inputQLeft = document.getElementById("rq-q-left");
+    const inputQRight = document.getElementById("rq-q-right");
+    const btnQuery = document.getElementById("rq-btn-query");
+
+    const inputUIdx = document.getElementById("rq-u-idx");
+    const inputUVal = document.getElementById("rq-u-val");
+    const btnUpdate = document.getElementById("rq-btn-update");
+    const btnReset = document.getElementById("rq-btn-reset");
+
+    if (!canvasEl) return;
+
+    let baseNums = [3, 2, 4, 5, 1, 6, 2, 8];
+    let currentMode = "segtree";
+
+    const setLog = (msg) => {
+      if (logEl) logEl.innerHTML = msg;
+    };
+
+    const renderArrayCells = (highlightIndices = []) => {
+      if (!arrayCells) return;
+      arrayCells.innerHTML = baseNums.map((val, idx) => {
+        const inQuery = highlightIndices.includes(idx);
+        return `
+          <div class="rq-cell ${inQuery ? 'in-query' : ''}" id="rq-cell-${idx}">
+            <span class="rq-cell-idx">#${idx}</span>
+            <span class="rq-cell-val">${val}</span>
+          </div>
+        `;
+      }).join("");
+    };
+
+    const renderSegTree = (queryResult = null) => {
+      const n = baseNums.length;
+      const tree = new Array(2 * n).fill(0);
+      for (let i = 0; i < n; i++) tree[n + i] = baseNums[i];
+      for (let i = n - 1; i > 0; i--) tree[i] = tree[2 * i] + tree[2 * i + 1];
+
+      let hitNodes = queryResult ? (queryResult.nodes || []) : [];
+      let updatedNode = queryResult ? queryResult.updated : null;
+
+      const levels = [
+        [1],
+        [2, 3],
+        [4, 5, 6, 7],
+        [8, 9, 10, 11, 12, 13, 14, 15]
+      ];
+
+      const nodeRanges = {
+        1: "[0..7]",
+        2: "[0..3]", 3: "[4..7]",
+        4: "[0..1]", 5: "[2..3]", 6: "[4..5]", 7: "[6..7]",
+        8: "[0]", 9: "[1]", 10: "[2]", 11: "[3]", 12: "[4]", 13: "[5]", 14: "[6]", 15: "[7]"
+      };
+
+      let html = `<div style="font-size: 0.72rem; color: var(--muted); font-weight: 700; text-transform: uppercase;">2N Segment Tree Dyadic Intervals:</div>`;
+      levels.forEach(lvl => {
+        html += `<div class="rq-tree-level">`;
+        lvl.forEach(nodeId => {
+          const isHit = hitNodes.includes(nodeId);
+          const isUpd = updatedNode === nodeId;
+          html += `
+            <div class="rq-tree-node ${isHit ? 'is-hit' : ''} ${isUpd ? 'is-updated' : ''}" id="rq-node-${nodeId}" title="Node ${nodeId} covering ${nodeRanges[nodeId]}">
+              <div class="rq-tree-range">${nodeRanges[nodeId]}</div>
+              <div class="rq-tree-val">${tree[nodeId]}</div>
+              <div class="rq-tree-node-id">N:${nodeId}</div>
+            </div>
+          `;
+        });
+        html += `</div>`;
+      });
+
+      canvasEl.innerHTML = html;
+      if (modeLbl) modeLbl.textContent = "Segment Tree (2N Array)";
+    };
+
+    const renderFenwick = (queryResult = null) => {
+      const n = baseNums.length;
+      const bit = new Array(n + 1).fill(0);
+      for (let i = 0; i < n; i++) {
+        let idx = i + 1;
+        while (idx <= n) {
+          bit[idx] += baseNums[i];
+          idx += idx & (-idx);
+        }
+      }
+
+      let posHits = queryResult ? (queryResult.posHits || []) : [];
+      let negHits = queryResult ? (queryResult.negHits || []) : [];
+
+      let html = `<div style="font-size: 0.72rem; color: var(--muted); font-weight: 700; text-transform: uppercase;">Fenwick BIT lowbit = x & (-x) Coverage Intervals:</div><div class="rq-bit-row">`;
+      for (let i = 1; i <= n; i++) {
+        const lowbit = i & (-i);
+        const start = i - lowbit + 1;
+        const isPos = posHits.includes(i);
+        const isNeg = negHits.includes(i);
+        html += `
+          <div class="rq-bit-card ${isPos ? 'hit-pos' : ''} ${isNeg ? 'hit-neg' : ''}" title="BIT[${i}] covers [${start}..${i}]">
+            <div style="font-size: 0.65rem; color: var(--faint);">lowbit: ${lowbit}</div>
+            <div style="font-size: 0.66rem; color: var(--muted);">[${start}..${i}]</div>
+            <div style="font-size: 0.95rem; font-weight: 700; color: #fff; margin: 0.2rem 0;">${bit[i]}</div>
+            <div style="font-size: 0.62rem; color: var(--orange);">BIT[${i}]</div>
+          </div>
+        `;
+      }
+      html += `</div>`;
+      canvasEl.innerHTML = html;
+      if (modeLbl) modeLbl.textContent = "Fenwick Tree (BIT)";
+    };
+
+    const renderSqrt = (queryResult = null) => {
+      const n = baseNums.length;
+      const blockSize = 3;
+      const numBlocks = Math.ceil(n / blockSize);
+      const blocks = new Array(numBlocks).fill(0);
+      for (let i = 0; i < n; i++) {
+        blocks[Math.floor(i / blockSize)] += baseNums[i];
+      }
+
+      let partials = queryResult ? (queryResult.partials || []) : [];
+      let fullBlocks = queryResult ? (queryResult.fullBlocks || []) : [];
+
+      let html = `<div style="font-size: 0.72rem; color: var(--muted); font-weight: 700; text-transform: uppercase;">SQRT Decomposition (Block Size B = 3):</div><div class="rq-blocks-row">`;
+      for (let b = 0; b < numBlocks; b++) {
+        const startIdx = b * blockSize;
+        const endIdx = Math.min(n - 1, (b + 1) * blockSize - 1);
+        const isFull = fullBlocks.includes(b);
+
+        html += `
+          <div class="rq-block-card ${isFull ? 'is-full-hit' : ''}">
+            <div class="rq-block-header">
+              <span>Block #${b} [${startIdx}..${endIdx}]</span>
+              <span style="color: var(--orange); font-weight: 700;">Sum: ${blocks[b]}</span>
+            </div>
+            <div class="rq-block-elems">
+        `;
+
+        for (let i = startIdx; i <= endIdx; i++) {
+          const isPart = partials.includes(i);
+          html += `
+            <div class="rq-elem-chip ${isPart ? 'chip-partial' : ''}" title="nums[${i}] = ${baseNums[i]}">
+              <span style="font-size: 0.62rem; color: var(--faint);">#${i}:</span> ${baseNums[i]}
+            </div>
+          `;
+        }
+
+        html += `</div></div>`;
+      }
+      html += `</div>`;
+      canvasEl.innerHTML = html;
+      if (modeLbl) modeLbl.textContent = "SQRT Decomposition";
+    };
+
+    const render = (queryResult = null) => {
+      if (sizeVal) sizeVal.textContent = baseNums.length;
+      let activeIndices = [];
+      if (queryResult && queryResult.range) {
+        const [l, r] = queryResult.range;
+        for (let i = l; i <= r; i++) activeIndices.push(i);
+      }
+      renderArrayCells(activeIndices);
+
+      if (currentMode === "segtree") renderSegTree(queryResult);
+      else if (currentMode === "fenwick") renderFenwick(queryResult);
+      else if (currentMode === "sqrt") renderSqrt(queryResult);
+    };
+
+    const handleQuery = () => {
+      const qLeft = Math.max(0, Math.min(baseNums.length - 1, parseInt(inputQLeft?.value || "1", 10)));
+      const qRight = Math.max(0, Math.min(baseNums.length - 1, parseInt(inputQRight?.value || "5", 10)));
+      if (qLeft > qRight) {
+        setLog(`<span style="color: #f87171; font-weight: bold;">⚠</span> Invalid Range: Left (${qLeft}) must be <= Right (${qRight})!`);
+        return;
+      }
+
+      let totalSum = 0;
+      for (let i = qLeft; i <= qRight; i++) totalSum += baseNums[i];
+      if (resultVal) resultVal.textContent = `Sum = ${totalSum}`;
+
+      if (currentMode === "segtree") {
+        const n = baseNums.length;
+        let left = qLeft + n, right = qRight + n;
+        const chosenNodes = [];
+        const logs = [];
+
+        while (left <= right) {
+          if (left % 2 === 1) {
+            chosenNodes.push(left);
+            logs.push(`Left ptr <code>${left}</code> is ODD (right-child) -> consumed canonical node <code>N:${left}</code>`);
+            left++;
+          }
+          if (right % 2 === 0) {
+            chosenNodes.push(right);
+            logs.push(`Right ptr <code>${right}</code> is EVEN (left-child) -> consumed canonical node <code>N:${right}</code>`);
+            right--;
+          }
+          left = Math.floor(left / 2);
+          right = Math.floor(right / 2);
+        }
+
+        if (opsVal) opsVal.textContent = `${chosenNodes.length} Nodes (O(log n))`;
+        setLog(`<strong>Range Query [${qLeft}, ${qRight}]:</strong> Decomposed into <strong>${chosenNodes.length}</strong> canonical segment tree nodes: <code>[${chosenNodes.map(id => 'N:'+id).join(', ')}]</code>.<br>${logs.join(' &bull; ')} &rarr; Total Sum = <strong>${totalSum}</strong>.`);
+        render({ range: [qLeft, qRight], nodes: chosenNodes });
+      } else if (currentMode === "fenwick") {
+        const posHits = [];
+        let idxR = qRight + 1;
+        while (idxR > 0) {
+          posHits.push(idxR);
+          idxR -= idxR & (-idxR);
+        }
+
+        const negHits = [];
+        let idxL = qLeft;
+        while (idxL > 0) {
+          negHits.push(idxL);
+          idxL -= idxL & (-idxL);
+        }
+
+        if (opsVal) opsVal.textContent = `${posHits.length + negHits.length} BIT Lookups (O(log n))`;
+        setLog(`<strong>Fenwick Range Query [${qLeft}, ${qRight}]:</strong> Inclusion-Exclusion <code>query(${qRight + 1}) - query(${qLeft})</code>.<br>Added BIT indices: <code>[${posHits.map(i => 'BIT['+i+']').join(', ')}]</code> &bull; Deducted BIT indices: <code>[${negHits.length ? negHits.map(i => 'BIT['+i+']').join(', ') : 'None'}]</code> &rarr; Total Sum = <strong>${totalSum}</strong>.`);
+        render({ range: [qLeft, qRight], posHits, negHits });
+      } else if (currentMode === "sqrt") {
+        const blockSize = 3;
+        const startBlock = Math.floor(qLeft / blockSize);
+        const endBlock = Math.floor(qRight / blockSize);
+        const partials = [];
+        const fullBlocks = [];
+
+        if (startBlock === endBlock) {
+          for (let i = qLeft; i <= qRight; i++) partials.push(i);
+        } else {
+          for (let i = qLeft; i < (startBlock + 1) * blockSize; i++) partials.push(i);
+          for (let b = startBlock + 1; b < endBlock; b++) fullBlocks.push(b);
+          for (let i = endBlock * blockSize; i <= qRight; i++) partials.push(i);
+        }
+
+        if (opsVal) opsVal.textContent = `${partials.length} partial + ${fullBlocks.length} full blocks (O(√n))`;
+        setLog(`<strong>SQRT Query [${qLeft}, ${qRight}]:</strong> Partial left elements: <code>[${partials.filter(i => Math.floor(i/blockSize) === startBlock).join(', ')}]</code> &bull; Full middle blocks: <code>[${fullBlocks.map(b => 'Block #'+b).join(', ') || 'None'}]</code> &bull; Partial right elements: <code>[${partials.filter(i => Math.floor(i/blockSize) === endBlock).join(', ')}]</code> &rarr; Total Sum = <strong>${totalSum}</strong>.`);
+        render({ range: [qLeft, qRight], partials, fullBlocks });
+      }
+    };
+
+    const handleUpdate = () => {
+      const idx = Math.max(0, Math.min(baseNums.length - 1, parseInt(inputUIdx?.value || "3", 10)));
+      const val = parseInt(inputUVal?.value || "10", 10);
+      const oldVal = baseNums[idx];
+      baseNums[idx] = val;
+
+      setLog(`<code>nums[${idx}] = ${val}</code> (was ${oldVal}): Point update mutated base array. Observe how ancestors adjust in O(log n) or O(1)!`);
+      render();
+
+      const cell = document.getElementById(`rq-cell-${idx}`);
+      if (cell) {
+        cell.classList.add("cell-updated");
+        setTimeout(() => cell.classList.remove("cell-updated"), 1500);
+      }
+    };
+
+    modeSelect?.addEventListener("change", (e) => {
+      currentMode = e.target.value;
+      if (opsVal) opsVal.textContent = "Ready";
+      if (resultVal) resultVal.textContent = "--";
+      setLog(`Switched view to <strong>${currentMode.toUpperCase()}</strong>. Execute Query or Update to test!`);
+      render();
+    });
+
+    btnQuery?.addEventListener("click", handleQuery);
+    btnUpdate?.addEventListener("click", handleUpdate);
+    btnReset?.addEventListener("click", () => {
+      baseNums = [3, 2, 4, 5, 1, 6, 2, 8];
+      if (inputQLeft) inputQLeft.value = "1";
+      if (inputQRight) inputQRight.value = "5";
+      if (inputUIdx) inputUIdx.value = "3";
+      if (inputUVal) inputUVal.value = "10";
+      if (opsVal) opsVal.textContent = "Ready";
+      if (resultVal) resultVal.textContent = "--";
+      setLog(`Reset array to default state <code>[3, 2, 4, 5, 1, 6, 2, 8]</code>.`);
+      render();
+    });
+
+    render();
+    handleQuery();
+  };
+
+  initRangeQuerySimulator();
 
   window.addEventListener("hashchange", handleHash);
   handleHash();
