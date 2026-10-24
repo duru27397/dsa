@@ -809,6 +809,7 @@
 
     const btnMoveEnd = document.getElementById("od-btn-move-end");
     const btnMoveFront = document.getElementById("od-btn-move-front");
+    const btnDel = document.getElementById("od-btn-del");
     const btnPopLast = document.getElementById("od-btn-pop-last");
     const btnPopFirst = document.getElementById("od-btn-pop-first");
     const btnPut = document.getElementById("od-btn-put");
@@ -931,21 +932,31 @@
       render();
     };
 
+    const deleteItem = (key) => {
+      if (!key) return;
+      const idx = items.findIndex(it => it.key === key);
+      if (idx === -1) {
+        setLog(`<code>del d['${key}']</code>: KeyError - key not found in OrderedDict!`, true);
+        return;
+      }
+      const [removed] = items.splice(idx, 1);
+      setLog(`<code>del d['${removed.key}']</code>: Unlinked node from circular DLL and purged from map in strictly O(1) time.`);
+      render();
+    };
+
     const putItem = (key, val) => {
       if (!key) return;
       const idx = items.findIndex(it => it.key === key);
       if (idx !== -1) {
         items[idx].val = val;
-        const [updated] = items.splice(idx, 1);
-        items.push(updated);
-        setLog(`<code>d['${key}'] = ${val}</code>: Existing key updated &amp; refreshed to TAIL (MRU).`);
+        setLog(`<code>d['${key}'] = ${val}</code>: Existing key updated IN-PLACE. Order PRESERVED in O(1) (does not move to tail).`);
       } else {
         items.push({ key, val });
         if (items.length > capacity) {
           const evicted = items.shift();
-          setLog(`<code>d['${key}'] = ${val}</code>: Capacity ${capacity} exceeded -> Evicted LRU HEAD ('${evicted.key}', ${evicted.val}) via <code>popitem(False)</code>!`, true);
+          setLog(`<code>d['${key}'] = ${val}</code>: Appended to TAIL. Capacity ${capacity} exceeded -> Evicted LRU HEAD ('${evicted.key}', ${evicted.val}) via <code>popitem(False)</code>!`, true);
         } else {
-          setLog(`<code>d['${key}'] = ${val}</code>: Appended new node to TAIL in O(1) time.`);
+          setLog(`<code>d['${key}'] = ${val}</code>: Appended new key-value pair to TAIL in O(1) time.`);
         }
       }
       render(key);
@@ -971,6 +982,11 @@
       if (k) moveToEnd(k, false);
     });
 
+    btnDel?.addEventListener("click", () => {
+      const k = keySelect?.value;
+      if (k) deleteItem(k);
+    });
+
     btnPopLast?.addEventListener("click", () => {
       popItem(true);
     });
@@ -984,6 +1000,7 @@
       const v = inputVal?.value.trim() || `${(items.length + 1) * 10}`;
       putItem(k, v);
       if (inputKey) inputKey.value = "";
+      if (inputVal) inputVal.value = "";
     });
 
     presetSelect?.addEventListener("change", (e) => {
@@ -1346,6 +1363,210 @@
   };
 
   initRangeQuerySimulator();
+
+  // 2N Iterative Segment Tree Interactive Visualizer & Step-by-Step Inspector
+  const initIterative2nVisualizer = () => {
+    const inputNums = document.getElementById("it2n-nums");
+    const btnBuild = document.getElementById("it2n-build");
+    const btnExample = document.getElementById("it2n-example");
+    const summaryEl = document.getElementById("it2n-summary");
+    const svgEl = document.getElementById("it2n-tree");
+    const detailsEl = document.getElementById("it2n-details");
+    const cellsEl = document.getElementById("it2n-cells");
+    const stepsEl = document.getElementById("it2n-steps");
+    const stepInfoEl = document.getElementById("it2n-step-info");
+    const btnPrev = document.getElementById("it2n-prev");
+    const btnNext = document.getElementById("it2n-next");
+    const btnAll = document.getElementById("it2n-all");
+    const loneEl = document.getElementById("it2n-lone");
+
+    if (!svgEl || !inputNums) return;
+
+    let nums = [];
+    let tree = [];
+    let n = 0;
+    let selected = 1;
+    let step = -1;
+    let states = [];
+
+    const build = () => {
+      let parsed = inputNums.value.split(',').map(x => Number(x.trim()));
+      if (!parsed.length || parsed.some(x => !Number.isFinite(x))) {
+        alert('Enter comma-separated numbers.');
+        return;
+      }
+      nums = parsed;
+      n = nums.length;
+      tree = Array(2 * n).fill(0);
+      for (let i = 0; i < n; i++) tree[n + i] = nums[i];
+
+      states = [];
+      for (let i = n - 1; i > 0; i--) {
+        tree[i] = tree[2 * i] + tree[2 * i + 1];
+        states.push({
+          i,
+          left: 2 * i,
+          right: 2 * i + 1,
+          value: tree[i],
+          leftVal: tree[2 * i] ?? 0,
+          rightVal: tree[2 * i + 1] ?? 0,
+          snapshot: tree.slice()
+        });
+      }
+      states.reverse();
+      selected = 1;
+      step = states.length - 1;
+      render();
+    };
+
+    const pos = (i) => {
+      let level = Math.floor(Math.log2(i));
+      let first = 2 ** level;
+      let offset = i - first;
+      let count = first;
+      return { x: 900 * (offset + 0.5) / count, y: 42 + level * 92, level };
+    };
+
+    const render = () => {
+      if (summaryEl) {
+        summaryEl.innerHTML = `<strong>n = ${n}</strong> &bull; Storage Length = <code>${2 * n}</code> &bull; Leaves at indices <code>${n}..${2 * n - 1}</code> &bull; Root sum = <strong>${tree[1]}</strong>`;
+      }
+      drawTree();
+      drawCells();
+      drawSteps();
+      details();
+
+      if (loneEl) {
+        loneEl.innerHTML = n % 2 === 1
+          ? `<strong>Odd n = ${n} Layout Dynamic:</strong> The leaf at index <b>${n}</b> stores <code>nums[0] = ${nums[0]}</code>. Its parent by standard index arithmetic is <b>${Math.floor(n / 2)}</b>. Because the flat 2n iterative layout uses heap-style formulas on arbitrary <em>n</em> without padding to the next power of 2, node <b>${Math.floor(n / 2)}</b> combines index <code>${2 * Math.floor(n / 2)}</code> and <code>${2 * Math.floor(n / 2) + 1}</code>. The loop runs strictly from <code>n - 1</code> down to <code>1</code>, and the iterative converging query algorithm correctly aggregates dyadic segments without missing any elements.`
+          : `<strong>Even n = ${n} Layout Dynamic:</strong> The leaf layer starts at index <code>${n}</code> and runs to <code>${2 * n - 1}</code>. Select any leaf or internal node above to inspect its stored value and child links.`;
+      }
+    };
+
+    const drawTree = () => {
+      if (!svgEl) return;
+      svgEl.innerHTML = '';
+      let maxLevel = Math.floor(Math.log2(2 * n - 1));
+      let height = Math.max(230, 70 + maxLevel * 92);
+      svgEl.setAttribute('viewBox', `0 0 900 ${height}`);
+      svgEl.style.height = 'auto';
+
+      let coords = {};
+      for (let i = 1; i < 2 * n; i++) coords[i] = pos(i);
+      let ns = Array.from({ length: 2 * n - 1 }, (_, k) => k + 1);
+
+      for (let i = 1; i < n; i++) {
+        for (let c of [2 * i, 2 * i + 1]) {
+          if (c < 2 * n) {
+            let a = coords[i];
+            let b = coords[c];
+            let line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+            line.setAttribute('x1', a.x);
+            line.setAttribute('y1', a.y + 21);
+            line.setAttribute('x2', b.x);
+            line.setAttribute('y2', b.y - 21);
+            line.setAttribute('class', 'it2n-edge' + ((selected === i || selected === c || Math.floor(selected / 2) === i) ? ' highlight' : ''));
+            svgEl.append(line);
+          }
+        }
+      }
+
+      for (let i of ns) {
+        let p = coords[i];
+        let g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+        g.setAttribute('class', `it2n-node ${i < n ? 'internal' : 'leaf'} ${i === selected ? 'selected' : ''}`);
+        g.setAttribute('transform', `translate(${p.x},${p.y})`);
+        g.innerHTML = `<circle r="21"></circle><text y="-2">${tree[i]}</text><text class="idx" y="34">idx ${i}</text>`;
+        g.addEventListener('click', () => {
+          selected = i;
+          drawTree();
+          drawCells();
+          details();
+        });
+        svgEl.append(g);
+      }
+    };
+
+    const drawCells = () => {
+      if (!cellsEl) return;
+      cellsEl.innerHTML = '';
+      for (let i = 1; i < 2 * n; i++) {
+        let d = document.createElement('button');
+        d.type = 'button';
+        d.className = `it2n-cell ${i < n ? 'internal' : 'leaf'} ${i === selected ? 'selected' : ''}`;
+        d.innerHTML = `<b>${tree[i]}</b><small>idx ${i}</small>`;
+        d.addEventListener('click', () => {
+          selected = i;
+          drawTree();
+          drawCells();
+          details();
+        });
+        cellsEl.append(d);
+      }
+    };
+
+    const details = () => {
+      let i = selected;
+      if (i < 1 || i >= 2 * n || !detailsEl) return;
+      let parent = i === 1 ? 'none (root)' : Math.floor(i / 2);
+      let left = 2 * i < 2 * n ? `${2 * i} (value ${tree[2 * i]})` : 'none';
+      let right = 2 * i + 1 < 2 * n ? `${2 * i + 1} (value ${tree[2 * i + 1]})` : 'none';
+      let isLeaf = i >= n;
+
+      detailsEl.innerHTML = `<strong>Selected Node: Index ${i}</strong> &bull; Value: <b>${tree[i]}</b><br>Type: <strong>${isLeaf ? 'Leaf (original array element)' : 'Internal Node (cumulative sum)'}</strong> &bull; Parent by formula (<code>i // 2</code>): <b>${parent}</b><br>Left child (<code>2*i</code>): <code>${left}</code> &bull; Right child (<code>2*i + 1</code>): <code>${right}</code>${!isLeaf ? `<br>Computation: <code>tree[${i}] = tree[${2 * i}] + tree[${2 * i + 1}] = ${tree[2 * i]} + ${tree[2 * i + 1]} = ${tree[i]}</code>` : ''}`;
+    };
+
+    const drawSteps = () => {
+      if (!stepsEl) return;
+      stepsEl.innerHTML = '';
+      states.forEach((s, j) => {
+        let b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'it2n-step-btn' + (j === step ? ' active' : '');
+        b.textContent = `i = ${s.i}`;
+        b.addEventListener('click', () => {
+          step = j;
+          renderStep();
+        });
+        stepsEl.append(b);
+      });
+      renderStep();
+    };
+
+    const renderStep = () => {
+      if (!stepsEl) return;
+      [...stepsEl.children].forEach((b, j) => b.classList.toggle('active', j === step));
+      if (!stepInfoEl) return;
+      if (step < 0 || !states.length) {
+        stepInfoEl.innerHTML = 'All internal nodes are built. Select any step calculation button above to inspect how a sub-sum is derived.';
+        return;
+      }
+      let s = states[step];
+      stepInfoEl.innerHTML = `<strong>Step ${step + 1} of ${states.length}:</strong> Calculate <code>tree[${s.i}]</code> from child indices <code>${s.left}</code> and <code>${s.right}</code>: <code>${s.leftVal} + ${s.rightVal} = ${s.value}</code>. The loop runs from <code>n &minus; 1</code> down to <code>1</code>.`;
+    };
+
+    btnBuild?.addEventListener('click', build);
+    btnExample?.addEventListener('click', () => {
+      inputNums.value = '2, 4, 6, 8, 10, 12';
+      build();
+    });
+    btnPrev?.addEventListener('click', () => {
+      step = Math.max(-1, step - 1);
+      renderStep();
+    });
+    btnNext?.addEventListener('click', () => {
+      step = Math.min(states.length - 1, step + 1);
+      renderStep();
+    });
+    btnAll?.addEventListener('click', () => {
+      step = states.length - 1;
+      renderStep();
+    });
+
+    build();
+  };
+
+  initIterative2nVisualizer();
 
   // Interactive Range Engine Decision Hub Pills
   const initRangeDecisionHub = () => {

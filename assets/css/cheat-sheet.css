@@ -3630,3 +3630,372 @@ h1 {
 .tax-link:hover {
   text-decoration: underline;
 }
+
+/* ========================================================================= */
+/* ORDEREDDICT TOP HIGHLIGHT BANNER & FAST REFERENCE STYLES                  */
+/* ========================================================================= */
+
+.od-top-highlight-banner {
+  background: #181818;
+  border: 1px solid #363636;
+  border-left: 4px solid var(--orange);
+  border-radius: 8px;
+  padding: 1.25rem;
+  margin-bottom: 1.6rem;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.35);
+}
+
+.od-highlight-head {
+  margin-bottom: 1rem;
+}
+
+.od-highlight-badge {
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--orange);
+  letter-spacing: 0.05em;
+  display: inline-block;
+  margin-bottom: 0.35rem;
+}
+
+.od-highlight-head h3 {
+  font-size: 1.15rem;
+  color: #fff;
+  margin: 0 0 0.45rem 0;
+}
+
+.od-highlight-desc {
+  font-size: 0.82rem;
+  color: var(--muted);
+  line-height: 1.55;
+  margin: 0;
+}
+
+.od-highlight-desc code {
+  color: var(--cyan);
+}
+
+.od-highlight-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 0.85rem;
+  margin-top: 0.95rem;
+}
+
+.od-highlight-callout {
+  background: #1f1f1f;
+  border: 1px solid #333;
+  border-radius: 6px;
+  padding: 0.85rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.callout-tag {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.tag-update {
+  color: var(--orange);
+}
+
+.tag-delete {
+  color: #f87171;
+}
+
+.od-highlight-callout p {
+  font-size: 0.78rem;
+  color: #d1d5db;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.od-highlight-callout code {
+  font-size: 0.76rem;
+  color: var(--cyan);
+  background: rgba(255, 255, 255, 0.06);
+  padding: 0.1rem 0.3rem;
+  border-radius: 3px;
+}
+
+/* ========================================================================= */
+/* 2N ITERATIVE SEGMENT TREE VISUALIZER (INSPECTOR, SVG TREE & STEPS)        */
+/* ========================================================================= */
+
+.it2n-visualizer {
+  background: #181818;
+  border: 1px solid #333;
+  border-radius: 8px;
+  padding: 1.25rem;
+  margin: 1.25rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+}
+
+.it2n-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: flex-end;
+}
+
+.it2n-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  font-size: 0.82rem;
+  color: var(--muted);
+  font-weight: 500;
+}
+
+.it2n-input {
+  font-family: inherit;
+  font-size: 0.85rem;
+  background: #121212;
+  border: 1px solid #3a3a3a;
+  border-radius: 6px;
+  color: #fff;
+  padding: 0.45rem 0.65rem;
+  min-width: 260px;
+  max-width: 100%;
+}
+
+.it2n-input:focus {
+  outline: none;
+  border-color: var(--orange);
+}
+
+.it2n-btn {
+  font-family: inherit;
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 0.45rem 0.85rem;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  background: var(--orange);
+  color: #141414;
+  transition: all 0.15s ease;
+}
+
+.it2n-btn:hover {
+  filter: brightness(1.1);
+}
+
+.it2n-btn.it2n-btn-sec {
+  background: #262626;
+  border-color: #3e3e3e;
+  color: #d1d5db;
+}
+
+.it2n-btn.it2n-btn-sec:hover {
+  background: #303030;
+  color: #fff;
+}
+
+.it2n-summary-bar {
+  font-size: 0.8rem;
+  color: var(--muted);
+  background: #121212;
+  border-left: 3px solid var(--orange);
+  padding: 0.5rem 0.75rem;
+  border-radius: 4px;
+}
+
+.it2n-summary-bar code {
+  color: var(--cyan);
+}
+
+.it2n-svg-wrap {
+  width: 100%;
+  overflow-x: auto;
+  background: #141414;
+  border: 1px solid #2a2a2a;
+  border-radius: 8px;
+  padding: 0.75rem 0.5rem;
+  -webkit-overflow-scrolling: touch;
+}
+
+.it2n-svg {
+  display: block;
+  width: 100%;
+  min-width: 650px;
+  height: auto;
+}
+
+.it2n-edge {
+  stroke: #475569;
+  stroke-width: 2;
+  transition: stroke 0.2s, stroke-width 0.2s;
+}
+
+.it2n-edge.highlight {
+  stroke: var(--orange);
+  stroke-width: 3.2;
+}
+
+.it2n-node {
+  cursor: pointer;
+}
+
+.it2n-node circle {
+  stroke-width: 2;
+  transition: all 0.2s ease;
+}
+
+.it2n-node.internal circle {
+  fill: #14281f;
+  stroke: #00b8a3;
+}
+
+.it2n-node.leaf circle {
+  fill: #142238;
+  stroke: #3b82f6;
+}
+
+.it2n-node.selected circle {
+  fill: rgba(255, 161, 22, 0.35);
+  stroke: var(--orange);
+  stroke-width: 3.5;
+}
+
+.it2n-node text {
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  fill: #eff1f6;
+  text-anchor: middle;
+  pointer-events: none;
+}
+
+.it2n-node .idx {
+  font-size: 10.5px;
+  font-weight: 500;
+  fill: #94a3b8;
+}
+
+.it2n-details-box {
+  background: #1b1b1b;
+  border: 1px solid #333;
+  border-radius: 6px;
+  padding: 0.75rem 1rem;
+  font-size: 0.84rem;
+  line-height: 1.6;
+  color: #eff1f6;
+}
+
+.it2n-details-box code {
+  color: var(--cyan);
+}
+
+.it2n-details-box strong,
+.it2n-details-box b {
+  color: var(--orange);
+}
+
+.it2n-array-cells {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.it2n-cell {
+  font-family: inherit;
+  min-width: 58px;
+  text-align: center;
+  border: 1px solid #353535;
+  border-radius: 8px;
+  padding: 6px 8px;
+  background: #1f1f1f;
+  color: #eff1f6;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.it2n-cell:hover {
+  filter: brightness(1.15);
+  border-color: #555;
+}
+
+.it2n-cell b {
+  display: block;
+  font-size: 1rem;
+  color: #fff;
+}
+
+.it2n-cell small {
+  font-size: 0.68rem;
+  color: var(--muted);
+}
+
+.it2n-cell.internal {
+  background: rgba(0, 184, 163, 0.12);
+  border-color: rgba(0, 184, 163, 0.35);
+}
+
+.it2n-cell.leaf {
+  background: rgba(59, 130, 246, 0.12);
+  border-color: rgba(59, 130, 246, 0.35);
+}
+
+.it2n-cell.selected {
+  outline: 2px solid var(--orange);
+  outline-offset: 1px;
+  border-color: var(--orange);
+  background: rgba(255, 161, 22, 0.22);
+}
+
+.it2n-steps-row {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.it2n-step-btn {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.78rem;
+  padding: 5px 10px;
+  background: #222;
+  border: 1px solid #3a3a3a;
+  border-radius: 6px;
+  color: #d1d5db;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.it2n-step-btn:hover {
+  background: #2c2c2c;
+  color: #fff;
+}
+
+.it2n-step-btn.active {
+  background: rgba(255, 161, 22, 0.2);
+  outline: 2px solid var(--orange);
+  border-color: var(--orange);
+  color: var(--orange);
+  font-weight: 700;
+}
+
+.it2n-lone-warn {
+  background: rgba(255, 161, 22, 0.1);
+  border: 1px solid rgba(255, 161, 22, 0.3);
+  border-left: 3px solid var(--orange);
+  padding: 0.75rem 1rem;
+  border-radius: 6px;
+  font-size: 0.82rem;
+  line-height: 1.6;
+  color: #eff1f6;
+}
+
+.it2n-lone-warn code {
+  color: var(--cyan);
+}

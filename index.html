@@ -797,6 +797,10 @@
             </div>
             <!-- LEVEL 3 (Topic / Technique C) -->
             <div class="tree-children l3-children">
+              <a class="nav-item l3-link" href="#python-ordered-dict-sub" data-target-sub="ordered-dict-fast-reference">
+                <span class="leaf-dot">•</span>
+                <span class="nav-title">O(1) Invariants &amp; Table</span>
+              </a>
               <a class="nav-item l3-link" href="#python-ordered-dict-sub" data-target-sub="ordered-dict-sim">
                 <span class="leaf-dot">•</span>
                 <span class="nav-title">Interactive DLL Simulator</span>
@@ -6549,8 +6553,10 @@ Time = 9: Active = 0 + 1 = 1</code></pre>
 <span class="line-text"><span class="flow">from</span> <span class="var">functools</span> <span class="flow">import</span> <span class="fn">cmp_to_key</span></span>
 <span class="line-text"><span class="flow">import</span> <span class="var">re</span><span class="punct">,</span> <span class="var">bisect</span><span class="punct">,</span> <span class="var">itertools</span><span class="punct">,</span> <span class="var">heapq</span></span>
 <span class="line-text"></span>
-<span class="line-text"><span class="comment"># 1. ORDEREDDICT: O(1) REORDERING &amp; BIDIRECTIONAL POPPING</span></span>
+<span class="line-text"><span class="comment"># 1. ORDEREDDICT: O(1) KEY MUTATION, REORDERING &amp; BIDIRECTIONAL POPPING</span></span>
 <span class="line-text"><span class="var">d</span> <span class="punct">=</span> <span class="type">OrderedDict</span><span class="punct">()</span></span>
+<span class="line-text"><span class="var">d</span><span class="punct">[</span><span class="param">key</span><span class="punct">]</span> <span class="punct">=</span> <span class="var">val</span>              <span class="comment"># New: appends to tail | Existing: updates val IN-PLACE</span></span>
+<span class="line-text"><span class="flow">del</span> <span class="var">d</span><span class="punct">[</span><span class="param">key</span><span class="punct">]</span>                <span class="comment"># O(1) arbitrary key deletion via DLL pointer unlink</span></span>
 <span class="line-text"><span class="var">d</span><span class="punct">.</span><span class="fn">move_to_end</span><span class="punct">(</span><span class="param">key</span><span class="punct">)</span>        <span class="comment"># move to end (MRU: Most Recently Used)</span></span>
 <span class="line-text"><span class="var">d</span><span class="punct">.</span><span class="fn">move_to_end</span><span class="punct">(</span><span class="param">key</span><span class="punct">,</span> <span class="kw-def">False</span><span class="punct">)</span> <span class="comment"># move to front (LRU: Least Recently Used)</span></span>
 <span class="line-text"><span class="var">d</span><span class="punct">.</span><span class="fn">popitem</span><span class="punct">()</span>               <span class="comment"># remove last item (LIFO / MRU)</span></span>
@@ -6691,6 +6697,43 @@ Time = 9: Active = 0 + 1 = 1</code></pre>
           <p class="topic-summary">Pair constant-time hash map lookups with an internal circular doubly linked list (DLL) to achieve O(1) key repositioning and bidirectional endpoint eviction.</p>
         </header>
 
+        <!-- HIGHLIGHTED FAST REFERENCE BANNER AT TOP OF PAGE -->
+        <div class="od-top-highlight-banner" id="ordered-dict-fast-reference">
+          <div class="od-highlight-head">
+            <span class="od-highlight-badge">⚡ Core O(1) Invariants &amp; Mutation Reference</span>
+            <h3>OrderedDict Complete API &amp; Pointer Mechanics</h3>
+            <p class="od-highlight-desc">
+              <code>collections.OrderedDict</code> pairs an O(1) hash map with an internal circular doubly linked list (DLL). Understanding how standard item assignment <code>d[key] = val</code> and key deletion <code>del d[key]</code> interact with DLL order is the #1 discriminator in LeetCode LRU/LFU cache design:
+            </p>
+          </div>
+
+          <pre class="trace-diagram" style="font-size: 0.72rem; line-height: 1.4; margin-bottom: 0.85rem;"><code>┌────────────────────────────────┬────────────┬────────────────────────────────────────────────────────┐
+│ Method / Operation             │ Time Comp. │ Behavior &amp; Order Invariant                             │
+├────────────────────────────────┼────────────┼────────────────────────────────────────────────────────┤
+│ d[key] = val                   │ O(1)       │ New: appends to END. Existing: updates val IN-PLACE    │
+│ del d[key]                     │ O(1)       │ Removes key &amp; unlinks node from ANY position in DLL    │
+│ d.move_to_end(key)             │ O(1)       │ Move existing key to END (MRU / rightmost)             │
+│ d.move_to_end(key, False)      │ O(1)       │ Move existing key to FRONT (LRU / leftmost)            │
+│ d.popitem()                    │ O(1)       │ Remove &amp; return (key, val) from END (LIFO / MRU)       │
+│ d.popitem(False)               │ O(1)       │ Remove &amp; return (key, val) from FRONT (FIFO / LRU)     │
+└────────────────────────────────┴────────────┴────────────────────────────────────────────────────────┘</code></pre>
+
+          <div class="od-highlight-grid">
+            <div class="od-highlight-callout">
+              <span class="callout-tag tag-update">⚠️ Crucial Invariant: d[key] = val</span>
+              <p>
+                Assigning an <strong>existing key</strong> updates its value in-place in <strong>O(1)</strong>, but <strong>DOES NOT</strong> refresh its order or move it to the MRU tail! To refresh recency in an LRU cache, you MUST explicitly call <code>d.move_to_end(key)</code>.
+              </p>
+            </div>
+            <div class="od-highlight-callout">
+              <span class="callout-tag tag-delete">⚡ Crucial Invariant: del d[key]</span>
+              <p>
+                Deleting any key with <code>del d[key]</code> is strictly <strong>O(1)</strong>. The hash table jumps directly to the DLL node, and circular pointer splicing (<code>prev.next = next</code>) removes it instantly—even from the middle of the collection (unlike Python <code>list.pop(i)</code> which is O(n)).
+              </p>
+            </div>
+          </div>
+        </div>
+
         <section class="patterns-section">
           <!-- LIVE INTERACTIVE ORDEREDDICT DLL & EVICTION SIMULATOR -->
           <div class="od-interactive-container" id="ordered-dict-sim" aria-label="Interactive OrderedDict DLL Simulation">
@@ -6753,6 +6796,9 @@ Time = 9: Active = 0 + 1 = 1</code></pre>
               <button type="button" class="od-btn od-btn-lru" id="od-btn-move-front" title="d.move_to_end(key, False)">
                 <span>⬅ Front</span> <span>d.move_to_end(k, False)</span>
               </button>
+              <button type="button" class="od-btn od-btn-pop" id="od-btn-del" title="del d[key] - O(1) Middle DLL Unlink">
+                <span>✕ del d[key]</span>
+              </button>
               <button type="button" class="od-btn od-btn-pop" id="od-btn-pop-first" title="d.popitem(False) - Evict LRU Head">
                 <span>✕ popitem(False) [LRU Head]</span>
               </button>
@@ -6787,15 +6833,17 @@ Time = 9: Active = 0 + 1 = 1</code></pre>
             <p class="use-when"><strong>Use when:</strong> building LRU/MRU caches, streaming unique data, managing window expiry queues, or moving prioritized keys to opposite ends in O(1) time.</p>
             <div class="why-box">
               <strong>Why it works &amp; API Breakdown</strong>
-              <p>Under the hood, <code>OrderedDict</code> stores elements in an internal circular doubly linked list. The methods <code>move_to_end()</code> and <code>popitem()</code> accept a boolean parameter <code>last</code> (defaulting to <code>True</code>):</p>
-              <pre class="trace-diagram"><code>┌────────────────────────────────┬────────────┬───────────────────────────────┐
-│ Method                         │ Time Comp. │ Behavior                      │
-├────────────────────────────────┼────────────┼───────────────────────────────┤
-│ d.move_to_end(key)             │ O(1)       │ Move existing key to END      │
-│ d.move_to_end(key, False)      │ O(1)       │ Move existing key to FRONT    │
-│ d.popitem()                    │ O(1)       │ Remove &amp; return (key, val) END│
-│ d.popitem(False)               │ O(1)       │ Remove &amp; return FRONT (first) │
-└────────────────────────────────┴────────────┴───────────────────────────────┘</code></pre>
+              <p>Under the hood, <code>OrderedDict</code> stores elements in an internal circular doubly linked list. Standard item assignment <code>d[key] = val</code>, key deletion <code>del d[key]</code>, endpoint repositioning <code>move_to_end()</code>, and popping <code>popitem()</code> execute in strictly O(1) time:</p>
+              <pre class="trace-diagram"><code>┌────────────────────────────────┬────────────┬────────────────────────────────────────────────────────┐
+│ Method / Operation             │ Time Comp. │ Behavior &amp; Order Invariant                             │
+├────────────────────────────────┼────────────┼────────────────────────────────────────────────────────┤
+│ d[key] = val                   │ O(1)       │ New: appends to END. Existing: updates val IN-PLACE    │
+│ del d[key]                     │ O(1)       │ Removes key &amp; unlinks node from ANY position in DLL    │
+│ d.move_to_end(key)             │ O(1)       │ Move existing key to END (MRU / rightmost)             │
+│ d.move_to_end(key, False)      │ O(1)       │ Move existing key to FRONT (LRU / leftmost)            │
+│ d.popitem()                    │ O(1)       │ Remove &amp; return (key, val) from END (LIFO / MRU)       │
+│ d.popitem(False)               │ O(1)       │ Remove &amp; return (key, val) from FRONT (FIFO / LRU)     │
+└────────────────────────────────┴────────────┴────────────────────────────────────────────────────────┘</code></pre>
             </div>
             <div class="mini-code-wrap">
               <button class="copy-button mini-copy" type="button" data-code="python-ordered-dict-ops-code">Copy</button>
@@ -6803,16 +6851,22 @@ Time = 9: Active = 0 + 1 = 1</code></pre>
 <span class="line-text"></span>
 <span class="line-text"><span class="var">d</span> <span class="punct">=</span> <span class="type">OrderedDict</span><span class="punct">()</span></span>
 <span class="line-text"></span>
-<span class="line-text"><span class="comment"># Populate initial entries</span></span>
+<span class="line-text"><span class="comment"># 1. O(1) Insert &amp; Append to Tail:</span></span>
 <span class="line-text"><span class="var">d</span><span class="punct">[</span><span class="str">"a"</span><span class="punct">],</span> <span class="var">d</span><span class="punct">[</span><span class="str">"b"</span><span class="punct">],</span> <span class="var">d</span><span class="punct">[</span><span class="str">"c"</span><span class="punct">]</span> <span class="punct">=</span> <span class="num">1</span><span class="punct">,</span> <span class="num">2</span><span class="punct">,</span> <span class="num">3</span>  <span class="comment"># Order: ['a', 'b', 'c']</span></span>
 <span class="line-text"></span>
-<span class="line-text"><span class="comment"># O(1) Reordering:</span></span>
-<span class="line-text"><span class="var">d</span><span class="punct">.</span><span class="fn">move_to_end</span><span class="punct">(</span><span class="str">"a"</span><span class="punct">)</span>         <span class="comment"># move to end        -&gt; Order: ['b', 'c', 'a']</span></span>
-<span class="line-text"><span class="var">d</span><span class="punct">.</span><span class="fn">move_to_end</span><span class="punct">(</span><span class="str">"c"</span><span class="punct">,</span> <span class="kw-def">False</span><span class="punct">)</span>  <span class="comment"># move to front      -&gt; Order: ['c', 'b', 'a']</span></span>
+<span class="line-text"><span class="comment"># 2. O(1) In-Place Update (PRESERVES EXISTING ORDER!):</span></span>
+<span class="line-text"><span class="var">d</span><span class="punct">[</span><span class="str">"b"</span><span class="punct">]</span> <span class="punct">=</span> <span class="num">20</span>                       <span class="comment"># Val updated; order remains ['a', 'b', 'c']</span></span>
 <span class="line-text"></span>
-<span class="line-text"><span class="comment"># O(1) Bidirectional Popping:</span></span>
-<span class="line-text"><span class="var">lastPair</span> <span class="punct">=</span> <span class="var">d</span><span class="punct">.</span><span class="fn">popitem</span><span class="punct">()</span>         <span class="comment"># remove last ('a', 1)  -&gt; Order: ['c', 'b']</span></span>
-<span class="line-text"><span class="var">firstPair</span> <span class="punct">=</span> <span class="var">d</span><span class="punct">.</span><span class="fn">popitem</span><span class="punct">(</span><span class="kw-def">False</span><span class="punct">)</span>   <span class="comment"># remove first ('c', 3) -&gt; Order: ['b']</span></span></code></pre>
+<span class="line-text"><span class="comment"># 3. O(1) Arbitrary Middle Key Deletion via DLL Unlink:</span></span>
+<span class="line-text"><span class="flow">del</span> <span class="var">d</span><span class="punct">[</span><span class="str">"b"</span><span class="punct">]</span>                        <span class="comment"># O(1) DLL node unlinked -&gt; Order: ['a', 'c']</span></span>
+<span class="line-text"></span>
+<span class="line-text"><span class="comment"># 4. O(1) Endpoint Reordering:</span></span>
+<span class="line-text"><span class="var">d</span><span class="punct">.</span><span class="fn">move_to_end</span><span class="punct">(</span><span class="str">"a"</span><span class="punct">)</span>                 <span class="comment"># Move to END (MRU)      -&gt; Order: ['c', 'a']</span></span>
+<span class="line-text"><span class="var">d</span><span class="punct">.</span><span class="fn">move_to_end</span><span class="punct">(</span><span class="str">"a"</span><span class="punct">,</span> <span class="kw-def">False</span><span class="punct">)</span>          <span class="comment"># Move to FRONT (LRU)    -&gt; Order: ['a', 'c']</span></span>
+<span class="line-text"></span>
+<span class="line-text"><span class="comment"># 5. O(1) Bidirectional Endpoint Popping:</span></span>
+<span class="line-text"><span class="var">lastPair</span> <span class="punct">=</span> <span class="var">d</span><span class="punct">.</span><span class="fn">popitem</span><span class="punct">()</span>             <span class="comment"># Pop last ('c', 3)      -&gt; Order: ['a']</span></span>
+<span class="line-text"><span class="var">firstPair</span> <span class="punct">=</span> <span class="var">d</span><span class="punct">.</span><span class="fn">popitem</span><span class="punct">(</span><span class="kw-def">False</span><span class="punct">)</span>       <span class="comment"># Pop first ('a', 1)     -&gt; Empty OrderedDict</span></span></code></pre>
             </div>
           </article>
 
@@ -8189,42 +8243,51 @@ Result: len(tails) = 3  (Optimal nesting: [2,3] -&gt; [5,4] -&gt; [6,7])</code><
 <span class="line-text"></span>
 <span class="line-text"></span>
 <span class="line-text"><span class="comment"># =========================================================================</span></span>
-<span class="line-text"><span class="comment"># 4. SQRT DECOMPOSITION (Block Partitioning, B = ceil(sqrt(n)))</span></span>
+<span class="line-text"><span class="comment"># 4. SQRT DECOMPOSITION (Block Partitioning, sqrt = ceil(sqrt(n)))</span></span>
 <span class="line-text"><span class="comment"># =========================================================================</span></span>
 <span class="line-text"><span class="kw-class">class</span> <span class="type">SqrtDecomposition</span><span class="punct">:</span></span>
 <span class="line-text">    <span class="docstr">&quot;&quot;&quot;
-    Square Root Decomposition: balances O(1) point updates with O(sqrt(n)) queries.
+    Square Root Decomposition (GKCS / Shikhar Singh Implementation):
+    Balances O(1) point updates with O(sqrt(n)) range queries.
     Time:  Build O(n) | Point Update O(1) | Range Query O(sqrt(n))
     Space: O(n + sqrt(n))
+    Video: https://www.youtube.com/watch?v=gWbDocYhwDA&amp;t=623s
     &quot;&quot;&quot;</span></span>
-<span class="line-text">    <span class="kw-def">def</span> <span class="fn">__init__</span><span class="punct">(</span><span class="param">self</span><span class="punct">,</span> <span class="param">nums</span><span class="punct">:</span> <span class="type">List</span><span class="punct">[</span><span class="type">int</span><span class="punct">]</span><span class="punct">)</span><span class="punct">:</span></span>
-<span class="line-text">        <span class="param">self</span><span class="punct">.</span><span class="var">n</span><span class="punct">,</span> <span class="param">self</span><span class="punct">.</span><span class="param">nums</span> <span class="punct">=</span> <span class="fn">len</span><span class="punct">(</span><span class="param">nums</span><span class="punct">)</span><span class="punct">,</span> <span class="param">nums</span><span class="punct">[</span><span class="punct">:</span><span class="punct">]</span></span>
-<span class="line-text">        <span class="param">self</span><span class="punct">.</span><span class="var">blockSize</span> <span class="punct">=</span> <span class="fn">max</span><span class="punct">(</span><span class="num">1</span><span class="punct">,</span> <span class="type">int</span><span class="punct">(</span><span class="var">math</span><span class="punct">.</span><span class="var">isqrt</span><span class="punct">(</span><span class="param">self</span><span class="punct">.</span><span class="var">n</span><span class="punct">)</span><span class="punct">)</span><span class="punct">)</span></span>
-<span class="line-text">        <span class="param">self</span><span class="punct">.</span><span class="var">numBlocks</span> <span class="punct">=</span> <span class="punct">(</span><span class="param">self</span><span class="punct">.</span><span class="var">n</span> <span class="punct">+</span> <span class="param">self</span><span class="punct">.</span><span class="var">blockSize</span> <span class="punct">-</span> <span class="num">1</span><span class="punct">)</span> <span class="punct">//</span> <span class="param">self</span><span class="punct">.</span><span class="var">blockSize</span></span>
-<span class="line-text">        <span class="param">self</span><span class="punct">.</span><span class="var">blocks</span> <span class="punct">=</span> <span class="punct">[</span><span class="num">0</span><span class="punct">]</span> <span class="punct">*</span> <span class="param">self</span><span class="punct">.</span><span class="var">numBlocks</span></span>
+<span class="line-text">    <span class="kw-def">def</span> <span class="fn">__init__</span><span class="punct">(</span><span class="param">self</span><span class="punct">,</span> <span class="param">a</span><span class="punct">:</span> <span class="type">List</span><span class="punct">[</span><span class="type">int</span><span class="punct">]</span><span class="punct">)</span><span class="punct">:</span></span>
+<span class="line-text">        <span class="param">self</span><span class="punct">.</span><span class="var">n</span><span class="punct">,</span> <span class="param">self</span><span class="punct">.</span><span class="param">a</span> <span class="punct">=</span> <span class="fn">len</span><span class="punct">(</span><span class="param">a</span><span class="punct">)</span><span class="punct">,</span> <span class="param">a</span><span class="punct">[</span><span class="punct">:</span><span class="punct">]</span></span>
+<span class="line-text">        <span class="param">self</span><span class="punct">.</span><span class="var">sqrt</span> <span class="punct">=</span> <span class="fn">max</span><span class="punct">(</span><span class="num">1</span><span class="punct">,</span> <span class="type">int</span><span class="punct">(</span><span class="var">math</span><span class="punct">.</span><span class="var">isqrt</span><span class="punct">(</span><span class="param">self</span><span class="punct">.</span><span class="var">n</span><span class="punct">)</span><span class="punct">)</span><span class="punct">)</span></span>
+<span class="line-text">        <span class="var">numBlocks</span> <span class="punct">=</span> <span class="punct">(</span><span class="param">self</span><span class="punct">.</span><span class="var">n</span> <span class="punct">+</span> <span class="param">self</span><span class="punct">.</span><span class="var">sqrt</span> <span class="punct">-</span> <span class="num">1</span><span class="punct">)</span> <span class="punct">//</span> <span class="param">self</span><span class="punct">.</span><span class="var">sqrt</span></span>
+<span class="line-text">        <span class="param">self</span><span class="punct">.</span><span class="var">blockSums</span> <span class="punct">=</span> <span class="punct">[</span><span class="num">0</span><span class="punct">]</span> <span class="punct">*</span> <span class="var">numBlocks</span></span>
 <span class="line-text"></span>
 <span class="line-text">        <span class="flow">for</span> <span class="var">i</span> <span class="flow">in</span> <span class="fn">range</span><span class="punct">(</span><span class="param">self</span><span class="punct">.</span><span class="var">n</span><span class="punct">)</span><span class="punct">:</span></span>
-<span class="line-text">            <span class="param">self</span><span class="punct">.</span><span class="var">blocks</span><span class="punct">[</span><span class="var">i</span> <span class="punct">//</span> <span class="param">self</span><span class="punct">.</span><span class="var">blockSize</span><span class="punct">]</span> <span class="punct">+=</span> <span class="param">nums</span><span class="punct">[</span><span class="var">i</span><span class="punct">]</span></span>
+<span class="line-text">            <span class="param">self</span><span class="punct">.</span><span class="var">blockSums</span><span class="punct">[</span><span class="var">i</span> <span class="punct">//</span> <span class="param">self</span><span class="punct">.</span><span class="var">sqrt</span><span class="punct">]</span> <span class="punct">+=</span> <span class="param">self</span><span class="punct">.</span><span class="var">a</span><span class="punct">[</span><span class="var">i</span><span class="punct">]</span></span>
 <span class="line-text"></span>
-<span class="line-text">    <span class="kw-def">def</span> <span class="fn">update</span><span class="punct">(</span><span class="param">self</span><span class="punct">,</span> <span class="param">idx</span><span class="punct">:</span> <span class="type">int</span><span class="punct">,</span> <span class="param">val</span><span class="punct">:</span> <span class="type">int</span><span class="punct">)</span> <span class="punct">-&gt;</span> <span class="kw-def">None</span><span class="punct">:</span></span>
-<span class="line-text">        <span class="var">blockIdx</span> <span class="punct">=</span> <span class="param">idx</span> <span class="punct">//</span> <span class="param">self</span><span class="punct">.</span><span class="var">blockSize</span></span>
-<span class="line-text">        <span class="param">self</span><span class="punct">.</span><span class="var">blocks</span><span class="punct">[</span><span class="var">blockIdx</span><span class="punct">]</span> <span class="punct">+=</span> <span class="param">val</span> <span class="punct">-</span> <span class="param">self</span><span class="punct">.</span><span class="param">nums</span><span class="punct">[</span><span class="param">idx</span><span class="punct">]</span></span>
-<span class="line-text">        <span class="param">self</span><span class="punct">.</span><span class="param">nums</span><span class="punct">[</span><span class="param">idx</span><span class="punct">]</span> <span class="punct">=</span> <span class="param">val</span></span>
+<span class="line-text">    <span class="kw-def">def</span> <span class="fn">update</span><span class="punct">(</span><span class="param">self</span><span class="punct">,</span> <span class="param">index</span><span class="punct">:</span> <span class="type">int</span><span class="punct">,</span> <span class="param">value</span><span class="punct">:</span> <span class="type">int</span><span class="punct">)</span> <span class="punct">-&gt;</span> <span class="kw-def">None</span><span class="punct">:</span></span>
+<span class="line-text">        <span class="var">blockIndex</span> <span class="punct">=</span> <span class="param">index</span> <span class="punct">//</span> <span class="param">self</span><span class="punct">.</span><span class="var">sqrt</span></span>
+<span class="line-text">        <span class="param">self</span><span class="punct">.</span><span class="var">blockSums</span><span class="punct">[</span><span class="var">blockIndex</span><span class="punct">]</span> <span class="punct">+=</span> <span class="param">value</span> <span class="punct">-</span> <span class="param">self</span><span class="punct">.</span><span class="var">a</span><span class="punct">[</span><span class="param">index</span><span class="punct">]</span></span>
+<span class="line-text">        <span class="param">self</span><span class="punct">.</span><span class="var">a</span><span class="punct">[</span><span class="param">index</span><span class="punct">]</span> <span class="punct">=</span> <span class="param">value</span></span>
 <span class="line-text"></span>
 <span class="line-text">    <span class="kw-def">def</span> <span class="fn">query</span><span class="punct">(</span><span class="param">self</span><span class="punct">,</span> <span class="param">left</span><span class="punct">:</span> <span class="type">int</span><span class="punct">,</span> <span class="param">right</span><span class="punct">:</span> <span class="type">int</span><span class="punct">)</span> <span class="punct">-&gt;</span> <span class="type">int</span><span class="punct">:</span></span>
-<span class="line-text">        <span class="var">startBlock</span><span class="punct">,</span> <span class="var">endBlock</span> <span class="punct">=</span> <span class="param">left</span> <span class="punct">//</span> <span class="param">self</span><span class="punct">.</span><span class="var">blockSize</span><span class="punct">,</span> <span class="param">right</span> <span class="punct">//</span> <span class="param">self</span><span class="punct">.</span><span class="var">blockSize</span></span>
+<span class="line-text">        <span class="var">startBlockIndex</span><span class="punct">,</span> <span class="var">endBlockIndex</span> <span class="punct">=</span> <span class="param">left</span> <span class="punct">//</span> <span class="param">self</span><span class="punct">.</span><span class="var">sqrt</span><span class="punct">,</span> <span class="param">right</span> <span class="punct">//</span> <span class="param">self</span><span class="punct">.</span><span class="var">sqrt</span></span>
 <span class="line-text"></span>
-<span class="line-text">        <span class="flow">if</span> <span class="var">startBlock</span> <span class="punct">==</span> <span class="var">endBlock</span><span class="punct">:</span></span>
-<span class="line-text">            <span class="flow">return</span> <span class="fn">sum</span><span class="punct">(</span><span class="param">self</span><span class="punct">.</span><span class="param">nums</span><span class="punct">[</span><span class="param">left</span> <span class="punct">:</span> <span class="param">right</span> <span class="punct">+</span> <span class="num">1</span><span class="punct">]</span><span class="punct">)</span></span>
+<span class="line-text">        <span class="flow">if</span> <span class="var">startBlockIndex</span> <span class="punct">==</span> <span class="var">endBlockIndex</span><span class="punct">:</span></span>
+<span class="line-text">            <span class="flow">return</span> <span class="fn">sum</span><span class="punct">(</span><span class="param">self</span><span class="punct">.</span><span class="var">a</span><span class="punct">[</span><span class="param">left</span> <span class="punct">:</span> <span class="param">right</span> <span class="punct">+</span> <span class="num">1</span><span class="punct">]</span><span class="punct">)</span></span>
 <span class="line-text"></span>
-<span class="line-text">        <span class="var">res</span> <span class="punct">=</span> <span class="num">0</span></span>
-<span class="line-text">        <span class="var">res</span> <span class="punct">+=</span> <span class="fn">sum</span><span class="punct">(</span><span class="param">self</span><span class="punct">.</span><span class="param">nums</span><span class="punct">[</span><span class="param">left</span> <span class="punct">:</span> <span class="punct">(</span><span class="var">startBlock</span> <span class="punct">+</span> <span class="num">1</span><span class="punct">)</span> <span class="punct">*</span> <span class="param">self</span><span class="punct">.</span><span class="var">blockSize</span><span class="punct">]</span><span class="punct">)</span></span>
+<span class="line-text">        <span class="var">sumVal</span> <span class="punct">=</span> <span class="num">0</span></span>
+<span class="line-text">        <span class="flow">for</span> <span class="var">i</span> <span class="flow">in</span> <span class="fn">range</span><span class="punct">(</span><span class="var">startBlockIndex</span> <span class="punct">+</span> <span class="num">1</span><span class="punct">,</span> <span class="var">endBlockIndex</span><span class="punct">)</span><span class="punct">:</span></span>
+<span class="line-text">            <span class="var">sumVal</span> <span class="punct">+=</span> <span class="param">self</span><span class="punct">.</span><span class="var">blockSums</span><span class="punct">[</span><span class="var">i</span><span class="punct">]</span></span>
 <span class="line-text"></span>
-<span class="line-text">        <span class="flow">for</span> <span class="var">b</span> <span class="flow">in</span> <span class="fn">range</span><span class="punct">(</span><span class="var">startBlock</span> <span class="punct">+</span> <span class="num">1</span><span class="punct">,</span> <span class="var">endBlock</span><span class="punct">)</span><span class="punct">:</span></span>
-<span class="line-text">            <span class="var">res</span> <span class="punct">+=</span> <span class="param">self</span><span class="punct">.</span><span class="var">blocks</span><span class="punct">[</span><span class="var">b</span><span class="punct">]</span></span>
+<span class="line-text">        <span class="var">startIndex</span> <span class="punct">=</span> <span class="param">left</span> <span class="punct">%</span> <span class="param">self</span><span class="punct">.</span><span class="var">sqrt</span></span>
+<span class="line-text">        <span class="flow">for</span> <span class="var">i</span> <span class="flow">in</span> <span class="fn">range</span><span class="punct">(</span><span class="var">startIndex</span><span class="punct">,</span> <span class="param">self</span><span class="punct">.</span><span class="var">sqrt</span><span class="punct">)</span><span class="punct">:</span></span>
+<span class="line-text">            <span class="var">idx</span> <span class="punct">=</span> <span class="var">startBlockIndex</span> <span class="punct">*</span> <span class="param">self</span><span class="punct">.</span><span class="var">sqrt</span> <span class="punct">+</span> <span class="var">i</span></span>
+<span class="line-text">            <span class="flow">if</span> <span class="var">idx</span> <span class="punct">&lt;</span> <span class="param">self</span><span class="punct">.</span><span class="var">n</span><span class="punct">:</span> <span class="var">sumVal</span> <span class="punct">+=</span> <span class="param">self</span><span class="punct">.</span><span class="var">a</span><span class="punct">[</span><span class="var">idx</span><span class="punct">]</span></span>
 <span class="line-text"></span>
-<span class="line-text">        <span class="var">res</span> <span class="punct">+=</span> <span class="fn">sum</span><span class="punct">(</span><span class="param">self</span><span class="punct">.</span><span class="param">nums</span><span class="punct">[</span><span class="var">endBlock</span> <span class="punct">*</span> <span class="param">self</span><span class="punct">.</span><span class="var">blockSize</span> <span class="punct">:</span> <span class="param">right</span> <span class="punct">+</span> <span class="num">1</span><span class="punct">]</span><span class="punct">)</span></span>
-<span class="line-text">        <span class="flow">return</span> <span class="var">res</span></span>
+<span class="line-text">        <span class="var">endIndex</span> <span class="punct">=</span> <span class="param">right</span> <span class="punct">%</span> <span class="param">self</span><span class="punct">.</span><span class="var">sqrt</span></span>
+<span class="line-text">        <span class="flow">for</span> <span class="var">i</span> <span class="flow">in</span> <span class="fn">range</span><span class="punct">(</span><span class="num">0</span><span class="punct">,</span> <span class="var">endIndex</span> <span class="punct">+</span> <span class="num">1</span><span class="punct">)</span><span class="punct">:</span></span>
+<span class="line-text">            <span class="var">idx</span> <span class="punct">=</span> <span class="var">endBlockIndex</span> <span class="punct">*</span> <span class="param">self</span><span class="punct">.</span><span class="var">sqrt</span> <span class="punct">+</span> <span class="var">i</span></span>
+<span class="line-text">            <span class="flow">if</span> <span class="var">idx</span> <span class="punct">&lt;</span> <span class="param">self</span><span class="punct">.</span><span class="var">n</span><span class="punct">:</span> <span class="var">sumVal</span> <span class="punct">+=</span> <span class="param">self</span><span class="punct">.</span><span class="var">a</span><span class="punct">[</span><span class="var">idx</span><span class="punct">]</span></span>
+<span class="line-text"></span>
+<span class="line-text">        <span class="flow">return</span> <span class="var">sumVal</span></span></span>
 <span class="line-text"></span></code></pre>
         </section>
       </section>
@@ -8815,6 +8878,60 @@ Result: len(tails) = 3  (Optimal nesting: [2,3] -&gt; [5,4] -&gt; [6,7])</code><
                   <strong>Takeaway:</strong> Notice how prime <em>n</em> = 5 fills indices 1 through 9 with <strong>zero gaps</strong>!
                   Indices 1..4 hold the 4 internal parents, and indices 5..9 hold the 5 leaves. Exactly 2N = 10 slots allocated.
                 </div>
+              </div>
+
+              <!-- LIVE INTERACTIVE 2N SEGMENT TREE VISUALIZER & INSPECTOR -->
+              <div class="it2n-visualizer" id="rq-it2n-visualizer" aria-label="Interactive 2N Iterative Segment Tree Visualizer">
+                <div class="rq-tree-diagram-header">
+                  <span class="rq-diagram-badge">Interactive 2N Segment Tree Visualizer &amp; Step-by-Step Inspector</span>
+                  <span class="rq-diagram-note">1-Indexed Tree Nodes &bull; Click Any Node or Array Cell to Inspect &bull; Trace Bottom-Up Construction</span>
+                </div>
+
+                <!-- Input Controls -->
+                <div class="it2n-controls">
+                  <label class="it2n-field">
+                    <span>Array Elements (comma-separated):</span>
+                    <input id="it2n-nums" class="it2n-input" type="text" value="2, 4, 6, 8, 10, 12, 14" placeholder="e.g. 2, 4, 6, 8, 10, 12, 14" />
+                  </label>
+                  <button type="button" id="it2n-build" class="it2n-btn">Build Tree</button>
+                  <button type="button" id="it2n-example" class="it2n-btn it2n-btn-sec">Use n = 6 Example</button>
+                </div>
+
+                <!-- Summary Bar -->
+                <div id="it2n-summary" class="it2n-summary-bar"></div>
+
+                <!-- SVG Tree Diagram -->
+                <div class="it2n-svg-wrap">
+                  <svg id="it2n-tree" class="it2n-svg" viewBox="0 0 900 430" role="img" aria-label="Interactive 2N iterative segment tree diagram"></svg>
+                </div>
+
+                <!-- Selected Node Inspector Box -->
+                <div id="it2n-details" class="it2n-details-box" aria-live="polite">Select a node or cell to inspect.</div>
+
+                <!-- Underlying Tree Array Cells -->
+                <div>
+                  <div style="font-size: 0.72rem; color: var(--muted); font-weight: 700; text-transform: uppercase; margin-bottom: 0.45rem;">
+                    Underlying 2N Tree Array (Green = Internal Sums, Blue = Original Array Leaves, Index 0 = Unused):
+                  </div>
+                  <div id="it2n-cells" class="it2n-array-cells"></div>
+                </div>
+
+                <!-- Bottom-Up Construction Step-by-Step -->
+                <div style="border-top: 1px solid #282828; padding-top: 0.85rem;">
+                  <div style="font-size: 0.75rem; color: #fff; font-weight: 700; margin-bottom: 0.35rem;">
+                    Bottom-Up Construction: <code>for i in range(n - 1, 0, -1): tree[i] = tree[2*i] + tree[2*i+1]</code>
+                  </div>
+                  <div id="it2n-steps" class="it2n-steps-row" style="margin-bottom: 0.55rem;"></div>
+                  <div id="it2n-step-info" class="it2n-details-box" style="margin-bottom: 0.65rem;"></div>
+                  <div class="it2n-controls">
+                    <button type="button" id="it2n-prev" class="it2n-btn it2n-btn-sec">&larr; Previous Step</button>
+                    <button type="button" id="it2n-next" class="it2n-btn">Next Calculation &rarr;</button>
+                    <button type="button" id="it2n-all" class="it2n-btn it2n-btn-sec">Show Final Tree</button>
+                  </div>
+                </div>
+
+                <!-- The Lone Leaf & Arbitrary N Topology Explanation -->
+                <div class="it2n-lone-warn" id="it2n-lone"></div>
               </div>
             </div>
 
@@ -9848,14 +9965,121 @@ Result: len(tails) = 3  (Optimal nesting: [2,3] -&gt; [5,4] -&gt; [6,7])</code><
           <article class="pattern-card" id="rq-sqrt-blocks">
             <div class="pattern-card-head">
               <h3>Block Decomposition (Range Sum &amp; Range Min)</h3>
+              <a class="video-ref-link" href="https://www.youtube.com/watch?v=gWbDocYhwDA&amp;t=623s" target="_blank" rel="noopener" style="display: inline-flex; align-items: center; gap: 0.35rem; font-size: 0.72rem; color: #ff5555; background: rgba(255, 68, 68, 0.1); border: 1px solid rgba(255, 68, 68, 0.3); padding: 0.22rem 0.55rem; border-radius: 4px; text-decoration: none; font-weight: 600; margin-left: auto;">
+                <span>▶ Video Walkthrough: GKCS (10:23) ↗</span>
+              </a>
             </div>
             <p class="use-when"><strong>Use when:</strong> Updates are very frequent (O(1) update needed), or queries involve complex non-invertible/non-associative aggregations where tree structures become unwieldy.</p>
 
             <div class="why-box" style="padding: 1.35rem;">
-              <strong>Why it works: Square Root Block Partitioning</strong>
+              <strong>Why it works: Square Root Block Partitioning &amp; Why &radic;N?</strong>
               <p style="line-height: 1.65; margin-bottom: 0.8rem;">
                 Divide an array of size <em>n</em> into blocks of size <code>B = &lceil;&radic;n&rceil;</code>. The total number of blocks is &asymp; &radic;n.
               </p>
+
+              <!-- MATHEMATICAL DERIVATION: WHY SQRT(N)? -->
+              <div style="background: #181818; border: 1px solid #2d2d2d; border-radius: 6px; padding: 0.95rem; margin-bottom: 1rem;">
+                <div style="font-size: 0.82rem; font-weight: 700; color: var(--orange); margin-bottom: 0.45rem;">
+                  Mathematical Derivation: Why is B = &radic;N the Optimal Trade-Off?
+                </div>
+                <ol style="margin: 0; padding-left: 1.25rem; font-size: 0.78rem; line-height: 1.65; color: var(--text);">
+                  <li>Let <strong>N</strong> be the array size and <strong>B</strong> be the size of each block.</li>
+                  <li>Number of blocks = <code>N / B</code>.</li>
+                  <li>Scanning elements inside boundary partial blocks (left tail + right head) costs at most <code>2 &times; (B - 1) = O(B)</code>.</li>
+                  <li>Processing complete middle blocks costs at most <code>(N / B)</code> lookups in <code>O(1)</code> each = <code>O(N / B)</code>.</li>
+                  <li>Therefore, worst-case query time complexity is <code>T(B) = O(B + N / B)</code>.</li>
+                  <li><strong>The Trade-Off Dilemma:</strong> A small <em>B</em> yields too many blocks to traverse (<code>N / B</code> blows up); a large <em>B</em> yields too many individual elements to scan in partial blocks (<em>B</em> blows up).</li>
+                  <li>We balance these two competing costs to find the equilibrium: <code>B = N / B</code>.</li>
+                  <li>Hence, <code>B<sup>2</sup> = N &implies; B = &radic;N</code> (provable via calculus: <code>d/dB (B + N/B) = 1 - N/B<sup>2</sup> = 0</code>).</li>
+                  <li>This gives the optimal worst-case bound: <code>T = O(&radic;N + N / &radic;N) = O(&radic;N)</code>.</li>
+                </ol>
+
+                <!-- N = 100 TRADE-OFF TABLE -->
+                <div style="margin-top: 0.85rem; overflow-x: auto; -webkit-overflow-scrolling: touch;">
+                  <table class="lps-stepper-table" style="font-size: 0.74rem;">
+                    <thead>
+                      <tr>
+                        <th>Block Size B</th>
+                        <th>Number of Blocks (N / B)</th>
+                        <th>Worst-Case Work (B + N/B)</th>
+                        <th>Trade-Off Analysis (N = 100)</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td><code>5</code></td>
+                        <td>20 blocks</td>
+                        <td>5 + 20 = <strong>25</strong> ops</td>
+                        <td>Too many blocks: complete block traversal is slow.</td>
+                      </tr>
+                      <tr style="background: rgba(255, 161, 22, 0.08);">
+                        <td><strong style="color: var(--orange);">10 (Optimal)</strong></td>
+                        <td><strong style="color: var(--orange);">10 blocks</strong></td>
+                        <td><strong style="color: var(--easy);">10 + 10 = 20 ops (MINIMUM)</strong></td>
+                        <td><strong style="color: var(--easy);">&radic;100 = 10: Perfect equilibrium! Neither side dominates.</strong></td>
+                      </tr>
+                      <tr>
+                        <td><code>20</code></td>
+                        <td>5 blocks</td>
+                        <td>20 + 5 = <strong>25</strong> ops</td>
+                        <td>Blocks too wide: scanning partial boundary elements is slow.</td>
+                      </tr>
+                      <tr>
+                        <td><code>50</code></td>
+                        <td>2 blocks</td>
+                        <td>50 + 2 = <strong>52</strong> ops</td>
+                        <td>Massive blocks: scanning elements approaches linear O(N).</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div style="font-size: 0.74rem; color: var(--muted); margin-top: 0.5rem; font-style: italic;">
+                  <strong style="color: var(--text);">Key intuition:</strong> We balance both parts of the worst-case work so neither dominates. <code>&radic;N</code> is mathematically optimal for this two-force trade-off.
+                </div>
+
+                <!-- VIDEO LINK CALLOUT BANNER -->
+                <div style="margin-top: 0.75rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem; background: #1c1515; border: 1px solid #4a2222; border-radius: 6px; padding: 0.55rem 0.8rem;">
+                  <span style="font-size: 0.76rem; color: #ff9999;">
+                    <strong>Video Walkthrough:</strong> Gaurav Sen &amp; Shikhar Singh &mdash; <em>What is Square Root Decomposition? (Range Query Solving)</em>
+                  </span>
+                  <a href="https://www.youtube.com/watch?v=gWbDocYhwDA&amp;t=623s" target="_blank" rel="noopener" style="font-size: 0.73rem; color: #ff5555; text-decoration: none; font-weight: 700; display: inline-flex; align-items: center; gap: 0.25rem;">
+                    Watch at 10:23 (Why &radic;N &amp; Implementation Walkthrough) &rarr;
+                  </a>
+                </div>
+              </div>
+
+              <!-- BLOCK BOX DRAWING DIAGRAM (NOT MERMAID) -->
+              <div style="margin-bottom: 1rem;">
+                <div style="font-size: 0.78rem; font-weight: 700; color: var(--text); margin-bottom: 0.35rem;">
+                  Visual Block Box Architecture: Array Partitioning &amp; Query Decomposition
+                </div>
+                <pre class="trace-diagram" style="font-size: 0.71rem; line-height: 1.35;"><code>┌─────────────────────────────────────────────────────────────────────────────────────────────┐
+│                      ARRAY OF SIZE N (Partitioned into Blocks of Size B)                    │
+├─────────────────┬─────────────────┬─────────────────┬─────────────────┬─────────────────────┤
+│    Block #0     │    Block #1     │    Block #2     │       ...       │  Block #(N/B - 1)   │
+│ [ 0 ... B - 1 ] │ [ B ... 2B - 1] │ [2B ... 3B - 1] │       ...       │ [(N-B) ... N - 1]   │
+│  Block Sum S_0  │  Block Sum S_1  │  Block Sum S_2  │       ...       │    Block Sum S_k    │
+└────────┬────────┴────────┬────────┴────────┬────────┴─────────────────┴──────────┬──────────┘
+         │                 │                 │                                     │
+         └─────────────────┴─────────────────┴─────────────────────────────────────┘
+                                             ▼
+┌─────────────────────────────────────────────────────────────────────────────────────────────┐
+│                             RANGE QUERY [L, R] DECOMPOSITION                                │
+├───────────────────────────┬─────────────────────────────────────┬───────────────────────────┤
+│    PARTIAL HEAD BLOCK     │       COMPLETE MIDDLE BLOCKS        │    PARTIAL TAIL BLOCK     │
+│  (Scan Individual Items)  │    (O(1) Precomputed Block Sums)    │  (Scan Individual Items)  │
+├───────────────────────────┼─────────────────────────────────────┼───────────────────────────┤
+│  nums[L] .. nums[b0_end]  │    blocks[b1] + blocks[b2] + ...    │ nums[bk_start] .. nums[R] │
+│                           │                                     │                           │
+│   At most (B - 1) items   │       At most (N / B) blocks        │   At most (B - 1) items   │
+│         Cost: O(B)        │            Cost: O(N / B)           │         Cost: O(B)        │
+└───────────────────────────┴─────────────────────────────────────┴───────────────────────────┘
+                                             │
+                                             ▼
+                 Worst-Case Total Query Cost = O(B) + O(N / B)
+                 Balancing both terms: B = N / B  ==>  B² = N  ==>  B = √N
+                 Optimal Time Complexity = O(√N + N/√N) = O(√N)</code></pre>
+              </div>
 
                             <!-- PROPER HTML SQRT CHUNK BLOCKS DIAGRAM (PRIME LENGTH N = 7) -->
               <div class="rq-sqrt-diagram-container">
@@ -9961,8 +10185,8 @@ Result: len(tails) = 3  (Optimal nesting: [2,3] -&gt; [5,4] -&gt; [6,7])</code><
               </div>
 
               <ul style="line-height: 1.65; margin-top: 1rem;">
-                <li><strong>O(1) Point Update:</strong> <code>blockIdx = idx // B; blocks[blockIdx] += val - nums[idx]; nums[idx] = val</code>. Only one block is affected.</li>
-                <li><strong>O(√n) Range Query:</strong> Sum partial left block (&le; B elements) + middle full blocks (&le; &radic;n blocks) + partial right block (&le; B elements). Total work: &le; 3&radic;n = O(&radic;n).</li>
+                <li><strong>O(1) Point Update:</strong> <code>blockIndex = index // sqrt; blockSums[blockIndex] += value - a[index]; a[index] = value</code>. Only one block is affected.</li>
+                <li><strong>O(√n) Range Query:</strong> Sum partial start block (from <code>left % sqrt</code> to <code>sqrt</code>) + complete middle blocks (<code>blockSums[i]</code> in O(1) each) + partial end block (from <code>0</code> to <code>right % sqrt</code>). Total work: &le; 3&radic;n = O(&radic;n).</li>
               </ul>
             </div>
 
@@ -9973,49 +10197,60 @@ Result: len(tails) = 3  (Optimal nesting: [2,3] -&gt; [5,4] -&gt; [6,7])</code><
 <span class="line-text"></span>
 <span class="line-text"><span class="kw-class">class</span> <span class="type">SqrtDecomposition</span><span class="punct">:</span></span>
 <span class="line-text">    <span class="docstr">&quot;&quot;&quot;
-    Square Root Decomposition:
-    Partitions array into blocks of size B = ceil(sqrt(n)).
+    Square Root Decomposition (GKCS / Shikhar Singh Implementation):
+    Partitions array 'a' into blocks of size 'sqrt = ceil(sqrt(n))'.
+    Maintains precomputed block summaries in 'blockSums'.
 
-    Time:  Point Update O(1) | Range Query O(sqrt(n)) | Build O(n)
+    Time:  Build O(n) | Point Update O(1) | Range Query O(sqrt(n))
     Space: O(n) array storage + O(sqrt(n)) block summaries
+    Video: https://www.youtube.com/watch?v=gWbDocYhwDA&amp;t=623s
     &quot;&quot;&quot;</span></span>
-<span class="line-text">    <span class="kw-def">def</span> <span class="fn">__init__</span><span class="punct">(</span><span class="param">self</span><span class="punct">,</span> <span class="param">nums</span><span class="punct">:</span> <span class="type">List</span><span class="punct">[</span><span class="type">int</span><span class="punct">]</span><span class="punct">)</span><span class="punct">:</span></span>
-<span class="line-text">        <span class="param">self</span><span class="punct">.</span><span class="var">n</span><span class="punct">,</span> <span class="param">self</span><span class="punct">.</span><span class="param">nums</span> <span class="punct">=</span> <span class="fn">len</span><span class="punct">(</span><span class="param">nums</span><span class="punct">)</span><span class="punct">,</span> <span class="param">nums</span><span class="punct">[</span><span class="punct">:</span><span class="punct">]</span></span>
-<span class="line-text">        <span class="param">self</span><span class="punct">.</span><span class="var">blockSize</span> <span class="punct">=</span> <span class="fn">max</span><span class="punct">(</span><span class="num">1</span><span class="punct">,</span> <span class="type">int</span><span class="punct">(</span><span class="var">math</span><span class="punct">.</span><span class="var">isqrt</span><span class="punct">(</span><span class="param">self</span><span class="punct">.</span><span class="var">n</span><span class="punct">)</span><span class="punct">)</span><span class="punct">)</span></span>
-<span class="line-text">        <span class="param">self</span><span class="punct">.</span><span class="var">numBlocks</span> <span class="punct">=</span> <span class="punct">(</span><span class="param">self</span><span class="punct">.</span><span class="var">n</span> <span class="punct">+</span> <span class="param">self</span><span class="punct">.</span><span class="var">blockSize</span> <span class="punct">-</span> <span class="num">1</span><span class="punct">)</span> <span class="punct">//</span> <span class="param">self</span><span class="punct">.</span><span class="var">blockSize</span></span>
-<span class="line-text">        <span class="param">self</span><span class="punct">.</span><span class="var">blocks</span> <span class="punct">=</span> <span class="punct">[</span><span class="num">0</span><span class="punct">]</span> <span class="punct">*</span> <span class="param">self</span><span class="punct">.</span><span class="var">numBlocks</span></span>
+<span class="line-text">    <span class="kw-def">def</span> <span class="fn">__init__</span><span class="punct">(</span><span class="param">self</span><span class="punct">,</span> <span class="param">a</span><span class="punct">:</span> <span class="type">List</span><span class="punct">[</span><span class="type">int</span><span class="punct">]</span><span class="punct">)</span><span class="punct">:</span></span>
+<span class="line-text">        <span class="param">self</span><span class="punct">.</span><span class="var">n</span><span class="punct">,</span> <span class="param">self</span><span class="punct">.</span><span class="param">a</span> <span class="punct">=</span> <span class="fn">len</span><span class="punct">(</span><span class="param">a</span><span class="punct">)</span><span class="punct">,</span> <span class="param">a</span><span class="punct">[</span><span class="punct">:</span><span class="punct">]</span></span>
+<span class="line-text">        <span class="param">self</span><span class="punct">.</span><span class="var">sqrt</span> <span class="punct">=</span> <span class="fn">max</span><span class="punct">(</span><span class="num">1</span><span class="punct">,</span> <span class="type">int</span><span class="punct">(</span><span class="var">math</span><span class="punct">.</span><span class="var">isqrt</span><span class="punct">(</span><span class="param">self</span><span class="punct">.</span><span class="var">n</span><span class="punct">)</span><span class="punct">)</span><span class="punct">)</span></span>
+<span class="line-text">        <span class="var">numBlocks</span> <span class="punct">=</span> <span class="punct">(</span><span class="param">self</span><span class="punct">.</span><span class="var">n</span> <span class="punct">+</span> <span class="param">self</span><span class="punct">.</span><span class="var">sqrt</span> <span class="punct">-</span> <span class="num">1</span><span class="punct">)</span> <span class="punct">//</span> <span class="param">self</span><span class="punct">.</span><span class="var">sqrt</span></span>
+<span class="line-text">        <span class="param">self</span><span class="punct">.</span><span class="var">blockSums</span> <span class="punct">=</span> <span class="punct">[</span><span class="num">0</span><span class="punct">]</span> <span class="punct">*</span> <span class="var">numBlocks</span></span>
 <span class="line-text"></span>
 <span class="line-text">        <span class="flow">for</span> <span class="var">i</span> <span class="flow">in</span> <span class="fn">range</span><span class="punct">(</span><span class="param">self</span><span class="punct">.</span><span class="var">n</span><span class="punct">)</span><span class="punct">:</span></span>
-<span class="line-text">            <span class="param">self</span><span class="punct">.</span><span class="var">blocks</span><span class="punct">[</span><span class="var">i</span> <span class="punct">//</span> <span class="param">self</span><span class="punct">.</span><span class="var">blockSize</span><span class="punct">]</span> <span class="punct">+=</span> <span class="param">nums</span><span class="punct">[</span><span class="var">i</span><span class="punct">]</span></span>
+<span class="line-text">            <span class="param">self</span><span class="punct">.</span><span class="var">blockSums</span><span class="punct">[</span><span class="var">i</span> <span class="punct">//</span> <span class="param">self</span><span class="punct">.</span><span class="var">sqrt</span><span class="punct">]</span> <span class="punct">+=</span> <span class="param">self</span><span class="punct">.</span><span class="var">a</span><span class="punct">[</span><span class="var">i</span><span class="punct">]</span></span>
 <span class="line-text"></span>
-<span class="line-text">    <span class="kw-def">def</span> <span class="fn">update</span><span class="punct">(</span><span class="param">self</span><span class="punct">,</span> <span class="param">idx</span><span class="punct">:</span> <span class="type">int</span><span class="punct">,</span> <span class="param">val</span><span class="punct">:</span> <span class="type">int</span><span class="punct">)</span> <span class="punct">-&gt;</span> <span class="kw-def">None</span><span class="punct">:</span></span>
-<span class="line-text">        <span class="docstr">&quot;&quot;&quot;O(1) Point Update.&quot;&quot;&quot;</span></span>
-<span class="line-text">        <span class="var">blockIdx</span> <span class="punct">=</span> <span class="param">idx</span> <span class="punct">//</span> <span class="param">self</span><span class="punct">.</span><span class="var">blockSize</span></span>
-<span class="line-text">        <span class="param">self</span><span class="punct">.</span><span class="var">blocks</span><span class="punct">[</span><span class="var">blockIdx</span><span class="punct">]</span> <span class="punct">+=</span> <span class="param">val</span> <span class="punct">-</span> <span class="param">self</span><span class="punct">.</span><span class="param">nums</span><span class="punct">[</span><span class="param">idx</span><span class="punct">]</span></span>
-<span class="line-text">        <span class="param">self</span><span class="punct">.</span><span class="param">nums</span><span class="punct">[</span><span class="param">idx</span><span class="punct">]</span> <span class="punct">=</span> <span class="param">val</span></span>
+<span class="line-text">    <span class="kw-def">def</span> <span class="fn">update</span><span class="punct">(</span><span class="param">self</span><span class="punct">,</span> <span class="param">index</span><span class="punct">:</span> <span class="type">int</span><span class="punct">,</span> <span class="param">value</span><span class="punct">:</span> <span class="type">int</span><span class="punct">)</span> <span class="punct">-&gt;</span> <span class="kw-def">None</span><span class="punct">:</span></span>
+<span class="line-text">        <span class="docstr">&quot;&quot;&quot;O(1) Point Update: Adjust blockSums, then mutate a[index].&quot;&quot;&quot;</span></span>
+<span class="line-text">        <span class="var">blockIndex</span> <span class="punct">=</span> <span class="param">index</span> <span class="punct">//</span> <span class="param">self</span><span class="punct">.</span><span class="var">sqrt</span></span>
+<span class="line-text">        <span class="param">self</span><span class="punct">.</span><span class="var">blockSums</span><span class="punct">[</span><span class="var">blockIndex</span><span class="punct">]</span> <span class="punct">+=</span> <span class="param">value</span> <span class="punct">-</span> <span class="param">self</span><span class="punct">.</span><span class="var">a</span><span class="punct">[</span><span class="param">index</span><span class="punct">]</span></span>
+<span class="line-text">        <span class="param">self</span><span class="punct">.</span><span class="var">a</span><span class="punct">[</span><span class="param">index</span><span class="punct">]</span> <span class="punct">=</span> <span class="param">value</span></span>
 <span class="line-text"></span>
 <span class="line-text">    <span class="kw-def">def</span> <span class="fn">query</span><span class="punct">(</span><span class="param">self</span><span class="punct">,</span> <span class="param">left</span><span class="punct">:</span> <span class="type">int</span><span class="punct">,</span> <span class="param">right</span><span class="punct">:</span> <span class="type">int</span><span class="punct">)</span> <span class="punct">-&gt;</span> <span class="type">int</span><span class="punct">:</span></span>
 <span class="line-text">        <span class="docstr">&quot;&quot;&quot;
         O(sqrt(n)) Range Query [left, right] inclusive:
-        Aggregates partial left block, full middle blocks, and partial right block.
+        Sums partial start block + complete middle blocks + partial end block.
         &quot;&quot;&quot;</span></span>
-<span class="line-text">        <span class="var">startBlock</span><span class="punct">,</span> <span class="var">endBlock</span> <span class="punct">=</span> <span class="param">left</span> <span class="punct">//</span> <span class="param">self</span><span class="punct">.</span><span class="var">blockSize</span><span class="punct">,</span> <span class="param">right</span> <span class="punct">//</span> <span class="param">self</span><span class="punct">.</span><span class="var">blockSize</span></span>
+<span class="line-text">        <span class="var">startBlockIndex</span><span class="punct">,</span> <span class="var">endBlockIndex</span> <span class="punct">=</span> <span class="param">left</span> <span class="punct">//</span> <span class="param">self</span><span class="punct">.</span><span class="var">sqrt</span><span class="punct">,</span> <span class="param">right</span> <span class="punct">//</span> <span class="param">self</span><span class="punct">.</span><span class="var">sqrt</span></span>
 <span class="line-text"></span>
-<span class="line-text">        <span class="flow">if</span> <span class="var">startBlock</span> <span class="punct">==</span> <span class="var">endBlock</span><span class="punct">:</span></span>
-<span class="line-text">            <span class="flow">return</span> <span class="fn">sum</span><span class="punct">(</span><span class="param">self</span><span class="punct">.</span><span class="param">nums</span><span class="punct">[</span><span class="param">left</span> <span class="punct">:</span> <span class="param">right</span> <span class="punct">+</span> <span class="num">1</span><span class="punct">]</span><span class="punct">)</span></span>
+<span class="line-text">        <span class="flow">if</span> <span class="var">startBlockIndex</span> <span class="punct">==</span> <span class="var">endBlockIndex</span><span class="punct">:</span></span>
+<span class="line-text">            <span class="flow">return</span> <span class="fn">sum</span><span class="punct">(</span><span class="param">self</span><span class="punct">.</span><span class="var">a</span><span class="punct">[</span><span class="param">left</span> <span class="punct">:</span> <span class="param">right</span> <span class="punct">+</span> <span class="num">1</span><span class="punct">]</span><span class="punct">)</span></span>
 <span class="line-text"></span>
-<span class="line-text">        <span class="var">res</span> <span class="punct">=</span> <span class="num">0</span></span>
-<span class="line-text">        <span class="comment"># 1. Partial head block</span></span>
-<span class="line-text">        <span class="var">res</span> <span class="punct">+=</span> <span class="fn">sum</span><span class="punct">(</span><span class="param">self</span><span class="punct">.</span><span class="param">nums</span><span class="punct">[</span><span class="param">left</span> <span class="punct">:</span> <span class="punct">(</span><span class="var">startBlock</span> <span class="punct">+</span> <span class="num">1</span><span class="punct">)</span> <span class="punct">*</span> <span class="param">self</span><span class="punct">.</span><span class="var">blockSize</span><span class="punct">]</span><span class="punct">)</span></span>
+<span class="line-text">        <span class="var">sumVal</span> <span class="punct">=</span> <span class="num">0</span></span>
 <span class="line-text"></span>
-<span class="line-text">        <span class="comment"># 2. Complete middle blocks in O(1) each</span></span>
-<span class="line-text">        <span class="flow">for</span> <span class="var">b</span> <span class="flow">in</span> <span class="fn">range</span><span class="punct">(</span><span class="var">startBlock</span> <span class="punct">+</span> <span class="num">1</span><span class="punct">,</span> <span class="var">endBlock</span><span class="punct">)</span><span class="punct">:</span></span>
-<span class="line-text">            <span class="var">res</span> <span class="punct">+=</span> <span class="param">self</span><span class="punct">.</span><span class="var">blocks</span><span class="punct">[</span><span class="var">b</span><span class="punct">]</span></span>
+<span class="line-text">        <span class="comment"># 1. Complete middle blocks in O(1) each</span></span>
+<span class="line-text">        <span class="flow">for</span> <span class="var">i</span> <span class="flow">in</span> <span class="fn">range</span><span class="punct">(</span><span class="var">startBlockIndex</span> <span class="punct">+</span> <span class="num">1</span><span class="punct">,</span> <span class="var">endBlockIndex</span><span class="punct">)</span><span class="punct">:</span></span>
+<span class="line-text">            <span class="var">sumVal</span> <span class="punct">+=</span> <span class="param">self</span><span class="punct">.</span><span class="var">blockSums</span><span class="punct">[</span><span class="var">i</span><span class="punct">]</span></span>
 <span class="line-text"></span>
-<span class="line-text">        <span class="comment"># 3. Partial tail block</span></span>
-<span class="line-text">        <span class="var">res</span> <span class="punct">+=</span> <span class="fn">sum</span><span class="punct">(</span><span class="param">self</span><span class="punct">.</span><span class="param">nums</span><span class="punct">[</span><span class="var">endBlock</span> <span class="punct">*</span> <span class="param">self</span><span class="punct">.</span><span class="var">blockSize</span> <span class="punct">:</span> <span class="param">right</span> <span class="punct">+</span> <span class="num">1</span><span class="punct">]</span><span class="punct">)</span></span>
+<span class="line-text">        <span class="comment"># 2. Partial start block: from left to boundary of startBlock</span></span>
+<span class="line-text">        <span class="var">startIndex</span> <span class="punct">=</span> <span class="param">left</span> <span class="punct">%</span> <span class="param">self</span><span class="punct">.</span><span class="var">sqrt</span></span>
+<span class="line-text">        <span class="flow">for</span> <span class="var">i</span> <span class="flow">in</span> <span class="fn">range</span><span class="punct">(</span><span class="var">startIndex</span><span class="punct">,</span> <span class="param">self</span><span class="punct">.</span><span class="var">sqrt</span><span class="punct">)</span><span class="punct">:</span></span>
+<span class="line-text">            <span class="var">idx</span> <span class="punct">=</span> <span class="var">startBlockIndex</span> <span class="punct">*</span> <span class="param">self</span><span class="punct">.</span><span class="var">sqrt</span> <span class="punct">+</span> <span class="var">i</span></span>
+<span class="line-text">            <span class="flow">if</span> <span class="var">idx</span> <span class="punct">&lt;</span> <span class="param">self</span><span class="punct">.</span><span class="var">n</span><span class="punct">:</span></span>
+<span class="line-text">                <span class="var">sumVal</span> <span class="punct">+=</span> <span class="param">self</span><span class="punct">.</span><span class="var">a</span><span class="punct">[</span><span class="var">idx</span><span class="punct">]</span></span>
 <span class="line-text"></span>
-<span class="line-text">        <span class="flow">return</span> <span class="var">res</span></span></code></pre>
+<span class="line-text">        <span class="comment"># 3. Partial end block: from boundary of endBlock to right</span></span>
+<span class="line-text">        <span class="var">endIndex</span> <span class="punct">=</span> <span class="param">right</span> <span class="punct">%</span> <span class="param">self</span><span class="punct">.</span><span class="var">sqrt</span></span>
+<span class="line-text">        <span class="flow">for</span> <span class="var">i</span> <span class="flow">in</span> <span class="fn">range</span><span class="punct">(</span><span class="num">0</span><span class="punct">,</span> <span class="var">endIndex</span> <span class="punct">+</span> <span class="num">1</span><span class="punct">)</span><span class="punct">:</span></span>
+<span class="line-text">            <span class="var">idx</span> <span class="punct">=</span> <span class="var">endBlockIndex</span> <span class="punct">*</span> <span class="param">self</span><span class="punct">.</span><span class="var">sqrt</span> <span class="punct">+</span> <span class="var">i</span></span>
+<span class="line-text">            <span class="flow">if</span> <span class="var">idx</span> <span class="punct">&lt;</span> <span class="param">self</span><span class="punct">.</span><span class="var">n</span><span class="punct">:</span></span>
+<span class="line-text">                <span class="var">sumVal</span> <span class="punct">+=</span> <span class="param">self</span><span class="punct">.</span><span class="var">a</span><span class="punct">[</span><span class="var">idx</span><span class="punct">]</span></span>
+<span class="line-text"></span>
+<span class="line-text">        <span class="flow">return</span> <span class="var">sumVal</span></span></code></pre>
             </div>
           </article>
 
