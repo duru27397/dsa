@@ -8677,11 +8677,32 @@ Result: len(tails) = 3  (Optimal nesting: [2,3] -&gt; [5,4] -&gt; [6,7])</code><
                 <li><strong>3. O(n) Bottom-Up Build:</strong> Populating from n &minus; 1 down to 1 ensures children <code>2 * i</code> and <code>2 * i + 1</code> are already initialized: <code>tree[i] = tree[2 * i] + tree[2 * i + 1]</code>.</li>
                 <li><strong>4. O(log n) Point Update:</strong> <code>idx += n; tree[idx] = val; while idx &gt; 1: idx //= 2; tree[idx] = tree[2*idx] + tree[2*idx+1]</code>. Directly mutates leaf and climbs ancestor path in O(log n) loop cycles.</li>
                 <li><strong>5. O(log n) Converging Query Invariant:</strong>
-                  <br>&bull; <code>left, right = left + n, right + n</code>
-                  <br>&bull; If <code>left % 2 == 1</code>: <code>left</code> is a <strong>right child</strong>. Its left sibling is <em>outside</em> our query range [left, right]! Therefore, its parent cannot be used. We must include <code>tree[left]</code> directly into the accumulator, and advance <code>left += 1</code> to enter the next parent range!
-                  <br>&bull; If <code>right % 2 == 0</code>: <code>right</code> is a <strong>left child</strong>. Its right sibling is <em>outside</em> our query range! We must include <code>tree[right]</code> directly into the accumulator, and decrement <code>right -= 1</code> before ascending!
-                  <br>&bull; Then ascend: <code>left //= 2; right //= 2</code> until pointers cross (<code>left &gt; right</code>).
+                  <br>&bull; <code>left, right = left + n, right + n</code> (map 0-indexed leaf boundaries to 1-indexed tree indices).
+                  <br>&bull; If <code>left % 2 == 1</code>: <code>left</code> is a <strong>right child</strong>. Its left sibling (<code>left - 1</code>) lies <em>strictly outside</em> the query range! Its parent (<code>left // 2</code>) covers both siblings, so parent cannot be used. We must consume <code>tree[left]</code> directly into <code>res</code>, and advance <code>left += 1</code> before ascending.
+                  <br>&bull; If <code>right % 2 == 0</code>: <code>right</code> is a <strong>left child</strong>. Its right sibling (<code>right + 1</code>) lies <em>strictly outside</em> the query range! Its parent (<code>right // 2</code>) covers both siblings, so parent cannot be used. We must consume <code>tree[right]</code> directly into <code>res</code>, and decrement <code>right -= 1</code> before ascending.
+                  <br>&bull; <strong>Otherwise (Full Parent Coverage):</strong> If <code>left</code> is even and <code>right</code> is odd, both siblings are fully inside the query window! We skip adding at this layer; their common parents will naturally cover them when we ascend via <code>left //= 2; right //= 2</code>.
                 </li>
+              </ul>
+
+              <!-- INTUITION DEEP-DIVE: WHY BOUNDARY NODES ARE CONSUMED & ROOT TERMINATION -->
+              <div class="rq-bracket-math-summary" style="margin: 0.9rem 0; border-left: 3px solid var(--cyan); background: #151b22;">
+                <span class="rq-diagram-badge" style="background: rgba(45, 212, 191, 0.15); color: var(--cyan); margin-bottom: 0.4rem; display: inline-block;">Intuition Deep-Dive: Boundary Peeling &amp; Root Termination</span>
+                <p style="margin: 0.35rem 0 0.55rem; line-height: 1.6; font-size: 0.83rem; color: #e2e8f0;">
+                  <strong>1. Why Boundary Nodes Are Consumed (&amp; Left/Right Siblings Excluded):</strong>
+                  <br>&bull; <strong>Left child</strong> has index <code>2 * i</code> (always <em>even</em>); <strong>Right child</strong> has index <code>2 * i + 1</code> (always <em>odd</em>).
+                  <br>&bull; When <code>left</code> is <strong>odd</strong>, it is a right child whose partner (left sibling) is left behind outside the query window. Because we are leaving this partial segment behind, we peel and add <code>tree[left]</code> to <code>res</code>, then move <code>left += 1</code>.
+                  <br>&bull; When <code>right</code> is <strong>even</strong>, it is a left child whose partner (right sibling) is ahead outside the query window. We peel and add <code>tree[right]</code> to <code>res</code>, then move <code>right -= 1</code>.
+                  <br>&bull; Whenever a node is an inner sibling (<code>left</code> is even, <code>right</code> is odd), we do <strong>not</strong> add it now: both siblings are inside the range, so their parent at <code>// 2</code> represents their combined sum and will be evaluated at the next level!
+                </p>
+                <p style="margin: 0; line-height: 1.6; font-size: 0.83rem; color: #cbd5e1;">
+                  <strong>2. What Happens at the Root (or Final Converging Level)?</strong>
+                  <br>If a query covers the entire array (or when the remaining interval merges into a single canonical node), the pointers converge to <code>left == right</code>.
+                  At that moment, <code>left</code> and <code>right</code> share the <em>exact same number</em>:
+                  <br>&bull; If that number is <strong>odd</strong>: the first condition (<code>left % 2 == 1</code>) triggers &rarr; adds <code>tree[left]</code>, increments <code>left += 1</code>. Now <code>left &gt; right</code>, loop cleanly terminates!
+                  <br>&bull; If that number is <strong>even</strong>: the first condition is false, but the second condition (<code>right % 2 == 0</code>) triggers &rarr; adds <code>tree[right]</code>, decrements <code>right -= 1</code>. Now <code>left &gt; right</code>, loop cleanly terminates!
+                  <br>&bull; <em>Conclusion:</em> The single converging node (even or odd, whether intermediate parent or root at index 1) is <strong>guaranteed to be captured exactly once</strong> without double-counting!
+                </p>
+              </div>
               </ul>
 
                                           <!-- MATHEMATICAL PROOF & TOURNAMENT BRACKET BOX DIAGRAM (PRIME LENGTH N=5) -->
