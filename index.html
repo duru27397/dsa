@@ -8960,16 +8960,16 @@ Result: len(tails) = 3  (Optimal nesting: [2,3] -&gt; [5,4] -&gt; [6,7])</code><
               <button class="copy-button mini-copy" type="button" data-code="rq-segtree-iterative-code">Copy</button>
               <pre class="mini-code" id="rq-segtree-iterative-code"><code><span class="line-text"><span class="flow">from</span> <span class="var">typing</span> <span class="flow">import</span> <span class="type">List</span></span>
 <span class="line-text"></span>
-<span class="line-text"><span class="kw-class">class</span> <span class="type">ShortSegmentTree</span><span class="punct">:</span></span>
+<span class="line-text"><span class="kw-class">class</span> <span class="type">SegTree</span><span class="punct">:</span></span>
 <span class="line-text">    <span class="docstr">&quot;&quot;&quot;
-    Iterative 2N &quot;Short Code&quot; Segment Tree:
+    Iterative 2N + 1 (1-Indexed) Segment Tree:
     High-performance, cache-friendly segment tree without recursion.
 
     Memory Layout for n = 4 (nums = [2, 1, 5, 3]):
-    Index:  0    1     2     3     4     5     6     7
-    Node:  [-] [0..3] [0..1] [2..3] [0]   [1]   [2]   [3]
-    Value:  0    11     3     8     2     1     5     3
-           Unused  &lt;-- Parents --&gt;  &lt;--- Leaves (n..2n-1) ---&gt;
+    Index:  0    1     2     3     4     5     6     7     8
+    Node:  [-] [0..3] [0..1] [2..3] [0]   [1]   [2]   [3]   [-]
+    Value:  0    11     3     8     2     1     5     3     0
+           Unused  &lt;-- Parents --&gt;  &lt;--- Leaves (n..2n-1) ---&gt; Guard
 
     Tree Invariants:
     - Leaves live at indices [n, 2n - 1] -&gt; leaf for nums[i] is at n + i
@@ -8977,18 +8977,18 @@ Result: len(tails) = 3  (Optimal nesting: [2,3] -&gt; [5,4] -&gt; [6,7])</code><
     - Left children always have EVEN index; Right children always have ODD index
 
     Time:  Build O(n) | Point Update O(log n) | Range Query O(log n)
-    Space: Exactly 2n elements (half the memory of 4n recursive tree!)
+    Space: Exactly 2n + 1 elements
     &quot;&quot;&quot;</span></span>
 <span class="line-text">    <span class="kw-def">def</span> <span class="fn">__init__</span><span class="punct">(</span><span class="param">self</span><span class="punct">,</span> <span class="param">nums</span><span class="punct">:</span> <span class="type">List</span><span class="punct">[</span><span class="type">int</span><span class="punct">]</span><span class="punct">)</span><span class="punct">:</span></span>
-<span class="line-text">        <span class="param">self</span><span class="punct">.</span><span class="var">n</span> <span class="punct">=</span> <span class="fn">len</span><span class="punct">(</span><span class="param">nums</span><span class="punct">)</span></span>
-<span class="line-text">        <span class="param">self</span><span class="punct">.</span><span class="var">tree</span> <span class="punct">=</span> <span class="punct">[</span><span class="num">0</span><span class="punct">]</span> <span class="punct">*</span> <span class="punct">(</span><span class="num">2</span> <span class="punct">*</span> <span class="param">self</span><span class="punct">.</span><span class="var">n</span><span class="punct">)</span></span>
+<span class="line-text">        <span class="var">n</span> <span class="punct">=</span> <span class="param">self</span><span class="punct">.</span><span class="var">n</span> <span class="punct">=</span> <span class="fn">len</span><span class="punct">(</span><span class="param">nums</span><span class="punct">)</span></span>
+<span class="line-text">        <span class="param">self</span><span class="punct">.</span><span class="var">tree</span> <span class="punct">=</span> <span class="punct">[</span><span class="num">0</span><span class="punct">]</span> <span class="punct">*</span> <span class="punct">(</span><span class="num">2</span> <span class="punct">*</span> <span class="var">n</span> <span class="punct">+</span> <span class="num">1</span><span class="punct">)</span></span>
 <span class="line-text"></span>
 <span class="line-text">        <span class="comment"># 1. Populate leaves at indices [n, 2n - 1] in O(n)</span></span>
-<span class="line-text">        <span class="flow">for</span> <span class="var">i</span> <span class="flow">in</span> <span class="fn">range</span><span class="punct">(</span><span class="param">self</span><span class="punct">.</span><span class="var">n</span><span class="punct">)</span><span class="punct">:</span></span>
-<span class="line-text">            <span class="param">self</span><span class="punct">.</span><span class="var">tree</span><span class="punct">[</span><span class="param">self</span><span class="punct">.</span><span class="var">n</span> <span class="punct">+</span> <span class="var">i</span><span class="punct">]</span> <span class="punct">=</span> <span class="param">nums</span><span class="punct">[</span><span class="var">i</span><span class="punct">]</span></span>
+<span class="line-text">        <span class="flow">for</span> <span class="var">i</span> <span class="flow">in</span> <span class="fn">range</span><span class="punct">(</span><span class="var">n</span><span class="punct">)</span><span class="punct">:</span></span>
+<span class="line-text">            <span class="param">self</span><span class="punct">.</span><span class="var">tree</span><span class="punct">[</span><span class="var">n</span> <span class="punct">+</span> <span class="var">i</span><span class="punct">]</span> <span class="punct">=</span> <span class="param">nums</span><span class="punct">[</span><span class="var">i</span><span class="punct">]</span></span>
 <span class="line-text"></span>
 <span class="line-text">        <span class="comment"># 2. Build internal parents bottom-up from n - 1 down to 1 in O(n)</span></span>
-<span class="line-text">        <span class="flow">for</span> <span class="var">i</span> <span class="flow">in</span> <span class="fn">range</span><span class="punct">(</span><span class="param">self</span><span class="punct">.</span><span class="var">n</span> <span class="punct">-</span> <span class="num">1</span><span class="punct">,</span> <span class="num">0</span><span class="punct">,</span> <span class="punct">-</span><span class="num">1</span><span class="punct">)</span><span class="punct">:</span></span>
+<span class="line-text">        <span class="flow">for</span> <span class="var">i</span> <span class="flow">in</span> <span class="fn">range</span><span class="punct">(</span><span class="var">n</span> <span class="punct">-</span> <span class="num">1</span><span class="punct">,</span> <span class="num">0</span><span class="punct">,</span> <span class="punct">-</span><span class="num">1</span><span class="punct">)</span><span class="punct">:</span></span>
 <span class="line-text">            <span class="param">self</span><span class="punct">.</span><span class="var">tree</span><span class="punct">[</span><span class="var">i</span><span class="punct">]</span> <span class="punct">=</span> <span class="param">self</span><span class="punct">.</span><span class="var">tree</span><span class="punct">[</span><span class="num">2</span> <span class="punct">*</span> <span class="var">i</span><span class="punct">]</span> <span class="punct">+</span> <span class="param">self</span><span class="punct">.</span><span class="var">tree</span><span class="punct">[</span><span class="num">2</span> <span class="punct">*</span> <span class="var">i</span> <span class="punct">+</span> <span class="num">1</span><span class="punct">]</span></span>
 <span class="line-text"></span>
 <span class="line-text">    <span class="kw-def">def</span> <span class="fn">update</span><span class="punct">(</span><span class="param">self</span><span class="punct">,</span> <span class="param">idx</span><span class="punct">:</span> <span class="type">int</span><span class="punct">,</span> <span class="param">val</span><span class="punct">:</span> <span class="type">int</span><span class="punct">)</span> <span class="punct">-&gt;</span> <span class="kw-def">None</span><span class="punct">:</span></span>
@@ -8998,37 +8998,51 @@ Result: len(tails) = 3  (Optimal nesting: [2,3] -&gt; [5,4] -&gt; [6,7])</code><
         &quot;&quot;&quot;</span></span>
 <span class="line-text">        <span class="param">idx</span> <span class="punct">+=</span> <span class="param">self</span><span class="punct">.</span><span class="var">n</span></span>
 <span class="line-text">        <span class="param">self</span><span class="punct">.</span><span class="var">tree</span><span class="punct">[</span><span class="param">idx</span><span class="punct">]</span> <span class="punct">=</span> <span class="param">val</span></span>
+<span class="line-text">        <span class="param">idx</span> <span class="punct">//=</span> <span class="num">2</span></span>
 <span class="line-text"></span>
 <span class="line-text">        <span class="comment"># Climb to root (node 1) updating parents</span></span>
-<span class="line-text">        <span class="flow">while</span> <span class="param">idx</span> <span class="punct">&gt;</span> <span class="num">1</span><span class="punct">:</span></span>
-<span class="line-text">            <span class="param">idx</span> <span class="punct">//=</span> <span class="num">2</span></span>
+<span class="line-text">        <span class="flow">while</span> <span class="param">idx</span> <span class="punct">&gt;</span> <span class="num">0</span><span class="punct">:</span></span>
 <span class="line-text">            <span class="param">self</span><span class="punct">.</span><span class="var">tree</span><span class="punct">[</span><span class="param">idx</span><span class="punct">]</span> <span class="punct">=</span> <span class="param">self</span><span class="punct">.</span><span class="var">tree</span><span class="punct">[</span><span class="num">2</span> <span class="punct">*</span> <span class="param">idx</span><span class="punct">]</span> <span class="punct">+</span> <span class="param">self</span><span class="punct">.</span><span class="var">tree</span><span class="punct">[</span><span class="num">2</span> <span class="punct">*</span> <span class="param">idx</span> <span class="punct">+</span> <span class="num">1</span><span class="punct">]</span></span>
+<span class="line-text">            <span class="param">idx</span> <span class="punct">//=</span> <span class="num">2</span></span>
 <span class="line-text"></span>
-<span class="line-text">    <span class="kw-def">def</span> <span class="fn">query</span><span class="punct">(</span><span class="param">self</span><span class="punct">,</span> <span class="param">left</span><span class="punct">:</span> <span class="type">int</span><span class="punct">,</span> <span class="param">right</span><span class="punct">:</span> <span class="type">int</span><span class="punct">)</span> <span class="punct">-&gt;</span> <span class="type">int</span><span class="punct">:</span></span>
+<span class="line-text">    <span class="kw-def">def</span> <span class="fn">query</span><span class="punct">(</span><span class="param">self</span><span class="punct">,</span> <span class="param">leftIdx</span><span class="punct">:</span> <span class="type">int</span><span class="punct">,</span> <span class="param">rightIdx</span><span class="punct">:</span> <span class="type">int</span><span class="punct">)</span> <span class="punct">-&gt;</span> <span class="type">int</span><span class="punct">:</span></span>
 <span class="line-text">        <span class="docstr">&quot;&quot;&quot;
-        Range query [left, right] inclusive in O(log n):
-        - If left is odd: right child -&gt; left sibling is outside range!
-          Include tree[left] directly, then increment left to enter next parent.
-        - If right is even: left child -&gt; right sibling is outside range!
-          Include tree[right] directly, then decrement right to enter next parent.
+        Range query [leftIdx, rightIdx] inclusive in O(log n):
+        - If leftIdx is odd: right child -&gt; left sibling is outside range!
+          Include tree[leftIdx] directly, then increment leftIdx to enter next parent.
+        - If rightIdx is even: left child -&gt; right sibling is outside range!
+          Include tree[rightIdx] directly, then decrement rightIdx to enter next parent.
         - Divide both by 2 to ascend one level.
         &quot;&quot;&quot;</span></span>
-<span class="line-text">        <span class="var">res</span> <span class="punct">=</span> <span class="num">0</span></span>
-<span class="line-text">        <span class="param">left</span><span class="punct">,</span> <span class="param">right</span> <span class="punct">=</span> <span class="param">left</span> <span class="punct">+</span> <span class="param">self</span><span class="punct">.</span><span class="var">n</span><span class="punct">,</span> <span class="param">right</span> <span class="punct">+</span> <span class="param">self</span><span class="punct">.</span><span class="var">n</span></span>
+<span class="line-text">        <span class="param">leftIdx</span> <span class="punct">+=</span> <span class="param">self</span><span class="punct">.</span><span class="var">n</span></span>
+<span class="line-text">        <span class="param">rightIdx</span> <span class="punct">+=</span> <span class="param">self</span><span class="punct">.</span><span class="var">n</span></span>
 <span class="line-text"></span>
-<span class="line-text">        <span class="flow">while</span> <span class="param">left</span> <span class="punct">&lt;=</span> <span class="param">right</span><span class="punct">:</span></span>
-<span class="line-text">            <span class="flow">if</span> <span class="param">left</span> <span class="punct">%</span> <span class="num">2</span> <span class="punct">==</span> <span class="num">1</span><span class="punct">:</span></span>
-<span class="line-text">                <span class="var">res</span> <span class="punct">+=</span> <span class="param">self</span><span class="punct">.</span><span class="var">tree</span><span class="punct">[</span><span class="param">left</span><span class="punct">]</span></span>
-<span class="line-text">                <span class="param">left</span> <span class="punct">+=</span> <span class="num">1</span></span>
+<span class="line-text">        <span class="var">result</span> <span class="punct">=</span> <span class="num">0</span></span>
 <span class="line-text"></span>
-<span class="line-text">            <span class="flow">if</span> <span class="param">right</span> <span class="punct">%</span> <span class="num">2</span> <span class="punct">==</span> <span class="num">0</span><span class="punct">:</span></span>
-<span class="line-text">                <span class="var">res</span> <span class="punct">+=</span> <span class="param">self</span><span class="punct">.</span><span class="var">tree</span><span class="punct">[</span><span class="param">right</span><span class="punct">]</span></span>
-<span class="line-text">                <span class="param">right</span> <span class="punct">-=</span> <span class="num">1</span></span>
+<span class="line-text">        <span class="flow">while</span> <span class="param">leftIdx</span> <span class="punct">&lt;=</span> <span class="param">rightIdx</span><span class="punct">:</span></span>
+<span class="line-text">            <span class="flow">if</span> <span class="param">leftIdx</span> <span class="punct">%</span> <span class="num">2</span> <span class="punct">==</span> <span class="num">1</span><span class="punct">:</span></span>
+<span class="line-text">                <span class="var">result</span> <span class="punct">+=</span> <span class="param">self</span><span class="punct">.</span><span class="var">tree</span><span class="punct">[</span><span class="param">leftIdx</span><span class="punct">]</span></span>
+<span class="line-text">                <span class="param">leftIdx</span> <span class="punct">+=</span> <span class="num">1</span></span>
 <span class="line-text"></span>
-<span class="line-text">            <span class="param">left</span> <span class="punct">//=</span> <span class="num">2</span></span>
-<span class="line-text">            <span class="param">right</span> <span class="punct">//=</span> <span class="num">2</span></span>
+<span class="line-text">            <span class="flow">if</span> <span class="param">rightIdx</span> <span class="punct">%</span> <span class="num">2</span> <span class="punct">==</span> <span class="num">0</span><span class="punct">:</span></span>
+<span class="line-text">                <span class="var">result</span> <span class="punct">+=</span> <span class="param">self</span><span class="punct">.</span><span class="var">tree</span><span class="punct">[</span><span class="param">rightIdx</span><span class="punct">]</span></span>
+<span class="line-text">                <span class="param">rightIdx</span> <span class="punct">-=</span> <span class="num">1</span></span>
 <span class="line-text"></span>
-<span class="line-text">        <span class="flow">return</span> <span class="var">res</span></span></code></pre>
+<span class="line-text">            <span class="param">leftIdx</span> <span class="punct">//=</span> <span class="num">2</span></span>
+<span class="line-text">            <span class="param">rightIdx</span> <span class="punct">//=</span> <span class="num">2</span></span>
+<span class="line-text"></span>
+<span class="line-text">        <span class="flow">return</span> <span class="var">result</span></span>
+<span class="line-text"></span>
+<span class="line-text"><span class="kw-class">class</span> <span class="type">NumArray</span><span class="punct">:</span></span>
+<span class="line-text">    <span class="docstr">&quot;&quot;&quot;LeetCode 307. Range Sum Query - Mutable wrapper interface.&quot;&quot;&quot;</span></span>
+<span class="line-text">    <span class="kw-def">def</span> <span class="fn">__init__</span><span class="punct">(</span><span class="param">self</span><span class="punct">,</span> <span class="param">nums</span><span class="punct">:</span> <span class="type">List</span><span class="punct">[</span><span class="type">int</span><span class="punct">]</span><span class="punct">)</span><span class="punct">:</span></span>
+<span class="line-text">        <span class="param">self</span><span class="punct">.</span><span class="var">st</span> <span class="punct">=</span> <span class="type">SegTree</span><span class="punct">(</span><span class="param">nums</span><span class="punct">)</span></span>
+<span class="line-text"></span>
+<span class="line-text">    <span class="kw-def">def</span> <span class="fn">update</span><span class="punct">(</span><span class="param">self</span><span class="punct">,</span> <span class="param">index</span><span class="punct">:</span> <span class="type">int</span><span class="punct">,</span> <span class="param">val</span><span class="punct">:</span> <span class="type">int</span><span class="punct">)</span> <span class="punct">-&gt;</span> <span class="kw-def">None</span><span class="punct">:</span></span>
+<span class="line-text">        <span class="param">self</span><span class="punct">.</span><span class="var">st</span><span class="punct">.</span><span class="fn">update</span><span class="punct">(</span><span class="param">index</span><span class="punct">,</span> <span class="param">val</span><span class="punct">)</span></span>
+<span class="line-text"></span>
+<span class="line-text">    <span class="kw-def">def</span> <span class="fn">sumRange</span><span class="punct">(</span><span class="param">self</span><span class="punct">,</span> <span class="param">left</span><span class="punct">:</span> <span class="type">int</span><span class="punct">,</span> <span class="param">right</span><span class="punct">:</span> <span class="type">int</span><span class="punct">)</span> <span class="punct">-&gt;</span> <span class="type">int</span><span class="punct">:</span></span>
+<span class="line-text">        <span class="flow">return</span> <span class="param">self</span><span class="punct">.</span><span class="var">st</span><span class="punct">.</span><span class="fn">query</span><span class="punct">(</span><span class="param">left</span><span class="punct">,</span> <span class="param">right</span><span class="punct">)</span></span></code></pre>
             </div>
           </article>
 
