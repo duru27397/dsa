@@ -96,6 +96,12 @@
     "range-fenwick-tree-sub": "range-fenwick-tree-sub",
     "fenwick-tree": "range-fenwick-tree-sub",
     "bit": "range-fenwick-tree-sub",
+    "range-fenwick-visual": "range-fenwick-visual-sub",
+    "range-fenwick-visual-sub": "range-fenwick-visual-sub",
+    "fenwick-visual": "range-fenwick-visual-sub",
+    "fenwick-visuals": "range-fenwick-visual-sub",
+    "bit-visual": "range-fenwick-visual-sub",
+    "bit-visuals": "range-fenwick-visual-sub",
     "range-l3": "range-sqrt-decomp-sub",
     "range-sqrt-decomp": "range-sqrt-decomp-sub",
     "range-sqrt-decomp-sub": "range-sqrt-decomp-sub",
@@ -1567,6 +1573,226 @@
   };
 
   initIterative2nVisualizer();
+
+  // Fenwick Tree (BIT) Interactive State Tracer & Visual Architecture Explorer
+  const initFenwickVisualWidget = () => {
+    const inputIdx = document.getElementById("bit-trace-idx");
+    const chips = [...document.querySelectorAll(".bit-chip-btn")];
+    const btnTraceQuery = document.getElementById("btn-trace-query");
+    const btnTraceUpdate = document.getElementById("btn-trace-update");
+    const btnTraceStep = document.getElementById("btn-trace-step");
+    const btnTraceReset = document.getElementById("btn-trace-reset");
+
+    const teleIdx = document.getElementById("bit-tele-idx");
+    const teleLowbit = document.getElementById("bit-tele-lowbit");
+    const teleRange = document.getElementById("bit-tele-range");
+    const teleNext = document.getElementById("bit-tele-next");
+    const teleHops = document.getElementById("bit-tele-hops");
+    const stepLog = document.getElementById("bit-step-log");
+
+    const btnCov8 = document.getElementById("btn-cov-8");
+    const btnCov16 = document.getElementById("btn-cov-16");
+    const svgCov8 = document.getElementById("bit-cov-svg-8");
+    const svgCov16 = document.getElementById("bit-cov-svg-16");
+
+    if (!inputIdx || !btnTraceQuery) return;
+
+    let currentScale = 8;
+    let traceMode = "query"; // "query" | "update"
+    let currentIdx = 7;
+    let hops = [];
+    let hopStep = 0;
+
+    // Toggle Scale N=8 / N=16
+    const setScale = (scale) => {
+      currentScale = scale;
+      if (scale === 8) {
+        btnCov8?.classList.add("active");
+        btnCov16?.classList.remove("active");
+        if (svgCov8) svgCov8.style.display = "block";
+        if (svgCov16) svgCov16.style.display = "none";
+      } else {
+        btnCov16?.classList.add("active");
+        btnCov8?.classList.remove("active");
+        if (svgCov16) svgCov16.style.display = "block";
+        if (svgCov8) svgCov8.style.display = "none";
+      }
+      clearHighlights();
+    };
+
+    btnCov8?.addEventListener("click", () => setScale(8));
+    btnCov16?.addEventListener("click", () => setScale(16));
+
+    const toBinary = (val, pad = 4) => val.toString(2).padStart(pad, "0");
+    const lowbit = (val) => val & (-val);
+
+    const clearHighlights = () => {
+      document.querySelectorAll(".cov-bar").forEach((b) => b.classList.remove("bar-highlight"));
+      document.querySelectorAll("#bit-update-tree-svg .tree-node-group").forEach((n) => n.classList.remove("node-highlight"));
+      document.querySelectorAll("#bit-update-tree-svg .tree-edge").forEach((e) => e.classList.remove("edge-path"));
+      document.querySelectorAll("#bit-query-tree-svg .tree-node-group").forEach((n) => n.classList.remove("node-highlight-query"));
+      document.querySelectorAll("#bit-query-tree-svg .tree-edge").forEach((e) => e.classList.remove("edge-path-query"));
+    };
+
+    const computeQueryHops = (startIdx) => {
+      const list = [];
+      let curr = startIdx;
+      while (curr > 0) {
+        const lb = lowbit(curr);
+        const nxt = curr - lb;
+        list.push({ curr, lb, nxt, range: `(${nxt}, ${curr}]` });
+        curr = nxt;
+      }
+      return list;
+    };
+
+    const computeUpdateHops = (startIdx, maxN = 8) => {
+      const list = [];
+      let curr = startIdx;
+      while (curr <= maxN) {
+        const lb = lowbit(curr);
+        const nxt = curr + lb;
+        list.push({ curr, lb, nxt, range: `(${curr - lb}, ${curr}]` });
+        curr = nxt;
+      }
+      return list;
+    };
+
+    const renderHop = () => {
+      if (hops.length === 0) return;
+      const hop = hops[hopStep];
+      const { curr, lb, nxt, range } = hop;
+      const pad = currentScale === 16 || curr > 8 ? 5 : 4;
+
+      clearHighlights();
+
+      const bar8 = document.getElementById(`cov-bar-8-${curr}`);
+      const bar16 = document.getElementById(`cov-bar-16-${curr}`);
+      if (bar8) bar8.classList.add("bar-highlight");
+      if (bar16) bar16.classList.add("bar-highlight");
+
+      if (teleIdx) teleIdx.textContent = `${curr} (${toBinary(curr, pad)}₂)`;
+      if (teleLowbit) teleLowbit.textContent = `${lb} (${toBinary(lb, pad)}₂)`;
+      if (teleRange) teleRange.textContent = range;
+      if (teleHops) teleHops.textContent = `${traceMode === "query" ? "Query" : "Update"} • Step ${hopStep + 1} of ${hops.length}`;
+
+      if (traceMode === "query") {
+        if (teleNext) teleNext.textContent = `${curr} - ${lb} = ${nxt}`;
+
+        const nodeEl = document.getElementById(`qry-node-${curr}`);
+        if (nodeEl) nodeEl.classList.add("node-highlight-query");
+        const edgeEl = document.getElementById(`qry-edge-${curr}-${nxt}`);
+        if (edgeEl) edgeEl.classList.add("edge-path-query");
+
+        if (stepLog) {
+          if (nxt === 0) {
+            stepLog.innerHTML = `<strong>Step ${hopStep + 1} (Terminates):</strong> At index <code>${curr}</code> (${toBinary(curr, pad)}₂). Strips lowest set 1-bit: <code>lowbit(${curr}) = ${lb}</code>. Adds <code>tree[${curr}]</code> covering <strong>${range}</strong>. Reached Root 0! Total prefix sum is fully stitched!`;
+          } else {
+            stepLog.innerHTML = `<strong>Step ${hopStep + 1}:</strong> At index <code>${curr}</code> (${toBinary(curr, pad)}₂). Strips lowest set 1-bit: <code>lowbit(${curr}) = ${lb}</code>. Adds <code>tree[${curr}]</code> covering <strong>${range}</strong>. Next hop: <code>${curr} - ${lb} = ${nxt}</code>.`;
+          }
+        }
+      } else {
+        if (teleNext) teleNext.textContent = nxt <= 8 ? `${curr} + ${lb} = ${nxt}` : `${nxt} > 8 (Terminates)`;
+
+        const nodeEl = document.getElementById(`upd-node-${curr}`);
+        if (nodeEl) nodeEl.classList.add("node-highlight");
+        const edgeEl = document.getElementById(`upd-edge-${curr}-${nxt}`);
+        if (edgeEl) edgeEl.classList.add("edge-path");
+
+        if (stepLog) {
+          if (nxt > 8) {
+            stepLog.innerHTML = `<strong>Step ${hopStep + 1} (Terminates):</strong> At index <code>${curr}</code> (${toBinary(curr, pad)}₂). Adds delta &Delta; to <code>tree[${curr}]</code> covering <strong>${range}</strong>. Next index: <code>${curr} + ${lb} = ${nxt} > 8</code> exceeds array capacity. Done!`;
+          } else {
+            stepLog.innerHTML = `<strong>Step ${hopStep + 1}:</strong> At index <code>${curr}</code> (${toBinary(curr, pad)}₂). Adds delta &Delta; to <code>tree[${curr}]</code> covering <strong>${range}</strong>. Ascends to enclosing parent: <code>${curr} + ${lb} = ${nxt}</code>.`;
+          }
+        }
+      }
+    };
+
+    const startTrace = (mode) => {
+      traceMode = mode;
+      currentIdx = Math.max(1, Math.min(16, parseInt(inputIdx?.value || "7", 10)));
+      if (inputIdx) inputIdx.value = currentIdx;
+
+      chips.forEach((c) => {
+        c.classList.toggle("active", parseInt(c.dataset.idx, 10) === currentIdx);
+      });
+
+      hops = traceMode === "query" ? computeQueryHops(currentIdx) : computeUpdateHops(currentIdx, 8);
+      hopStep = 0;
+      renderHop();
+    };
+
+    btnTraceQuery?.addEventListener("click", () => startTrace("query"));
+    btnTraceUpdate?.addEventListener("click", () => startTrace("update"));
+
+    btnTraceStep?.addEventListener("click", () => {
+      if (hops.length === 0) {
+        startTrace(traceMode);
+        return;
+      }
+      if (hopStep < hops.length - 1) {
+        hopStep++;
+        renderHop();
+      } else {
+        hopStep = 0;
+        renderHop();
+      }
+    });
+
+    btnTraceReset?.addEventListener("click", () => {
+      clearHighlights();
+      currentIdx = 7;
+      if (inputIdx) inputIdx.value = "7";
+      chips.forEach((c) => c.classList.toggle("active", parseInt(c.dataset.idx, 10) === 7));
+      if (teleIdx) teleIdx.textContent = "7 (0111₂)";
+      if (teleLowbit) teleLowbit.textContent = "1 (0001₂)";
+      if (teleRange) teleRange.textContent = "(6, 7]";
+      if (teleNext) teleNext.textContent = "7 - 1 = 6";
+      if (teleHops) teleHops.textContent = "Ready";
+      if (stepLog) stepLog.innerHTML = '<strong>Reset:</strong> Click <code>Trace query(i)</code> or <code>Trace update(i)</code> to begin visual hop traversal!';
+      hops = [];
+      hopStep = 0;
+    });
+
+    chips.forEach((chip) => {
+      chip.addEventListener("click", () => {
+        const val = parseInt(chip.dataset.idx, 10);
+        if (inputIdx) inputIdx.value = val;
+        chips.forEach((c) => c.classList.remove("active"));
+        chip.classList.add("active");
+        startTrace(traceMode);
+      });
+    });
+
+    inputIdx?.addEventListener("change", () => {
+      startTrace(traceMode);
+    });
+
+    document.querySelectorAll(".cov-bar").forEach((bar) => {
+      bar.addEventListener("click", () => {
+        const idx = parseInt(bar.dataset.idx || bar.id.split("-").pop(), 10);
+        if (idx) {
+          if (inputIdx) inputIdx.value = idx;
+          chips.forEach((c) => c.classList.toggle("active", parseInt(c.dataset.idx, 10) === idx));
+          startTrace(traceMode);
+        }
+      });
+    });
+
+    document.querySelectorAll(".tree-node-group").forEach((grp) => {
+      grp.addEventListener("click", () => {
+        const idx = parseInt(grp.dataset.node, 10);
+        if (idx > 0) {
+          if (inputIdx) inputIdx.value = idx;
+          chips.forEach((c) => c.classList.toggle("active", parseInt(c.dataset.idx, 10) === idx));
+          startTrace(grp.id.startsWith("upd") ? "update" : "query");
+        }
+      });
+    });
+  };
+
+  initFenwickVisualWidget();
 
   // Interactive Range Engine Decision Hub Pills
   const initRangeDecisionHub = () => {
