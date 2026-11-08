@@ -1632,6 +1632,8 @@
       document.querySelectorAll("#bit-update-tree-svg .tree-edge").forEach((e) => e.classList.remove("edge-path"));
       document.querySelectorAll("#bit-query-tree-svg .tree-node-group").forEach((n) => n.classList.remove("node-highlight-query"));
       document.querySelectorAll("#bit-query-tree-svg .tree-edge").forEach((e) => e.classList.remove("edge-path-query"));
+      document.querySelectorAll("#bit-canonical-binary-tree-svg .bin-node-group").forEach((n) => n.classList.remove("node-highlight", "node-highlight-query"));
+      document.querySelectorAll("#bit-canonical-binary-tree-svg .bin-tree-edge").forEach((e) => e.classList.remove("edge-path", "edge-path-query"));
     };
 
     const computeQueryHops = (startIdx) => {
@@ -1670,6 +1672,11 @@
       const bar16 = document.getElementById(`cov-bar-16-${curr}`);
       if (bar8) bar8.classList.add("bar-highlight");
       if (bar16) bar16.classList.add("bar-highlight");
+
+      const binNodeEl = document.getElementById(`bin-node-${curr}`);
+      if (binNodeEl) {
+        binNodeEl.classList.add(traceMode === "query" ? "node-highlight-query" : "node-highlight");
+      }
 
       if (teleIdx) teleIdx.textContent = `${curr} (${toBinary(curr, pad)}₂)`;
       if (teleLowbit) teleLowbit.textContent = `${lb} (${toBinary(lb, pad)}₂)`;

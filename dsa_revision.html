@@ -1009,6 +1009,10 @@
                 <span class="leaf-dot">•</span>
                 <span class="nav-title">Core Rules &amp; lowbit Invariant</span>
               </a>
+              <a class="nav-item l3-link" href="#range-fenwick-visual-sub" data-target-sub="fenwick-visual-canonical-tree">
+                <span class="leaf-dot">•</span>
+                <span class="nav-title">Canonical Binary Tree</span>
+              </a>
               <a class="nav-item l3-link" href="#range-fenwick-visual-sub" data-target-sub="fenwick-visual-coverage">
                 <span class="leaf-dot">•</span>
                 <span class="nav-title">Interval Coverage Grid</span>
@@ -10012,7 +10016,7 @@ Result: len(tails) = 3  (Optimal nesting: [2,3] -&gt; [5,4] -&gt; [6,7])</code><
         <header class="topic-heading">
           <span class="level-tag">Topic 09 · Visual Architecture</span>
           <h1><span>⚡</span> Fenwick Tree (BIT): Visual Architecture &amp; State Transitions</h1>
-          <p class="topic-summary" style="max-width: 860px; line-height: 1.65; font-size: 0.94rem;">Unravel the binary mechanics of Binary Indexed Trees. Explore exact coordinate geometry, bitwise 2's complement invariants, and dual update/query tree hierarchies that maintain dynamic prefix sums in strictly O(n) memory and O(log n) time.</p>
+          <p class="topic-summary" style="max-width: 860px; line-height: 1.65; font-size: 0.94rem;">Unravel the binary mechanics of Binary Indexed Trees. Explore the true balanced binary tree topology, exact coordinate geometry, bitwise 2's complement invariants, and dual update/query tree traversals that maintain dynamic prefix sums in strictly O(n) memory and O(log n) time.</p>
         </header>
 
         <!-- TOPIC SUBNAV SPECTRUM BANNER -->
@@ -10029,6 +10033,12 @@ Result: len(tails) = 3  (Optimal nesting: [2,3] -&gt; [5,4] -&gt; [6,7])</code><
               <a class="tax-link" href="#range-fenwick-visual-sub" data-target-sub="fenwick-visual-rules">View Rules &amp; Math &darr;</a>
             </div>
             <div class="rq-tax-card">
+              <span class="tax-tag">Topology · Binary Tree</span>
+              <h4>Canonical Binary Tree</h4>
+              <p>The implicit balanced binary search tree: symmetric left/right branches with in-order traversal 1..8.</p>
+              <a class="tax-link" href="#range-fenwick-visual-sub" data-target-sub="fenwick-visual-canonical-tree">View Binary Tree &darr;</a>
+            </div>
+            <div class="rq-tax-card">
               <span class="tax-tag">Diagram · Coordinates</span>
               <h4>Coverage Diagram (8 / 16)</h4>
               <p>Exact position bars showing how each <code>tree[i]</code> covers <code>(i-k, i]</code> cells ending at <em>i</em>.</p>
@@ -10037,21 +10047,15 @@ Result: len(tails) = 3  (Optimal nesting: [2,3] -&gt; [5,4] -&gt; [6,7])</code><
             <div class="rq-tax-card">
               <span class="tax-tag">Tree · Mutation</span>
               <h4>Update Tree (i + lowbit)</h4>
-              <p>Ascend the responsibility hierarchy from child to enclosing parents (e.g. <code>3 &rarr; 4 &rarr; 8</code>).</p>
+              <p>Ascend the responsibility hierarchy in binary tree layout (e.g. <code>3 &rarr; 4 &rarr; 8</code>).</p>
               <a class="tax-link" href="#range-fenwick-visual-sub" data-target-sub="fenwick-visual-update-tree">View Update Tree &darr;</a>
-            </div>
-            <div class="rq-tax-card">
-              <span class="tax-tag">Tree · Aggregation</span>
-              <h4>Query Tree (i - lowbit)</h4>
-              <p>Descend to sentinel root 0 by stripping lowest bits and stitching non-overlapping dyadic chunks.</p>
-              <a class="tax-link" href="#range-fenwick-visual-sub" data-target-sub="fenwick-visual-query-tree">View Query Tree &darr;</a>
             </div>
           </div>
         </div>
 
         <!-- INTUITION BLURB CARD -->
         <div class="bit-intuition-banner" id="fenwick-visual-intuition">
-          <h4><span>💡</span> The Core Fenwick Mental Model: Two Complementary Trees</h4>
+          <h4><span>💡</span> The Core Fenwick Mental Model: Two Complementary Tree Traversals</h4>
           <p class="bit-intuition-text">
             <strong>&bull; "tree[i] = the last step you took to reach i, climbing biggest steps first."</strong><br>
             <strong>&bull; Query = undo steps (subtract lowbit):</strong> Each hop strips the rightmost set bit, aggregating mutually exclusive dyadic segments down to root 0.<br>
@@ -10130,7 +10134,136 @@ Result: len(tails) = 3  (Optimal nesting: [2,3] -&gt; [5,4] -&gt; [6,7])</code><
             </div>
           </article>
 
-          <!-- PATTERN CARD 2: COVERAGE DIAGRAM (SVG) -->
+          <!-- PATTERN CARD 2: THE CANONICAL FENWICK BINARY TREE (NEW!) -->
+          <article class="pattern-card" id="fenwick-visual-canonical-tree">
+            <div class="pattern-card-head">
+              <h3>The Implicit Fenwick Binary Tree: Balanced Binary Search Tree Topology</h3>
+            </div>
+            <p class="use-when"><strong>Use when:</strong> Visualizing how the flat 1-indexed Fenwick array maps onto a textbook balanced binary search tree, where in-order traversal yields the sorted index order 1..N.</p>
+
+            <div class="why-box" style="padding: 1.35rem;">
+              <strong>Binary Tree Properties: Left Child = x - 2^(k-1) &bull; Right Child = x + 2^(k-1)</strong>
+              <p style="line-height: 1.65; margin-bottom: 0.85rem;">
+                A Fenwick Tree is not an ad-hoc graph: <strong>it is a strict, fully balanced binary tree!</strong>
+                Every node <em>x</em> with <code>lowbit(x) = 2^k</code> has:
+                <strong>Left child:</strong> <code>x - 2^(k-1)</code> (e.g. Node 4 has left child 4 - 2 = 2).
+                <strong>Right child:</strong> <code>x + 2^(k-1)</code> (e.g. Node 4 has right child 4 + 2 = 6).
+                When <em>k</em> = 0 (<code>lowbit = 1</code>), the node is an <strong>odd leaf</strong> (1, 3, 5, 7).
+                Notice the stunning invariant: <strong>In-order traversal strictly visits indices 1, 2, 3, 4, 5, 6, 7, 8!</strong>
+              </p>
+
+              <!-- Canonical Binary Tree SVG -->
+              <div class="bit-svg-wrap">
+<svg class="bit-svg bit-binary-tree-svg" id="bit-canonical-binary-tree-svg" viewBox="0 0 860 395" width="100%" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bin-grad-8" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#451a03"/><stop offset="100%" stop-color="#241208"/></linearGradient>
+    <linearGradient id="bin-grad-4" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#3b0764"/><stop offset="100%" stop-color="#1e0538"/></linearGradient>
+    <linearGradient id="bin-grad-2" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#083344"/><stop offset="100%" stop-color="#061e29"/></linearGradient>
+    <linearGradient id="bin-grad-1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1e293b"/><stop offset="100%" stop-color="#0f172a"/></linearGradient>
+  </defs>
+  <line x1="25" y1="55" x2="835" y2="55" stroke="#222" stroke-dasharray="3,3" stroke-width="1"/>
+  <text x="30" y="45" fill="#475569" font-size="10" font-family="monospace">Root Domain · k=8</text>
+  <line x1="25" y1="140" x2="835" y2="140" stroke="#222" stroke-dasharray="3,3" stroke-width="1"/>
+  <text x="30" y="130" fill="#475569" font-size="10" font-family="monospace">Dyadic Halves · k=4</text>
+  <line x1="25" y1="225" x2="835" y2="225" stroke="#222" stroke-dasharray="3,3" stroke-width="1"/>
+  <text x="30" y="215" fill="#475569" font-size="10" font-family="monospace">Dyadic Quarters · k=2</text>
+  <line x1="25" y1="310" x2="835" y2="310" stroke="#222" stroke-dasharray="3,3" stroke-width="1"/>
+  <text x="30" y="300" fill="#475569" font-size="10" font-family="monospace">Odd Leaves · k=1</text>
+  <!-- Binary Tree Symmetrical Left/Right Branches -->
+  <line class="bin-tree-edge" id="bin-edge-8-4" x1="701.7" y1="60.8" x2="408.3" y2="134.2" stroke="#475569" stroke-width="2.2"/>
+  <circle cx="544.0" cy="97.5" r="7" fill="#181818" stroke="#333" stroke-width="1"/>
+  <text x="544.0" y="100.5" fill="#94a3b8" font-size="8.5" font-family="sans-serif" font-weight="700" text-anchor="middle">L</text>
+  <line class="bin-tree-edge" id="bin-edge-4-2" x1="363.5" y1="150.7" x2="236.5" y2="214.3" stroke="#475569" stroke-width="2.2"/>
+  <circle cx="289.0" cy="182.5" r="7" fill="#181818" stroke="#333" stroke-width="1"/>
+  <text x="289.0" y="185.5" fill="#94a3b8" font-size="8.5" font-family="sans-serif" font-weight="700" text-anchor="middle">L</text>
+  <line class="bin-tree-edge" id="bin-edge-4-6" x1="406.5" y1="150.7" x2="533.5" y2="214.3" stroke="#475569" stroke-width="2.2"/>
+  <circle cx="481.0" cy="182.5" r="7" fill="#181818" stroke="#333" stroke-width="1"/>
+  <text x="481.0" y="185.5" fill="#94a3b8" font-size="8.5" font-family="sans-serif" font-weight="700" text-anchor="middle">R</text>
+  <line class="bin-tree-edge" id="bin-edge-2-1" x1="198.0" y1="242.0" x2="147.0" y2="293.0" stroke="#475569" stroke-width="2.2"/>
+  <circle cx="161.5" cy="267.5" r="7" fill="#181818" stroke="#333" stroke-width="1"/>
+  <text x="161.5" y="270.5" fill="#94a3b8" font-size="8.5" font-family="sans-serif" font-weight="700" text-anchor="middle">L</text>
+  <line class="bin-tree-edge" id="bin-edge-2-3" x1="232.0" y1="242.0" x2="283.0" y2="293.0" stroke="#475569" stroke-width="2.2"/>
+  <circle cx="268.5" cy="267.5" r="7" fill="#181818" stroke="#333" stroke-width="1"/>
+  <text x="268.5" y="270.5" fill="#94a3b8" font-size="8.5" font-family="sans-serif" font-weight="700" text-anchor="middle">R</text>
+  <line class="bin-tree-edge" id="bin-edge-6-5" x1="538.0" y1="242.0" x2="487.0" y2="293.0" stroke="#475569" stroke-width="2.2"/>
+  <circle cx="501.5" cy="267.5" r="7" fill="#181818" stroke="#333" stroke-width="1"/>
+  <text x="501.5" y="270.5" fill="#94a3b8" font-size="8.5" font-family="sans-serif" font-weight="700" text-anchor="middle">L</text>
+  <line class="bin-tree-edge" id="bin-edge-6-7" x1="572.0" y1="242.0" x2="623.0" y2="293.0" stroke="#475569" stroke-width="2.2"/>
+  <circle cx="608.5" cy="267.5" r="7" fill="#181818" stroke="#333" stroke-width="1"/>
+  <text x="608.5" y="270.5" fill="#94a3b8" font-size="8.5" font-family="sans-serif" font-weight="700" text-anchor="middle">R</text>
+  <!-- In-order BST Sequence Indicator -->
+  <path d="M 115 365 L 740 365" stroke="var(--cyan)" stroke-width="1.8" stroke-dasharray="4,4"/>
+  <text x="427" y="380" fill="var(--cyan)" font-size="10.5" font-family="monospace" font-weight="700" text-anchor="middle">&uarr; In-Order Traversal strictly yields sorted array sequence: 1, 2, 3, 4, 5, 6, 7, 8</text>
+  <!-- Circular Binary Tree Nodes -->
+  <g class="bin-node-group" id="bin-node-8" data-node="8">
+    <circle cx="725" cy="55" r="24" fill="url(#bin-grad-8)" stroke="#ffa116" stroke-width="2.2"/>
+    <text x="725" y="60" fill="#ffffff" font-size="14" font-weight="800" font-family="monospace" text-anchor="middle" pointer-events="none">8</text>
+    <rect x="695" y="83" width="60" height="16" rx="4" fill="#181818" stroke="#333" stroke-width="0.8"/>
+    <text x="725" y="94" fill="#2dd4bf" font-size="9" font-weight="700" font-family="monospace" text-anchor="middle" pointer-events="none">(0, 8]</text>
+    <text x="725" y="26" fill="#9ea0a5" font-size="9" font-family="monospace" text-anchor="middle" pointer-events="none">1000₂</text>
+  </g>
+  <g class="bin-node-group" id="bin-node-4" data-node="4">
+    <circle cx="385" cy="140" r="24" fill="url(#bin-grad-4)" stroke="#c586c0" stroke-width="2.2"/>
+    <text x="385" y="145" fill="#ffffff" font-size="14" font-weight="800" font-family="monospace" text-anchor="middle" pointer-events="none">4</text>
+    <rect x="355" y="168" width="60" height="16" rx="4" fill="#181818" stroke="#333" stroke-width="0.8"/>
+    <text x="385" y="179" fill="#2dd4bf" font-size="9" font-weight="700" font-family="monospace" text-anchor="middle" pointer-events="none">(0, 4]</text>
+    <text x="385" y="111" fill="#9ea0a5" font-size="9" font-family="monospace" text-anchor="middle" pointer-events="none">0100₂</text>
+  </g>
+  <g class="bin-node-group" id="bin-node-2" data-node="2">
+    <circle cx="215" cy="225" r="24" fill="url(#bin-grad-2)" stroke="#2dd4bf" stroke-width="2.2"/>
+    <text x="215" y="230" fill="#ffffff" font-size="14" font-weight="800" font-family="monospace" text-anchor="middle" pointer-events="none">2</text>
+    <rect x="185" y="253" width="60" height="16" rx="4" fill="#181818" stroke="#333" stroke-width="0.8"/>
+    <text x="215" y="264" fill="#2dd4bf" font-size="9" font-weight="700" font-family="monospace" text-anchor="middle" pointer-events="none">(0, 2]</text>
+    <text x="215" y="196" fill="#9ea0a5" font-size="9" font-family="monospace" text-anchor="middle" pointer-events="none">0010₂</text>
+  </g>
+  <g class="bin-node-group" id="bin-node-6" data-node="6">
+    <circle cx="555" cy="225" r="24" fill="url(#bin-grad-2)" stroke="#2dd4bf" stroke-width="2.2"/>
+    <text x="555" y="230" fill="#ffffff" font-size="14" font-weight="800" font-family="monospace" text-anchor="middle" pointer-events="none">6</text>
+    <rect x="525" y="253" width="60" height="16" rx="4" fill="#181818" stroke="#333" stroke-width="0.8"/>
+    <text x="555" y="264" fill="#2dd4bf" font-size="9" font-weight="700" font-family="monospace" text-anchor="middle" pointer-events="none">(4, 6]</text>
+    <text x="555" y="196" fill="#9ea0a5" font-size="9" font-family="monospace" text-anchor="middle" pointer-events="none">0110₂</text>
+  </g>
+  <g class="bin-node-group" id="bin-node-1" data-node="1">
+    <circle cx="130" cy="310" r="24" fill="url(#bin-grad-1)" stroke="#64748b" stroke-width="2.2"/>
+    <text x="130" y="315" fill="#ffffff" font-size="14" font-weight="800" font-family="monospace" text-anchor="middle" pointer-events="none">1</text>
+    <rect x="100" y="338" width="60" height="16" rx="4" fill="#181818" stroke="#333" stroke-width="0.8"/>
+    <text x="130" y="349" fill="#2dd4bf" font-size="9" font-weight="700" font-family="monospace" text-anchor="middle" pointer-events="none">(0, 1]</text>
+    <text x="130" y="281" fill="#9ea0a5" font-size="9" font-family="monospace" text-anchor="middle" pointer-events="none">0001₂</text>
+  </g>
+  <g class="bin-node-group" id="bin-node-3" data-node="3">
+    <circle cx="300" cy="310" r="24" fill="url(#bin-grad-1)" stroke="#64748b" stroke-width="2.2"/>
+    <text x="300" y="315" fill="#ffffff" font-size="14" font-weight="800" font-family="monospace" text-anchor="middle" pointer-events="none">3</text>
+    <rect x="270" y="338" width="60" height="16" rx="4" fill="#181818" stroke="#333" stroke-width="0.8"/>
+    <text x="300" y="349" fill="#2dd4bf" font-size="9" font-weight="700" font-family="monospace" text-anchor="middle" pointer-events="none">(2, 3]</text>
+    <text x="300" y="281" fill="#9ea0a5" font-size="9" font-family="monospace" text-anchor="middle" pointer-events="none">0011₂</text>
+  </g>
+  <g class="bin-node-group" id="bin-node-5" data-node="5">
+    <circle cx="470" cy="310" r="24" fill="url(#bin-grad-1)" stroke="#64748b" stroke-width="2.2"/>
+    <text x="470" y="315" fill="#ffffff" font-size="14" font-weight="800" font-family="monospace" text-anchor="middle" pointer-events="none">5</text>
+    <rect x="440" y="338" width="60" height="16" rx="4" fill="#181818" stroke="#333" stroke-width="0.8"/>
+    <text x="470" y="349" fill="#2dd4bf" font-size="9" font-weight="700" font-family="monospace" text-anchor="middle" pointer-events="none">(4, 5]</text>
+    <text x="470" y="281" fill="#9ea0a5" font-size="9" font-family="monospace" text-anchor="middle" pointer-events="none">0101₂</text>
+  </g>
+  <g class="bin-node-group" id="bin-node-7" data-node="7">
+    <circle cx="640" cy="310" r="24" fill="url(#bin-grad-1)" stroke="#64748b" stroke-width="2.2"/>
+    <text x="640" y="315" fill="#ffffff" font-size="14" font-weight="800" font-family="monospace" text-anchor="middle" pointer-events="none">7</text>
+    <rect x="610" y="338" width="60" height="16" rx="4" fill="#181818" stroke="#333" stroke-width="0.8"/>
+    <text x="640" y="349" fill="#2dd4bf" font-size="9" font-weight="700" font-family="monospace" text-anchor="middle" pointer-events="none">(6, 7]</text>
+    <text x="640" y="281" fill="#9ea0a5" font-size="9" font-family="monospace" text-anchor="middle" pointer-events="none">0111₂</text>
+  </g>
+</svg>
+              </div>
+
+              <div class="rq-bracket-math-summary" style="margin-top: 0.85rem;">
+                <strong>Key Binary Tree Insights:</strong>
+                &bull; <strong>Odd Indices (1, 3, 5, 7):</strong> Pure leaves at Level 0, each covering 1 element.<br>
+                &bull; <strong>Power of 2 Spine (1, 2, 4, 8):</strong> Form the left spine of the tree, each accumulating the entire prefix from position 1.<br>
+                &bull; <strong>Right Subtrees (3, 6, 7):</strong> Represent residual interval sums that are added to prefixes during descent!
+              </div>
+            </div>
+          </article>
+
+          <!-- PATTERN CARD 3: COVERAGE DIAGRAM (SVG) -->
           <article class="pattern-card" id="fenwick-visual-coverage">
             <div class="pattern-card-head">
               <h3>Interval Coverage Grid: The Dyadic Hierarchy</h3>
@@ -10312,128 +10445,128 @@ Result: len(tails) = 3  (Optimal nesting: [2,3] -&gt; [5,4] -&gt; [6,7])</code><
   <!-- Row tree[1] -->
   <g class="cov-row" id="cov-row-16-1" data-tree-idx="1" data-lowbit="1">
     <text x="15" y="82" fill="#eff1f6" font-size="12" font-weight="700" font-family="monospace">tree[1]</text>
-    <text x="80" y="82" fill="#9ea0a5" font-size="11" font-family="monospace">00001₂</text>
-    <text x="135" y="82" fill="#64748b" font-size="10" font-family="monospace">k=1</text>
+    <text x="85" y="82" fill="#9ea0a5" font-size="11" font-family="monospace">00001₂</text>
+    <text x="145" y="82" fill="#64748b" font-size="10" font-family="monospace">k=1</text>
     <rect class="cov-bar cov-bar-1" id="cov-bar-16-1" data-idx="1" x="183.0" y="65.0" width="45.9" height="22" rx="5" fill="url(#cov-bar-1)" stroke="#64748b" stroke-width="1.5"/>
     <text x="205.9" y="80.0" fill="#fff" font-size="11" font-weight="600" font-family="monospace" text-anchor="middle" pointer-events="none">(0,1]</text>
   </g>
   <!-- Row tree[2] -->
   <g class="cov-row" id="cov-row-16-2" data-tree-idx="2" data-lowbit="2">
     <text x="15" y="112" fill="#eff1f6" font-size="12" font-weight="700" font-family="monospace">tree[2]</text>
-    <text x="80" y="112" fill="#9ea0a5" font-size="11" font-family="monospace">00010₂</text>
-    <text x="135" y="112" fill="#64748b" font-size="10" font-family="monospace">k=2</text>
+    <text x="85" y="112" fill="#9ea0a5" font-size="11" font-family="monospace">00010₂</text>
+    <text x="145" y="112" fill="#64748b" font-size="10" font-family="monospace">k=2</text>
     <rect class="cov-bar cov-bar-2" id="cov-bar-16-2" data-idx="2" x="183.0" y="95.0" width="97.8" height="22" rx="5" fill="url(#cov-bar-2)" stroke="#2dd4bf" stroke-width="1.5"/>
     <text x="231.9" y="110.0" fill="#fff" font-size="11" font-weight="600" font-family="monospace" text-anchor="middle" pointer-events="none">(0, 2] (2 cells)</text>
   </g>
   <!-- Row tree[3] -->
   <g class="cov-row" id="cov-row-16-3" data-tree-idx="3" data-lowbit="1">
     <text x="15" y="142" fill="#eff1f6" font-size="12" font-weight="700" font-family="monospace">tree[3]</text>
-    <text x="80" y="142" fill="#9ea0a5" font-size="11" font-family="monospace">00011₂</text>
-    <text x="135" y="142" fill="#64748b" font-size="10" font-family="monospace">k=1</text>
+    <text x="85" y="142" fill="#9ea0a5" font-size="11" font-family="monospace">00011₂</text>
+    <text x="145" y="142" fill="#64748b" font-size="10" font-family="monospace">k=1</text>
     <rect class="cov-bar cov-bar-1" id="cov-bar-16-3" data-idx="3" x="286.8" y="125.0" width="45.9" height="22" rx="5" fill="url(#cov-bar-1)" stroke="#64748b" stroke-width="1.5"/>
     <text x="309.7" y="140.0" fill="#fff" font-size="11" font-weight="600" font-family="monospace" text-anchor="middle" pointer-events="none">(2,3]</text>
   </g>
   <!-- Row tree[4] -->
   <g class="cov-row" id="cov-row-16-4" data-tree-idx="4" data-lowbit="4">
     <text x="15" y="172" fill="#eff1f6" font-size="12" font-weight="700" font-family="monospace">tree[4]</text>
-    <text x="80" y="172" fill="#9ea0a5" font-size="11" font-family="monospace">00100₂</text>
-    <text x="135" y="172" fill="#64748b" font-size="10" font-family="monospace">k=4</text>
+    <text x="85" y="172" fill="#9ea0a5" font-size="11" font-family="monospace">00100₂</text>
+    <text x="145" y="172" fill="#64748b" font-size="10" font-family="monospace">k=4</text>
     <rect class="cov-bar cov-bar-4" id="cov-bar-16-4" data-idx="4" x="183.0" y="155.0" width="201.5" height="22" rx="5" fill="url(#cov-bar-4)" stroke="#c586c0" stroke-width="1.5"/>
     <text x="283.8" y="170.0" fill="#fff" font-size="11" font-weight="600" font-family="monospace" text-anchor="middle" pointer-events="none">(0, 4] (4 cells)</text>
   </g>
   <!-- Row tree[5] -->
   <g class="cov-row" id="cov-row-16-5" data-tree-idx="5" data-lowbit="1">
     <text x="15" y="202" fill="#eff1f6" font-size="12" font-weight="700" font-family="monospace">tree[5]</text>
-    <text x="80" y="202" fill="#9ea0a5" font-size="11" font-family="monospace">00101₂</text>
-    <text x="135" y="202" fill="#64748b" font-size="10" font-family="monospace">k=1</text>
+    <text x="85" y="202" fill="#9ea0a5" font-size="11" font-family="monospace">00101₂</text>
+    <text x="145" y="202" fill="#64748b" font-size="10" font-family="monospace">k=1</text>
     <rect class="cov-bar cov-bar-1" id="cov-bar-16-5" data-idx="5" x="390.5" y="185.0" width="45.9" height="22" rx="5" fill="url(#cov-bar-1)" stroke="#64748b" stroke-width="1.5"/>
     <text x="413.4" y="200.0" fill="#fff" font-size="11" font-weight="600" font-family="monospace" text-anchor="middle" pointer-events="none">(4,5]</text>
   </g>
   <!-- Row tree[6] -->
   <g class="cov-row" id="cov-row-16-6" data-tree-idx="6" data-lowbit="2">
     <text x="15" y="232" fill="#eff1f6" font-size="12" font-weight="700" font-family="monospace">tree[6]</text>
-    <text x="80" y="232" fill="#9ea0a5" font-size="11" font-family="monospace">00110₂</text>
-    <text x="135" y="232" fill="#64748b" font-size="10" font-family="monospace">k=2</text>
+    <text x="85" y="232" fill="#9ea0a5" font-size="11" font-family="monospace">00110₂</text>
+    <text x="145" y="232" fill="#64748b" font-size="10" font-family="monospace">k=2</text>
     <rect class="cov-bar cov-bar-2" id="cov-bar-16-6" data-idx="6" x="390.5" y="215.0" width="97.8" height="22" rx="5" fill="url(#cov-bar-2)" stroke="#2dd4bf" stroke-width="1.5"/>
     <text x="439.4" y="230.0" fill="#fff" font-size="11" font-weight="600" font-family="monospace" text-anchor="middle" pointer-events="none">(4, 6] (2 cells)</text>
   </g>
   <!-- Row tree[7] -->
   <g class="cov-row" id="cov-row-16-7" data-tree-idx="7" data-lowbit="1">
     <text x="15" y="262" fill="#eff1f6" font-size="12" font-weight="700" font-family="monospace">tree[7]</text>
-    <text x="80" y="262" fill="#9ea0a5" font-size="11" font-family="monospace">00111₂</text>
-    <text x="135" y="262" fill="#64748b" font-size="10" font-family="monospace">k=1</text>
+    <text x="85" y="262" fill="#9ea0a5" font-size="11" font-family="monospace">00111₂</text>
+    <text x="145" y="262" fill="#64748b" font-size="10" font-family="monospace">k=1</text>
     <rect class="cov-bar cov-bar-1" id="cov-bar-16-7" data-idx="7" x="494.2" y="245.0" width="45.9" height="22" rx="5" fill="url(#cov-bar-1)" stroke="#64748b" stroke-width="1.5"/>
     <text x="517.2" y="260.0" fill="#fff" font-size="11" font-weight="600" font-family="monospace" text-anchor="middle" pointer-events="none">(6,7]</text>
   </g>
   <!-- Row tree[8] -->
   <g class="cov-row" id="cov-row-16-8" data-tree-idx="8" data-lowbit="8">
     <text x="15" y="292" fill="#eff1f6" font-size="12" font-weight="700" font-family="monospace">tree[8]</text>
-    <text x="80" y="292" fill="#9ea0a5" font-size="11" font-family="monospace">01000₂</text>
-    <text x="135" y="292" fill="#64748b" font-size="10" font-family="monospace">k=8</text>
+    <text x="85" y="292" fill="#9ea0a5" font-size="11" font-family="monospace">01000₂</text>
+    <text x="145" y="292" fill="#64748b" font-size="10" font-family="monospace">k=8</text>
     <rect class="cov-bar cov-bar-8" id="cov-bar-16-8" data-idx="8" x="183.0" y="275.0" width="409.0" height="22" rx="5" fill="url(#cov-bar-8)" stroke="#ffa116" stroke-width="1.5"/>
     <text x="387.5" y="290.0" fill="#fff" font-size="11" font-weight="600" font-family="monospace" text-anchor="middle" pointer-events="none">(0, 8] (8 cells)</text>
   </g>
   <!-- Row tree[9] -->
   <g class="cov-row" id="cov-row-16-9" data-tree-idx="9" data-lowbit="1">
     <text x="15" y="322" fill="#eff1f6" font-size="12" font-weight="700" font-family="monospace">tree[9]</text>
-    <text x="80" y="322" fill="#9ea0a5" font-size="11" font-family="monospace">01001₂</text>
-    <text x="135" y="322" fill="#64748b" font-size="10" font-family="monospace">k=1</text>
+    <text x="85" y="322" fill="#9ea0a5" font-size="11" font-family="monospace">01001₂</text>
+    <text x="145" y="322" fill="#64748b" font-size="10" font-family="monospace">k=1</text>
     <rect class="cov-bar cov-bar-1" id="cov-bar-16-9" data-idx="9" x="598.0" y="305.0" width="45.9" height="22" rx="5" fill="url(#cov-bar-1)" stroke="#64748b" stroke-width="1.5"/>
     <text x="620.9" y="320.0" fill="#fff" font-size="11" font-weight="600" font-family="monospace" text-anchor="middle" pointer-events="none">(8,9]</text>
   </g>
   <!-- Row tree[10] -->
   <g class="cov-row" id="cov-row-16-10" data-tree-idx="10" data-lowbit="2">
     <text x="15" y="352" fill="#eff1f6" font-size="12" font-weight="700" font-family="monospace">tree[10]</text>
-    <text x="80" y="352" fill="#9ea0a5" font-size="11" font-family="monospace">01010₂</text>
-    <text x="135" y="352" fill="#64748b" font-size="10" font-family="monospace">k=2</text>
+    <text x="85" y="352" fill="#9ea0a5" font-size="11" font-family="monospace">01010₂</text>
+    <text x="145" y="352" fill="#64748b" font-size="10" font-family="monospace">k=2</text>
     <rect class="cov-bar cov-bar-2" id="cov-bar-16-10" data-idx="10" x="598.0" y="335.0" width="97.8" height="22" rx="5" fill="url(#cov-bar-2)" stroke="#2dd4bf" stroke-width="1.5"/>
     <text x="646.9" y="350.0" fill="#fff" font-size="11" font-weight="600" font-family="monospace" text-anchor="middle" pointer-events="none">(8, 10] (2 cells)</text>
   </g>
   <!-- Row tree[11] -->
   <g class="cov-row" id="cov-row-16-11" data-tree-idx="11" data-lowbit="1">
     <text x="15" y="382" fill="#eff1f6" font-size="12" font-weight="700" font-family="monospace">tree[11]</text>
-    <text x="80" y="382" fill="#9ea0a5" font-size="11" font-family="monospace">01011₂</text>
-    <text x="135" y="382" fill="#64748b" font-size="10" font-family="monospace">k=1</text>
+    <text x="85" y="382" fill="#9ea0a5" font-size="11" font-family="monospace">01011₂</text>
+    <text x="145" y="382" fill="#64748b" font-size="10" font-family="monospace">k=1</text>
     <rect class="cov-bar cov-bar-1" id="cov-bar-16-11" data-idx="11" x="701.8" y="365.0" width="45.9" height="22" rx="5" fill="url(#cov-bar-1)" stroke="#64748b" stroke-width="1.5"/>
     <text x="724.7" y="380.0" fill="#fff" font-size="11" font-weight="600" font-family="monospace" text-anchor="middle" pointer-events="none">(10,11]</text>
   </g>
   <!-- Row tree[12] -->
   <g class="cov-row" id="cov-row-16-12" data-tree-idx="12" data-lowbit="4">
     <text x="15" y="412" fill="#eff1f6" font-size="12" font-weight="700" font-family="monospace">tree[12]</text>
-    <text x="80" y="412" fill="#9ea0a5" font-size="11" font-family="monospace">01100₂</text>
-    <text x="135" y="412" fill="#64748b" font-size="10" font-family="monospace">k=4</text>
+    <text x="85" y="412" fill="#9ea0a5" font-size="11" font-family="monospace">01100₂</text>
+    <text x="145" y="412" fill="#64748b" font-size="10" font-family="monospace">k=4</text>
     <rect class="cov-bar cov-bar-4" id="cov-bar-16-12" data-idx="12" x="598.0" y="395.0" width="201.5" height="22" rx="5" fill="url(#cov-bar-4)" stroke="#c586c0" stroke-width="1.5"/>
     <text x="698.8" y="410.0" fill="#fff" font-size="11" font-weight="600" font-family="monospace" text-anchor="middle" pointer-events="none">(8, 12] (4 cells)</text>
   </g>
   <!-- Row tree[13] -->
   <g class="cov-row" id="cov-row-16-13" data-tree-idx="13" data-lowbit="1">
     <text x="15" y="442" fill="#eff1f6" font-size="12" font-weight="700" font-family="monospace">tree[13]</text>
-    <text x="80" y="442" fill="#9ea0a5" font-size="11" font-family="monospace">01101₂</text>
-    <text x="135" y="442" fill="#64748b" font-size="10" font-family="monospace">k=1</text>
+    <text x="85" y="442" fill="#9ea0a5" font-size="11" font-family="monospace">01101₂</text>
+    <text x="145" y="442" fill="#64748b" font-size="10" font-family="monospace">k=1</text>
     <rect class="cov-bar cov-bar-1" id="cov-bar-16-13" data-idx="13" x="805.5" y="425.0" width="45.9" height="22" rx="5" fill="url(#cov-bar-1)" stroke="#64748b" stroke-width="1.5"/>
     <text x="828.4" y="440.0" fill="#fff" font-size="11" font-weight="600" font-family="monospace" text-anchor="middle" pointer-events="none">(12,13]</text>
   </g>
   <!-- Row tree[14] -->
   <g class="cov-row" id="cov-row-16-14" data-tree-idx="14" data-lowbit="2">
     <text x="15" y="472" fill="#eff1f6" font-size="12" font-weight="700" font-family="monospace">tree[14]</text>
-    <text x="80" y="472" fill="#9ea0a5" font-size="11" font-family="monospace">01110₂</text>
-    <text x="135" y="472" fill="#64748b" font-size="10" font-family="monospace">k=2</text>
+    <text x="85" y="472" fill="#9ea0a5" font-size="11" font-family="monospace">01110₂</text>
+    <text x="145" y="472" fill="#64748b" font-size="10" font-family="monospace">k=2</text>
     <rect class="cov-bar cov-bar-2" id="cov-bar-16-14" data-idx="14" x="805.5" y="455.0" width="97.8" height="22" rx="5" fill="url(#cov-bar-2)" stroke="#2dd4bf" stroke-width="1.5"/>
     <text x="854.4" y="470.0" fill="#fff" font-size="11" font-weight="600" font-family="monospace" text-anchor="middle" pointer-events="none">(12, 14] (2 cells)</text>
   </g>
   <!-- Row tree[15] -->
   <g class="cov-row" id="cov-row-16-15" data-tree-idx="15" data-lowbit="1">
     <text x="15" y="502" fill="#eff1f6" font-size="12" font-weight="700" font-family="monospace">tree[15]</text>
-    <text x="80" y="502" fill="#9ea0a5" font-size="11" font-family="monospace">01111₂</text>
-    <text x="135" y="502" fill="#64748b" font-size="10" font-family="monospace">k=1</text>
+    <text x="85" y="502" fill="#9ea0a5" font-size="11" font-family="monospace">01111₂</text>
+    <text x="145" y="502" fill="#64748b" font-size="10" font-family="monospace">k=1</text>
     <rect class="cov-bar cov-bar-1" id="cov-bar-16-15" data-idx="15" x="909.2" y="485.0" width="45.9" height="22" rx="5" fill="url(#cov-bar-1)" stroke="#64748b" stroke-width="1.5"/>
     <text x="932.2" y="500.0" fill="#fff" font-size="11" font-weight="600" font-family="monospace" text-anchor="middle" pointer-events="none">(14,15]</text>
   </g>
   <!-- Row tree[16] -->
   <g class="cov-row" id="cov-row-16-16" data-tree-idx="16" data-lowbit="16">
     <text x="15" y="532" fill="#eff1f6" font-size="12" font-weight="700" font-family="monospace">tree[16]</text>
-    <text x="80" y="532" fill="#9ea0a5" font-size="11" font-family="monospace">10000₂</text>
-    <text x="135" y="532" fill="#64748b" font-size="10" font-family="monospace">k=16</text>
+    <text x="85" y="532" fill="#9ea0a5" font-size="11" font-family="monospace">10000₂</text>
+    <text x="145" y="532" fill="#64748b" font-size="10" font-family="monospace">k=16</text>
     <rect class="cov-bar cov-bar-16" id="cov-bar-16-16" data-idx="16" x="183.0" y="515.0" width="824.0" height="22" rx="5" fill="url(#cov-bar-16)" stroke="#00b8a3" stroke-width="1.5"/>
     <text x="595.0" y="530.0" fill="#fff" font-size="11" font-weight="600" font-family="monospace" text-anchor="middle" pointer-events="none">(0, 16] (16 cells)</text>
   </g>
@@ -10451,107 +10584,100 @@ Result: len(tails) = 3  (Optimal nesting: [2,3] -&gt; [5,4] -&gt; [6,7])</code><
             </div>
           </article>
 
-          <!-- PATTERN CARD 3: UPDATE TREE DIAGRAM -->
+          <!-- PATTERN CARD 4: UPDATE TREE DIAGRAM -->
           <article class="pattern-card" id="fenwick-visual-update-tree">
             <div class="pattern-card-head">
-              <h3>Update Tree Diagram: Ascending via i + lowbit(i)</h3>
+              <h3>Update Tree Diagram: Ascending via i + lowbit(i) in Binary Tree Layout</h3>
             </div>
             <p class="use-when"><strong>Use when:</strong> Modifying an element at position <em>i</em> and tracing how the delta &Delta; propagates up to every larger enclosing responsibility chunk in O(log n).</p>
 
             <div class="why-box" style="padding: 1.35rem;">
-              <strong>Update Tree Structure: parent = i + lowbit(i)</strong>
+              <strong>Update Tree Structure: parent = i + lowbit(i) in Circular Binary Tree Form</strong>
               <p style="line-height: 1.65; margin-bottom: 0.85rem;">
                 In the Update Tree, directed edges point upward from child to parent via <code>parent = i + lowbit(i)</code>.
+                Rendered with circular nodes and angled tree branches:
                 For $N = 8$, the root is <strong>Node 8</strong> (since $8 + 8 = 16 > 8$).
                 <strong>Node 8</strong> has children <strong>4, 6, 7</strong>; <strong>Node 4</strong> has children <strong>2, 3</strong>; <strong>Node 2</strong> has child <strong>1</strong>; <strong>Node 6</strong> has child <strong>5</strong>.
               </p>
 
               <!-- Update Tree SVG -->
               <div class="bit-svg-wrap">
-<svg class="bit-svg bit-tree-svg" id="bit-update-tree-svg" viewBox="0 0 860 420" width="100%" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+<svg class="bit-svg bit-tree-svg" id="bit-update-tree-svg" viewBox="0 0 860 400" width="100%" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
   <defs>
-    <marker id="arrow-default" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 1 L 10 5 L 0 9 z" fill="#64748b"/></marker>
-    <marker id="arrow-orange" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#ffa116"/></marker>
-    <filter id="glow-orange" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="3" result="blur"/><feComposite in="SourceGraphic" in2="blur" operator="over"/></filter>
+    <marker id="upd-arr-default" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 1 L 10 5 L 0 9 z" fill="#64748b"/></marker>
+    <marker id="upd-arr-orange" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#ffa116"/></marker>
+    <filter id="glow-orange-upd" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="4" result="blur"/><feComposite in="SourceGraphic" in2="blur" operator="over"/></filter>
   </defs>
-  <!-- Tree Edges (Child to Parent in update: parent = i + lowbit(i)) -->
-  <line class="tree-edge" id="upd-edge-1-2" x1="120" y1="328" x2="120" y2="282" stroke="#383838" stroke-width="1.5" stroke-dasharray="3,3" marker-end="url(#arrow-default)"/>
-  <line class="tree-edge" id="upd-edge-2-4" x1="120" y1="228" x2="210" y2="182" stroke="#383838" stroke-width="1.5" stroke-dasharray="3,3" marker-end="url(#arrow-default)"/>
-  <line class="tree-edge edge-path" id="upd-edge-3-4" x1="300" y1="228" x2="210" y2="182" stroke="#ffa116" stroke-width="2.5" marker-end="url(#arrow-orange)" filter="url(#glow-orange)"/>
-  <line class="tree-edge edge-path" id="upd-edge-4-8" x1="210" y1="128" x2="420" y2="82" stroke="#ffa116" stroke-width="2.5" marker-end="url(#arrow-orange)" filter="url(#glow-orange)"/>
-  <line class="tree-edge" id="upd-edge-5-6" x1="520" y1="228" x2="520" y2="182" stroke="#383838" stroke-width="1.5" stroke-dasharray="3,3" marker-end="url(#arrow-default)"/>
-  <line class="tree-edge" id="upd-edge-6-8" x1="520" y1="128" x2="420" y2="82" stroke="#383838" stroke-width="1.5" stroke-dasharray="3,3" marker-end="url(#arrow-default)"/>
-  <line class="tree-edge" id="upd-edge-7-8" x1="720" y1="128" x2="420" y2="82" stroke="#383838" stroke-width="1.5" stroke-dasharray="3,3" marker-end="url(#arrow-default)"/>
-  <!-- Tree Nodes -->
+  <!-- Directed Update Edges: parent = i + lowbit(i) -->
+  <line class="tree-edge" id="upd-edge-1-2" x1="147.0" y1="293.0" x2="196.6" y2="243.4" stroke="#383838" stroke-width="1.6" stroke-dasharray="3,3" marker-end="url(#upd-arr-default)"/>
+  <line class="tree-edge" id="upd-edge-2-4" x1="236.5" y1="214.3" x2="361.7" y2="151.6" stroke="#383838" stroke-width="1.6" stroke-dasharray="3,3" marker-end="url(#upd-arr-default)"/>
+  <line class="tree-edge edge-path" id="upd-edge-3-4" x1="310.7" y1="288.5" x2="373.4" y2="163.3" stroke="#ffa116" stroke-width="2.8" marker-end="url(#upd-arr-orange)" filter="url(#glow-orange-upd)"/>
+  <line class="tree-edge edge-path" id="upd-edge-4-8" x1="408.3" y1="134.2" x2="699.8" y2="61.3" stroke="#ffa116" stroke-width="2.8" marker-end="url(#upd-arr-orange)" filter="url(#glow-orange-upd)"/>
+  <line class="tree-edge" id="upd-edge-5-6" x1="487.0" y1="293.0" x2="536.6" y2="243.4" stroke="#383838" stroke-width="1.6" stroke-dasharray="3,3" marker-end="url(#upd-arr-default)"/>
+  <line class="tree-edge" id="upd-edge-6-8" x1="572.0" y1="208.0" x2="706.6" y2="73.4" stroke="#383838" stroke-width="1.6" stroke-dasharray="3,3" marker-end="url(#upd-arr-default)"/>
+  <line class="tree-edge" id="upd-edge-7-8" x1="647.6" y1="287.2" x2="716.8" y2="79.7" stroke="#383838" stroke-width="1.6" stroke-dasharray="3,3" marker-end="url(#upd-arr-default)"/>
+  <!-- Circular Binary Tree Nodes -->
   <g class="tree-node-group node-highlight" id="upd-node-8" data-node="8">
-    <rect x="355.0" y="28.0" width="130" height="54" rx="6" fill="rgba(255, 161, 22, 0.18)" stroke="#ffa116" stroke-width="2" filter="url(#glow-orange)"/>
-    <text x="365.0" y="47.0" fill="#ffa116" font-size="12" font-weight="700" font-family="monospace">tree[8]</text>
-    <text x="475.0" y="47.0" fill="#9ea0a5" font-size="10" font-family="monospace" text-anchor="end">1000₂</text>
-    <line x1="361.0" y1="54.0" x2="479.0" y2="54.0" stroke="#ffa116" stroke-width="0.6" stroke-opacity="0.4"/>
-    <text x="365.0" y="70.0" fill="#2dd4bf" font-size="11" font-weight="600" font-family="monospace">(0, 8]</text>
-    <text x="475.0" y="70.0" fill="#64748b" font-size="10" font-family="monospace" text-anchor="end">k=8</text>
-    <rect class="node-step-badge" x="372" y="17.0" width="96" height="16" rx="8" fill="#ffa116" stroke="#141414" stroke-width="1.5"/>
-    <text class="node-step-text" x="420" y="29.0" fill="#141414" font-size="9" font-weight="800" font-family="sans-serif" text-anchor="middle">Step 3 (+4)</text>
+    <circle cx="725" cy="55" r="25" fill="rgba(255, 161, 22, 0.22)" stroke="#ffa116" stroke-width="2.6" filter="url(#glow-orange-upd)"/>
+    <text x="725" y="60" fill="#ffa116" font-size="14" font-weight="800" font-family="monospace" text-anchor="middle" pointer-events="none">8</text>
+    <rect x="695" y="83" width="60" height="16" rx="4" fill="#1c1c1c" stroke="#333" stroke-width="0.8"/>
+    <text x="725" y="94" fill="#2dd4bf" font-size="9" font-weight="700" font-family="monospace" text-anchor="middle" pointer-events="none">(0, 8]</text>
+    <text x="725" y="26" fill="#9ea0a5" font-size="9" font-family="monospace" text-anchor="middle" pointer-events="none">1000₂</text>
+    <rect class="node-step-badge" x="680" y="7" width="90" height="16" rx="8" fill="#ffa116" stroke="#141414" stroke-width="1.5"/>
+    <text class="node-step-text" x="725" y="19" fill="#141414" font-size="8.5" font-weight="800" font-family="sans-serif" text-anchor="middle">Step 3 (+4)</text>
   </g>
   <g class="tree-node-group node-highlight" id="upd-node-4" data-node="4">
-    <rect x="145.0" y="128.0" width="130" height="54" rx="6" fill="rgba(255, 161, 22, 0.18)" stroke="#ffa116" stroke-width="2" filter="url(#glow-orange)"/>
-    <text x="155.0" y="147.0" fill="#ffa116" font-size="12" font-weight="700" font-family="monospace">tree[4]</text>
-    <text x="265.0" y="147.0" fill="#9ea0a5" font-size="10" font-family="monospace" text-anchor="end">0100₂</text>
-    <line x1="151.0" y1="154.0" x2="269.0" y2="154.0" stroke="#ffa116" stroke-width="0.6" stroke-opacity="0.4"/>
-    <text x="155.0" y="170.0" fill="#2dd4bf" font-size="11" font-weight="600" font-family="monospace">(0, 4]</text>
-    <text x="265.0" y="170.0" fill="#64748b" font-size="10" font-family="monospace" text-anchor="end">k=4</text>
-    <rect class="node-step-badge" x="162" y="117.0" width="96" height="16" rx="8" fill="#ffa116" stroke="#141414" stroke-width="1.5"/>
-    <text class="node-step-text" x="210" y="129.0" fill="#141414" font-size="9" font-weight="800" font-family="sans-serif" text-anchor="middle">Step 2 (+1)</text>
-  </g>
-  <g class="tree-node-group " id="upd-node-6" data-node="6">
-    <rect x="455.0" y="128.0" width="130" height="54" rx="6" fill="#1e1e1e" stroke="#3c3c3c" stroke-width="1"/>
-    <text x="465.0" y="147.0" fill="#eff1f6" font-size="12" font-weight="700" font-family="monospace">tree[6]</text>
-    <text x="575.0" y="147.0" fill="#9ea0a5" font-size="10" font-family="monospace" text-anchor="end">0110₂</text>
-    <line x1="461.0" y1="154.0" x2="579.0" y2="154.0" stroke="#3c3c3c" stroke-width="0.6" stroke-opacity="0.4"/>
-    <text x="465.0" y="170.0" fill="#2dd4bf" font-size="11" font-weight="600" font-family="monospace">(4, 6]</text>
-    <text x="575.0" y="170.0" fill="#64748b" font-size="10" font-family="monospace" text-anchor="end">k=2</text>
-  </g>
-  <g class="tree-node-group " id="upd-node-7" data-node="7">
-    <rect x="655.0" y="128.0" width="130" height="54" rx="6" fill="#1e1e1e" stroke="#3c3c3c" stroke-width="1"/>
-    <text x="665.0" y="147.0" fill="#eff1f6" font-size="12" font-weight="700" font-family="monospace">tree[7]</text>
-    <text x="775.0" y="147.0" fill="#9ea0a5" font-size="10" font-family="monospace" text-anchor="end">0111₂</text>
-    <line x1="661.0" y1="154.0" x2="779.0" y2="154.0" stroke="#3c3c3c" stroke-width="0.6" stroke-opacity="0.4"/>
-    <text x="665.0" y="170.0" fill="#2dd4bf" font-size="11" font-weight="600" font-family="monospace">(6, 7]</text>
-    <text x="775.0" y="170.0" fill="#64748b" font-size="10" font-family="monospace" text-anchor="end">k=1</text>
+    <circle cx="385" cy="140" r="25" fill="rgba(255, 161, 22, 0.22)" stroke="#ffa116" stroke-width="2.6" filter="url(#glow-orange-upd)"/>
+    <text x="385" y="145" fill="#ffa116" font-size="14" font-weight="800" font-family="monospace" text-anchor="middle" pointer-events="none">4</text>
+    <rect x="355" y="168" width="60" height="16" rx="4" fill="#1c1c1c" stroke="#333" stroke-width="0.8"/>
+    <text x="385" y="179" fill="#2dd4bf" font-size="9" font-weight="700" font-family="monospace" text-anchor="middle" pointer-events="none">(0, 4]</text>
+    <text x="385" y="111" fill="#9ea0a5" font-size="9" font-family="monospace" text-anchor="middle" pointer-events="none">0100₂</text>
+    <rect class="node-step-badge" x="340" y="92" width="90" height="16" rx="8" fill="#ffa116" stroke="#141414" stroke-width="1.5"/>
+    <text class="node-step-text" x="385" y="104" fill="#141414" font-size="8.5" font-weight="800" font-family="sans-serif" text-anchor="middle">Step 2 (+1)</text>
   </g>
   <g class="tree-node-group " id="upd-node-2" data-node="2">
-    <rect x="55.0" y="228.0" width="130" height="54" rx="6" fill="#1e1e1e" stroke="#3c3c3c" stroke-width="1"/>
-    <text x="65.0" y="247.0" fill="#eff1f6" font-size="12" font-weight="700" font-family="monospace">tree[2]</text>
-    <text x="175.0" y="247.0" fill="#9ea0a5" font-size="10" font-family="monospace" text-anchor="end">0010₂</text>
-    <line x1="61.0" y1="254.0" x2="179.0" y2="254.0" stroke="#3c3c3c" stroke-width="0.6" stroke-opacity="0.4"/>
-    <text x="65.0" y="270.0" fill="#2dd4bf" font-size="11" font-weight="600" font-family="monospace">(0, 2]</text>
-    <text x="175.0" y="270.0" fill="#64748b" font-size="10" font-family="monospace" text-anchor="end">k=2</text>
+    <circle cx="215" cy="225" r="23" fill="#1e1e1e" stroke="#2dd4bf" stroke-width="1.8"/>
+    <text x="215" y="230" fill="#ffffff" font-size="14" font-weight="800" font-family="monospace" text-anchor="middle" pointer-events="none">2</text>
+    <rect x="185" y="253" width="60" height="16" rx="4" fill="#1c1c1c" stroke="#333" stroke-width="0.8"/>
+    <text x="215" y="264" fill="#2dd4bf" font-size="9" font-weight="700" font-family="monospace" text-anchor="middle" pointer-events="none">(0, 2]</text>
+    <text x="215" y="196" fill="#9ea0a5" font-size="9" font-family="monospace" text-anchor="middle" pointer-events="none">0010₂</text>
   </g>
-  <g class="tree-node-group node-highlight" id="upd-node-3" data-node="3">
-    <rect x="235.0" y="228.0" width="130" height="54" rx="6" fill="rgba(255, 161, 22, 0.18)" stroke="#ffa116" stroke-width="2" filter="url(#glow-orange)"/>
-    <text x="245.0" y="247.0" fill="#ffa116" font-size="12" font-weight="700" font-family="monospace">tree[3]</text>
-    <text x="355.0" y="247.0" fill="#9ea0a5" font-size="10" font-family="monospace" text-anchor="end">0011₂</text>
-    <line x1="241.0" y1="254.0" x2="359.0" y2="254.0" stroke="#ffa116" stroke-width="0.6" stroke-opacity="0.4"/>
-    <text x="245.0" y="270.0" fill="#2dd4bf" font-size="11" font-weight="600" font-family="monospace">(2, 3]</text>
-    <text x="355.0" y="270.0" fill="#64748b" font-size="10" font-family="monospace" text-anchor="end">k=1</text>
-    <rect class="node-step-badge" x="252" y="217.0" width="96" height="16" rx="8" fill="#ffa116" stroke="#141414" stroke-width="1.5"/>
-    <text class="node-step-text" x="300" y="229.0" fill="#141414" font-size="9" font-weight="800" font-family="sans-serif" text-anchor="middle">Step 1 (Start)</text>
-  </g>
-  <g class="tree-node-group " id="upd-node-5" data-node="5">
-    <rect x="455.0" y="228.0" width="130" height="54" rx="6" fill="#1e1e1e" stroke="#3c3c3c" stroke-width="1"/>
-    <text x="465.0" y="247.0" fill="#eff1f6" font-size="12" font-weight="700" font-family="monospace">tree[5]</text>
-    <text x="575.0" y="247.0" fill="#9ea0a5" font-size="10" font-family="monospace" text-anchor="end">0101₂</text>
-    <line x1="461.0" y1="254.0" x2="579.0" y2="254.0" stroke="#3c3c3c" stroke-width="0.6" stroke-opacity="0.4"/>
-    <text x="465.0" y="270.0" fill="#2dd4bf" font-size="11" font-weight="600" font-family="monospace">(4, 5]</text>
-    <text x="575.0" y="270.0" fill="#64748b" font-size="10" font-family="monospace" text-anchor="end">k=1</text>
+  <g class="tree-node-group " id="upd-node-6" data-node="6">
+    <circle cx="555" cy="225" r="23" fill="#1e1e1e" stroke="#2dd4bf" stroke-width="1.8"/>
+    <text x="555" y="230" fill="#ffffff" font-size="14" font-weight="800" font-family="monospace" text-anchor="middle" pointer-events="none">6</text>
+    <rect x="525" y="253" width="60" height="16" rx="4" fill="#1c1c1c" stroke="#333" stroke-width="0.8"/>
+    <text x="555" y="264" fill="#2dd4bf" font-size="9" font-weight="700" font-family="monospace" text-anchor="middle" pointer-events="none">(4, 6]</text>
+    <text x="555" y="196" fill="#9ea0a5" font-size="9" font-family="monospace" text-anchor="middle" pointer-events="none">0110₂</text>
   </g>
   <g class="tree-node-group " id="upd-node-1" data-node="1">
-    <rect x="55.0" y="328.0" width="130" height="54" rx="6" fill="#1e1e1e" stroke="#3c3c3c" stroke-width="1"/>
-    <text x="65.0" y="347.0" fill="#eff1f6" font-size="12" font-weight="700" font-family="monospace">tree[1]</text>
-    <text x="175.0" y="347.0" fill="#9ea0a5" font-size="10" font-family="monospace" text-anchor="end">0001₂</text>
-    <line x1="61.0" y1="354.0" x2="179.0" y2="354.0" stroke="#3c3c3c" stroke-width="0.6" stroke-opacity="0.4"/>
-    <text x="65.0" y="370.0" fill="#2dd4bf" font-size="11" font-weight="600" font-family="monospace">(0, 1]</text>
-    <text x="175.0" y="370.0" fill="#64748b" font-size="10" font-family="monospace" text-anchor="end">k=1</text>
+    <circle cx="130" cy="310" r="23" fill="#1e1e1e" stroke="#64748b" stroke-width="1.8"/>
+    <text x="130" y="315" fill="#ffffff" font-size="14" font-weight="800" font-family="monospace" text-anchor="middle" pointer-events="none">1</text>
+    <rect x="100" y="338" width="60" height="16" rx="4" fill="#1c1c1c" stroke="#333" stroke-width="0.8"/>
+    <text x="130" y="349" fill="#2dd4bf" font-size="9" font-weight="700" font-family="monospace" text-anchor="middle" pointer-events="none">(0, 1]</text>
+    <text x="130" y="281" fill="#9ea0a5" font-size="9" font-family="monospace" text-anchor="middle" pointer-events="none">0001₂</text>
+  </g>
+  <g class="tree-node-group node-highlight" id="upd-node-3" data-node="3">
+    <circle cx="300" cy="310" r="25" fill="rgba(255, 161, 22, 0.22)" stroke="#ffa116" stroke-width="2.6" filter="url(#glow-orange-upd)"/>
+    <text x="300" y="315" fill="#ffa116" font-size="14" font-weight="800" font-family="monospace" text-anchor="middle" pointer-events="none">3</text>
+    <rect x="270" y="338" width="60" height="16" rx="4" fill="#1c1c1c" stroke="#333" stroke-width="0.8"/>
+    <text x="300" y="349" fill="#2dd4bf" font-size="9" font-weight="700" font-family="monospace" text-anchor="middle" pointer-events="none">(2, 3]</text>
+    <text x="300" y="281" fill="#9ea0a5" font-size="9" font-family="monospace" text-anchor="middle" pointer-events="none">0011₂</text>
+    <rect class="node-step-badge" x="255" y="262" width="90" height="16" rx="8" fill="#ffa116" stroke="#141414" stroke-width="1.5"/>
+    <text class="node-step-text" x="300" y="274" fill="#141414" font-size="8.5" font-weight="800" font-family="sans-serif" text-anchor="middle">Step 1 (Start)</text>
+  </g>
+  <g class="tree-node-group " id="upd-node-5" data-node="5">
+    <circle cx="470" cy="310" r="23" fill="#1e1e1e" stroke="#64748b" stroke-width="1.8"/>
+    <text x="470" y="315" fill="#ffffff" font-size="14" font-weight="800" font-family="monospace" text-anchor="middle" pointer-events="none">5</text>
+    <rect x="440" y="338" width="60" height="16" rx="4" fill="#1c1c1c" stroke="#333" stroke-width="0.8"/>
+    <text x="470" y="349" fill="#2dd4bf" font-size="9" font-weight="700" font-family="monospace" text-anchor="middle" pointer-events="none">(4, 5]</text>
+    <text x="470" y="281" fill="#9ea0a5" font-size="9" font-family="monospace" text-anchor="middle" pointer-events="none">0101₂</text>
+  </g>
+  <g class="tree-node-group " id="upd-node-7" data-node="7">
+    <circle cx="640" cy="310" r="23" fill="#1e1e1e" stroke="#64748b" stroke-width="1.8"/>
+    <text x="640" y="315" fill="#ffffff" font-size="14" font-weight="800" font-family="monospace" text-anchor="middle" pointer-events="none">7</text>
+    <rect x="610" y="338" width="60" height="16" rx="4" fill="#1c1c1c" stroke="#333" stroke-width="0.8"/>
+    <text x="640" y="349" fill="#2dd4bf" font-size="9" font-weight="700" font-family="monospace" text-anchor="middle" pointer-events="none">(6, 7]</text>
+    <text x="640" y="281" fill="#9ea0a5" font-size="9" font-family="monospace" text-anchor="middle" pointer-events="none">0111₂</text>
   </g>
 </svg>
               </div>
@@ -10582,7 +10708,7 @@ Result: len(tails) = 3  (Optimal nesting: [2,3] -&gt; [5,4] -&gt; [6,7])</code><
             </div>
           </article>
 
-          <!-- PATTERN CARD 4: QUERY TREE DIAGRAM -->
+          <!-- PATTERN CARD 5: QUERY TREE DIAGRAM -->
           <article class="pattern-card" id="fenwick-visual-query-tree">
             <div class="pattern-card-head">
               <h3>Query Tree Diagram: Descending via i - lowbit(i) &amp; Interval Stitching</h3>
@@ -10593,106 +10719,98 @@ Result: len(tails) = 3  (Optimal nesting: [2,3] -&gt; [5,4] -&gt; [6,7])</code><
               <strong>Query Tree Structure: parent = i - lowbit(i), Root 0</strong>
               <p style="line-height: 1.65; margin-bottom: 0.85rem;">
                 In the Query Tree, edges point upward towards <strong>Sentinel Root 0</strong>.
+                Rendered with circular nodes and angled tree branches:
                 <strong>Root 0</strong> has children <strong>1, 2, 4, 8</strong> (all powers of 2); <strong>Node 2</strong> &rarr; <strong>3</strong>; <strong>Node 4</strong> &rarr; <strong>5, 6</strong>; <strong>Node 6</strong> &rarr; <strong>7</strong>.
               </p>
 
               <!-- Query Tree SVG -->
               <div class="bit-svg-wrap">
-<svg class="bit-svg bit-tree-svg" id="bit-query-tree-svg" viewBox="0 0 860 440" width="100%" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+<svg class="bit-svg bit-tree-svg" id="bit-query-tree-svg" viewBox="0 0 860 400" width="100%" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
   <defs>
-    <marker id="arrow-default-q" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 1 L 10 5 L 0 9 z" fill="#64748b"/></marker>
-    <marker id="arrow-easy" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#00b8a3"/></marker>
-    <filter id="glow-easy" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="3" result="blur"/><feComposite in="SourceGraphic" in2="blur" operator="over"/></filter>
+    <marker id="qry-arr-default" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 1 L 10 5 L 0 9 z" fill="#64748b"/></marker>
+    <marker id="qry-arr-easy" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#00b8a3"/></marker>
+    <filter id="glow-easy-qry" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="4" result="blur"/><feComposite in="SourceGraphic" in2="blur" operator="over"/></filter>
   </defs>
-  <!-- Tree Edges (Child to Parent in query: parent = i - lowbit(i)) -->
-  <line class="tree-edge" id="qry-edge-1-0" x1="100" y1="128" x2="420" y2="82" stroke="#383838" stroke-width="1.5" stroke-dasharray="3,3" marker-end="url(#arrow-default-q)"/>
-  <line class="tree-edge" id="qry-edge-2-0" x1="260" y1="128" x2="420" y2="82" stroke="#383838" stroke-width="1.5" stroke-dasharray="3,3" marker-end="url(#arrow-default-q)"/>
-  <line class="tree-edge edge-path-query" id="qry-edge-4-0" x1="520" y1="128" x2="420" y2="82" stroke="#00b8a3" stroke-width="2.5" marker-end="url(#arrow-easy)" filter="url(#glow-easy)"/>
-  <line class="tree-edge" id="qry-edge-8-0" x1="740" y1="128" x2="420" y2="82" stroke="#383838" stroke-width="1.5" stroke-dasharray="3,3" marker-end="url(#arrow-default-q)"/>
-  <line class="tree-edge" id="qry-edge-3-2" x1="260" y1="228" x2="260" y2="182" stroke="#383838" stroke-width="1.5" stroke-dasharray="3,3" marker-end="url(#arrow-default-q)"/>
-  <line class="tree-edge" id="qry-edge-5-4" x1="440" y1="228" x2="520" y2="182" stroke="#383838" stroke-width="1.5" stroke-dasharray="3,3" marker-end="url(#arrow-default-q)"/>
-  <line class="tree-edge edge-path-query" id="qry-edge-6-4" x1="600" y1="228" x2="520" y2="182" stroke="#00b8a3" stroke-width="2.5" marker-end="url(#arrow-easy)" filter="url(#glow-easy)"/>
-  <line class="tree-edge edge-path-query" id="qry-edge-7-6" x1="600" y1="328" x2="600" y2="282" stroke="#00b8a3" stroke-width="2.5" marker-end="url(#arrow-easy)" filter="url(#glow-easy)"/>
-  <!-- Tree Nodes -->
+  <!-- Directed Query Edges: parent = i - lowbit(i) -->
+  <line class="tree-edge" id="qry-edge-1-0" x1="124.5" y1="286.6" x2="76.0" y2="80.3" stroke="#383838" stroke-width="1.6" stroke-dasharray="3,3" marker-end="url(#qry-arr-default)"/>
+  <line class="tree-edge" id="qry-edge-2-0" x1="199.4" y1="206.7" x2="86.9" y2="74.8" stroke="#383838" stroke-width="1.6" stroke-dasharray="3,3" marker-end="url(#qry-arr-default)"/>
+  <line class="tree-edge edge-path-query" id="qry-edge-4-0" x1="361.8" y1="133.7" x2="95.1" y2="61.8" stroke="#00b8a3" stroke-width="2.8" marker-end="url(#qry-arr-easy)" filter="url(#glow-easy-qry)"/>
+  <line class="tree-edge" id="qry-edge-8-0" x1="701.0" y1="55.0" x2="96.0" y2="55.0" stroke="#383838" stroke-width="1.6" stroke-dasharray="3,3" marker-end="url(#qry-arr-default)"/>
+  <line class="tree-edge" id="qry-edge-3-2" x1="283.0" y1="293.0" x2="233.4" y2="243.4" stroke="#383838" stroke-width="1.6" stroke-dasharray="3,3" marker-end="url(#qry-arr-default)"/>
+  <line class="tree-edge" id="qry-edge-5-4" x1="459.3" y1="288.5" x2="396.6" y2="163.3" stroke="#383838" stroke-width="1.6" stroke-dasharray="3,3" marker-end="url(#qry-arr-default)"/>
+  <line class="tree-edge edge-path-query" id="qry-edge-6-4" x1="533.5" y1="214.3" x2="408.3" y2="151.6" stroke="#00b8a3" stroke-width="2.8" marker-end="url(#qry-arr-easy)" filter="url(#glow-easy-qry)"/>
+  <line class="tree-edge edge-path-query" id="qry-edge-7-6" x1="623.0" y1="293.0" x2="573.4" y2="243.4" stroke="#00b8a3" stroke-width="2.8" marker-end="url(#qry-arr-easy)" filter="url(#glow-easy-qry)"/>
+  <!-- Circular Tree Nodes -->
   <g class="tree-node-group node-highlight-query" id="qry-node-0" data-node="0">
-    <rect x="355.0" y="28.0" width="130" height="54" rx="6" fill="rgba(0, 184, 163, 0.18)" stroke="#00b8a3" stroke-width="2" filter="url(#glow-easy)"/>
-    <text x="365.0" y="47.0" fill="#00b8a3" font-size="12" font-weight="700" font-family="monospace">Node 0 (Root)</text>
-    <text x="475.0" y="47.0" fill="#9ea0a5" font-size="10" font-family="monospace" text-anchor="end">0000₂</text>
-    <line x1="361.0" y1="54.0" x2="479.0" y2="54.0" stroke="#00b8a3" stroke-width="0.6" stroke-opacity="0.4"/>
-    <text x="365.0" y="70.0" fill="#2dd4bf" font-size="11" font-weight="600" font-family="monospace">Root (Empty)</text>
-    <text x="475.0" y="70.0" fill="#64748b" font-size="10" font-family="monospace" text-anchor="end">k=0</text>
-    <rect class="node-step-badge" x="357.0" y="17.0" width="126" height="16" rx="8" fill="#00b8a3" stroke="#141414" stroke-width="1.5"/>
-    <text class="node-step-text" x="420" y="29.0" fill="#141414" font-size="9" font-weight="800" font-family="sans-serif" text-anchor="middle">Step 4: Root 0 (Done)</text>
-  </g>
-  <g class="tree-node-group " id="qry-node-1" data-node="1">
-    <rect x="35.0" y="128.0" width="130" height="54" rx="6" fill="#1e1e1e" stroke="#3c3c3c" stroke-width="1"/>
-    <text x="45.0" y="147.0" fill="#eff1f6" font-size="12" font-weight="700" font-family="monospace">tree[1]</text>
-    <text x="155.0" y="147.0" fill="#9ea0a5" font-size="10" font-family="monospace" text-anchor="end">0001₂</text>
-    <line x1="41.0" y1="154.0" x2="159.0" y2="154.0" stroke="#3c3c3c" stroke-width="0.6" stroke-opacity="0.4"/>
-    <text x="45.0" y="170.0" fill="#2dd4bf" font-size="11" font-weight="600" font-family="monospace">(0, 1]</text>
-    <text x="155.0" y="170.0" fill="#64748b" font-size="10" font-family="monospace" text-anchor="end">k=1</text>
-  </g>
-  <g class="tree-node-group " id="qry-node-2" data-node="2">
-    <rect x="195.0" y="128.0" width="130" height="54" rx="6" fill="#1e1e1e" stroke="#3c3c3c" stroke-width="1"/>
-    <text x="205.0" y="147.0" fill="#eff1f6" font-size="12" font-weight="700" font-family="monospace">tree[2]</text>
-    <text x="315.0" y="147.0" fill="#9ea0a5" font-size="10" font-family="monospace" text-anchor="end">0010₂</text>
-    <line x1="201.0" y1="154.0" x2="319.0" y2="154.0" stroke="#3c3c3c" stroke-width="0.6" stroke-opacity="0.4"/>
-    <text x="205.0" y="170.0" fill="#2dd4bf" font-size="11" font-weight="600" font-family="monospace">(0, 2]</text>
-    <text x="315.0" y="170.0" fill="#64748b" font-size="10" font-family="monospace" text-anchor="end">k=2</text>
-  </g>
-  <g class="tree-node-group node-highlight-query" id="qry-node-4" data-node="4">
-    <rect x="455.0" y="128.0" width="130" height="54" rx="6" fill="rgba(0, 184, 163, 0.18)" stroke="#00b8a3" stroke-width="2" filter="url(#glow-easy)"/>
-    <text x="465.0" y="147.0" fill="#00b8a3" font-size="12" font-weight="700" font-family="monospace">tree[4]</text>
-    <text x="575.0" y="147.0" fill="#9ea0a5" font-size="10" font-family="monospace" text-anchor="end">0100₂</text>
-    <line x1="461.0" y1="154.0" x2="579.0" y2="154.0" stroke="#00b8a3" stroke-width="0.6" stroke-opacity="0.4"/>
-    <text x="465.0" y="170.0" fill="#2dd4bf" font-size="11" font-weight="600" font-family="monospace">(0, 4]</text>
-    <text x="575.0" y="170.0" fill="#64748b" font-size="10" font-family="monospace" text-anchor="end">k=4</text>
-    <rect class="node-step-badge" x="457.0" y="117.0" width="126" height="16" rx="8" fill="#00b8a3" stroke="#141414" stroke-width="1.5"/>
-    <text class="node-step-text" x="520" y="129.0" fill="#141414" font-size="9" font-weight="800" font-family="sans-serif" text-anchor="middle">Step 3: adds (0, 4]</text>
+    <circle cx="70" cy="55" r="25" fill="rgba(0, 184, 163, 0.22)" stroke="#00b8a3" stroke-width="2.6" filter="url(#glow-easy-qry)"/>
+    <text x="70" y="60" fill="#00b8a3" font-size="14" font-weight="800" font-family="monospace" text-anchor="middle" pointer-events="none">0</text>
+    <rect x="40" y="83" width="60" height="16" rx="4" fill="#1c1c1c" stroke="#333" stroke-width="0.8"/>
+    <text x="70" y="94" fill="#2dd4bf" font-size="9" font-weight="700" font-family="monospace" text-anchor="middle" pointer-events="none">Root (0)</text>
+    <text x="70" y="26" fill="#9ea0a5" font-size="9" font-family="monospace" text-anchor="middle" pointer-events="none">0000₂</text>
+    <rect class="node-step-badge" x="15.0" y="7" width="110" height="16" rx="8" fill="#00b8a3" stroke="#141414" stroke-width="1.5"/>
+    <text class="node-step-text" x="70" y="19" fill="#141414" font-size="8.5" font-weight="800" font-family="sans-serif" text-anchor="middle">Sentinel Root 0 (Done)</text>
   </g>
   <g class="tree-node-group " id="qry-node-8" data-node="8">
-    <rect x="675.0" y="128.0" width="130" height="54" rx="6" fill="#1e1e1e" stroke="#3c3c3c" stroke-width="1"/>
-    <text x="685.0" y="147.0" fill="#eff1f6" font-size="12" font-weight="700" font-family="monospace">tree[8]</text>
-    <text x="795.0" y="147.0" fill="#9ea0a5" font-size="10" font-family="monospace" text-anchor="end">1000₂</text>
-    <line x1="681.0" y1="154.0" x2="799.0" y2="154.0" stroke="#3c3c3c" stroke-width="0.6" stroke-opacity="0.4"/>
-    <text x="685.0" y="170.0" fill="#2dd4bf" font-size="11" font-weight="600" font-family="monospace">(0, 8]</text>
-    <text x="795.0" y="170.0" fill="#64748b" font-size="10" font-family="monospace" text-anchor="end">k=8</text>
+    <circle cx="725" cy="55" r="23" fill="#1e1e1e" stroke="#ffa116" stroke-width="1.8"/>
+    <text x="725" y="60" fill="#ffffff" font-size="14" font-weight="800" font-family="monospace" text-anchor="middle" pointer-events="none">8</text>
+    <rect x="695" y="83" width="60" height="16" rx="4" fill="#1c1c1c" stroke="#333" stroke-width="0.8"/>
+    <text x="725" y="94" fill="#2dd4bf" font-size="9" font-weight="700" font-family="monospace" text-anchor="middle" pointer-events="none">(0, 8]</text>
+    <text x="725" y="26" fill="#9ea0a5" font-size="9" font-family="monospace" text-anchor="middle" pointer-events="none">1000₂</text>
   </g>
-  <g class="tree-node-group " id="qry-node-3" data-node="3">
-    <rect x="195.0" y="228.0" width="130" height="54" rx="6" fill="#1e1e1e" stroke="#3c3c3c" stroke-width="1"/>
-    <text x="205.0" y="247.0" fill="#eff1f6" font-size="12" font-weight="700" font-family="monospace">tree[3]</text>
-    <text x="315.0" y="247.0" fill="#9ea0a5" font-size="10" font-family="monospace" text-anchor="end">0011₂</text>
-    <line x1="201.0" y1="254.0" x2="319.0" y2="254.0" stroke="#3c3c3c" stroke-width="0.6" stroke-opacity="0.4"/>
-    <text x="205.0" y="270.0" fill="#2dd4bf" font-size="11" font-weight="600" font-family="monospace">(2, 3]</text>
-    <text x="315.0" y="270.0" fill="#64748b" font-size="10" font-family="monospace" text-anchor="end">k=1</text>
+  <g class="tree-node-group node-highlight-query" id="qry-node-4" data-node="4">
+    <circle cx="385" cy="140" r="25" fill="rgba(0, 184, 163, 0.22)" stroke="#00b8a3" stroke-width="2.6" filter="url(#glow-easy-qry)"/>
+    <text x="385" y="145" fill="#00b8a3" font-size="14" font-weight="800" font-family="monospace" text-anchor="middle" pointer-events="none">4</text>
+    <rect x="355" y="168" width="60" height="16" rx="4" fill="#1c1c1c" stroke="#333" stroke-width="0.8"/>
+    <text x="385" y="179" fill="#2dd4bf" font-size="9" font-weight="700" font-family="monospace" text-anchor="middle" pointer-events="none">(0, 4]</text>
+    <text x="385" y="111" fill="#9ea0a5" font-size="9" font-family="monospace" text-anchor="middle" pointer-events="none">0100₂</text>
+    <rect class="node-step-badge" x="330.0" y="92" width="110" height="16" rx="8" fill="#00b8a3" stroke="#141414" stroke-width="1.5"/>
+    <text class="node-step-text" x="385" y="104" fill="#141414" font-size="8.5" font-weight="800" font-family="sans-serif" text-anchor="middle">Step 3: adds (0, 4]</text>
   </g>
-  <g class="tree-node-group " id="qry-node-5" data-node="5">
-    <rect x="375.0" y="228.0" width="130" height="54" rx="6" fill="#1e1e1e" stroke="#3c3c3c" stroke-width="1"/>
-    <text x="385.0" y="247.0" fill="#eff1f6" font-size="12" font-weight="700" font-family="monospace">tree[5]</text>
-    <text x="495.0" y="247.0" fill="#9ea0a5" font-size="10" font-family="monospace" text-anchor="end">0101₂</text>
-    <line x1="381.0" y1="254.0" x2="499.0" y2="254.0" stroke="#3c3c3c" stroke-width="0.6" stroke-opacity="0.4"/>
-    <text x="385.0" y="270.0" fill="#2dd4bf" font-size="11" font-weight="600" font-family="monospace">(4, 5]</text>
-    <text x="495.0" y="270.0" fill="#64748b" font-size="10" font-family="monospace" text-anchor="end">k=1</text>
+  <g class="tree-node-group " id="qry-node-2" data-node="2">
+    <circle cx="215" cy="225" r="23" fill="#1e1e1e" stroke="#2dd4bf" stroke-width="1.8"/>
+    <text x="215" y="230" fill="#ffffff" font-size="14" font-weight="800" font-family="monospace" text-anchor="middle" pointer-events="none">2</text>
+    <rect x="185" y="253" width="60" height="16" rx="4" fill="#1c1c1c" stroke="#333" stroke-width="0.8"/>
+    <text x="215" y="264" fill="#2dd4bf" font-size="9" font-weight="700" font-family="monospace" text-anchor="middle" pointer-events="none">(0, 2]</text>
+    <text x="215" y="196" fill="#9ea0a5" font-size="9" font-family="monospace" text-anchor="middle" pointer-events="none">0010₂</text>
   </g>
   <g class="tree-node-group node-highlight-query" id="qry-node-6" data-node="6">
-    <rect x="535.0" y="228.0" width="130" height="54" rx="6" fill="rgba(0, 184, 163, 0.18)" stroke="#00b8a3" stroke-width="2" filter="url(#glow-easy)"/>
-    <text x="545.0" y="247.0" fill="#00b8a3" font-size="12" font-weight="700" font-family="monospace">tree[6]</text>
-    <text x="655.0" y="247.0" fill="#9ea0a5" font-size="10" font-family="monospace" text-anchor="end">0110₂</text>
-    <line x1="541.0" y1="254.0" x2="659.0" y2="254.0" stroke="#00b8a3" stroke-width="0.6" stroke-opacity="0.4"/>
-    <text x="545.0" y="270.0" fill="#2dd4bf" font-size="11" font-weight="600" font-family="monospace">(4, 6]</text>
-    <text x="655.0" y="270.0" fill="#64748b" font-size="10" font-family="monospace" text-anchor="end">k=2</text>
-    <rect class="node-step-badge" x="537.0" y="217.0" width="126" height="16" rx="8" fill="#00b8a3" stroke="#141414" stroke-width="1.5"/>
-    <text class="node-step-text" x="600" y="229.0" fill="#141414" font-size="9" font-weight="800" font-family="sans-serif" text-anchor="middle">Step 2: adds (4, 6]</text>
+    <circle cx="555" cy="225" r="25" fill="rgba(0, 184, 163, 0.22)" stroke="#00b8a3" stroke-width="2.6" filter="url(#glow-easy-qry)"/>
+    <text x="555" y="230" fill="#00b8a3" font-size="14" font-weight="800" font-family="monospace" text-anchor="middle" pointer-events="none">6</text>
+    <rect x="525" y="253" width="60" height="16" rx="4" fill="#1c1c1c" stroke="#333" stroke-width="0.8"/>
+    <text x="555" y="264" fill="#2dd4bf" font-size="9" font-weight="700" font-family="monospace" text-anchor="middle" pointer-events="none">(4, 6]</text>
+    <text x="555" y="196" fill="#9ea0a5" font-size="9" font-family="monospace" text-anchor="middle" pointer-events="none">0110₂</text>
+    <rect class="node-step-badge" x="500.0" y="177" width="110" height="16" rx="8" fill="#00b8a3" stroke="#141414" stroke-width="1.5"/>
+    <text class="node-step-text" x="555" y="189" fill="#141414" font-size="8.5" font-weight="800" font-family="sans-serif" text-anchor="middle">Step 2: adds (4, 6]</text>
+  </g>
+  <g class="tree-node-group " id="qry-node-1" data-node="1">
+    <circle cx="130" cy="310" r="23" fill="#1e1e1e" stroke="#64748b" stroke-width="1.8"/>
+    <text x="130" y="315" fill="#ffffff" font-size="14" font-weight="800" font-family="monospace" text-anchor="middle" pointer-events="none">1</text>
+    <rect x="100" y="338" width="60" height="16" rx="4" fill="#1c1c1c" stroke="#333" stroke-width="0.8"/>
+    <text x="130" y="349" fill="#2dd4bf" font-size="9" font-weight="700" font-family="monospace" text-anchor="middle" pointer-events="none">(0, 1]</text>
+    <text x="130" y="281" fill="#9ea0a5" font-size="9" font-family="monospace" text-anchor="middle" pointer-events="none">0001₂</text>
+  </g>
+  <g class="tree-node-group " id="qry-node-3" data-node="3">
+    <circle cx="300" cy="310" r="23" fill="#1e1e1e" stroke="#64748b" stroke-width="1.8"/>
+    <text x="300" y="315" fill="#ffffff" font-size="14" font-weight="800" font-family="monospace" text-anchor="middle" pointer-events="none">3</text>
+    <rect x="270" y="338" width="60" height="16" rx="4" fill="#1c1c1c" stroke="#333" stroke-width="0.8"/>
+    <text x="300" y="349" fill="#2dd4bf" font-size="9" font-weight="700" font-family="monospace" text-anchor="middle" pointer-events="none">(2, 3]</text>
+    <text x="300" y="281" fill="#9ea0a5" font-size="9" font-family="monospace" text-anchor="middle" pointer-events="none">0011₂</text>
+  </g>
+  <g class="tree-node-group " id="qry-node-5" data-node="5">
+    <circle cx="470" cy="310" r="23" fill="#1e1e1e" stroke="#64748b" stroke-width="1.8"/>
+    <text x="470" y="315" fill="#ffffff" font-size="14" font-weight="800" font-family="monospace" text-anchor="middle" pointer-events="none">5</text>
+    <rect x="440" y="338" width="60" height="16" rx="4" fill="#1c1c1c" stroke="#333" stroke-width="0.8"/>
+    <text x="470" y="349" fill="#2dd4bf" font-size="9" font-weight="700" font-family="monospace" text-anchor="middle" pointer-events="none">(4, 5]</text>
+    <text x="470" y="281" fill="#9ea0a5" font-size="9" font-family="monospace" text-anchor="middle" pointer-events="none">0101₂</text>
   </g>
   <g class="tree-node-group node-highlight-query" id="qry-node-7" data-node="7">
-    <rect x="535.0" y="328.0" width="130" height="54" rx="6" fill="rgba(0, 184, 163, 0.18)" stroke="#00b8a3" stroke-width="2" filter="url(#glow-easy)"/>
-    <text x="545.0" y="347.0" fill="#00b8a3" font-size="12" font-weight="700" font-family="monospace">tree[7]</text>
-    <text x="655.0" y="347.0" fill="#9ea0a5" font-size="10" font-family="monospace" text-anchor="end">0111₂</text>
-    <line x1="541.0" y1="354.0" x2="659.0" y2="354.0" stroke="#00b8a3" stroke-width="0.6" stroke-opacity="0.4"/>
-    <text x="545.0" y="370.0" fill="#2dd4bf" font-size="11" font-weight="600" font-family="monospace">(6, 7]</text>
-    <text x="655.0" y="370.0" fill="#64748b" font-size="10" font-family="monospace" text-anchor="end">k=1</text>
-    <rect class="node-step-badge" x="537.0" y="317.0" width="126" height="16" rx="8" fill="#00b8a3" stroke="#141414" stroke-width="1.5"/>
-    <text class="node-step-text" x="600" y="329.0" fill="#141414" font-size="9" font-weight="800" font-family="sans-serif" text-anchor="middle">Step 1: adds (6, 7]</text>
+    <circle cx="640" cy="310" r="25" fill="rgba(0, 184, 163, 0.22)" stroke="#00b8a3" stroke-width="2.6" filter="url(#glow-easy-qry)"/>
+    <text x="640" y="315" fill="#00b8a3" font-size="14" font-weight="800" font-family="monospace" text-anchor="middle" pointer-events="none">7</text>
+    <rect x="610" y="338" width="60" height="16" rx="4" fill="#1c1c1c" stroke="#333" stroke-width="0.8"/>
+    <text x="640" y="349" fill="#2dd4bf" font-size="9" font-weight="700" font-family="monospace" text-anchor="middle" pointer-events="none">(6, 7]</text>
+    <text x="640" y="281" fill="#9ea0a5" font-size="9" font-family="monospace" text-anchor="middle" pointer-events="none">0111₂</text>
+    <rect class="node-step-badge" x="585.0" y="262" width="110" height="16" rx="8" fill="#00b8a3" stroke="#141414" stroke-width="1.5"/>
+    <text class="node-step-text" x="640" y="274" fill="#141414" font-size="8.5" font-weight="800" font-family="sans-serif" text-anchor="middle">Step 1: adds (6, 7]</text>
   </g>
 </svg>
               </div>
@@ -10735,12 +10853,12 @@ Result: len(tails) = 3  (Optimal nesting: [2,3] -&gt; [5,4] -&gt; [6,7])</code><
             </div>
           </article>
 
-          <!-- PATTERN CARD 5: INTERACTIVE BIT STEP TRACER -->
+          <!-- PATTERN CARD 6: INTERACTIVE BIT STEP TRACER -->
           <article class="pattern-card" id="fenwick-visual-interactive">
             <div class="pattern-card-head">
-              <h3>Interactive BIT Step Tracer: Real-Time Animation</h3>
+              <h3>Interactive BIT Step Tracer: Real-Time Animation Across Binary Trees</h3>
             </div>
-            <p class="use-when"><strong>Use when:</strong> Interactively testing any arbitrary index <em>i</em>, observing how the binary bits flip at each step, and animating the update and query traversal paths.</p>
+            <p class="use-when"><strong>Use when:</strong> Interactively testing any arbitrary index <em>i</em>, observing how the binary bits flip at each step, and animating the update and query traversal paths directly on circular binary tree nodes.</p>
 
             <div class="bit-interactive-widget" id="bit-interactive-widget">
               <!-- Controls Header -->
@@ -10749,7 +10867,7 @@ Result: len(tails) = 3  (Optimal nesting: [2,3] -&gt; [5,4] -&gt; [6,7])</code><
                   <span class="sim-pulse-dot" aria-hidden="true"></span>
                   <h4 style="font-size: 0.92rem; color: #fff;">Interactive BIT Traversal Simulator</h4>
                 </div>
-                <div style="font-size: 0.74rem; color: var(--muted);">Click nodes in the diagrams or use controls below:</div>
+                <div style="font-size: 0.74rem; color: var(--muted);">Click circular nodes in the diagrams or use controls below:</div>
               </div>
 
               <!-- Input and Quick Select -->
@@ -10814,12 +10932,12 @@ Result: len(tails) = 3  (Optimal nesting: [2,3] -&gt; [5,4] -&gt; [6,7])</code><
 
               <!-- Live Step Education Log -->
               <div class="bit-step-log" id="bit-step-log">
-                <strong>Initialized:</strong> Ready to trace index 7. Click <code>Trace query(i)</code> or <code>Trace update(i)</code> to animate hops through the tree!
+                <strong>Initialized:</strong> Ready to trace index 7. Click <code>Trace query(i)</code> or <code>Trace update(i)</code> to animate hops through the binary tree!
               </div>
             </div>
           </article>
 
-          <!-- PATTERN CARD 6: TEMPLATE IMPLEMENTATION -->
+          <!-- PATTERN CARD 7: TEMPLATE IMPLEMENTATION -->
           <article class="pattern-card" id="fenwick-visual-template">
             <div class="pattern-card-head">
               <h3>Production Python 3 BIT Template (Strict camelCase)</h3>

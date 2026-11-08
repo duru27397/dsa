@@ -4086,31 +4086,73 @@ h1 {
   stroke: var(--orange) !important;
 }
 
-.tree-node-group {
+.tree-node-group,
+.bin-node-group {
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
-.tree-node-group rect {
+.tree-node-group circle,
+.tree-node-group rect,
+.bin-node-group circle,
+.bin-node-group rect {
   transition: all 0.2s ease;
 }
 
-.tree-node-group:hover rect {
+.tree-node-group:hover circle,
+.bin-node-group:hover circle {
+  filter: drop-shadow(0 0 10px rgba(255, 161, 22, 0.7));
+}
+
+.tree-node-group:hover rect,
+.bin-node-group:hover rect {
   filter: drop-shadow(0 0 8px rgba(255, 161, 22, 0.5));
 }
 
-.tree-node-group.node-highlight rect {
+.tree-node-group.node-highlight circle,
+.bin-node-group.node-highlight circle {
+  stroke: var(--orange) !important;
+  fill: rgba(255, 161, 22, 0.35) !important;
+  stroke-width: 3px !important;
+  filter: drop-shadow(0 0 12px rgba(255, 161, 22, 0.85)) !important;
+}
+
+.tree-node-group.node-highlight-query circle,
+.bin-node-group.node-highlight-query circle {
+  stroke: var(--easy) !important;
+  fill: rgba(0, 184, 163, 0.35) !important;
+  stroke-width: 3px !important;
+  filter: drop-shadow(0 0 12px rgba(0, 184, 163, 0.85)) !important;
+}
+
+.tree-node-group.node-highlight rect,
+.bin-node-group.node-highlight rect {
   stroke: var(--orange) !important;
   fill: rgba(255, 161, 22, 0.25) !important;
-  stroke-width: 2.5 !important;
+  stroke-width: 2.5px !important;
   filter: drop-shadow(0 0 10px rgba(255, 161, 22, 0.65)) !important;
 }
 
-.tree-node-group.node-highlight-query rect {
+.tree-node-group.node-highlight-query rect,
+.bin-node-group.node-highlight-query rect {
   stroke: var(--easy) !important;
   fill: rgba(0, 184, 163, 0.25) !important;
-  stroke-width: 2.5 !important;
+  stroke-width: 2.5px !important;
   filter: drop-shadow(0 0 10px rgba(0, 184, 163, 0.65)) !important;
+}
+
+.bin-tree-edge {
+  transition: all 0.25s ease;
+}
+
+.bin-tree-edge.edge-path {
+  stroke: var(--orange) !important;
+  stroke-width: 3.2px !important;
+}
+
+.bin-tree-edge.edge-path-query {
+  stroke: var(--easy) !important;
+  stroke-width: 3.2px !important;
 }
 
 .tree-edge {
