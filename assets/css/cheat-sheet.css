@@ -4032,6 +4032,11 @@ h1 {
   height: auto;
 }
 
+/* Full 0..30 query tree: keep node + binary labels legible; wrap scrolls horizontally */
+.bit-q30-svg {
+  min-width: 1400px;
+}
+
 .bit-cov-svg {
   min-width: 720px;
 }
@@ -4223,6 +4228,12 @@ h1 {
   background: rgba(255, 161, 22, 0.18);
   border: 1px solid var(--orange);
   color: var(--orange);
+}
+
+.chunk-sky {
+  background: rgba(156, 220, 254, 0.15);
+  border: 1px solid #9cdcfe;
+  color: #9cdcfe;
 }
 
 .chunk-total {

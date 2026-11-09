@@ -1025,6 +1025,10 @@
                 <span class="leaf-dot">•</span>
                 <span class="nav-title">Query Tree (Stitching)</span>
               </a>
+              <a class="nav-item l3-link" href="#range-fenwick-visual-sub" data-target-sub="fenwick-visual-query-tree-30">
+                <span class="leaf-dot">•</span>
+                <span class="nav-title">Query Tree 0–30 (Binary)</span>
+              </a>
               <a class="nav-item l3-link" href="#range-fenwick-visual-sub" data-target-sub="fenwick-visual-interactive">
                 <span class="leaf-dot">•</span>
                 <span class="nav-title">Interactive BIT Tracer</span>
@@ -10848,6 +10852,266 @@ Result: len(tails) = 3  (Optimal nesting: [2,3] -&gt; [5,4] -&gt; [6,7])</code><
                 <div style="font-size: 0.77rem; color: var(--muted); line-height: 1.5; margin-top: 0.2rem;">
                   Notice how the intervals <code>(0, 4]</code>, <code>(4, 6]</code>, and <code>(6, 7]</code> tile the range <code>(0, 7]</code> without a single gap or overlap!
                   Similarly, for $N = 16$: <code>query(13)</code> hops <code>13 &rarr; 12 &rarr; 8 &rarr; 0</code>, stitching <code>(0, 8] + (8, 12] + (12, 13] = (0, 13]</code>.
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <!-- PATTERN CARD 5b: FULL QUERY TREE FOR INDICES 0..30 -->
+          <article class="pattern-card" id="fenwick-visual-query-tree-30">
+            <div class="pattern-card-head">
+              <h3>Query Tree for N = 30: Every Index with Its Binary Form</h3>
+            </div>
+            <p class="use-when"><strong>Use when:</strong> Seeing the whole query forest at once &mdash; which <code>tree[i]</code> cells a prefix query touches, and why the hop count equals the number of set bits.</p>
+
+            <div class="why-box" style="padding: 1.35rem;">
+              <strong>Parent = i - (i &amp; -i) &bull; Row = popcount(i) &bull; Column = i</strong>
+              <p style="line-height: 1.65; margin-bottom: 0.85rem;">
+                Every index <code>1..30</code> points to <code>i - lowbit(i)</code>, which <b style="color: var(--text);">clears its lowest set bit</b>. <b style="color: var(--text);">Node 0</b> is a dummy root (sentinel), not an array slot.
+                Each hop removes exactly one 1-bit, so the row a node sits in is its popcount and <code>query(i)</code> takes popcount(i) hops.
+                Root 0's children are the powers of two <b style="color: var(--text);">1, 2, 4, 8, 16</b>; node <code>i</code>'s children are <code>i + 2^j</code> for every <code>2^j &lt; lowbit(i)</code> (e.g. 24 = <code>11000₂</code> &rarr; 25, 26, 28).
+                Hover a node for its interval <code>(i - lowbit(i), i]</code>.
+              </p>
+
+              <div class="bit-svg-wrap" role="region" aria-label="Query tree for indices 0 to 30" tabindex="0">
+<svg class="bit-svg bit-q30-svg" id="bit-query-tree-30-svg" viewBox="0 0 1572 520" width="100%" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Fenwick query tree for indices 0 to 30; parent of i is i minus lowbit of i; query(29) path highlighted">
+  <defs>
+    <marker id="q30-arr-default" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 1 L 10 5 L 0 9 z" fill="#64748b"/></marker>
+    <marker id="q30-arr-easy" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#00b8a3"/></marker>
+    <filter id="glow-easy-q30" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="4" result="blur"/><feComposite in="SourceGraphic" in2="blur" operator="over"/></filter>
+  </defs>
+  <text x="4" y="23" fill="#64748b" font-size="9" font-family="monospace" text-anchor="start">0 set bits</text>
+  <text x="4" y="128" fill="#64748b" font-size="9" font-family="monospace" text-anchor="start">1 set bit</text>
+  <text x="4" y="233" fill="#64748b" font-size="9" font-family="monospace" text-anchor="start">2 set bits</text>
+  <text x="4" y="338" fill="#64748b" font-size="9" font-family="monospace" text-anchor="start">3 set bits</text>
+  <text x="4" y="443" fill="#64748b" font-size="9" font-family="monospace" text-anchor="start">4 set bits</text>
+  <!-- Directed Query Edges: parent = i - lowbit(i) -->
+  <line id="q30-edge-1-0" x1="75.7" y1="133.3" x2="48.0" y2="75.3" stroke="#383838" stroke-width="1.6" stroke-dasharray="3,3" marker-end="url(#q30-arr-default)"/>
+  <line id="q30-edge-2-0" x1="119.4" y1="137.6" x2="55.3" y2="70.3" stroke="#383838" stroke-width="1.6" stroke-dasharray="3,3" marker-end="url(#q30-arr-default)"/>
+  <line id="q30-edge-3-2" x1="175.7" y1="238.3" x2="148.0" y2="180.3" stroke="#383838" stroke-width="1.6" stroke-dasharray="3,3" marker-end="url(#q30-arr-default)"/>
+  <line id="q30-edge-4-0" x1="214.8" y1="143.8" x2="60.8" y2="63.0" stroke="#383838" stroke-width="1.6" stroke-dasharray="3,3" marker-end="url(#q30-arr-default)"/>
+  <line id="q30-edge-5-4" x1="275.7" y1="238.3" x2="248.0" y2="180.3" stroke="#383838" stroke-width="1.6" stroke-dasharray="3,3" marker-end="url(#q30-arr-default)"/>
+  <line id="q30-edge-6-4" x1="319.4" y1="242.6" x2="255.3" y2="175.3" stroke="#383838" stroke-width="1.6" stroke-dasharray="3,3" marker-end="url(#q30-arr-default)"/>
+  <line id="q30-edge-7-6" x1="375.7" y1="343.3" x2="348.0" y2="285.3" stroke="#383838" stroke-width="1.6" stroke-dasharray="3,3" marker-end="url(#q30-arr-default)"/>
+  <line id="q30-edge-8-0" x1="412.8" y1="148.9" x2="63.1" y2="57.1" stroke="#383838" stroke-width="1.6" stroke-dasharray="3,3" marker-end="url(#q30-arr-default)"/>
+  <line id="q30-edge-9-8" x1="475.7" y1="238.3" x2="448.0" y2="180.3" stroke="#383838" stroke-width="1.6" stroke-dasharray="3,3" marker-end="url(#q30-arr-default)"/>
+  <line id="q30-edge-10-8" x1="519.4" y1="242.6" x2="455.3" y2="175.3" stroke="#383838" stroke-width="1.6" stroke-dasharray="3,3" marker-end="url(#q30-arr-default)"/>
+  <line id="q30-edge-11-10" x1="575.7" y1="343.3" x2="548.0" y2="285.3" stroke="#383838" stroke-width="1.6" stroke-dasharray="3,3" marker-end="url(#q30-arr-default)"/>
+  <line id="q30-edge-12-8" x1="614.8" y1="248.8" x2="460.8" y2="168.0" stroke="#383838" stroke-width="1.6" stroke-dasharray="3,3" marker-end="url(#q30-arr-default)"/>
+  <line id="q30-edge-13-12" x1="675.7" y1="343.3" x2="648.0" y2="285.3" stroke="#383838" stroke-width="1.6" stroke-dasharray="3,3" marker-end="url(#q30-arr-default)"/>
+  <line id="q30-edge-14-12" x1="719.4" y1="347.6" x2="655.3" y2="280.3" stroke="#383838" stroke-width="1.6" stroke-dasharray="3,3" marker-end="url(#q30-arr-default)"/>
+  <line id="q30-edge-15-14" x1="775.7" y1="448.3" x2="748.0" y2="390.3" stroke="#383838" stroke-width="1.6" stroke-dasharray="3,3" marker-end="url(#q30-arr-default)"/>
+  <line id="q30-edge-16-0" x1="812.2" y1="151.9" x2="63.8" y2="53.6" stroke="#00b8a3" stroke-width="2.8" marker-end="url(#q30-arr-easy)" filter="url(#glow-easy-q30)"/>
+  <line id="q30-edge-17-16" x1="875.7" y1="238.3" x2="848.0" y2="180.3" stroke="#383838" stroke-width="1.6" stroke-dasharray="3,3" marker-end="url(#q30-arr-default)"/>
+  <line id="q30-edge-18-16" x1="919.4" y1="242.6" x2="855.3" y2="175.3" stroke="#383838" stroke-width="1.6" stroke-dasharray="3,3" marker-end="url(#q30-arr-default)"/>
+  <line id="q30-edge-19-18" x1="975.7" y1="343.3" x2="948.0" y2="285.3" stroke="#383838" stroke-width="1.6" stroke-dasharray="3,3" marker-end="url(#q30-arr-default)"/>
+  <line id="q30-edge-20-16" x1="1014.8" y1="248.8" x2="860.8" y2="168.0" stroke="#383838" stroke-width="1.6" stroke-dasharray="3,3" marker-end="url(#q30-arr-default)"/>
+  <line id="q30-edge-21-20" x1="1075.7" y1="343.3" x2="1048.0" y2="285.3" stroke="#383838" stroke-width="1.6" stroke-dasharray="3,3" marker-end="url(#q30-arr-default)"/>
+  <line id="q30-edge-22-20" x1="1119.4" y1="347.6" x2="1055.3" y2="280.3" stroke="#383838" stroke-width="1.6" stroke-dasharray="3,3" marker-end="url(#q30-arr-default)"/>
+  <line id="q30-edge-23-22" x1="1175.7" y1="448.3" x2="1148.0" y2="390.3" stroke="#383838" stroke-width="1.6" stroke-dasharray="3,3" marker-end="url(#q30-arr-default)"/>
+  <line id="q30-edge-24-16" x1="1212.8" y1="253.9" x2="863.1" y2="162.1" stroke="#00b8a3" stroke-width="2.8" marker-end="url(#q30-arr-easy)" filter="url(#glow-easy-q30)"/>
+  <line id="q30-edge-25-24" x1="1275.7" y1="343.3" x2="1248.0" y2="285.3" stroke="#383838" stroke-width="1.6" stroke-dasharray="3,3" marker-end="url(#q30-arr-default)"/>
+  <line id="q30-edge-26-24" x1="1319.4" y1="347.6" x2="1255.3" y2="280.3" stroke="#383838" stroke-width="1.6" stroke-dasharray="3,3" marker-end="url(#q30-arr-default)"/>
+  <line id="q30-edge-27-26" x1="1375.7" y1="448.3" x2="1348.0" y2="390.3" stroke="#383838" stroke-width="1.6" stroke-dasharray="3,3" marker-end="url(#q30-arr-default)"/>
+  <line id="q30-edge-28-24" x1="1414.8" y1="353.8" x2="1260.8" y2="273.0" stroke="#00b8a3" stroke-width="2.8" marker-end="url(#q30-arr-easy)" filter="url(#glow-easy-q30)"/>
+  <line id="q30-edge-29-28" x1="1475.7" y1="448.3" x2="1448.0" y2="390.3" stroke="#00b8a3" stroke-width="2.8" marker-end="url(#q30-arr-easy)" filter="url(#glow-easy-q30)"/>
+  <line id="q30-edge-30-28" x1="1519.4" y1="452.6" x2="1455.3" y2="385.3" stroke="#383838" stroke-width="1.6" stroke-dasharray="3,3" marker-end="url(#q30-arr-default)"/>
+  <!-- Circular Nodes: index + 5-bit binary -->
+  <g id="q30-node-0" data-node="0"><title>Sentinel root 0: query stops here</title>
+    <circle cx="36" cy="50" r="22" fill="rgba(0, 184, 163, 0.22)" stroke="#00b8a3" stroke-width="2.6" filter="url(#glow-easy-q30)"/>
+    <text x="36" y="52" fill="#00b8a3" font-size="14" font-weight="800" font-family="monospace" text-anchor="middle" pointer-events="none">0</text>
+    <text x="36" y="63" fill="#9ea0a5" font-size="8.5" font-family="monospace" text-anchor="middle" pointer-events="none">00000</text>
+  </g>
+  <g id="q30-node-1" data-node="1"><title>tree[1] covers (0, 1] · lowbit = 1 · parent = 0</title>
+    <circle cx="86" cy="155" r="22" fill="#1e1e1e" stroke="#ffa116" stroke-width="1.8"/>
+    <text x="86" y="157" fill="#ffffff" font-size="14" font-weight="800" font-family="monospace" text-anchor="middle" pointer-events="none">1</text>
+    <text x="86" y="168" fill="#9ea0a5" font-size="8.5" font-family="monospace" text-anchor="middle" pointer-events="none">00001</text>
+  </g>
+  <g id="q30-node-2" data-node="2"><title>tree[2] covers (0, 2] · lowbit = 2 · parent = 0</title>
+    <circle cx="136" cy="155" r="22" fill="#1e1e1e" stroke="#ffa116" stroke-width="1.8"/>
+    <text x="136" y="157" fill="#ffffff" font-size="14" font-weight="800" font-family="monospace" text-anchor="middle" pointer-events="none">2</text>
+    <text x="136" y="168" fill="#9ea0a5" font-size="8.5" font-family="monospace" text-anchor="middle" pointer-events="none">00010</text>
+  </g>
+  <g id="q30-node-3" data-node="3"><title>tree[3] covers (2, 3] · lowbit = 1 · parent = 2</title>
+    <circle cx="186" cy="260" r="22" fill="#1e1e1e" stroke="#2dd4bf" stroke-width="1.8"/>
+    <text x="186" y="262" fill="#ffffff" font-size="14" font-weight="800" font-family="monospace" text-anchor="middle" pointer-events="none">3</text>
+    <text x="186" y="273" fill="#9ea0a5" font-size="8.5" font-family="monospace" text-anchor="middle" pointer-events="none">00011</text>
+  </g>
+  <g id="q30-node-4" data-node="4"><title>tree[4] covers (0, 4] · lowbit = 4 · parent = 0</title>
+    <circle cx="236" cy="155" r="22" fill="#1e1e1e" stroke="#ffa116" stroke-width="1.8"/>
+    <text x="236" y="157" fill="#ffffff" font-size="14" font-weight="800" font-family="monospace" text-anchor="middle" pointer-events="none">4</text>
+    <text x="236" y="168" fill="#9ea0a5" font-size="8.5" font-family="monospace" text-anchor="middle" pointer-events="none">00100</text>
+  </g>
+  <g id="q30-node-5" data-node="5"><title>tree[5] covers (4, 5] · lowbit = 1 · parent = 4</title>
+    <circle cx="286" cy="260" r="22" fill="#1e1e1e" stroke="#2dd4bf" stroke-width="1.8"/>
+    <text x="286" y="262" fill="#ffffff" font-size="14" font-weight="800" font-family="monospace" text-anchor="middle" pointer-events="none">5</text>
+    <text x="286" y="273" fill="#9ea0a5" font-size="8.5" font-family="monospace" text-anchor="middle" pointer-events="none">00101</text>
+  </g>
+  <g id="q30-node-6" data-node="6"><title>tree[6] covers (4, 6] · lowbit = 2 · parent = 4</title>
+    <circle cx="336" cy="260" r="22" fill="#1e1e1e" stroke="#2dd4bf" stroke-width="1.8"/>
+    <text x="336" y="262" fill="#ffffff" font-size="14" font-weight="800" font-family="monospace" text-anchor="middle" pointer-events="none">6</text>
+    <text x="336" y="273" fill="#9ea0a5" font-size="8.5" font-family="monospace" text-anchor="middle" pointer-events="none">00110</text>
+  </g>
+  <g id="q30-node-7" data-node="7"><title>tree[7] covers (6, 7] · lowbit = 1 · parent = 6</title>
+    <circle cx="386" cy="365" r="22" fill="#1e1e1e" stroke="#c586c0" stroke-width="1.8"/>
+    <text x="386" y="367" fill="#ffffff" font-size="14" font-weight="800" font-family="monospace" text-anchor="middle" pointer-events="none">7</text>
+    <text x="386" y="378" fill="#9ea0a5" font-size="8.5" font-family="monospace" text-anchor="middle" pointer-events="none">00111</text>
+  </g>
+  <g id="q30-node-8" data-node="8"><title>tree[8] covers (0, 8] · lowbit = 8 · parent = 0</title>
+    <circle cx="436" cy="155" r="22" fill="#1e1e1e" stroke="#ffa116" stroke-width="1.8"/>
+    <text x="436" y="157" fill="#ffffff" font-size="14" font-weight="800" font-family="monospace" text-anchor="middle" pointer-events="none">8</text>
+    <text x="436" y="168" fill="#9ea0a5" font-size="8.5" font-family="monospace" text-anchor="middle" pointer-events="none">01000</text>
+  </g>
+  <g id="q30-node-9" data-node="9"><title>tree[9] covers (8, 9] · lowbit = 1 · parent = 8</title>
+    <circle cx="486" cy="260" r="22" fill="#1e1e1e" stroke="#2dd4bf" stroke-width="1.8"/>
+    <text x="486" y="262" fill="#ffffff" font-size="14" font-weight="800" font-family="monospace" text-anchor="middle" pointer-events="none">9</text>
+    <text x="486" y="273" fill="#9ea0a5" font-size="8.5" font-family="monospace" text-anchor="middle" pointer-events="none">01001</text>
+  </g>
+  <g id="q30-node-10" data-node="10"><title>tree[10] covers (8, 10] · lowbit = 2 · parent = 8</title>
+    <circle cx="536" cy="260" r="22" fill="#1e1e1e" stroke="#2dd4bf" stroke-width="1.8"/>
+    <text x="536" y="262" fill="#ffffff" font-size="14" font-weight="800" font-family="monospace" text-anchor="middle" pointer-events="none">10</text>
+    <text x="536" y="273" fill="#9ea0a5" font-size="8.5" font-family="monospace" text-anchor="middle" pointer-events="none">01010</text>
+  </g>
+  <g id="q30-node-11" data-node="11"><title>tree[11] covers (10, 11] · lowbit = 1 · parent = 10</title>
+    <circle cx="586" cy="365" r="22" fill="#1e1e1e" stroke="#c586c0" stroke-width="1.8"/>
+    <text x="586" y="367" fill="#ffffff" font-size="14" font-weight="800" font-family="monospace" text-anchor="middle" pointer-events="none">11</text>
+    <text x="586" y="378" fill="#9ea0a5" font-size="8.5" font-family="monospace" text-anchor="middle" pointer-events="none">01011</text>
+  </g>
+  <g id="q30-node-12" data-node="12"><title>tree[12] covers (8, 12] · lowbit = 4 · parent = 8</title>
+    <circle cx="636" cy="260" r="22" fill="#1e1e1e" stroke="#2dd4bf" stroke-width="1.8"/>
+    <text x="636" y="262" fill="#ffffff" font-size="14" font-weight="800" font-family="monospace" text-anchor="middle" pointer-events="none">12</text>
+    <text x="636" y="273" fill="#9ea0a5" font-size="8.5" font-family="monospace" text-anchor="middle" pointer-events="none">01100</text>
+  </g>
+  <g id="q30-node-13" data-node="13"><title>tree[13] covers (12, 13] · lowbit = 1 · parent = 12</title>
+    <circle cx="686" cy="365" r="22" fill="#1e1e1e" stroke="#c586c0" stroke-width="1.8"/>
+    <text x="686" y="367" fill="#ffffff" font-size="14" font-weight="800" font-family="monospace" text-anchor="middle" pointer-events="none">13</text>
+    <text x="686" y="378" fill="#9ea0a5" font-size="8.5" font-family="monospace" text-anchor="middle" pointer-events="none">01101</text>
+  </g>
+  <g id="q30-node-14" data-node="14"><title>tree[14] covers (12, 14] · lowbit = 2 · parent = 12</title>
+    <circle cx="736" cy="365" r="22" fill="#1e1e1e" stroke="#c586c0" stroke-width="1.8"/>
+    <text x="736" y="367" fill="#ffffff" font-size="14" font-weight="800" font-family="monospace" text-anchor="middle" pointer-events="none">14</text>
+    <text x="736" y="378" fill="#9ea0a5" font-size="8.5" font-family="monospace" text-anchor="middle" pointer-events="none">01110</text>
+  </g>
+  <g id="q30-node-15" data-node="15"><title>tree[15] covers (14, 15] · lowbit = 1 · parent = 14</title>
+    <circle cx="786" cy="470" r="22" fill="#1e1e1e" stroke="#64748b" stroke-width="1.8"/>
+    <text x="786" y="472" fill="#ffffff" font-size="14" font-weight="800" font-family="monospace" text-anchor="middle" pointer-events="none">15</text>
+    <text x="786" y="483" fill="#9ea0a5" font-size="8.5" font-family="monospace" text-anchor="middle" pointer-events="none">01111</text>
+  </g>
+  <g id="q30-node-16" data-node="16"><title>tree[16] covers (0, 16] · lowbit = 16 · parent = 0</title>
+    <circle cx="836" cy="155" r="22" fill="rgba(0, 184, 163, 0.22)" stroke="#00b8a3" stroke-width="2.6" filter="url(#glow-easy-q30)"/>
+    <text x="836" y="157" fill="#00b8a3" font-size="14" font-weight="800" font-family="monospace" text-anchor="middle" pointer-events="none">16</text>
+    <text x="836" y="168" fill="#9ea0a5" font-size="8.5" font-family="monospace" text-anchor="middle" pointer-events="none">10000</text>
+  </g>
+  <g id="q30-node-17" data-node="17"><title>tree[17] covers (16, 17] · lowbit = 1 · parent = 16</title>
+    <circle cx="886" cy="260" r="22" fill="#1e1e1e" stroke="#2dd4bf" stroke-width="1.8"/>
+    <text x="886" y="262" fill="#ffffff" font-size="14" font-weight="800" font-family="monospace" text-anchor="middle" pointer-events="none">17</text>
+    <text x="886" y="273" fill="#9ea0a5" font-size="8.5" font-family="monospace" text-anchor="middle" pointer-events="none">10001</text>
+  </g>
+  <g id="q30-node-18" data-node="18"><title>tree[18] covers (16, 18] · lowbit = 2 · parent = 16</title>
+    <circle cx="936" cy="260" r="22" fill="#1e1e1e" stroke="#2dd4bf" stroke-width="1.8"/>
+    <text x="936" y="262" fill="#ffffff" font-size="14" font-weight="800" font-family="monospace" text-anchor="middle" pointer-events="none">18</text>
+    <text x="936" y="273" fill="#9ea0a5" font-size="8.5" font-family="monospace" text-anchor="middle" pointer-events="none">10010</text>
+  </g>
+  <g id="q30-node-19" data-node="19"><title>tree[19] covers (18, 19] · lowbit = 1 · parent = 18</title>
+    <circle cx="986" cy="365" r="22" fill="#1e1e1e" stroke="#c586c0" stroke-width="1.8"/>
+    <text x="986" y="367" fill="#ffffff" font-size="14" font-weight="800" font-family="monospace" text-anchor="middle" pointer-events="none">19</text>
+    <text x="986" y="378" fill="#9ea0a5" font-size="8.5" font-family="monospace" text-anchor="middle" pointer-events="none">10011</text>
+  </g>
+  <g id="q30-node-20" data-node="20"><title>tree[20] covers (16, 20] · lowbit = 4 · parent = 16</title>
+    <circle cx="1036" cy="260" r="22" fill="#1e1e1e" stroke="#2dd4bf" stroke-width="1.8"/>
+    <text x="1036" y="262" fill="#ffffff" font-size="14" font-weight="800" font-family="monospace" text-anchor="middle" pointer-events="none">20</text>
+    <text x="1036" y="273" fill="#9ea0a5" font-size="8.5" font-family="monospace" text-anchor="middle" pointer-events="none">10100</text>
+  </g>
+  <g id="q30-node-21" data-node="21"><title>tree[21] covers (20, 21] · lowbit = 1 · parent = 20</title>
+    <circle cx="1086" cy="365" r="22" fill="#1e1e1e" stroke="#c586c0" stroke-width="1.8"/>
+    <text x="1086" y="367" fill="#ffffff" font-size="14" font-weight="800" font-family="monospace" text-anchor="middle" pointer-events="none">21</text>
+    <text x="1086" y="378" fill="#9ea0a5" font-size="8.5" font-family="monospace" text-anchor="middle" pointer-events="none">10101</text>
+  </g>
+  <g id="q30-node-22" data-node="22"><title>tree[22] covers (20, 22] · lowbit = 2 · parent = 20</title>
+    <circle cx="1136" cy="365" r="22" fill="#1e1e1e" stroke="#c586c0" stroke-width="1.8"/>
+    <text x="1136" y="367" fill="#ffffff" font-size="14" font-weight="800" font-family="monospace" text-anchor="middle" pointer-events="none">22</text>
+    <text x="1136" y="378" fill="#9ea0a5" font-size="8.5" font-family="monospace" text-anchor="middle" pointer-events="none">10110</text>
+  </g>
+  <g id="q30-node-23" data-node="23"><title>tree[23] covers (22, 23] · lowbit = 1 · parent = 22</title>
+    <circle cx="1186" cy="470" r="22" fill="#1e1e1e" stroke="#64748b" stroke-width="1.8"/>
+    <text x="1186" y="472" fill="#ffffff" font-size="14" font-weight="800" font-family="monospace" text-anchor="middle" pointer-events="none">23</text>
+    <text x="1186" y="483" fill="#9ea0a5" font-size="8.5" font-family="monospace" text-anchor="middle" pointer-events="none">10111</text>
+  </g>
+  <g id="q30-node-24" data-node="24"><title>tree[24] covers (16, 24] · lowbit = 8 · parent = 16</title>
+    <circle cx="1236" cy="260" r="22" fill="rgba(0, 184, 163, 0.22)" stroke="#00b8a3" stroke-width="2.6" filter="url(#glow-easy-q30)"/>
+    <text x="1236" y="262" fill="#00b8a3" font-size="14" font-weight="800" font-family="monospace" text-anchor="middle" pointer-events="none">24</text>
+    <text x="1236" y="273" fill="#9ea0a5" font-size="8.5" font-family="monospace" text-anchor="middle" pointer-events="none">11000</text>
+  </g>
+  <g id="q30-node-25" data-node="25"><title>tree[25] covers (24, 25] · lowbit = 1 · parent = 24</title>
+    <circle cx="1286" cy="365" r="22" fill="#1e1e1e" stroke="#c586c0" stroke-width="1.8"/>
+    <text x="1286" y="367" fill="#ffffff" font-size="14" font-weight="800" font-family="monospace" text-anchor="middle" pointer-events="none">25</text>
+    <text x="1286" y="378" fill="#9ea0a5" font-size="8.5" font-family="monospace" text-anchor="middle" pointer-events="none">11001</text>
+  </g>
+  <g id="q30-node-26" data-node="26"><title>tree[26] covers (24, 26] · lowbit = 2 · parent = 24</title>
+    <circle cx="1336" cy="365" r="22" fill="#1e1e1e" stroke="#c586c0" stroke-width="1.8"/>
+    <text x="1336" y="367" fill="#ffffff" font-size="14" font-weight="800" font-family="monospace" text-anchor="middle" pointer-events="none">26</text>
+    <text x="1336" y="378" fill="#9ea0a5" font-size="8.5" font-family="monospace" text-anchor="middle" pointer-events="none">11010</text>
+  </g>
+  <g id="q30-node-27" data-node="27"><title>tree[27] covers (26, 27] · lowbit = 1 · parent = 26</title>
+    <circle cx="1386" cy="470" r="22" fill="#1e1e1e" stroke="#64748b" stroke-width="1.8"/>
+    <text x="1386" y="472" fill="#ffffff" font-size="14" font-weight="800" font-family="monospace" text-anchor="middle" pointer-events="none">27</text>
+    <text x="1386" y="483" fill="#9ea0a5" font-size="8.5" font-family="monospace" text-anchor="middle" pointer-events="none">11011</text>
+  </g>
+  <g id="q30-node-28" data-node="28"><title>tree[28] covers (24, 28] · lowbit = 4 · parent = 24</title>
+    <circle cx="1436" cy="365" r="22" fill="rgba(0, 184, 163, 0.22)" stroke="#00b8a3" stroke-width="2.6" filter="url(#glow-easy-q30)"/>
+    <text x="1436" y="367" fill="#00b8a3" font-size="14" font-weight="800" font-family="monospace" text-anchor="middle" pointer-events="none">28</text>
+    <text x="1436" y="378" fill="#9ea0a5" font-size="8.5" font-family="monospace" text-anchor="middle" pointer-events="none">11100</text>
+  </g>
+  <g id="q30-node-29" data-node="29"><title>tree[29] covers (28, 29] · lowbit = 1 · parent = 28</title>
+    <circle cx="1486" cy="470" r="22" fill="rgba(0, 184, 163, 0.22)" stroke="#00b8a3" stroke-width="2.6" filter="url(#glow-easy-q30)"/>
+    <text x="1486" y="472" fill="#00b8a3" font-size="14" font-weight="800" font-family="monospace" text-anchor="middle" pointer-events="none">29</text>
+    <text x="1486" y="483" fill="#9ea0a5" font-size="8.5" font-family="monospace" text-anchor="middle" pointer-events="none">11101</text>
+  </g>
+  <g id="q30-node-30" data-node="30"><title>tree[30] covers (28, 30] · lowbit = 2 · parent = 28</title>
+    <circle cx="1536" cy="470" r="22" fill="#1e1e1e" stroke="#64748b" stroke-width="1.8"/>
+    <text x="1536" y="472" fill="#ffffff" font-size="14" font-weight="800" font-family="monospace" text-anchor="middle" pointer-events="none">30</text>
+    <text x="1536" y="483" fill="#9ea0a5" font-size="8.5" font-family="monospace" text-anchor="middle" pointer-events="none">11110</text>
+  </g>
+</svg>
+              </div>
+
+              <div class="bit-stitching-box">
+                <div class="bit-stitch-equation">
+                  <strong style="color: var(--easy);">Highlighted path <code>query(29)</code>: 29 &rarr; 28 &rarr; 24 &rarr; 16 &rarr; 0 &nbsp;(<code>11101₂ &rarr; 11100₂ &rarr; 11000₂ &rarr; 10000₂ &rarr; 00000₂</code>)</strong>
+                </div>
+                <div class="bit-stitch-chips">
+                  <div class="bit-stitch-chunk chunk-4">
+                    <span>tree[16]</span>
+                    <span>(0, 16]</span>
+                    <span>(16 items)</span>
+                  </div>
+                  <span style="color: var(--muted); font-size: 1.1rem; font-weight: 700;">+</span>
+                  <div class="bit-stitch-chunk chunk-6">
+                    <span>tree[24]</span>
+                    <span>(16, 24]</span>
+                    <span>(8 items)</span>
+                  </div>
+                  <span style="color: var(--muted); font-size: 1.1rem; font-weight: 700;">+</span>
+                  <div class="bit-stitch-chunk chunk-7">
+                    <span>tree[28]</span>
+                    <span>(24, 28]</span>
+                    <span>(4 items)</span>
+                  </div>
+                  <span style="color: var(--muted); font-size: 1.1rem; font-weight: 700;">+</span>
+                  <div class="bit-stitch-chunk chunk-sky">
+                    <span>tree[29]</span>
+                    <span>(28, 29]</span>
+                    <span>(1 item)</span>
+                  </div>
+                  <span style="color: var(--muted); font-size: 1.1rem; font-weight: 700;">=</span>
+                  <div class="bit-stitch-chunk chunk-total">
+                    <span>prefix(29)</span>
+                    <span>(0, 29]</span>
+                    <span>4 hops = popcount(29)</span>
+                  </div>
+                </div>
+                <div style="font-size: 0.77rem; color: var(--muted); line-height: 1.5; margin-top: 0.2rem;">
+                  Worst cases for N = 30 sit on the bottom row (4 set bits): <code>15, 23, 27, 29, 30</code>. The deepest possible path in a Fenwick tree of size N is &lfloor;log&#8322; N&rfloor; + 1 hops.
                 </div>
               </div>
             </div>
