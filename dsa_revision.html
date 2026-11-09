@@ -1005,37 +1005,9 @@
             </div>
             <!-- LEVEL 3 (Topic / Technique C) -->
             <div class="tree-children l3-children">
-              <a class="nav-item l3-link" href="#range-fenwick-visual-sub" data-target-sub="fenwick-visual-rules">
-                <span class="leaf-dot">•</span>
-                <span class="nav-title">Core Rules &amp; lowbit Invariant</span>
-              </a>
-              <a class="nav-item l3-link" href="#range-fenwick-visual-sub" data-target-sub="fenwick-visual-canonical-tree">
-                <span class="leaf-dot">•</span>
-                <span class="nav-title">Canonical Binary Tree</span>
-              </a>
-              <a class="nav-item l3-link" href="#range-fenwick-visual-sub" data-target-sub="fenwick-visual-coverage">
-                <span class="leaf-dot">•</span>
-                <span class="nav-title">Interval Coverage Grid</span>
-              </a>
-              <a class="nav-item l3-link" href="#range-fenwick-visual-sub" data-target-sub="fenwick-visual-update-tree">
-                <span class="leaf-dot">•</span>
-                <span class="nav-title">Update Tree (Climbing)</span>
-              </a>
-              <a class="nav-item l3-link" href="#range-fenwick-visual-sub" data-target-sub="fenwick-visual-query-tree">
-                <span class="leaf-dot">•</span>
-                <span class="nav-title">Query Tree (Stitching)</span>
-              </a>
               <a class="nav-item l3-link" href="#range-fenwick-visual-sub" data-target-sub="fenwick-visual-query-tree-30">
                 <span class="leaf-dot">•</span>
                 <span class="nav-title">Query Tree 0–30 (Binary)</span>
-              </a>
-              <a class="nav-item l3-link" href="#range-fenwick-visual-sub" data-target-sub="fenwick-visual-interactive">
-                <span class="leaf-dot">•</span>
-                <span class="nav-title">Interactive BIT Tracer</span>
-              </a>
-              <a class="nav-item l3-link" href="#range-fenwick-visual-sub" data-target-sub="fenwick-visual-template">
-                <span class="leaf-dot">•</span>
-                <span class="nav-title">Python 3 Implementation</span>
               </a>
             </div>
           </div>
@@ -10018,863 +9990,20 @@ Result: len(tails) = 3  (Optimal nesting: [2,3] -&gt; [5,4] -&gt; [6,7])</code><
       <!-- PAGE 3B: Fenwick Tree Visualizations Subcategory -->
       <section class="page-view" id="range-fenwick-visual-sub" data-topic-title="Advanced Range Query Structures" data-page-title="Fenwick Tree Visuals">
         <header class="topic-heading">
-          <span class="level-tag">Topic 09 · Visual Architecture</span>
-          <h1><span>⚡</span> Fenwick Tree (BIT): Visual Architecture &amp; State Transitions</h1>
-          <p class="topic-summary" style="max-width: 860px; line-height: 1.65; font-size: 0.94rem;">Unravel the binary mechanics of Binary Indexed Trees. Explore the true balanced binary tree topology, exact coordinate geometry, bitwise 2's complement invariants, and dual update/query tree traversals that maintain dynamic prefix sums in strictly O(n) memory and O(log n) time.</p>
+          <span class="level-tag">Topic 09 · Visual</span>
+          <h1><span>⚡</span> Fenwick Tree (BIT): Query Tree for N = 30</h1>
+          <p class="topic-summary" style="max-width: 860px; line-height: 1.65; font-size: 0.94rem;">One picture, four rules: parent links, what each <code>tree[i]</code> stores, the query path and the update path.</p>
         </header>
 
-        <!-- TOPIC SUBNAV SPECTRUM BANNER -->
-        <div class="rq-taxonomy-banner">
-          <div class="rq-tax-head">
-            <span class="rq-tax-badge">Visual Architecture Directory</span>
-            <h3>Fenwick Tree Visual Exploration Index</h3>
-          </div>
-          <div class="rq-tax-grid">
-            <div class="rq-tax-card">
-              <span class="tax-tag">Theory · Invariants</span>
-              <h4>Core Rules &amp; lowbit</h4>
-              <p>1-indexed design, why index 0 loops infinitely, and the bitwise 2's complement isolation engine.</p>
-              <a class="tax-link" href="#range-fenwick-visual-sub" data-target-sub="fenwick-visual-rules">View Rules &amp; Math &darr;</a>
-            </div>
-            <div class="rq-tax-card">
-              <span class="tax-tag">Topology · Binary Tree</span>
-              <h4>Canonical Binary Tree</h4>
-              <p>The implicit balanced binary search tree: symmetric left/right branches with in-order traversal 1..8.</p>
-              <a class="tax-link" href="#range-fenwick-visual-sub" data-target-sub="fenwick-visual-canonical-tree">View Binary Tree &darr;</a>
-            </div>
-            <div class="rq-tax-card">
-              <span class="tax-tag">Diagram · Coordinates</span>
-              <h4>Coverage Diagram (8 / 16)</h4>
-              <p>Exact position bars showing how each <code>tree[i]</code> covers <code>(i-k, i]</code> cells ending at <em>i</em>.</p>
-              <a class="tax-link" href="#range-fenwick-visual-sub" data-target-sub="fenwick-visual-coverage">View Coverage SVG &darr;</a>
-            </div>
-            <div class="rq-tax-card">
-              <span class="tax-tag">Tree · Mutation</span>
-              <h4>Update Tree (i + lowbit)</h4>
-              <p>Ascend the responsibility hierarchy in binary tree layout (e.g. <code>3 &rarr; 4 &rarr; 8</code>).</p>
-              <a class="tax-link" href="#range-fenwick-visual-sub" data-target-sub="fenwick-visual-update-tree">View Update Tree &darr;</a>
-            </div>
-          </div>
-        </div>
-
-        <!-- INTUITION BLURB CARD -->
-        <div class="bit-intuition-banner" id="fenwick-visual-intuition">
-          <h4><span>💡</span> The Core Fenwick Mental Model: Two Complementary Tree Traversals</h4>
-          <p class="bit-intuition-text">
-            <strong>&bull; "tree[i] = the last step you took to reach i, climbing biggest steps first."</strong><br>
-            <strong>&bull; Query = undo steps (subtract lowbit):</strong> Each hop strips the rightmost set bit, aggregating mutually exclusive dyadic segments down to root 0.<br>
-            <strong>&bull; Update = climb to every bigger chunk that covers you (add lowbit):</strong> Mutating position <em>i</em> ripples upward to every ancestor interval that encloses it.<br>
-            <strong>&bull; Range sum = <code>query(r) - query(l - 1)</code>:</strong> Prefix subtraction executes exact range sums in at most 2 &times; &lceil;log₂ n&rceil; operations.
-          </p>
-        </div>
-
         <section class="patterns-section">
-          <!-- PATTERN CARD 1: CORE RULE CARD -->
-          <article class="pattern-card" id="fenwick-visual-rules">
-            <div class="pattern-card-head">
-              <h3>Core Rules &amp; The lowbit Bitwise Engine</h3>
-            </div>
-            <p class="use-when"><strong>Use when:</strong> Establishing the foundational bitwise invariants of Binary Indexed Trees, understanding 1-based indexing, and deriving cell responsibility intervals.</p>
-
-            <div class="why-box" style="padding: 1.35rem;">
-              <strong>The 3 Unbreakable Invariants of Fenwick Trees</strong>
-              <p style="line-height: 1.65; margin-bottom: 0.8rem;">
-                A Fenwick tree stores aggregated array sums inside a flat array of length <code>n + 1</code>. Unlike Segment Trees which require $4N$ memory and explicit child pointers, a Fenwick Tree encodes tree structure directly into the binary bits of its indices!
-              </p>
-
-              <div class="rq-parity-rules-box" style="margin: 0.8rem 0 1.2rem;">
-                <div class="rq-rule-item">
-                  <span class="rq-rule-tag rq-tag-even">RULE 1: 1-INDEXED</span>
-                  <span><strong>1-Indexed (N + 1 slots):</strong> Array allocated as <code>tree = [0] * (n + 1)</code>. <strong>Index 0 is unused</strong> because in 2's complement <code>lowbit(0) = 0 &amp; (-0) = 0</code>, which causes <code>while idx &le; n: idx += lowbit(idx)</code> to spin infinitely!</span>
-                </div>
-                <div class="rq-rule-item">
-                  <span class="rq-rule-tag rq-tag-odd">RULE 2: LOWBIT ENGINE</span>
-                  <span><strong>Lowest Set Bit Isolation:</strong> <code>k = lowbit(i) = i &amp; (-i)</code> isolates the lowest set 1-bit in <em>i</em>. This represents the largest power of 2 that divides <em>i</em> without remainder.</span>
-                </div>
-                <div class="rq-rule-item">
-                  <span class="rq-rule-tag rq-tag-query">RULE 3: COVERAGE INTERVAL</span>
-                  <span><strong>Half-Open Range:</strong> <code>tree[i]</code> stores the sum of values over positions <strong><code>(i - k, i]</code></strong> (i.e. exactly <em>k</em> contiguous cells ending at position <em>i</em>: <code>[i - k + 1 .. i]</code>).</span>
-                </div>
-              </div>
-
-              <!-- BITWISE 2'S COMPLEMENT MATH CARD -->
-              <div class="rq-bit-math-card" style="margin-top: 1rem;">
-                <div style="font-size: 0.78rem; font-weight: 700; color: var(--orange); margin-bottom: 0.2rem;">Two's Complement Bit Isolation Proof: i &amp; (-i)</div>
-                <div style="font-size: 0.76rem; color: var(--muted); margin-bottom: 0.55rem; line-height: 1.5;">
-                  In computer hardware, negative numbers are stored as <strong>two's complement: <code>-i = (~i) + 1</code></strong>.
-                  Inverting all bits turns trailing zeros to ones and the rightmost 1 to 0; adding 1 cascades carries back until that exact bit flips back to 1!
-                </div>
-                <div class="rq-bit-row-visual">
-                  <span class="rq-bit-lbl">Decimal i = 6 (0110₂)</span>
-                  <div class="rq-bit-bits">
-                    <span class="bit-cell">0</span><span class="bit-cell">0</span><span class="bit-cell">0</span><span class="bit-cell">0</span>
-                    <span class="bit-cell">0</span><span class="bit-cell bit-active">1</span><span class="bit-cell bit-active">1</span><span class="bit-cell">0</span>
-                  </div>
-                </div>
-                <div class="rq-bit-row-visual">
-                  <span class="rq-bit-lbl">Bitwise NOT ~6 (1001₂)</span>
-                  <div class="rq-bit-bits">
-                    <span class="bit-cell bit-inverted">1</span><span class="bit-cell bit-inverted">1</span><span class="bit-cell bit-inverted">1</span><span class="bit-cell bit-inverted">1</span>
-                    <span class="bit-cell bit-inverted">1</span><span class="bit-cell">0</span><span class="bit-cell">0</span><span class="bit-cell bit-inverted">1</span>
-                  </div>
-                </div>
-                <div class="rq-bit-row-visual">
-                  <span class="rq-bit-lbl">Negation -6 (~6 + 1)</span>
-                  <div class="rq-bit-bits">
-                    <span class="bit-cell bit-inverted">1</span><span class="bit-cell bit-inverted">1</span><span class="bit-cell bit-inverted">1</span><span class="bit-cell bit-inverted">1</span>
-                    <span class="bit-cell bit-inverted">1</span><span class="bit-cell bit-inverted">0</span><span class="bit-cell bit-active">1</span><span class="bit-cell">0</span>
-                  </div>
-                </div>
-                <div class="rq-bit-divider"></div>
-                <div class="rq-bit-row-visual rq-bit-result-row">
-                  <span class="rq-bit-lbl" style="color: var(--easy); font-weight: 700;">lowbit(6) = 6 &amp; (-6)</span>
-                  <div class="rq-bit-bits">
-                    <span class="bit-cell">0</span><span class="bit-cell">0</span><span class="bit-cell">0</span><span class="bit-cell">0</span>
-                    <span class="bit-cell">0</span><span class="bit-cell">0</span><span class="bit-cell bit-isolated">1</span><span class="bit-cell">0</span>
-                  </div>
-                  <span class="rq-bit-val-tag">= 2 &rarr; tree[6] covers (6-2, 6] = (4, 6] = [5..6]</span>
-                </div>
-              </div>
-            </div>
-          </article>
-
-          <!-- PATTERN CARD 2: THE CANONICAL FENWICK BINARY TREE (NEW!) -->
-          <article class="pattern-card" id="fenwick-visual-canonical-tree">
-            <div class="pattern-card-head">
-              <h3>The Implicit Fenwick Binary Tree: Balanced Binary Search Tree Topology</h3>
-            </div>
-            <p class="use-when"><strong>Use when:</strong> Visualizing how the flat 1-indexed Fenwick array maps onto a textbook balanced binary search tree, where in-order traversal yields the sorted index order 1..N.</p>
-
-            <div class="why-box" style="padding: 1.35rem;">
-              <strong>Binary Tree Properties: Left Child = x - 2^(k-1) &bull; Right Child = x + 2^(k-1)</strong>
-              <p style="line-height: 1.65; margin-bottom: 0.85rem;">
-                A Fenwick Tree is not an ad-hoc graph: <strong>it is a strict, fully balanced binary tree!</strong>
-                Every node <em>x</em> with <code>lowbit(x) = 2^k</code> has:
-                <strong>Left child:</strong> <code>x - 2^(k-1)</code> (e.g. Node 4 has left child 4 - 2 = 2).
-                <strong>Right child:</strong> <code>x + 2^(k-1)</code> (e.g. Node 4 has right child 4 + 2 = 6).
-                When <em>k</em> = 0 (<code>lowbit = 1</code>), the node is an <strong>odd leaf</strong> (1, 3, 5, 7).
-                Notice the stunning invariant: <strong>In-order traversal strictly visits indices 1, 2, 3, 4, 5, 6, 7, 8!</strong>
-              </p>
-
-              <!-- Canonical Binary Tree SVG -->
-              <div class="bit-svg-wrap">
-<svg class="bit-svg bit-binary-tree-svg" id="bit-canonical-binary-tree-svg" viewBox="0 0 860 395" width="100%" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
-  <defs>
-    <linearGradient id="bin-grad-8" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#451a03"/><stop offset="100%" stop-color="#241208"/></linearGradient>
-    <linearGradient id="bin-grad-4" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#3b0764"/><stop offset="100%" stop-color="#1e0538"/></linearGradient>
-    <linearGradient id="bin-grad-2" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#083344"/><stop offset="100%" stop-color="#061e29"/></linearGradient>
-    <linearGradient id="bin-grad-1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1e293b"/><stop offset="100%" stop-color="#0f172a"/></linearGradient>
-  </defs>
-  <line x1="25" y1="55" x2="835" y2="55" stroke="#222" stroke-dasharray="3,3" stroke-width="1"/>
-  <text x="30" y="45" fill="#475569" font-size="10" font-family="monospace">Root Domain · k=8</text>
-  <line x1="25" y1="140" x2="835" y2="140" stroke="#222" stroke-dasharray="3,3" stroke-width="1"/>
-  <text x="30" y="130" fill="#475569" font-size="10" font-family="monospace">Dyadic Halves · k=4</text>
-  <line x1="25" y1="225" x2="835" y2="225" stroke="#222" stroke-dasharray="3,3" stroke-width="1"/>
-  <text x="30" y="215" fill="#475569" font-size="10" font-family="monospace">Dyadic Quarters · k=2</text>
-  <line x1="25" y1="310" x2="835" y2="310" stroke="#222" stroke-dasharray="3,3" stroke-width="1"/>
-  <text x="30" y="300" fill="#475569" font-size="10" font-family="monospace">Odd Leaves · k=1</text>
-  <!-- Binary Tree Symmetrical Left/Right Branches -->
-  <line class="bin-tree-edge" id="bin-edge-8-4" x1="701.7" y1="60.8" x2="408.3" y2="134.2" stroke="#475569" stroke-width="2.2"/>
-  <circle cx="544.0" cy="97.5" r="7" fill="#181818" stroke="#333" stroke-width="1"/>
-  <text x="544.0" y="100.5" fill="#94a3b8" font-size="8.5" font-family="sans-serif" font-weight="700" text-anchor="middle">L</text>
-  <line class="bin-tree-edge" id="bin-edge-4-2" x1="363.5" y1="150.7" x2="236.5" y2="214.3" stroke="#475569" stroke-width="2.2"/>
-  <circle cx="289.0" cy="182.5" r="7" fill="#181818" stroke="#333" stroke-width="1"/>
-  <text x="289.0" y="185.5" fill="#94a3b8" font-size="8.5" font-family="sans-serif" font-weight="700" text-anchor="middle">L</text>
-  <line class="bin-tree-edge" id="bin-edge-4-6" x1="406.5" y1="150.7" x2="533.5" y2="214.3" stroke="#475569" stroke-width="2.2"/>
-  <circle cx="481.0" cy="182.5" r="7" fill="#181818" stroke="#333" stroke-width="1"/>
-  <text x="481.0" y="185.5" fill="#94a3b8" font-size="8.5" font-family="sans-serif" font-weight="700" text-anchor="middle">R</text>
-  <line class="bin-tree-edge" id="bin-edge-2-1" x1="198.0" y1="242.0" x2="147.0" y2="293.0" stroke="#475569" stroke-width="2.2"/>
-  <circle cx="161.5" cy="267.5" r="7" fill="#181818" stroke="#333" stroke-width="1"/>
-  <text x="161.5" y="270.5" fill="#94a3b8" font-size="8.5" font-family="sans-serif" font-weight="700" text-anchor="middle">L</text>
-  <line class="bin-tree-edge" id="bin-edge-2-3" x1="232.0" y1="242.0" x2="283.0" y2="293.0" stroke="#475569" stroke-width="2.2"/>
-  <circle cx="268.5" cy="267.5" r="7" fill="#181818" stroke="#333" stroke-width="1"/>
-  <text x="268.5" y="270.5" fill="#94a3b8" font-size="8.5" font-family="sans-serif" font-weight="700" text-anchor="middle">R</text>
-  <line class="bin-tree-edge" id="bin-edge-6-5" x1="538.0" y1="242.0" x2="487.0" y2="293.0" stroke="#475569" stroke-width="2.2"/>
-  <circle cx="501.5" cy="267.5" r="7" fill="#181818" stroke="#333" stroke-width="1"/>
-  <text x="501.5" y="270.5" fill="#94a3b8" font-size="8.5" font-family="sans-serif" font-weight="700" text-anchor="middle">L</text>
-  <line class="bin-tree-edge" id="bin-edge-6-7" x1="572.0" y1="242.0" x2="623.0" y2="293.0" stroke="#475569" stroke-width="2.2"/>
-  <circle cx="608.5" cy="267.5" r="7" fill="#181818" stroke="#333" stroke-width="1"/>
-  <text x="608.5" y="270.5" fill="#94a3b8" font-size="8.5" font-family="sans-serif" font-weight="700" text-anchor="middle">R</text>
-  <!-- In-order BST Sequence Indicator -->
-  <path d="M 115 365 L 740 365" stroke="var(--cyan)" stroke-width="1.8" stroke-dasharray="4,4"/>
-  <text x="427" y="380" fill="var(--cyan)" font-size="10.5" font-family="monospace" font-weight="700" text-anchor="middle">&uarr; In-Order Traversal strictly yields sorted array sequence: 1, 2, 3, 4, 5, 6, 7, 8</text>
-  <!-- Circular Binary Tree Nodes -->
-  <g class="bin-node-group" id="bin-node-8" data-node="8">
-    <circle cx="725" cy="55" r="24" fill="url(#bin-grad-8)" stroke="#ffa116" stroke-width="2.2"/>
-    <text x="725" y="60" fill="#ffffff" font-size="14" font-weight="800" font-family="monospace" text-anchor="middle" pointer-events="none">8</text>
-    <rect x="695" y="83" width="60" height="16" rx="4" fill="#181818" stroke="#333" stroke-width="0.8"/>
-    <text x="725" y="94" fill="#2dd4bf" font-size="9" font-weight="700" font-family="monospace" text-anchor="middle" pointer-events="none">(0, 8]</text>
-    <text x="725" y="26" fill="#9ea0a5" font-size="9" font-family="monospace" text-anchor="middle" pointer-events="none">1000₂</text>
-  </g>
-  <g class="bin-node-group" id="bin-node-4" data-node="4">
-    <circle cx="385" cy="140" r="24" fill="url(#bin-grad-4)" stroke="#c586c0" stroke-width="2.2"/>
-    <text x="385" y="145" fill="#ffffff" font-size="14" font-weight="800" font-family="monospace" text-anchor="middle" pointer-events="none">4</text>
-    <rect x="355" y="168" width="60" height="16" rx="4" fill="#181818" stroke="#333" stroke-width="0.8"/>
-    <text x="385" y="179" fill="#2dd4bf" font-size="9" font-weight="700" font-family="monospace" text-anchor="middle" pointer-events="none">(0, 4]</text>
-    <text x="385" y="111" fill="#9ea0a5" font-size="9" font-family="monospace" text-anchor="middle" pointer-events="none">0100₂</text>
-  </g>
-  <g class="bin-node-group" id="bin-node-2" data-node="2">
-    <circle cx="215" cy="225" r="24" fill="url(#bin-grad-2)" stroke="#2dd4bf" stroke-width="2.2"/>
-    <text x="215" y="230" fill="#ffffff" font-size="14" font-weight="800" font-family="monospace" text-anchor="middle" pointer-events="none">2</text>
-    <rect x="185" y="253" width="60" height="16" rx="4" fill="#181818" stroke="#333" stroke-width="0.8"/>
-    <text x="215" y="264" fill="#2dd4bf" font-size="9" font-weight="700" font-family="monospace" text-anchor="middle" pointer-events="none">(0, 2]</text>
-    <text x="215" y="196" fill="#9ea0a5" font-size="9" font-family="monospace" text-anchor="middle" pointer-events="none">0010₂</text>
-  </g>
-  <g class="bin-node-group" id="bin-node-6" data-node="6">
-    <circle cx="555" cy="225" r="24" fill="url(#bin-grad-2)" stroke="#2dd4bf" stroke-width="2.2"/>
-    <text x="555" y="230" fill="#ffffff" font-size="14" font-weight="800" font-family="monospace" text-anchor="middle" pointer-events="none">6</text>
-    <rect x="525" y="253" width="60" height="16" rx="4" fill="#181818" stroke="#333" stroke-width="0.8"/>
-    <text x="555" y="264" fill="#2dd4bf" font-size="9" font-weight="700" font-family="monospace" text-anchor="middle" pointer-events="none">(4, 6]</text>
-    <text x="555" y="196" fill="#9ea0a5" font-size="9" font-family="monospace" text-anchor="middle" pointer-events="none">0110₂</text>
-  </g>
-  <g class="bin-node-group" id="bin-node-1" data-node="1">
-    <circle cx="130" cy="310" r="24" fill="url(#bin-grad-1)" stroke="#64748b" stroke-width="2.2"/>
-    <text x="130" y="315" fill="#ffffff" font-size="14" font-weight="800" font-family="monospace" text-anchor="middle" pointer-events="none">1</text>
-    <rect x="100" y="338" width="60" height="16" rx="4" fill="#181818" stroke="#333" stroke-width="0.8"/>
-    <text x="130" y="349" fill="#2dd4bf" font-size="9" font-weight="700" font-family="monospace" text-anchor="middle" pointer-events="none">(0, 1]</text>
-    <text x="130" y="281" fill="#9ea0a5" font-size="9" font-family="monospace" text-anchor="middle" pointer-events="none">0001₂</text>
-  </g>
-  <g class="bin-node-group" id="bin-node-3" data-node="3">
-    <circle cx="300" cy="310" r="24" fill="url(#bin-grad-1)" stroke="#64748b" stroke-width="2.2"/>
-    <text x="300" y="315" fill="#ffffff" font-size="14" font-weight="800" font-family="monospace" text-anchor="middle" pointer-events="none">3</text>
-    <rect x="270" y="338" width="60" height="16" rx="4" fill="#181818" stroke="#333" stroke-width="0.8"/>
-    <text x="300" y="349" fill="#2dd4bf" font-size="9" font-weight="700" font-family="monospace" text-anchor="middle" pointer-events="none">(2, 3]</text>
-    <text x="300" y="281" fill="#9ea0a5" font-size="9" font-family="monospace" text-anchor="middle" pointer-events="none">0011₂</text>
-  </g>
-  <g class="bin-node-group" id="bin-node-5" data-node="5">
-    <circle cx="470" cy="310" r="24" fill="url(#bin-grad-1)" stroke="#64748b" stroke-width="2.2"/>
-    <text x="470" y="315" fill="#ffffff" font-size="14" font-weight="800" font-family="monospace" text-anchor="middle" pointer-events="none">5</text>
-    <rect x="440" y="338" width="60" height="16" rx="4" fill="#181818" stroke="#333" stroke-width="0.8"/>
-    <text x="470" y="349" fill="#2dd4bf" font-size="9" font-weight="700" font-family="monospace" text-anchor="middle" pointer-events="none">(4, 5]</text>
-    <text x="470" y="281" fill="#9ea0a5" font-size="9" font-family="monospace" text-anchor="middle" pointer-events="none">0101₂</text>
-  </g>
-  <g class="bin-node-group" id="bin-node-7" data-node="7">
-    <circle cx="640" cy="310" r="24" fill="url(#bin-grad-1)" stroke="#64748b" stroke-width="2.2"/>
-    <text x="640" y="315" fill="#ffffff" font-size="14" font-weight="800" font-family="monospace" text-anchor="middle" pointer-events="none">7</text>
-    <rect x="610" y="338" width="60" height="16" rx="4" fill="#181818" stroke="#333" stroke-width="0.8"/>
-    <text x="640" y="349" fill="#2dd4bf" font-size="9" font-weight="700" font-family="monospace" text-anchor="middle" pointer-events="none">(6, 7]</text>
-    <text x="640" y="281" fill="#9ea0a5" font-size="9" font-family="monospace" text-anchor="middle" pointer-events="none">0111₂</text>
-  </g>
-</svg>
-              </div>
-
-              <div class="rq-bracket-math-summary" style="margin-top: 0.85rem;">
-                <strong>Key Binary Tree Insights:</strong>
-                &bull; <strong>Odd Indices (1, 3, 5, 7):</strong> Pure leaves at Level 0, each covering 1 element.<br>
-                &bull; <strong>Power of 2 Spine (1, 2, 4, 8):</strong> Form the left spine of the tree, each accumulating the entire prefix from position 1.<br>
-                &bull; <strong>Right Subtrees (3, 6, 7):</strong> Represent residual interval sums that are added to prefixes during descent!
-              </div>
-            </div>
-          </article>
-
-          <!-- PATTERN CARD 3: COVERAGE DIAGRAM (SVG) -->
-          <article class="pattern-card" id="fenwick-visual-coverage">
-            <div class="pattern-card-head">
-              <h3>Interval Coverage Grid: The Dyadic Hierarchy</h3>
-            </div>
-            <p class="use-when"><strong>Use when:</strong> Visualizing which exact positions in the original array are covered by each slot <code>tree[i]</code>. Columns are array positions 1..N; rows are individual <code>tree[i]</code> cells.</p>
-
-            <div class="why-box" style="padding: 1.35rem;">
-              <strong>Coverage Geometry: Columns = Positions 1..N &bull; Rows = tree[i]</strong>
-              <p style="line-height: 1.65; margin-bottom: 0.85rem;">
-                Every horizontal bar spans exactly the range <code>(i - lowbit(i), i]</code>. Notice how:
-                <strong>Odd indices (1, 3, 5, 7)</strong> have <code>lowbit = 1</code> and cover only themselves (length 1).
-                <strong>Powers of 2 (1, 2, 4, 8)</strong> aggregate the entire prefix from position 1!
-              </p>
-
-              <!-- N=8 / N=16 Toggle Controls -->
-              <div class="bit-cov-toggle-bar">
-                <span style="font-size: 0.76rem; color: var(--muted); font-weight: 600; margin-right: 0.4rem;">Select Scale:</span>
-                <button type="button" class="bit-cov-btn active" id="btn-cov-8" data-scale="8">N = 8 Positions (Standard)</button>
-                <button type="button" class="bit-cov-btn" id="btn-cov-16" data-scale="16">N = 16 Positions (Extended Dyadic Fractal)</button>
-              </div>
-
-              <!-- Coverage SVGs Wrapper -->
-              <div class="bit-svg-wrap">
-<svg class="bit-svg bit-cov-svg" id="bit-cov-svg-8" viewBox="0 0 880 379" width="100%" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
-  <defs>
-    <linearGradient id="cov-bar-1" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#334155" stop-opacity="0.8"/><stop offset="100%" stop-color="#475569" stop-opacity="0.95"/></linearGradient>
-    <linearGradient id="cov-bar-2" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#0e7490" stop-opacity="0.8"/><stop offset="100%" stop-color="#0891b2" stop-opacity="0.95"/></linearGradient>
-    <linearGradient id="cov-bar-4" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#7e22ce" stop-opacity="0.8"/><stop offset="100%" stop-color="#9333ea" stop-opacity="0.95"/></linearGradient>
-    <linearGradient id="cov-bar-8" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#c2410c" stop-opacity="0.8"/><stop offset="100%" stop-color="#ea580c" stop-opacity="0.95"/></linearGradient>
-    <linearGradient id="cov-bar-16" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#047857" stop-opacity="0.8"/><stop offset="100%" stop-color="#059669" stop-opacity="0.95"/></linearGradient>
-  </defs>
-  <!-- Column Headers & Guidelines -->
-  <line x1="221.9" y1="50" x2="221.9" y2="364" stroke="#262626" stroke-dasharray="3,3" stroke-width="1"/>
-  <rect x="182.0" y="10" width="79.8" height="26" rx="4" fill="#1c1c1c" stroke="#333" stroke-width="1"/>
-  <text x="221.9" y="27" fill="#ffa116" font-size="11" font-weight="700" font-family="monospace" text-anchor="middle">Pos 1</text>
-  <line x1="305.6" y1="50" x2="305.6" y2="364" stroke="#262626" stroke-dasharray="3,3" stroke-width="1"/>
-  <rect x="265.8" y="10" width="79.8" height="26" rx="4" fill="#1c1c1c" stroke="#333" stroke-width="1"/>
-  <text x="305.6" y="27" fill="#ffa116" font-size="11" font-weight="700" font-family="monospace" text-anchor="middle">Pos 2</text>
-  <line x1="389.4" y1="50" x2="389.4" y2="364" stroke="#262626" stroke-dasharray="3,3" stroke-width="1"/>
-  <rect x="349.5" y="10" width="79.8" height="26" rx="4" fill="#1c1c1c" stroke="#333" stroke-width="1"/>
-  <text x="389.4" y="27" fill="#ffa116" font-size="11" font-weight="700" font-family="monospace" text-anchor="middle">Pos 3</text>
-  <line x1="473.1" y1="50" x2="473.1" y2="364" stroke="#262626" stroke-dasharray="3,3" stroke-width="1"/>
-  <rect x="433.2" y="10" width="79.8" height="26" rx="4" fill="#1c1c1c" stroke="#333" stroke-width="1"/>
-  <text x="473.1" y="27" fill="#ffa116" font-size="11" font-weight="700" font-family="monospace" text-anchor="middle">Pos 4</text>
-  <line x1="556.9" y1="50" x2="556.9" y2="364" stroke="#262626" stroke-dasharray="3,3" stroke-width="1"/>
-  <rect x="517.0" y="10" width="79.8" height="26" rx="4" fill="#1c1c1c" stroke="#333" stroke-width="1"/>
-  <text x="556.9" y="27" fill="#ffa116" font-size="11" font-weight="700" font-family="monospace" text-anchor="middle">Pos 5</text>
-  <line x1="640.6" y1="50" x2="640.6" y2="364" stroke="#262626" stroke-dasharray="3,3" stroke-width="1"/>
-  <rect x="600.8" y="10" width="79.8" height="26" rx="4" fill="#1c1c1c" stroke="#333" stroke-width="1"/>
-  <text x="640.6" y="27" fill="#ffa116" font-size="11" font-weight="700" font-family="monospace" text-anchor="middle">Pos 6</text>
-  <line x1="724.4" y1="50" x2="724.4" y2="364" stroke="#262626" stroke-dasharray="3,3" stroke-width="1"/>
-  <rect x="684.5" y="10" width="79.8" height="26" rx="4" fill="#1c1c1c" stroke="#333" stroke-width="1"/>
-  <text x="724.4" y="27" fill="#ffa116" font-size="11" font-weight="700" font-family="monospace" text-anchor="middle">Pos 7</text>
-  <line x1="808.1" y1="50" x2="808.1" y2="364" stroke="#262626" stroke-dasharray="3,3" stroke-width="1"/>
-  <rect x="768.2" y="10" width="79.8" height="26" rx="4" fill="#1c1c1c" stroke="#333" stroke-width="1"/>
-  <text x="808.1" y="27" fill="#ffa116" font-size="11" font-weight="700" font-family="monospace" text-anchor="middle">Pos 8</text>
-  <!-- Row tree[1] -->
-  <g class="cov-row" id="cov-row-8-1" data-tree-idx="1" data-lowbit="1">
-    <text x="15" y="88" fill="#eff1f6" font-size="12" font-weight="700" font-family="monospace">tree[1]</text>
-    <text x="80" y="88" fill="#9ea0a5" font-size="11" font-family="monospace">0001₂</text>
-    <text x="135" y="88" fill="#64748b" font-size="10" font-family="monospace">k=1</text>
-    <rect class="cov-bar cov-bar-1" id="cov-bar-8-1" data-idx="1" x="183.0" y="71.0" width="77.8" height="28" rx="5" fill="url(#cov-bar-1)" stroke="#64748b" stroke-width="1.5"/>
-    <text x="221.9" y="89.0" fill="#fff" font-size="11" font-weight="600" font-family="monospace" text-anchor="middle" pointer-events="none">(0,1]</text>
-  </g>
-  <!-- Row tree[2] -->
-  <g class="cov-row" id="cov-row-8-2" data-tree-idx="2" data-lowbit="2">
-    <text x="15" y="124" fill="#eff1f6" font-size="12" font-weight="700" font-family="monospace">tree[2]</text>
-    <text x="80" y="124" fill="#9ea0a5" font-size="11" font-family="monospace">0010₂</text>
-    <text x="135" y="124" fill="#64748b" font-size="10" font-family="monospace">k=2</text>
-    <rect class="cov-bar cov-bar-2" id="cov-bar-8-2" data-idx="2" x="183.0" y="107.0" width="161.5" height="28" rx="5" fill="url(#cov-bar-2)" stroke="#2dd4bf" stroke-width="1.5"/>
-    <text x="263.8" y="125.0" fill="#fff" font-size="11" font-weight="600" font-family="monospace" text-anchor="middle" pointer-events="none">(0, 2] (2 cells)</text>
-  </g>
-  <!-- Row tree[3] -->
-  <g class="cov-row" id="cov-row-8-3" data-tree-idx="3" data-lowbit="1">
-    <text x="15" y="160" fill="#eff1f6" font-size="12" font-weight="700" font-family="monospace">tree[3]</text>
-    <text x="80" y="160" fill="#9ea0a5" font-size="11" font-family="monospace">0011₂</text>
-    <text x="135" y="160" fill="#64748b" font-size="10" font-family="monospace">k=1</text>
-    <rect class="cov-bar cov-bar-1" id="cov-bar-8-3" data-idx="3" x="350.5" y="143.0" width="77.8" height="28" rx="5" fill="url(#cov-bar-1)" stroke="#64748b" stroke-width="1.5"/>
-    <text x="389.4" y="161.0" fill="#fff" font-size="11" font-weight="600" font-family="monospace" text-anchor="middle" pointer-events="none">(2,3]</text>
-  </g>
-  <!-- Row tree[4] -->
-  <g class="cov-row" id="cov-row-8-4" data-tree-idx="4" data-lowbit="4">
-    <text x="15" y="196" fill="#eff1f6" font-size="12" font-weight="700" font-family="monospace">tree[4]</text>
-    <text x="80" y="196" fill="#9ea0a5" font-size="11" font-family="monospace">0100₂</text>
-    <text x="135" y="196" fill="#64748b" font-size="10" font-family="monospace">k=4</text>
-    <rect class="cov-bar cov-bar-4" id="cov-bar-8-4" data-idx="4" x="183.0" y="179.0" width="329.0" height="28" rx="5" fill="url(#cov-bar-4)" stroke="#c586c0" stroke-width="1.5"/>
-    <text x="347.5" y="197.0" fill="#fff" font-size="11" font-weight="600" font-family="monospace" text-anchor="middle" pointer-events="none">(0, 4] (4 cells)</text>
-  </g>
-  <!-- Row tree[5] -->
-  <g class="cov-row" id="cov-row-8-5" data-tree-idx="5" data-lowbit="1">
-    <text x="15" y="232" fill="#eff1f6" font-size="12" font-weight="700" font-family="monospace">tree[5]</text>
-    <text x="80" y="232" fill="#9ea0a5" font-size="11" font-family="monospace">0101₂</text>
-    <text x="135" y="232" fill="#64748b" font-size="10" font-family="monospace">k=1</text>
-    <rect class="cov-bar cov-bar-1" id="cov-bar-8-5" data-idx="5" x="518.0" y="215.0" width="77.8" height="28" rx="5" fill="url(#cov-bar-1)" stroke="#64748b" stroke-width="1.5"/>
-    <text x="556.9" y="233.0" fill="#fff" font-size="11" font-weight="600" font-family="monospace" text-anchor="middle" pointer-events="none">(4,5]</text>
-  </g>
-  <!-- Row tree[6] -->
-  <g class="cov-row" id="cov-row-8-6" data-tree-idx="6" data-lowbit="2">
-    <text x="15" y="268" fill="#eff1f6" font-size="12" font-weight="700" font-family="monospace">tree[6]</text>
-    <text x="80" y="268" fill="#9ea0a5" font-size="11" font-family="monospace">0110₂</text>
-    <text x="135" y="268" fill="#64748b" font-size="10" font-family="monospace">k=2</text>
-    <rect class="cov-bar cov-bar-2" id="cov-bar-8-6" data-idx="6" x="518.0" y="251.0" width="161.5" height="28" rx="5" fill="url(#cov-bar-2)" stroke="#2dd4bf" stroke-width="1.5"/>
-    <text x="598.8" y="269.0" fill="#fff" font-size="11" font-weight="600" font-family="monospace" text-anchor="middle" pointer-events="none">(4, 6] (2 cells)</text>
-  </g>
-  <!-- Row tree[7] -->
-  <g class="cov-row" id="cov-row-8-7" data-tree-idx="7" data-lowbit="1">
-    <text x="15" y="304" fill="#eff1f6" font-size="12" font-weight="700" font-family="monospace">tree[7]</text>
-    <text x="80" y="304" fill="#9ea0a5" font-size="11" font-family="monospace">0111₂</text>
-    <text x="135" y="304" fill="#64748b" font-size="10" font-family="monospace">k=1</text>
-    <rect class="cov-bar cov-bar-1" id="cov-bar-8-7" data-idx="7" x="685.5" y="287.0" width="77.8" height="28" rx="5" fill="url(#cov-bar-1)" stroke="#64748b" stroke-width="1.5"/>
-    <text x="724.4" y="305.0" fill="#fff" font-size="11" font-weight="600" font-family="monospace" text-anchor="middle" pointer-events="none">(6,7]</text>
-  </g>
-  <!-- Row tree[8] -->
-  <g class="cov-row" id="cov-row-8-8" data-tree-idx="8" data-lowbit="8">
-    <text x="15" y="340" fill="#eff1f6" font-size="12" font-weight="700" font-family="monospace">tree[8]</text>
-    <text x="80" y="340" fill="#9ea0a5" font-size="11" font-family="monospace">1000₂</text>
-    <text x="135" y="340" fill="#64748b" font-size="10" font-family="monospace">k=8</text>
-    <rect class="cov-bar cov-bar-8" id="cov-bar-8-8" data-idx="8" x="183.0" y="323.0" width="664.0" height="28" rx="5" fill="url(#cov-bar-8)" stroke="#ffa116" stroke-width="1.5"/>
-    <text x="515.0" y="341.0" fill="#fff" font-size="11" font-weight="600" font-family="monospace" text-anchor="middle" pointer-events="none">(0, 8] (8 cells)</text>
-  </g>
-</svg>
-<svg class="bit-svg bit-cov-svg" id="bit-cov-svg-16" viewBox="0 0 1040 565" width="100%" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" style="display: none;">
-  <defs>
-    <linearGradient id="cov-bar-1" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#334155" stop-opacity="0.8"/><stop offset="100%" stop-color="#475569" stop-opacity="0.95"/></linearGradient>
-    <linearGradient id="cov-bar-2" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#0e7490" stop-opacity="0.8"/><stop offset="100%" stop-color="#0891b2" stop-opacity="0.95"/></linearGradient>
-    <linearGradient id="cov-bar-4" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#7e22ce" stop-opacity="0.8"/><stop offset="100%" stop-color="#9333ea" stop-opacity="0.95"/></linearGradient>
-    <linearGradient id="cov-bar-8" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#c2410c" stop-opacity="0.8"/><stop offset="100%" stop-color="#ea580c" stop-opacity="0.95"/></linearGradient>
-    <linearGradient id="cov-bar-16" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#047857" stop-opacity="0.8"/><stop offset="100%" stop-color="#059669" stop-opacity="0.95"/></linearGradient>
-  </defs>
-  <!-- Column Headers & Guidelines -->
-  <line x1="205.9" y1="50" x2="205.9" y2="550" stroke="#262626" stroke-dasharray="3,3" stroke-width="1"/>
-  <rect x="182.0" y="10" width="47.9" height="26" rx="4" fill="#1c1c1c" stroke="#333" stroke-width="1"/>
-  <text x="205.9" y="27" fill="#ffa116" font-size="11" font-weight="700" font-family="monospace" text-anchor="middle">Pos 1</text>
-  <line x1="257.8" y1="50" x2="257.8" y2="550" stroke="#262626" stroke-dasharray="3,3" stroke-width="1"/>
-  <rect x="233.9" y="10" width="47.9" height="26" rx="4" fill="#1c1c1c" stroke="#333" stroke-width="1"/>
-  <text x="257.8" y="27" fill="#ffa116" font-size="11" font-weight="700" font-family="monospace" text-anchor="middle">Pos 2</text>
-  <line x1="309.7" y1="50" x2="309.7" y2="550" stroke="#262626" stroke-dasharray="3,3" stroke-width="1"/>
-  <rect x="285.8" y="10" width="47.9" height="26" rx="4" fill="#1c1c1c" stroke="#333" stroke-width="1"/>
-  <text x="309.7" y="27" fill="#ffa116" font-size="11" font-weight="700" font-family="monospace" text-anchor="middle">Pos 3</text>
-  <line x1="361.6" y1="50" x2="361.6" y2="550" stroke="#262626" stroke-dasharray="3,3" stroke-width="1"/>
-  <rect x="337.6" y="10" width="47.9" height="26" rx="4" fill="#1c1c1c" stroke="#333" stroke-width="1"/>
-  <text x="361.6" y="27" fill="#ffa116" font-size="11" font-weight="700" font-family="monospace" text-anchor="middle">Pos 4</text>
-  <line x1="413.4" y1="50" x2="413.4" y2="550" stroke="#262626" stroke-dasharray="3,3" stroke-width="1"/>
-  <rect x="389.5" y="10" width="47.9" height="26" rx="4" fill="#1c1c1c" stroke="#333" stroke-width="1"/>
-  <text x="413.4" y="27" fill="#ffa116" font-size="11" font-weight="700" font-family="monospace" text-anchor="middle">Pos 5</text>
-  <line x1="465.3" y1="50" x2="465.3" y2="550" stroke="#262626" stroke-dasharray="3,3" stroke-width="1"/>
-  <rect x="441.4" y="10" width="47.9" height="26" rx="4" fill="#1c1c1c" stroke="#333" stroke-width="1"/>
-  <text x="465.3" y="27" fill="#ffa116" font-size="11" font-weight="700" font-family="monospace" text-anchor="middle">Pos 6</text>
-  <line x1="517.2" y1="50" x2="517.2" y2="550" stroke="#262626" stroke-dasharray="3,3" stroke-width="1"/>
-  <rect x="493.2" y="10" width="47.9" height="26" rx="4" fill="#1c1c1c" stroke="#333" stroke-width="1"/>
-  <text x="517.2" y="27" fill="#ffa116" font-size="11" font-weight="700" font-family="monospace" text-anchor="middle">Pos 7</text>
-  <line x1="569.1" y1="50" x2="569.1" y2="550" stroke="#262626" stroke-dasharray="3,3" stroke-width="1"/>
-  <rect x="545.1" y="10" width="47.9" height="26" rx="4" fill="#1c1c1c" stroke="#333" stroke-width="1"/>
-  <text x="569.1" y="27" fill="#ffa116" font-size="11" font-weight="700" font-family="monospace" text-anchor="middle">Pos 8</text>
-  <line x1="620.9" y1="50" x2="620.9" y2="550" stroke="#262626" stroke-dasharray="3,3" stroke-width="1"/>
-  <rect x="597.0" y="10" width="47.9" height="26" rx="4" fill="#1c1c1c" stroke="#333" stroke-width="1"/>
-  <text x="620.9" y="27" fill="#ffa116" font-size="11" font-weight="700" font-family="monospace" text-anchor="middle">Pos 9</text>
-  <line x1="672.8" y1="50" x2="672.8" y2="550" stroke="#262626" stroke-dasharray="3,3" stroke-width="1"/>
-  <rect x="648.9" y="10" width="47.9" height="26" rx="4" fill="#1c1c1c" stroke="#333" stroke-width="1"/>
-  <text x="672.8" y="27" fill="#ffa116" font-size="11" font-weight="700" font-family="monospace" text-anchor="middle">Pos 10</text>
-  <line x1="724.7" y1="50" x2="724.7" y2="550" stroke="#262626" stroke-dasharray="3,3" stroke-width="1"/>
-  <rect x="700.8" y="10" width="47.9" height="26" rx="4" fill="#1c1c1c" stroke="#333" stroke-width="1"/>
-  <text x="724.7" y="27" fill="#ffa116" font-size="11" font-weight="700" font-family="monospace" text-anchor="middle">Pos 11</text>
-  <line x1="776.6" y1="50" x2="776.6" y2="550" stroke="#262626" stroke-dasharray="3,3" stroke-width="1"/>
-  <rect x="752.6" y="10" width="47.9" height="26" rx="4" fill="#1c1c1c" stroke="#333" stroke-width="1"/>
-  <text x="776.6" y="27" fill="#ffa116" font-size="11" font-weight="700" font-family="monospace" text-anchor="middle">Pos 12</text>
-  <line x1="828.4" y1="50" x2="828.4" y2="550" stroke="#262626" stroke-dasharray="3,3" stroke-width="1"/>
-  <rect x="804.5" y="10" width="47.9" height="26" rx="4" fill="#1c1c1c" stroke="#333" stroke-width="1"/>
-  <text x="828.4" y="27" fill="#ffa116" font-size="11" font-weight="700" font-family="monospace" text-anchor="middle">Pos 13</text>
-  <line x1="880.3" y1="50" x2="880.3" y2="550" stroke="#262626" stroke-dasharray="3,3" stroke-width="1"/>
-  <rect x="856.4" y="10" width="47.9" height="26" rx="4" fill="#1c1c1c" stroke="#333" stroke-width="1"/>
-  <text x="880.3" y="27" fill="#ffa116" font-size="11" font-weight="700" font-family="monospace" text-anchor="middle">Pos 14</text>
-  <line x1="932.2" y1="50" x2="932.2" y2="550" stroke="#262626" stroke-dasharray="3,3" stroke-width="1"/>
-  <rect x="908.2" y="10" width="47.9" height="26" rx="4" fill="#1c1c1c" stroke="#333" stroke-width="1"/>
-  <text x="932.2" y="27" fill="#ffa116" font-size="11" font-weight="700" font-family="monospace" text-anchor="middle">Pos 15</text>
-  <line x1="984.1" y1="50" x2="984.1" y2="550" stroke="#262626" stroke-dasharray="3,3" stroke-width="1"/>
-  <rect x="960.1" y="10" width="47.9" height="26" rx="4" fill="#1c1c1c" stroke="#333" stroke-width="1"/>
-  <text x="984.1" y="27" fill="#ffa116" font-size="11" font-weight="700" font-family="monospace" text-anchor="middle">Pos 16</text>
-  <!-- Row tree[1] -->
-  <g class="cov-row" id="cov-row-16-1" data-tree-idx="1" data-lowbit="1">
-    <text x="15" y="82" fill="#eff1f6" font-size="12" font-weight="700" font-family="monospace">tree[1]</text>
-    <text x="85" y="82" fill="#9ea0a5" font-size="11" font-family="monospace">00001₂</text>
-    <text x="145" y="82" fill="#64748b" font-size="10" font-family="monospace">k=1</text>
-    <rect class="cov-bar cov-bar-1" id="cov-bar-16-1" data-idx="1" x="183.0" y="65.0" width="45.9" height="22" rx="5" fill="url(#cov-bar-1)" stroke="#64748b" stroke-width="1.5"/>
-    <text x="205.9" y="80.0" fill="#fff" font-size="11" font-weight="600" font-family="monospace" text-anchor="middle" pointer-events="none">(0,1]</text>
-  </g>
-  <!-- Row tree[2] -->
-  <g class="cov-row" id="cov-row-16-2" data-tree-idx="2" data-lowbit="2">
-    <text x="15" y="112" fill="#eff1f6" font-size="12" font-weight="700" font-family="monospace">tree[2]</text>
-    <text x="85" y="112" fill="#9ea0a5" font-size="11" font-family="monospace">00010₂</text>
-    <text x="145" y="112" fill="#64748b" font-size="10" font-family="monospace">k=2</text>
-    <rect class="cov-bar cov-bar-2" id="cov-bar-16-2" data-idx="2" x="183.0" y="95.0" width="97.8" height="22" rx="5" fill="url(#cov-bar-2)" stroke="#2dd4bf" stroke-width="1.5"/>
-    <text x="231.9" y="110.0" fill="#fff" font-size="11" font-weight="600" font-family="monospace" text-anchor="middle" pointer-events="none">(0, 2] (2 cells)</text>
-  </g>
-  <!-- Row tree[3] -->
-  <g class="cov-row" id="cov-row-16-3" data-tree-idx="3" data-lowbit="1">
-    <text x="15" y="142" fill="#eff1f6" font-size="12" font-weight="700" font-family="monospace">tree[3]</text>
-    <text x="85" y="142" fill="#9ea0a5" font-size="11" font-family="monospace">00011₂</text>
-    <text x="145" y="142" fill="#64748b" font-size="10" font-family="monospace">k=1</text>
-    <rect class="cov-bar cov-bar-1" id="cov-bar-16-3" data-idx="3" x="286.8" y="125.0" width="45.9" height="22" rx="5" fill="url(#cov-bar-1)" stroke="#64748b" stroke-width="1.5"/>
-    <text x="309.7" y="140.0" fill="#fff" font-size="11" font-weight="600" font-family="monospace" text-anchor="middle" pointer-events="none">(2,3]</text>
-  </g>
-  <!-- Row tree[4] -->
-  <g class="cov-row" id="cov-row-16-4" data-tree-idx="4" data-lowbit="4">
-    <text x="15" y="172" fill="#eff1f6" font-size="12" font-weight="700" font-family="monospace">tree[4]</text>
-    <text x="85" y="172" fill="#9ea0a5" font-size="11" font-family="monospace">00100₂</text>
-    <text x="145" y="172" fill="#64748b" font-size="10" font-family="monospace">k=4</text>
-    <rect class="cov-bar cov-bar-4" id="cov-bar-16-4" data-idx="4" x="183.0" y="155.0" width="201.5" height="22" rx="5" fill="url(#cov-bar-4)" stroke="#c586c0" stroke-width="1.5"/>
-    <text x="283.8" y="170.0" fill="#fff" font-size="11" font-weight="600" font-family="monospace" text-anchor="middle" pointer-events="none">(0, 4] (4 cells)</text>
-  </g>
-  <!-- Row tree[5] -->
-  <g class="cov-row" id="cov-row-16-5" data-tree-idx="5" data-lowbit="1">
-    <text x="15" y="202" fill="#eff1f6" font-size="12" font-weight="700" font-family="monospace">tree[5]</text>
-    <text x="85" y="202" fill="#9ea0a5" font-size="11" font-family="monospace">00101₂</text>
-    <text x="145" y="202" fill="#64748b" font-size="10" font-family="monospace">k=1</text>
-    <rect class="cov-bar cov-bar-1" id="cov-bar-16-5" data-idx="5" x="390.5" y="185.0" width="45.9" height="22" rx="5" fill="url(#cov-bar-1)" stroke="#64748b" stroke-width="1.5"/>
-    <text x="413.4" y="200.0" fill="#fff" font-size="11" font-weight="600" font-family="monospace" text-anchor="middle" pointer-events="none">(4,5]</text>
-  </g>
-  <!-- Row tree[6] -->
-  <g class="cov-row" id="cov-row-16-6" data-tree-idx="6" data-lowbit="2">
-    <text x="15" y="232" fill="#eff1f6" font-size="12" font-weight="700" font-family="monospace">tree[6]</text>
-    <text x="85" y="232" fill="#9ea0a5" font-size="11" font-family="monospace">00110₂</text>
-    <text x="145" y="232" fill="#64748b" font-size="10" font-family="monospace">k=2</text>
-    <rect class="cov-bar cov-bar-2" id="cov-bar-16-6" data-idx="6" x="390.5" y="215.0" width="97.8" height="22" rx="5" fill="url(#cov-bar-2)" stroke="#2dd4bf" stroke-width="1.5"/>
-    <text x="439.4" y="230.0" fill="#fff" font-size="11" font-weight="600" font-family="monospace" text-anchor="middle" pointer-events="none">(4, 6] (2 cells)</text>
-  </g>
-  <!-- Row tree[7] -->
-  <g class="cov-row" id="cov-row-16-7" data-tree-idx="7" data-lowbit="1">
-    <text x="15" y="262" fill="#eff1f6" font-size="12" font-weight="700" font-family="monospace">tree[7]</text>
-    <text x="85" y="262" fill="#9ea0a5" font-size="11" font-family="monospace">00111₂</text>
-    <text x="145" y="262" fill="#64748b" font-size="10" font-family="monospace">k=1</text>
-    <rect class="cov-bar cov-bar-1" id="cov-bar-16-7" data-idx="7" x="494.2" y="245.0" width="45.9" height="22" rx="5" fill="url(#cov-bar-1)" stroke="#64748b" stroke-width="1.5"/>
-    <text x="517.2" y="260.0" fill="#fff" font-size="11" font-weight="600" font-family="monospace" text-anchor="middle" pointer-events="none">(6,7]</text>
-  </g>
-  <!-- Row tree[8] -->
-  <g class="cov-row" id="cov-row-16-8" data-tree-idx="8" data-lowbit="8">
-    <text x="15" y="292" fill="#eff1f6" font-size="12" font-weight="700" font-family="monospace">tree[8]</text>
-    <text x="85" y="292" fill="#9ea0a5" font-size="11" font-family="monospace">01000₂</text>
-    <text x="145" y="292" fill="#64748b" font-size="10" font-family="monospace">k=8</text>
-    <rect class="cov-bar cov-bar-8" id="cov-bar-16-8" data-idx="8" x="183.0" y="275.0" width="409.0" height="22" rx="5" fill="url(#cov-bar-8)" stroke="#ffa116" stroke-width="1.5"/>
-    <text x="387.5" y="290.0" fill="#fff" font-size="11" font-weight="600" font-family="monospace" text-anchor="middle" pointer-events="none">(0, 8] (8 cells)</text>
-  </g>
-  <!-- Row tree[9] -->
-  <g class="cov-row" id="cov-row-16-9" data-tree-idx="9" data-lowbit="1">
-    <text x="15" y="322" fill="#eff1f6" font-size="12" font-weight="700" font-family="monospace">tree[9]</text>
-    <text x="85" y="322" fill="#9ea0a5" font-size="11" font-family="monospace">01001₂</text>
-    <text x="145" y="322" fill="#64748b" font-size="10" font-family="monospace">k=1</text>
-    <rect class="cov-bar cov-bar-1" id="cov-bar-16-9" data-idx="9" x="598.0" y="305.0" width="45.9" height="22" rx="5" fill="url(#cov-bar-1)" stroke="#64748b" stroke-width="1.5"/>
-    <text x="620.9" y="320.0" fill="#fff" font-size="11" font-weight="600" font-family="monospace" text-anchor="middle" pointer-events="none">(8,9]</text>
-  </g>
-  <!-- Row tree[10] -->
-  <g class="cov-row" id="cov-row-16-10" data-tree-idx="10" data-lowbit="2">
-    <text x="15" y="352" fill="#eff1f6" font-size="12" font-weight="700" font-family="monospace">tree[10]</text>
-    <text x="85" y="352" fill="#9ea0a5" font-size="11" font-family="monospace">01010₂</text>
-    <text x="145" y="352" fill="#64748b" font-size="10" font-family="monospace">k=2</text>
-    <rect class="cov-bar cov-bar-2" id="cov-bar-16-10" data-idx="10" x="598.0" y="335.0" width="97.8" height="22" rx="5" fill="url(#cov-bar-2)" stroke="#2dd4bf" stroke-width="1.5"/>
-    <text x="646.9" y="350.0" fill="#fff" font-size="11" font-weight="600" font-family="monospace" text-anchor="middle" pointer-events="none">(8, 10] (2 cells)</text>
-  </g>
-  <!-- Row tree[11] -->
-  <g class="cov-row" id="cov-row-16-11" data-tree-idx="11" data-lowbit="1">
-    <text x="15" y="382" fill="#eff1f6" font-size="12" font-weight="700" font-family="monospace">tree[11]</text>
-    <text x="85" y="382" fill="#9ea0a5" font-size="11" font-family="monospace">01011₂</text>
-    <text x="145" y="382" fill="#64748b" font-size="10" font-family="monospace">k=1</text>
-    <rect class="cov-bar cov-bar-1" id="cov-bar-16-11" data-idx="11" x="701.8" y="365.0" width="45.9" height="22" rx="5" fill="url(#cov-bar-1)" stroke="#64748b" stroke-width="1.5"/>
-    <text x="724.7" y="380.0" fill="#fff" font-size="11" font-weight="600" font-family="monospace" text-anchor="middle" pointer-events="none">(10,11]</text>
-  </g>
-  <!-- Row tree[12] -->
-  <g class="cov-row" id="cov-row-16-12" data-tree-idx="12" data-lowbit="4">
-    <text x="15" y="412" fill="#eff1f6" font-size="12" font-weight="700" font-family="monospace">tree[12]</text>
-    <text x="85" y="412" fill="#9ea0a5" font-size="11" font-family="monospace">01100₂</text>
-    <text x="145" y="412" fill="#64748b" font-size="10" font-family="monospace">k=4</text>
-    <rect class="cov-bar cov-bar-4" id="cov-bar-16-12" data-idx="12" x="598.0" y="395.0" width="201.5" height="22" rx="5" fill="url(#cov-bar-4)" stroke="#c586c0" stroke-width="1.5"/>
-    <text x="698.8" y="410.0" fill="#fff" font-size="11" font-weight="600" font-family="monospace" text-anchor="middle" pointer-events="none">(8, 12] (4 cells)</text>
-  </g>
-  <!-- Row tree[13] -->
-  <g class="cov-row" id="cov-row-16-13" data-tree-idx="13" data-lowbit="1">
-    <text x="15" y="442" fill="#eff1f6" font-size="12" font-weight="700" font-family="monospace">tree[13]</text>
-    <text x="85" y="442" fill="#9ea0a5" font-size="11" font-family="monospace">01101₂</text>
-    <text x="145" y="442" fill="#64748b" font-size="10" font-family="monospace">k=1</text>
-    <rect class="cov-bar cov-bar-1" id="cov-bar-16-13" data-idx="13" x="805.5" y="425.0" width="45.9" height="22" rx="5" fill="url(#cov-bar-1)" stroke="#64748b" stroke-width="1.5"/>
-    <text x="828.4" y="440.0" fill="#fff" font-size="11" font-weight="600" font-family="monospace" text-anchor="middle" pointer-events="none">(12,13]</text>
-  </g>
-  <!-- Row tree[14] -->
-  <g class="cov-row" id="cov-row-16-14" data-tree-idx="14" data-lowbit="2">
-    <text x="15" y="472" fill="#eff1f6" font-size="12" font-weight="700" font-family="monospace">tree[14]</text>
-    <text x="85" y="472" fill="#9ea0a5" font-size="11" font-family="monospace">01110₂</text>
-    <text x="145" y="472" fill="#64748b" font-size="10" font-family="monospace">k=2</text>
-    <rect class="cov-bar cov-bar-2" id="cov-bar-16-14" data-idx="14" x="805.5" y="455.0" width="97.8" height="22" rx="5" fill="url(#cov-bar-2)" stroke="#2dd4bf" stroke-width="1.5"/>
-    <text x="854.4" y="470.0" fill="#fff" font-size="11" font-weight="600" font-family="monospace" text-anchor="middle" pointer-events="none">(12, 14] (2 cells)</text>
-  </g>
-  <!-- Row tree[15] -->
-  <g class="cov-row" id="cov-row-16-15" data-tree-idx="15" data-lowbit="1">
-    <text x="15" y="502" fill="#eff1f6" font-size="12" font-weight="700" font-family="monospace">tree[15]</text>
-    <text x="85" y="502" fill="#9ea0a5" font-size="11" font-family="monospace">01111₂</text>
-    <text x="145" y="502" fill="#64748b" font-size="10" font-family="monospace">k=1</text>
-    <rect class="cov-bar cov-bar-1" id="cov-bar-16-15" data-idx="15" x="909.2" y="485.0" width="45.9" height="22" rx="5" fill="url(#cov-bar-1)" stroke="#64748b" stroke-width="1.5"/>
-    <text x="932.2" y="500.0" fill="#fff" font-size="11" font-weight="600" font-family="monospace" text-anchor="middle" pointer-events="none">(14,15]</text>
-  </g>
-  <!-- Row tree[16] -->
-  <g class="cov-row" id="cov-row-16-16" data-tree-idx="16" data-lowbit="16">
-    <text x="15" y="532" fill="#eff1f6" font-size="12" font-weight="700" font-family="monospace">tree[16]</text>
-    <text x="85" y="532" fill="#9ea0a5" font-size="11" font-family="monospace">10000₂</text>
-    <text x="145" y="532" fill="#64748b" font-size="10" font-family="monospace">k=16</text>
-    <rect class="cov-bar cov-bar-16" id="cov-bar-16-16" data-idx="16" x="183.0" y="515.0" width="824.0" height="22" rx="5" fill="url(#cov-bar-16)" stroke="#00b8a3" stroke-width="1.5"/>
-    <text x="595.0" y="530.0" fill="#fff" font-size="11" font-weight="600" font-family="monospace" text-anchor="middle" pointer-events="none">(0, 16] (16 cells)</text>
-  </g>
-</svg>
-              </div>
-
-              <div style="font-size: 0.76rem; color: var(--muted); line-height: 1.5; margin-top: 0.5rem;">
-                <span style="color: var(--orange); font-weight: 700;">Color Code by lowbit Power:</span>
-                <span style="color: #64748b; font-weight: 600;">&bull; k = 1 (Leaves / Odd)</span> &bull;
-                <span style="color: var(--cyan); font-weight: 600;">&bull; k = 2 (2 Cells)</span> &bull;
-                <span style="color: #c586c0; font-weight: 600;">&bull; k = 4 (4 Cells)</span> &bull;
-                <span style="color: var(--orange); font-weight: 600;">&bull; k = 8 (8 Cells)</span> &bull;
-                <span style="color: var(--easy); font-weight: 600;">&bull; k = 16 (16 Cells)</span>
-              </div>
-            </div>
-          </article>
-
-          <!-- PATTERN CARD 4: UPDATE TREE DIAGRAM -->
-          <article class="pattern-card" id="fenwick-visual-update-tree">
-            <div class="pattern-card-head">
-              <h3>Update Tree Diagram: Ascending via i + lowbit(i) in Binary Tree Layout</h3>
-            </div>
-            <p class="use-when"><strong>Use when:</strong> Modifying an element at position <em>i</em> and tracing how the delta &Delta; propagates up to every larger enclosing responsibility chunk in O(log n).</p>
-
-            <div class="why-box" style="padding: 1.35rem;">
-              <strong>Update Tree Structure: parent = i + lowbit(i) in Circular Binary Tree Form</strong>
-              <p style="line-height: 1.65; margin-bottom: 0.85rem;">
-                In the Update Tree, directed edges point upward from child to parent via <code>parent = i + lowbit(i)</code>.
-                Rendered with circular nodes and angled tree branches:
-                For $N = 8$, the root is <strong>Node 8</strong> (since $8 + 8 = 16 > 8$).
-                <strong>Node 8</strong> has children <strong>4, 6, 7</strong>; <strong>Node 4</strong> has children <strong>2, 3</strong>; <strong>Node 2</strong> has child <strong>1</strong>; <strong>Node 6</strong> has child <strong>5</strong>.
-              </p>
-
-              <!-- Update Tree SVG -->
-              <div class="bit-svg-wrap">
-<svg class="bit-svg bit-tree-svg" id="bit-update-tree-svg" viewBox="0 0 860 400" width="100%" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
-  <defs>
-    <marker id="upd-arr-default" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 1 L 10 5 L 0 9 z" fill="#64748b"/></marker>
-    <marker id="upd-arr-orange" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#ffa116"/></marker>
-    <filter id="glow-orange-upd" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="4" result="blur"/><feComposite in="SourceGraphic" in2="blur" operator="over"/></filter>
-  </defs>
-  <!-- Directed Update Edges: parent = i + lowbit(i) -->
-  <line class="tree-edge" id="upd-edge-1-2" x1="147.0" y1="293.0" x2="196.6" y2="243.4" stroke="#383838" stroke-width="1.6" stroke-dasharray="3,3" marker-end="url(#upd-arr-default)"/>
-  <line class="tree-edge" id="upd-edge-2-4" x1="236.5" y1="214.3" x2="361.7" y2="151.6" stroke="#383838" stroke-width="1.6" stroke-dasharray="3,3" marker-end="url(#upd-arr-default)"/>
-  <line class="tree-edge edge-path" id="upd-edge-3-4" x1="310.7" y1="288.5" x2="373.4" y2="163.3" stroke="#ffa116" stroke-width="2.8" marker-end="url(#upd-arr-orange)" filter="url(#glow-orange-upd)"/>
-  <line class="tree-edge edge-path" id="upd-edge-4-8" x1="408.3" y1="134.2" x2="699.8" y2="61.3" stroke="#ffa116" stroke-width="2.8" marker-end="url(#upd-arr-orange)" filter="url(#glow-orange-upd)"/>
-  <line class="tree-edge" id="upd-edge-5-6" x1="487.0" y1="293.0" x2="536.6" y2="243.4" stroke="#383838" stroke-width="1.6" stroke-dasharray="3,3" marker-end="url(#upd-arr-default)"/>
-  <line class="tree-edge" id="upd-edge-6-8" x1="572.0" y1="208.0" x2="706.6" y2="73.4" stroke="#383838" stroke-width="1.6" stroke-dasharray="3,3" marker-end="url(#upd-arr-default)"/>
-  <line class="tree-edge" id="upd-edge-7-8" x1="647.6" y1="287.2" x2="716.8" y2="79.7" stroke="#383838" stroke-width="1.6" stroke-dasharray="3,3" marker-end="url(#upd-arr-default)"/>
-  <!-- Circular Binary Tree Nodes -->
-  <g class="tree-node-group node-highlight" id="upd-node-8" data-node="8">
-    <circle cx="725" cy="55" r="25" fill="rgba(255, 161, 22, 0.22)" stroke="#ffa116" stroke-width="2.6" filter="url(#glow-orange-upd)"/>
-    <text x="725" y="60" fill="#ffa116" font-size="14" font-weight="800" font-family="monospace" text-anchor="middle" pointer-events="none">8</text>
-    <rect x="695" y="83" width="60" height="16" rx="4" fill="#1c1c1c" stroke="#333" stroke-width="0.8"/>
-    <text x="725" y="94" fill="#2dd4bf" font-size="9" font-weight="700" font-family="monospace" text-anchor="middle" pointer-events="none">(0, 8]</text>
-    <text x="725" y="26" fill="#9ea0a5" font-size="9" font-family="monospace" text-anchor="middle" pointer-events="none">1000₂</text>
-    <rect class="node-step-badge" x="680" y="7" width="90" height="16" rx="8" fill="#ffa116" stroke="#141414" stroke-width="1.5"/>
-    <text class="node-step-text" x="725" y="19" fill="#141414" font-size="8.5" font-weight="800" font-family="sans-serif" text-anchor="middle">Step 3 (+4)</text>
-  </g>
-  <g class="tree-node-group node-highlight" id="upd-node-4" data-node="4">
-    <circle cx="385" cy="140" r="25" fill="rgba(255, 161, 22, 0.22)" stroke="#ffa116" stroke-width="2.6" filter="url(#glow-orange-upd)"/>
-    <text x="385" y="145" fill="#ffa116" font-size="14" font-weight="800" font-family="monospace" text-anchor="middle" pointer-events="none">4</text>
-    <rect x="355" y="168" width="60" height="16" rx="4" fill="#1c1c1c" stroke="#333" stroke-width="0.8"/>
-    <text x="385" y="179" fill="#2dd4bf" font-size="9" font-weight="700" font-family="monospace" text-anchor="middle" pointer-events="none">(0, 4]</text>
-    <text x="385" y="111" fill="#9ea0a5" font-size="9" font-family="monospace" text-anchor="middle" pointer-events="none">0100₂</text>
-    <rect class="node-step-badge" x="340" y="92" width="90" height="16" rx="8" fill="#ffa116" stroke="#141414" stroke-width="1.5"/>
-    <text class="node-step-text" x="385" y="104" fill="#141414" font-size="8.5" font-weight="800" font-family="sans-serif" text-anchor="middle">Step 2 (+1)</text>
-  </g>
-  <g class="tree-node-group " id="upd-node-2" data-node="2">
-    <circle cx="215" cy="225" r="23" fill="#1e1e1e" stroke="#2dd4bf" stroke-width="1.8"/>
-    <text x="215" y="230" fill="#ffffff" font-size="14" font-weight="800" font-family="monospace" text-anchor="middle" pointer-events="none">2</text>
-    <rect x="185" y="253" width="60" height="16" rx="4" fill="#1c1c1c" stroke="#333" stroke-width="0.8"/>
-    <text x="215" y="264" fill="#2dd4bf" font-size="9" font-weight="700" font-family="monospace" text-anchor="middle" pointer-events="none">(0, 2]</text>
-    <text x="215" y="196" fill="#9ea0a5" font-size="9" font-family="monospace" text-anchor="middle" pointer-events="none">0010₂</text>
-  </g>
-  <g class="tree-node-group " id="upd-node-6" data-node="6">
-    <circle cx="555" cy="225" r="23" fill="#1e1e1e" stroke="#2dd4bf" stroke-width="1.8"/>
-    <text x="555" y="230" fill="#ffffff" font-size="14" font-weight="800" font-family="monospace" text-anchor="middle" pointer-events="none">6</text>
-    <rect x="525" y="253" width="60" height="16" rx="4" fill="#1c1c1c" stroke="#333" stroke-width="0.8"/>
-    <text x="555" y="264" fill="#2dd4bf" font-size="9" font-weight="700" font-family="monospace" text-anchor="middle" pointer-events="none">(4, 6]</text>
-    <text x="555" y="196" fill="#9ea0a5" font-size="9" font-family="monospace" text-anchor="middle" pointer-events="none">0110₂</text>
-  </g>
-  <g class="tree-node-group " id="upd-node-1" data-node="1">
-    <circle cx="130" cy="310" r="23" fill="#1e1e1e" stroke="#64748b" stroke-width="1.8"/>
-    <text x="130" y="315" fill="#ffffff" font-size="14" font-weight="800" font-family="monospace" text-anchor="middle" pointer-events="none">1</text>
-    <rect x="100" y="338" width="60" height="16" rx="4" fill="#1c1c1c" stroke="#333" stroke-width="0.8"/>
-    <text x="130" y="349" fill="#2dd4bf" font-size="9" font-weight="700" font-family="monospace" text-anchor="middle" pointer-events="none">(0, 1]</text>
-    <text x="130" y="281" fill="#9ea0a5" font-size="9" font-family="monospace" text-anchor="middle" pointer-events="none">0001₂</text>
-  </g>
-  <g class="tree-node-group node-highlight" id="upd-node-3" data-node="3">
-    <circle cx="300" cy="310" r="25" fill="rgba(255, 161, 22, 0.22)" stroke="#ffa116" stroke-width="2.6" filter="url(#glow-orange-upd)"/>
-    <text x="300" y="315" fill="#ffa116" font-size="14" font-weight="800" font-family="monospace" text-anchor="middle" pointer-events="none">3</text>
-    <rect x="270" y="338" width="60" height="16" rx="4" fill="#1c1c1c" stroke="#333" stroke-width="0.8"/>
-    <text x="300" y="349" fill="#2dd4bf" font-size="9" font-weight="700" font-family="monospace" text-anchor="middle" pointer-events="none">(2, 3]</text>
-    <text x="300" y="281" fill="#9ea0a5" font-size="9" font-family="monospace" text-anchor="middle" pointer-events="none">0011₂</text>
-    <rect class="node-step-badge" x="255" y="262" width="90" height="16" rx="8" fill="#ffa116" stroke="#141414" stroke-width="1.5"/>
-    <text class="node-step-text" x="300" y="274" fill="#141414" font-size="8.5" font-weight="800" font-family="sans-serif" text-anchor="middle">Step 1 (Start)</text>
-  </g>
-  <g class="tree-node-group " id="upd-node-5" data-node="5">
-    <circle cx="470" cy="310" r="23" fill="#1e1e1e" stroke="#64748b" stroke-width="1.8"/>
-    <text x="470" y="315" fill="#ffffff" font-size="14" font-weight="800" font-family="monospace" text-anchor="middle" pointer-events="none">5</text>
-    <rect x="440" y="338" width="60" height="16" rx="4" fill="#1c1c1c" stroke="#333" stroke-width="0.8"/>
-    <text x="470" y="349" fill="#2dd4bf" font-size="9" font-weight="700" font-family="monospace" text-anchor="middle" pointer-events="none">(4, 5]</text>
-    <text x="470" y="281" fill="#9ea0a5" font-size="9" font-family="monospace" text-anchor="middle" pointer-events="none">0101₂</text>
-  </g>
-  <g class="tree-node-group " id="upd-node-7" data-node="7">
-    <circle cx="640" cy="310" r="23" fill="#1e1e1e" stroke="#64748b" stroke-width="1.8"/>
-    <text x="640" y="315" fill="#ffffff" font-size="14" font-weight="800" font-family="monospace" text-anchor="middle" pointer-events="none">7</text>
-    <rect x="610" y="338" width="60" height="16" rx="4" fill="#1c1c1c" stroke="#333" stroke-width="0.8"/>
-    <text x="640" y="349" fill="#2dd4bf" font-size="9" font-weight="700" font-family="monospace" text-anchor="middle" pointer-events="none">(6, 7]</text>
-    <text x="640" y="281" fill="#9ea0a5" font-size="9" font-family="monospace" text-anchor="middle" pointer-events="none">0111₂</text>
-  </g>
-</svg>
-              </div>
-
-              <!-- Update Walkthrough Trace -->
-              <div class="rq-sqrt-query-trace-box" style="margin-top: 0.95rem;">
-                <div class="rq-trace-title">
-                  <strong style="color: var(--orange);">Walkthrough: Executing <code>update(3, delta)</code> &bull; Path: 3 &rarr; 4 &rarr; 8:</strong>
-                </div>
-                <div class="rq-trace-steps">
-                  <div class="rq-step-box step-head" style="border-color: var(--orange);">
-                    <span class="step-badge" style="color: var(--orange);">Hop 1 (i = 3)</span>
-                    <span><code>tree[3] += &Delta;</code> &bull; Covers (2, 3] &bull; <code>3 + lowbit(3) = 3 + 1 = 4</code></span>
-                  </div>
-                  <div class="rq-step-box step-mid" style="border-color: var(--orange);">
-                    <span class="step-badge" style="color: var(--orange);">Hop 2 (i = 4)</span>
-                    <span><code>tree[4] += &Delta;</code> &bull; Covers (0, 4] &bull; <code>4 + lowbit(4) = 4 + 4 = 8</code></span>
-                  </div>
-                  <div class="rq-step-box step-tail" style="border-color: var(--orange);">
-                    <span class="step-badge" style="color: var(--orange);">Hop 3 (i = 8)</span>
-                    <span><code>tree[8] += &Delta;</code> &bull; Covers (0, 8] &bull; <code>8 + lowbit(8) = 16 &gt; 8</code> (Terminates!)</span>
-                  </div>
-                </div>
-                <div class="rq-trace-total">
-                  <strong>Why this is correct:</strong> Position 3 is enclosed within intervals <code>(2, 3]</code>, <code>(0, 4]</code>, and <code>(0, 8]</code>. No other node in the tree contains position 3! Exactly 3 point additions suffice.
-                </div>
-              </div>
-            </div>
-          </article>
-
-          <!-- PATTERN CARD 5: QUERY TREE DIAGRAM -->
-          <article class="pattern-card" id="fenwick-visual-query-tree">
-            <div class="pattern-card-head">
-              <h3>Query Tree Diagram: Descending via i - lowbit(i) &amp; Interval Stitching</h3>
-            </div>
-            <p class="use-when"><strong>Use when:</strong> Computing prefix sum <code>query(idx)</code> by stripping set bits, stepping down to sentinel root 0, and concatenating disjoint dyadic chunks.</p>
-
-            <div class="why-box" style="padding: 1.35rem;">
-              <strong>Query Tree Structure: parent = i - lowbit(i), Root 0</strong>
-              <p style="line-height: 1.65; margin-bottom: 0.85rem;">
-                In the Query Tree, edges point upward towards <strong>Sentinel Root 0</strong>.
-                Rendered with circular nodes and angled tree branches:
-                <strong>Root 0</strong> has children <strong>1, 2, 4, 8</strong> (all powers of 2); <strong>Node 2</strong> &rarr; <strong>3</strong>; <strong>Node 4</strong> &rarr; <strong>5, 6</strong>; <strong>Node 6</strong> &rarr; <strong>7</strong>.
-              </p>
-
-              <!-- Query Tree SVG -->
-              <div class="bit-svg-wrap">
-<svg class="bit-svg bit-tree-svg" id="bit-query-tree-svg" viewBox="0 0 860 400" width="100%" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
-  <defs>
-    <marker id="qry-arr-default" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 1 L 10 5 L 0 9 z" fill="#64748b"/></marker>
-    <marker id="qry-arr-easy" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#00b8a3"/></marker>
-    <filter id="glow-easy-qry" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="4" result="blur"/><feComposite in="SourceGraphic" in2="blur" operator="over"/></filter>
-  </defs>
-  <!-- Directed Query Edges: parent = i - lowbit(i) -->
-  <line class="tree-edge" id="qry-edge-1-0" x1="124.5" y1="286.6" x2="76.0" y2="80.3" stroke="#383838" stroke-width="1.6" stroke-dasharray="3,3" marker-end="url(#qry-arr-default)"/>
-  <line class="tree-edge" id="qry-edge-2-0" x1="199.4" y1="206.7" x2="86.9" y2="74.8" stroke="#383838" stroke-width="1.6" stroke-dasharray="3,3" marker-end="url(#qry-arr-default)"/>
-  <line class="tree-edge edge-path-query" id="qry-edge-4-0" x1="361.8" y1="133.7" x2="95.1" y2="61.8" stroke="#00b8a3" stroke-width="2.8" marker-end="url(#qry-arr-easy)" filter="url(#glow-easy-qry)"/>
-  <line class="tree-edge" id="qry-edge-8-0" x1="701.0" y1="55.0" x2="96.0" y2="55.0" stroke="#383838" stroke-width="1.6" stroke-dasharray="3,3" marker-end="url(#qry-arr-default)"/>
-  <line class="tree-edge" id="qry-edge-3-2" x1="283.0" y1="293.0" x2="233.4" y2="243.4" stroke="#383838" stroke-width="1.6" stroke-dasharray="3,3" marker-end="url(#qry-arr-default)"/>
-  <line class="tree-edge" id="qry-edge-5-4" x1="459.3" y1="288.5" x2="396.6" y2="163.3" stroke="#383838" stroke-width="1.6" stroke-dasharray="3,3" marker-end="url(#qry-arr-default)"/>
-  <line class="tree-edge edge-path-query" id="qry-edge-6-4" x1="533.5" y1="214.3" x2="408.3" y2="151.6" stroke="#00b8a3" stroke-width="2.8" marker-end="url(#qry-arr-easy)" filter="url(#glow-easy-qry)"/>
-  <line class="tree-edge edge-path-query" id="qry-edge-7-6" x1="623.0" y1="293.0" x2="573.4" y2="243.4" stroke="#00b8a3" stroke-width="2.8" marker-end="url(#qry-arr-easy)" filter="url(#glow-easy-qry)"/>
-  <!-- Circular Tree Nodes -->
-  <g class="tree-node-group node-highlight-query" id="qry-node-0" data-node="0">
-    <circle cx="70" cy="55" r="25" fill="rgba(0, 184, 163, 0.22)" stroke="#00b8a3" stroke-width="2.6" filter="url(#glow-easy-qry)"/>
-    <text x="70" y="60" fill="#00b8a3" font-size="14" font-weight="800" font-family="monospace" text-anchor="middle" pointer-events="none">0</text>
-    <rect x="40" y="83" width="60" height="16" rx="4" fill="#1c1c1c" stroke="#333" stroke-width="0.8"/>
-    <text x="70" y="94" fill="#2dd4bf" font-size="9" font-weight="700" font-family="monospace" text-anchor="middle" pointer-events="none">Root (0)</text>
-    <text x="70" y="26" fill="#9ea0a5" font-size="9" font-family="monospace" text-anchor="middle" pointer-events="none">0000₂</text>
-    <rect class="node-step-badge" x="15.0" y="7" width="110" height="16" rx="8" fill="#00b8a3" stroke="#141414" stroke-width="1.5"/>
-    <text class="node-step-text" x="70" y="19" fill="#141414" font-size="8.5" font-weight="800" font-family="sans-serif" text-anchor="middle">Sentinel Root 0 (Done)</text>
-  </g>
-  <g class="tree-node-group " id="qry-node-8" data-node="8">
-    <circle cx="725" cy="55" r="23" fill="#1e1e1e" stroke="#ffa116" stroke-width="1.8"/>
-    <text x="725" y="60" fill="#ffffff" font-size="14" font-weight="800" font-family="monospace" text-anchor="middle" pointer-events="none">8</text>
-    <rect x="695" y="83" width="60" height="16" rx="4" fill="#1c1c1c" stroke="#333" stroke-width="0.8"/>
-    <text x="725" y="94" fill="#2dd4bf" font-size="9" font-weight="700" font-family="monospace" text-anchor="middle" pointer-events="none">(0, 8]</text>
-    <text x="725" y="26" fill="#9ea0a5" font-size="9" font-family="monospace" text-anchor="middle" pointer-events="none">1000₂</text>
-  </g>
-  <g class="tree-node-group node-highlight-query" id="qry-node-4" data-node="4">
-    <circle cx="385" cy="140" r="25" fill="rgba(0, 184, 163, 0.22)" stroke="#00b8a3" stroke-width="2.6" filter="url(#glow-easy-qry)"/>
-    <text x="385" y="145" fill="#00b8a3" font-size="14" font-weight="800" font-family="monospace" text-anchor="middle" pointer-events="none">4</text>
-    <rect x="355" y="168" width="60" height="16" rx="4" fill="#1c1c1c" stroke="#333" stroke-width="0.8"/>
-    <text x="385" y="179" fill="#2dd4bf" font-size="9" font-weight="700" font-family="monospace" text-anchor="middle" pointer-events="none">(0, 4]</text>
-    <text x="385" y="111" fill="#9ea0a5" font-size="9" font-family="monospace" text-anchor="middle" pointer-events="none">0100₂</text>
-    <rect class="node-step-badge" x="330.0" y="92" width="110" height="16" rx="8" fill="#00b8a3" stroke="#141414" stroke-width="1.5"/>
-    <text class="node-step-text" x="385" y="104" fill="#141414" font-size="8.5" font-weight="800" font-family="sans-serif" text-anchor="middle">Step 3: adds (0, 4]</text>
-  </g>
-  <g class="tree-node-group " id="qry-node-2" data-node="2">
-    <circle cx="215" cy="225" r="23" fill="#1e1e1e" stroke="#2dd4bf" stroke-width="1.8"/>
-    <text x="215" y="230" fill="#ffffff" font-size="14" font-weight="800" font-family="monospace" text-anchor="middle" pointer-events="none">2</text>
-    <rect x="185" y="253" width="60" height="16" rx="4" fill="#1c1c1c" stroke="#333" stroke-width="0.8"/>
-    <text x="215" y="264" fill="#2dd4bf" font-size="9" font-weight="700" font-family="monospace" text-anchor="middle" pointer-events="none">(0, 2]</text>
-    <text x="215" y="196" fill="#9ea0a5" font-size="9" font-family="monospace" text-anchor="middle" pointer-events="none">0010₂</text>
-  </g>
-  <g class="tree-node-group node-highlight-query" id="qry-node-6" data-node="6">
-    <circle cx="555" cy="225" r="25" fill="rgba(0, 184, 163, 0.22)" stroke="#00b8a3" stroke-width="2.6" filter="url(#glow-easy-qry)"/>
-    <text x="555" y="230" fill="#00b8a3" font-size="14" font-weight="800" font-family="monospace" text-anchor="middle" pointer-events="none">6</text>
-    <rect x="525" y="253" width="60" height="16" rx="4" fill="#1c1c1c" stroke="#333" stroke-width="0.8"/>
-    <text x="555" y="264" fill="#2dd4bf" font-size="9" font-weight="700" font-family="monospace" text-anchor="middle" pointer-events="none">(4, 6]</text>
-    <text x="555" y="196" fill="#9ea0a5" font-size="9" font-family="monospace" text-anchor="middle" pointer-events="none">0110₂</text>
-    <rect class="node-step-badge" x="500.0" y="177" width="110" height="16" rx="8" fill="#00b8a3" stroke="#141414" stroke-width="1.5"/>
-    <text class="node-step-text" x="555" y="189" fill="#141414" font-size="8.5" font-weight="800" font-family="sans-serif" text-anchor="middle">Step 2: adds (4, 6]</text>
-  </g>
-  <g class="tree-node-group " id="qry-node-1" data-node="1">
-    <circle cx="130" cy="310" r="23" fill="#1e1e1e" stroke="#64748b" stroke-width="1.8"/>
-    <text x="130" y="315" fill="#ffffff" font-size="14" font-weight="800" font-family="monospace" text-anchor="middle" pointer-events="none">1</text>
-    <rect x="100" y="338" width="60" height="16" rx="4" fill="#1c1c1c" stroke="#333" stroke-width="0.8"/>
-    <text x="130" y="349" fill="#2dd4bf" font-size="9" font-weight="700" font-family="monospace" text-anchor="middle" pointer-events="none">(0, 1]</text>
-    <text x="130" y="281" fill="#9ea0a5" font-size="9" font-family="monospace" text-anchor="middle" pointer-events="none">0001₂</text>
-  </g>
-  <g class="tree-node-group " id="qry-node-3" data-node="3">
-    <circle cx="300" cy="310" r="23" fill="#1e1e1e" stroke="#64748b" stroke-width="1.8"/>
-    <text x="300" y="315" fill="#ffffff" font-size="14" font-weight="800" font-family="monospace" text-anchor="middle" pointer-events="none">3</text>
-    <rect x="270" y="338" width="60" height="16" rx="4" fill="#1c1c1c" stroke="#333" stroke-width="0.8"/>
-    <text x="300" y="349" fill="#2dd4bf" font-size="9" font-weight="700" font-family="monospace" text-anchor="middle" pointer-events="none">(2, 3]</text>
-    <text x="300" y="281" fill="#9ea0a5" font-size="9" font-family="monospace" text-anchor="middle" pointer-events="none">0011₂</text>
-  </g>
-  <g class="tree-node-group " id="qry-node-5" data-node="5">
-    <circle cx="470" cy="310" r="23" fill="#1e1e1e" stroke="#64748b" stroke-width="1.8"/>
-    <text x="470" y="315" fill="#ffffff" font-size="14" font-weight="800" font-family="monospace" text-anchor="middle" pointer-events="none">5</text>
-    <rect x="440" y="338" width="60" height="16" rx="4" fill="#1c1c1c" stroke="#333" stroke-width="0.8"/>
-    <text x="470" y="349" fill="#2dd4bf" font-size="9" font-weight="700" font-family="monospace" text-anchor="middle" pointer-events="none">(4, 5]</text>
-    <text x="470" y="281" fill="#9ea0a5" font-size="9" font-family="monospace" text-anchor="middle" pointer-events="none">0101₂</text>
-  </g>
-  <g class="tree-node-group node-highlight-query" id="qry-node-7" data-node="7">
-    <circle cx="640" cy="310" r="25" fill="rgba(0, 184, 163, 0.22)" stroke="#00b8a3" stroke-width="2.6" filter="url(#glow-easy-qry)"/>
-    <text x="640" y="315" fill="#00b8a3" font-size="14" font-weight="800" font-family="monospace" text-anchor="middle" pointer-events="none">7</text>
-    <rect x="610" y="338" width="60" height="16" rx="4" fill="#1c1c1c" stroke="#333" stroke-width="0.8"/>
-    <text x="640" y="349" fill="#2dd4bf" font-size="9" font-weight="700" font-family="monospace" text-anchor="middle" pointer-events="none">(6, 7]</text>
-    <text x="640" y="281" fill="#9ea0a5" font-size="9" font-family="monospace" text-anchor="middle" pointer-events="none">0111₂</text>
-    <rect class="node-step-badge" x="585.0" y="262" width="110" height="16" rx="8" fill="#00b8a3" stroke="#141414" stroke-width="1.5"/>
-    <text class="node-step-text" x="640" y="274" fill="#141414" font-size="8.5" font-weight="800" font-family="sans-serif" text-anchor="middle">Step 1: adds (6, 7]</text>
-  </g>
-</svg>
-              </div>
-
-              <!-- Interval Stitching Component -->
-              <div class="bit-stitching-box">
-                <div class="bit-stitch-equation">
-                  <strong style="color: var(--easy);">Prefix Sum Range Stitching Decomposition for <code>query(7)</code>:</strong>
-                </div>
-                <div class="bit-stitch-chips">
-                  <div class="bit-stitch-chunk chunk-4">
-                    <span>tree[4]</span>
-                    <span>(0, 4]</span>
-                    <span>(4 items)</span>
-                  </div>
-                  <span style="color: var(--muted); font-size: 1.1rem; font-weight: 700;">+</span>
-                  <div class="bit-stitch-chunk chunk-6">
-                    <span>tree[6]</span>
-                    <span>(4, 6]</span>
-                    <span>(2 items)</span>
-                  </div>
-                  <span style="color: var(--muted); font-size: 1.1rem; font-weight: 700;">+</span>
-                  <div class="bit-stitch-chunk chunk-7">
-                    <span>tree[7]</span>
-                    <span>(6, 7]</span>
-                    <span>(1 item)</span>
-                  </div>
-                  <span style="color: var(--muted); font-size: 1.1rem; font-weight: 700;">=</span>
-                  <div class="bit-stitch-chunk chunk-total">
-                    <span>prefix(7)</span>
-                    <span>(0, 7]</span>
-                    <span>Exact Sum!</span>
-                  </div>
-                </div>
-                <div style="font-size: 0.77rem; color: var(--muted); line-height: 1.5; margin-top: 0.2rem;">
-                  Notice how the intervals <code>(0, 4]</code>, <code>(4, 6]</code>, and <code>(6, 7]</code> tile the range <code>(0, 7]</code> without a single gap or overlap!
-                  Similarly, for $N = 16$: <code>query(13)</code> hops <code>13 &rarr; 12 &rarr; 8 &rarr; 0</code>, stitching <code>(0, 8] + (8, 12] + (12, 13] = (0, 13]</code>.
-                </div>
-              </div>
-            </div>
-          </article>
-
-          <!-- PATTERN CARD 5b: FULL QUERY TREE FOR INDICES 0..30 -->
           <article class="pattern-card" id="fenwick-visual-query-tree-30">
             <div class="pattern-card-head">
-              <h3>Query Tree for N = 30: Every Index with Its Binary Form</h3>
+              <h3>Query Tree for N = 30</h3>
             </div>
-            <p class="use-when"><strong>Use when:</strong> Seeing the whole query forest at once &mdash; which <code>tree[i]</code> cells a prefix query touches, and why the hop count equals the number of set bits.</p>
+            <p class="use-when"><strong>Read it as:</strong> column = index, row = number of set bits, binary inside each node, 0 = dummy root. Highlighted: <code>query(13)</code>. Hover a node for its range.</p>
 
-            <div class="why-box" style="padding: 1.35rem;">
-              <strong>Parent = i - (i &amp; -i) &bull; Row = popcount(i) &bull; Column = i</strong>
-              <p style="line-height: 1.65; margin-bottom: 0.85rem;">
-                Every index <code>1..30</code> points to <code>i - lowbit(i)</code>, which <b style="color: var(--text);">clears its lowest set bit</b>. <b style="color: var(--text);">Node 0</b> is a dummy root (sentinel), not an array slot.
-                Each hop removes exactly one 1-bit, so the row a node sits in is its popcount and <code>query(i)</code> takes popcount(i) hops.
-                Root 0's children are the powers of two <b style="color: var(--text);">1, 2, 4, 8, 16</b>; node <code>i</code>'s children are <code>i + 2^j</code> for every <code>2^j &lt; lowbit(i)</code> (e.g. 24 = <code>11000₂</code> &rarr; 25, 26, 28).
-                Hover a node for its interval <code>(i - lowbit(i), i]</code>.
-              </p>
-
-              <div class="bit-svg-wrap" role="region" aria-label="Query tree for indices 0 to 30" tabindex="0">
-<svg class="bit-svg bit-q30-svg" id="bit-query-tree-30-svg" viewBox="0 0 1572 520" width="100%" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Fenwick query tree for indices 0 to 30; parent of i is i minus lowbit of i; query(29) path highlighted">
+            <div class="bit-svg-wrap" role="region" aria-label="Query tree for indices 0 to 30" tabindex="0">
+<svg class="bit-svg bit-q30-svg" id="bit-query-tree-30-svg" viewBox="0 0 1572 520" width="100%" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Fenwick query tree for indices 0 to 30; parent of i is i minus lowbit of i; query(13) path highlighted">
   <defs>
     <marker id="q30-arr-default" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 1 L 10 5 L 0 9 z" fill="#64748b"/></marker>
     <marker id="q30-arr-easy" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#00b8a3"/></marker>
@@ -10893,15 +10022,15 @@ Result: len(tails) = 3  (Optimal nesting: [2,3] -&gt; [5,4] -&gt; [6,7])</code><
   <line id="q30-edge-5-4" x1="275.7" y1="238.3" x2="248.0" y2="180.3" stroke="#383838" stroke-width="1.6" stroke-dasharray="3,3" marker-end="url(#q30-arr-default)"/>
   <line id="q30-edge-6-4" x1="319.4" y1="242.6" x2="255.3" y2="175.3" stroke="#383838" stroke-width="1.6" stroke-dasharray="3,3" marker-end="url(#q30-arr-default)"/>
   <line id="q30-edge-7-6" x1="375.7" y1="343.3" x2="348.0" y2="285.3" stroke="#383838" stroke-width="1.6" stroke-dasharray="3,3" marker-end="url(#q30-arr-default)"/>
-  <line id="q30-edge-8-0" x1="412.8" y1="148.9" x2="63.1" y2="57.1" stroke="#383838" stroke-width="1.6" stroke-dasharray="3,3" marker-end="url(#q30-arr-default)"/>
+  <line id="q30-edge-8-0" x1="412.8" y1="148.9" x2="63.1" y2="57.1" stroke="#00b8a3" stroke-width="2.8" marker-end="url(#q30-arr-easy)" filter="url(#glow-easy-q30)"/>
   <line id="q30-edge-9-8" x1="475.7" y1="238.3" x2="448.0" y2="180.3" stroke="#383838" stroke-width="1.6" stroke-dasharray="3,3" marker-end="url(#q30-arr-default)"/>
   <line id="q30-edge-10-8" x1="519.4" y1="242.6" x2="455.3" y2="175.3" stroke="#383838" stroke-width="1.6" stroke-dasharray="3,3" marker-end="url(#q30-arr-default)"/>
   <line id="q30-edge-11-10" x1="575.7" y1="343.3" x2="548.0" y2="285.3" stroke="#383838" stroke-width="1.6" stroke-dasharray="3,3" marker-end="url(#q30-arr-default)"/>
-  <line id="q30-edge-12-8" x1="614.8" y1="248.8" x2="460.8" y2="168.0" stroke="#383838" stroke-width="1.6" stroke-dasharray="3,3" marker-end="url(#q30-arr-default)"/>
-  <line id="q30-edge-13-12" x1="675.7" y1="343.3" x2="648.0" y2="285.3" stroke="#383838" stroke-width="1.6" stroke-dasharray="3,3" marker-end="url(#q30-arr-default)"/>
+  <line id="q30-edge-12-8" x1="614.8" y1="248.8" x2="460.8" y2="168.0" stroke="#00b8a3" stroke-width="2.8" marker-end="url(#q30-arr-easy)" filter="url(#glow-easy-q30)"/>
+  <line id="q30-edge-13-12" x1="675.7" y1="343.3" x2="648.0" y2="285.3" stroke="#00b8a3" stroke-width="2.8" marker-end="url(#q30-arr-easy)" filter="url(#glow-easy-q30)"/>
   <line id="q30-edge-14-12" x1="719.4" y1="347.6" x2="655.3" y2="280.3" stroke="#383838" stroke-width="1.6" stroke-dasharray="3,3" marker-end="url(#q30-arr-default)"/>
   <line id="q30-edge-15-14" x1="775.7" y1="448.3" x2="748.0" y2="390.3" stroke="#383838" stroke-width="1.6" stroke-dasharray="3,3" marker-end="url(#q30-arr-default)"/>
-  <line id="q30-edge-16-0" x1="812.2" y1="151.9" x2="63.8" y2="53.6" stroke="#00b8a3" stroke-width="2.8" marker-end="url(#q30-arr-easy)" filter="url(#glow-easy-q30)"/>
+  <line id="q30-edge-16-0" x1="812.2" y1="151.9" x2="63.8" y2="53.6" stroke="#383838" stroke-width="1.6" stroke-dasharray="3,3" marker-end="url(#q30-arr-default)"/>
   <line id="q30-edge-17-16" x1="875.7" y1="238.3" x2="848.0" y2="180.3" stroke="#383838" stroke-width="1.6" stroke-dasharray="3,3" marker-end="url(#q30-arr-default)"/>
   <line id="q30-edge-18-16" x1="919.4" y1="242.6" x2="855.3" y2="175.3" stroke="#383838" stroke-width="1.6" stroke-dasharray="3,3" marker-end="url(#q30-arr-default)"/>
   <line id="q30-edge-19-18" x1="975.7" y1="343.3" x2="948.0" y2="285.3" stroke="#383838" stroke-width="1.6" stroke-dasharray="3,3" marker-end="url(#q30-arr-default)"/>
@@ -10909,12 +10038,12 @@ Result: len(tails) = 3  (Optimal nesting: [2,3] -&gt; [5,4] -&gt; [6,7])</code><
   <line id="q30-edge-21-20" x1="1075.7" y1="343.3" x2="1048.0" y2="285.3" stroke="#383838" stroke-width="1.6" stroke-dasharray="3,3" marker-end="url(#q30-arr-default)"/>
   <line id="q30-edge-22-20" x1="1119.4" y1="347.6" x2="1055.3" y2="280.3" stroke="#383838" stroke-width="1.6" stroke-dasharray="3,3" marker-end="url(#q30-arr-default)"/>
   <line id="q30-edge-23-22" x1="1175.7" y1="448.3" x2="1148.0" y2="390.3" stroke="#383838" stroke-width="1.6" stroke-dasharray="3,3" marker-end="url(#q30-arr-default)"/>
-  <line id="q30-edge-24-16" x1="1212.8" y1="253.9" x2="863.1" y2="162.1" stroke="#00b8a3" stroke-width="2.8" marker-end="url(#q30-arr-easy)" filter="url(#glow-easy-q30)"/>
+  <line id="q30-edge-24-16" x1="1212.8" y1="253.9" x2="863.1" y2="162.1" stroke="#383838" stroke-width="1.6" stroke-dasharray="3,3" marker-end="url(#q30-arr-default)"/>
   <line id="q30-edge-25-24" x1="1275.7" y1="343.3" x2="1248.0" y2="285.3" stroke="#383838" stroke-width="1.6" stroke-dasharray="3,3" marker-end="url(#q30-arr-default)"/>
   <line id="q30-edge-26-24" x1="1319.4" y1="347.6" x2="1255.3" y2="280.3" stroke="#383838" stroke-width="1.6" stroke-dasharray="3,3" marker-end="url(#q30-arr-default)"/>
   <line id="q30-edge-27-26" x1="1375.7" y1="448.3" x2="1348.0" y2="390.3" stroke="#383838" stroke-width="1.6" stroke-dasharray="3,3" marker-end="url(#q30-arr-default)"/>
-  <line id="q30-edge-28-24" x1="1414.8" y1="353.8" x2="1260.8" y2="273.0" stroke="#00b8a3" stroke-width="2.8" marker-end="url(#q30-arr-easy)" filter="url(#glow-easy-q30)"/>
-  <line id="q30-edge-29-28" x1="1475.7" y1="448.3" x2="1448.0" y2="390.3" stroke="#00b8a3" stroke-width="2.8" marker-end="url(#q30-arr-easy)" filter="url(#glow-easy-q30)"/>
+  <line id="q30-edge-28-24" x1="1414.8" y1="353.8" x2="1260.8" y2="273.0" stroke="#383838" stroke-width="1.6" stroke-dasharray="3,3" marker-end="url(#q30-arr-default)"/>
+  <line id="q30-edge-29-28" x1="1475.7" y1="448.3" x2="1448.0" y2="390.3" stroke="#383838" stroke-width="1.6" stroke-dasharray="3,3" marker-end="url(#q30-arr-default)"/>
   <line id="q30-edge-30-28" x1="1519.4" y1="452.6" x2="1455.3" y2="385.3" stroke="#383838" stroke-width="1.6" stroke-dasharray="3,3" marker-end="url(#q30-arr-default)"/>
   <!-- Circular Nodes: index + 5-bit binary -->
   <g id="q30-node-0" data-node="0"><title>Sentinel root 0: query stops here</title>
@@ -10958,8 +10087,8 @@ Result: len(tails) = 3  (Optimal nesting: [2,3] -&gt; [5,4] -&gt; [6,7])</code><
     <text x="386" y="378" fill="#9ea0a5" font-size="8.5" font-family="monospace" text-anchor="middle" pointer-events="none">00111</text>
   </g>
   <g id="q30-node-8" data-node="8"><title>tree[8] covers (0, 8] · lowbit = 8 · parent = 0</title>
-    <circle cx="436" cy="155" r="22" fill="#1e1e1e" stroke="#ffa116" stroke-width="1.8"/>
-    <text x="436" y="157" fill="#ffffff" font-size="14" font-weight="800" font-family="monospace" text-anchor="middle" pointer-events="none">8</text>
+    <circle cx="436" cy="155" r="22" fill="rgba(0, 184, 163, 0.22)" stroke="#00b8a3" stroke-width="2.6" filter="url(#glow-easy-q30)"/>
+    <text x="436" y="157" fill="#00b8a3" font-size="14" font-weight="800" font-family="monospace" text-anchor="middle" pointer-events="none">8</text>
     <text x="436" y="168" fill="#9ea0a5" font-size="8.5" font-family="monospace" text-anchor="middle" pointer-events="none">01000</text>
   </g>
   <g id="q30-node-9" data-node="9"><title>tree[9] covers (8, 9] · lowbit = 1 · parent = 8</title>
@@ -10978,13 +10107,13 @@ Result: len(tails) = 3  (Optimal nesting: [2,3] -&gt; [5,4] -&gt; [6,7])</code><
     <text x="586" y="378" fill="#9ea0a5" font-size="8.5" font-family="monospace" text-anchor="middle" pointer-events="none">01011</text>
   </g>
   <g id="q30-node-12" data-node="12"><title>tree[12] covers (8, 12] · lowbit = 4 · parent = 8</title>
-    <circle cx="636" cy="260" r="22" fill="#1e1e1e" stroke="#2dd4bf" stroke-width="1.8"/>
-    <text x="636" y="262" fill="#ffffff" font-size="14" font-weight="800" font-family="monospace" text-anchor="middle" pointer-events="none">12</text>
+    <circle cx="636" cy="260" r="22" fill="rgba(0, 184, 163, 0.22)" stroke="#00b8a3" stroke-width="2.6" filter="url(#glow-easy-q30)"/>
+    <text x="636" y="262" fill="#00b8a3" font-size="14" font-weight="800" font-family="monospace" text-anchor="middle" pointer-events="none">12</text>
     <text x="636" y="273" fill="#9ea0a5" font-size="8.5" font-family="monospace" text-anchor="middle" pointer-events="none">01100</text>
   </g>
   <g id="q30-node-13" data-node="13"><title>tree[13] covers (12, 13] · lowbit = 1 · parent = 12</title>
-    <circle cx="686" cy="365" r="22" fill="#1e1e1e" stroke="#c586c0" stroke-width="1.8"/>
-    <text x="686" y="367" fill="#ffffff" font-size="14" font-weight="800" font-family="monospace" text-anchor="middle" pointer-events="none">13</text>
+    <circle cx="686" cy="365" r="22" fill="rgba(0, 184, 163, 0.22)" stroke="#00b8a3" stroke-width="2.6" filter="url(#glow-easy-q30)"/>
+    <text x="686" y="367" fill="#00b8a3" font-size="14" font-weight="800" font-family="monospace" text-anchor="middle" pointer-events="none">13</text>
     <text x="686" y="378" fill="#9ea0a5" font-size="8.5" font-family="monospace" text-anchor="middle" pointer-events="none">01101</text>
   </g>
   <g id="q30-node-14" data-node="14"><title>tree[14] covers (12, 14] · lowbit = 2 · parent = 12</title>
@@ -10998,8 +10127,8 @@ Result: len(tails) = 3  (Optimal nesting: [2,3] -&gt; [5,4] -&gt; [6,7])</code><
     <text x="786" y="483" fill="#9ea0a5" font-size="8.5" font-family="monospace" text-anchor="middle" pointer-events="none">01111</text>
   </g>
   <g id="q30-node-16" data-node="16"><title>tree[16] covers (0, 16] · lowbit = 16 · parent = 0</title>
-    <circle cx="836" cy="155" r="22" fill="rgba(0, 184, 163, 0.22)" stroke="#00b8a3" stroke-width="2.6" filter="url(#glow-easy-q30)"/>
-    <text x="836" y="157" fill="#00b8a3" font-size="14" font-weight="800" font-family="monospace" text-anchor="middle" pointer-events="none">16</text>
+    <circle cx="836" cy="155" r="22" fill="#1e1e1e" stroke="#ffa116" stroke-width="1.8"/>
+    <text x="836" y="157" fill="#ffffff" font-size="14" font-weight="800" font-family="monospace" text-anchor="middle" pointer-events="none">16</text>
     <text x="836" y="168" fill="#9ea0a5" font-size="8.5" font-family="monospace" text-anchor="middle" pointer-events="none">10000</text>
   </g>
   <g id="q30-node-17" data-node="17"><title>tree[17] covers (16, 17] · lowbit = 1 · parent = 16</title>
@@ -11038,8 +10167,8 @@ Result: len(tails) = 3  (Optimal nesting: [2,3] -&gt; [5,4] -&gt; [6,7])</code><
     <text x="1186" y="483" fill="#9ea0a5" font-size="8.5" font-family="monospace" text-anchor="middle" pointer-events="none">10111</text>
   </g>
   <g id="q30-node-24" data-node="24"><title>tree[24] covers (16, 24] · lowbit = 8 · parent = 16</title>
-    <circle cx="1236" cy="260" r="22" fill="rgba(0, 184, 163, 0.22)" stroke="#00b8a3" stroke-width="2.6" filter="url(#glow-easy-q30)"/>
-    <text x="1236" y="262" fill="#00b8a3" font-size="14" font-weight="800" font-family="monospace" text-anchor="middle" pointer-events="none">24</text>
+    <circle cx="1236" cy="260" r="22" fill="#1e1e1e" stroke="#2dd4bf" stroke-width="1.8"/>
+    <text x="1236" y="262" fill="#ffffff" font-size="14" font-weight="800" font-family="monospace" text-anchor="middle" pointer-events="none">24</text>
     <text x="1236" y="273" fill="#9ea0a5" font-size="8.5" font-family="monospace" text-anchor="middle" pointer-events="none">11000</text>
   </g>
   <g id="q30-node-25" data-node="25"><title>tree[25] covers (24, 25] · lowbit = 1 · parent = 24</title>
@@ -11058,13 +10187,13 @@ Result: len(tails) = 3  (Optimal nesting: [2,3] -&gt; [5,4] -&gt; [6,7])</code><
     <text x="1386" y="483" fill="#9ea0a5" font-size="8.5" font-family="monospace" text-anchor="middle" pointer-events="none">11011</text>
   </g>
   <g id="q30-node-28" data-node="28"><title>tree[28] covers (24, 28] · lowbit = 4 · parent = 24</title>
-    <circle cx="1436" cy="365" r="22" fill="rgba(0, 184, 163, 0.22)" stroke="#00b8a3" stroke-width="2.6" filter="url(#glow-easy-q30)"/>
-    <text x="1436" y="367" fill="#00b8a3" font-size="14" font-weight="800" font-family="monospace" text-anchor="middle" pointer-events="none">28</text>
+    <circle cx="1436" cy="365" r="22" fill="#1e1e1e" stroke="#c586c0" stroke-width="1.8"/>
+    <text x="1436" y="367" fill="#ffffff" font-size="14" font-weight="800" font-family="monospace" text-anchor="middle" pointer-events="none">28</text>
     <text x="1436" y="378" fill="#9ea0a5" font-size="8.5" font-family="monospace" text-anchor="middle" pointer-events="none">11100</text>
   </g>
   <g id="q30-node-29" data-node="29"><title>tree[29] covers (28, 29] · lowbit = 1 · parent = 28</title>
-    <circle cx="1486" cy="470" r="22" fill="rgba(0, 184, 163, 0.22)" stroke="#00b8a3" stroke-width="2.6" filter="url(#glow-easy-q30)"/>
-    <text x="1486" y="472" fill="#00b8a3" font-size="14" font-weight="800" font-family="monospace" text-anchor="middle" pointer-events="none">29</text>
+    <circle cx="1486" cy="470" r="22" fill="#1e1e1e" stroke="#64748b" stroke-width="1.8"/>
+    <text x="1486" y="472" fill="#ffffff" font-size="14" font-weight="800" font-family="monospace" text-anchor="middle" pointer-events="none">29</text>
     <text x="1486" y="483" fill="#9ea0a5" font-size="8.5" font-family="monospace" text-anchor="middle" pointer-events="none">11101</text>
   </g>
   <g id="q30-node-30" data-node="30"><title>tree[30] covers (28, 30] · lowbit = 2 · parent = 28</title>
@@ -11073,196 +10202,46 @@ Result: len(tails) = 3  (Optimal nesting: [2,3] -&gt; [5,4] -&gt; [6,7])</code><
     <text x="1536" y="483" fill="#9ea0a5" font-size="8.5" font-family="monospace" text-anchor="middle" pointer-events="none">11110</text>
   </g>
 </svg>
-              </div>
-
-              <div class="bit-stitching-box">
-                <div class="bit-stitch-equation">
-                  <strong style="color: var(--easy);">Highlighted path <code>query(29)</code>: 29 &rarr; 28 &rarr; 24 &rarr; 16 &rarr; 0 &nbsp;(<code>11101₂ &rarr; 11100₂ &rarr; 11000₂ &rarr; 10000₂ &rarr; 00000₂</code>)</strong>
-                </div>
-                <div class="bit-stitch-chips">
-                  <div class="bit-stitch-chunk chunk-4">
-                    <span>tree[16]</span>
-                    <span>(0, 16]</span>
-                    <span>(16 items)</span>
-                  </div>
-                  <span style="color: var(--muted); font-size: 1.1rem; font-weight: 700;">+</span>
-                  <div class="bit-stitch-chunk chunk-6">
-                    <span>tree[24]</span>
-                    <span>(16, 24]</span>
-                    <span>(8 items)</span>
-                  </div>
-                  <span style="color: var(--muted); font-size: 1.1rem; font-weight: 700;">+</span>
-                  <div class="bit-stitch-chunk chunk-7">
-                    <span>tree[28]</span>
-                    <span>(24, 28]</span>
-                    <span>(4 items)</span>
-                  </div>
-                  <span style="color: var(--muted); font-size: 1.1rem; font-weight: 700;">+</span>
-                  <div class="bit-stitch-chunk chunk-sky">
-                    <span>tree[29]</span>
-                    <span>(28, 29]</span>
-                    <span>(1 item)</span>
-                  </div>
-                  <span style="color: var(--muted); font-size: 1.1rem; font-weight: 700;">=</span>
-                  <div class="bit-stitch-chunk chunk-total">
-                    <span>prefix(29)</span>
-                    <span>(0, 29]</span>
-                    <span>4 hops = popcount(29)</span>
-                  </div>
-                </div>
-                <div style="font-size: 0.77rem; color: var(--muted); line-height: 1.5; margin-top: 0.2rem;">
-                  Worst cases for N = 30 sit on the bottom row (4 set bits): <code>15, 23, 27, 29, 30</code>. The deepest possible path in a Fenwick tree of size N is &lfloor;log&#8322; N&rfloor; + 1 hops.
-                </div>
-              </div>
             </div>
-          </article>
 
-          <!-- PATTERN CARD 6: INTERACTIVE BIT STEP TRACER -->
-          <article class="pattern-card" id="fenwick-visual-interactive">
-            <div class="pattern-card-head">
-              <h3>Interactive BIT Step Tracer: Real-Time Animation Across Binary Trees</h3>
+            <div class="why-box" style="padding: 1rem 1.2rem;">
+              <strong>1 · Tree rules</strong>
+              <p>Parent = remove the lowest set bit: <code>i - (i &amp; -i)</code>.</p>
+              <p>Children keep the parent's bits up to its lowest 1, then add one extra 1 below it (<code>24 = 11000</code> &rarr; 25, 26, 28).</p>
+              <p style="margin-bottom: 0.9rem;">Child &gt; parent; right sibling &gt; node; a whole subtree sits before the next sibling (4's subtree is 4&ndash;7, then 8).</p>
+
+              <strong>2 · What each node stores</strong>
+              <p style="margin-bottom: 0.9rem;">Each edge parent &rarr; i is the range <code>(parent, i]</code>. <code>tree[i]</code> = sum of that range (e.g. <code>tree[12]</code> = <code>(8, 12]</code>).</p>
+
+              <strong>3 · Query (prefix sum): climb to the parent until 0</strong>
+              <p style="margin-bottom: 0.9rem;"><code>query(13)</code>: 13 &rarr; 12 &rarr; 8 &rarr; 0 = <code>(0, 8] + (8, 12] + (12, 13]</code>.</p>
+
+              <strong>4 · Update: add the lowest set bit until past n</strong>
+              <p><code>i += i &amp; -i</code> while <code>i &lt;= n</code>.</p>
+              <p>Visual rule: ignore the rows below you, take the first node to the right.</p>
+              <p>It hits exactly the edges whose range covers i.</p>
+              <p><code>update(5)</code>: 5, 6, 8, 16 &nbsp;&middot;&nbsp; <code>update(13)</code>: 13, 14, 16 &nbsp;&middot;&nbsp; <code>update(11)</code>: 11, 12, 16.</p>
             </div>
-            <p class="use-when"><strong>Use when:</strong> Interactively testing any arbitrary index <em>i</em>, observing how the binary bits flip at each step, and animating the update and query traversal paths directly on circular binary tree nodes.</p>
-
-            <div class="bit-interactive-widget" id="bit-interactive-widget">
-              <!-- Controls Header -->
-              <div class="rq-sim-header" style="padding-bottom: 0.6rem; border-bottom: 1px solid #282828;">
-                <div class="rq-sim-title-group">
-                  <span class="sim-pulse-dot" aria-hidden="true"></span>
-                  <h4 style="font-size: 0.92rem; color: #fff;">Interactive BIT Traversal Simulator</h4>
-                </div>
-                <div style="font-size: 0.74rem; color: var(--muted);">Click circular nodes in the diagrams or use controls below:</div>
-              </div>
-
-              <!-- Input and Quick Select -->
-              <div class="bit-ctrl-bar">
-                <div class="rq-ctrl-group">
-                  <label for="bit-trace-idx" style="font-size: 0.78rem; font-weight: 700; color: var(--muted);">Target Index i:</label>
-                  <input type="number" id="bit-trace-idx" min="1" max="16" value="7" class="rq-num-input" style="width: 58px;" />
-                </div>
-
-                <div class="bit-chip-group">
-                  <span style="font-size: 0.72rem; color: var(--faint);">Quick Select:</span>
-                  <button type="button" class="bit-chip-btn" data-idx="1">1</button>
-                  <button type="button" class="bit-chip-btn" data-idx="2">2</button>
-                  <button type="button" class="bit-chip-btn" data-idx="3">3</button>
-                  <button type="button" class="bit-chip-btn" data-idx="4">4</button>
-                  <button type="button" class="bit-chip-btn" data-idx="5">5</button>
-                  <button type="button" class="bit-chip-btn" data-idx="6">6</button>
-                  <button type="button" class="bit-chip-btn active" data-idx="7">7</button>
-                  <button type="button" class="bit-chip-btn" data-idx="8">8</button>
-                  <button type="button" class="bit-chip-btn" data-idx="12">12</button>
-                  <button type="button" class="bit-chip-btn" data-idx="13">13</button>
-                  <button type="button" class="bit-chip-btn" data-idx="15">15</button>
-                </div>
-
-                <div class="rq-ctrl-group" style="margin-left: auto;">
-                  <button type="button" class="rq-btn rq-btn-query" id="btn-trace-query">
-                    <span>🔍 Trace query(i)</span>
-                  </button>
-                  <button type="button" class="rq-btn rq-btn-update" id="btn-trace-update">
-                    <span>⚡ Trace update(i)</span>
-                  </button>
-                  <button type="button" class="rq-btn" id="btn-trace-step">
-                    <span>▶ Next Step</span>
-                  </button>
-                  <button type="button" class="rq-btn" id="btn-trace-reset">Reset</button>
-                </div>
-              </div>
-
-              <!-- Telemetry Strip -->
-              <div class="bit-telemetry-strip">
-                <div class="bit-tele-chip">
-                  <span class="bit-tele-lbl">Current Index:</span>
-                  <span class="bit-tele-val" id="bit-tele-idx" style="color: var(--orange);">7 (0111₂)</span>
-                </div>
-                <div class="bit-tele-chip">
-                  <span class="bit-tele-lbl">lowbit(i):</span>
-                  <span class="bit-tele-val" id="bit-tele-lowbit" style="color: var(--cyan);">1 (0001₂)</span>
-                </div>
-                <div class="bit-tele-chip">
-                  <span class="bit-tele-lbl">Interval Covered:</span>
-                  <span class="bit-tele-val" id="bit-tele-range" style="color: #fff;">(6, 7]</span>
-                </div>
-                <div class="bit-tele-chip">
-                  <span class="bit-tele-lbl">Next Index:</span>
-                  <span class="bit-tele-val" id="bit-tele-next" style="color: var(--easy);">7 - 1 = 6</span>
-                </div>
-                <div class="bit-tele-chip">
-                  <span class="bit-tele-lbl">Operation / Hops:</span>
-                  <span class="bit-tele-val" id="bit-tele-hops" style="color: #cbd5e1;">Query &bull; Hop 1 / 3</span>
-                </div>
-              </div>
-
-              <!-- Live Step Education Log -->
-              <div class="bit-step-log" id="bit-step-log">
-                <strong>Initialized:</strong> Ready to trace index 7. Click <code>Trace query(i)</code> or <code>Trace update(i)</code> to animate hops through the binary tree!
-              </div>
-            </div>
-          </article>
-
-          <!-- PATTERN CARD 7: TEMPLATE IMPLEMENTATION -->
-          <article class="pattern-card" id="fenwick-visual-template">
-            <div class="pattern-card-head">
-              <h3>Production Python 3 BIT Template (Strict camelCase)</h3>
-            </div>
-            <p class="use-when"><strong>Use when:</strong> Implementing an ultra-fast, zero-overhead Binary Indexed Tree in Python 3 adhering to strict camelCase standards, ASCII traces, and single-line initial states.</p>
 
             <div class="mini-code-wrap">
               <button class="copy-button mini-copy" type="button" data-code="fenwick-visual-code">Copy</button>
-              <pre class="mini-code" id="fenwick-visual-code"><code><span class="line-text"><span class="kw-class">class</span> <span class="type">FenwickTree</span><span class="punct">:</span></span>
-<span class="line-text">    <span class="docstr">&quot;&quot;&quot;</span></span>
-<span class="line-text">    <span class="docstr">Binary Indexed Tree (BIT / Fenwick Tree) for O(log n) Prefix Sums &amp; Point Updates:</span></span>
-<span class="line-text">    <span class="docstr"></span></span>
-<span class="line-text">    <span class="docstr">Invariant &amp; Bitwise Mechanics:</span></span>
-<span class="line-text">    <span class="docstr">- 1-indexed array of size (n + 1); tree[0] is unused because lowbit(0) = 0 loops infinitely.</span></span>
-<span class="line-text">    <span class="docstr">- lowbit(i) = i &amp; (-i) isolates lowest set 1-bit in i (two's complement: -i = ~i + 1).</span></span>
-<span class="line-text">    <span class="docstr">- tree[i] stores the sum of values in half-open interval (i - lowbit(i), i].</span></span>
-<span class="line-text">    <span class="docstr"></span></span>
-<span class="line-text">    <span class="docstr">Visual Hop ASCII Trace for query(7):</span></span>
-<span class="line-text">    <span class="docstr">  7 (0111) -&gt; lowbit=1 -&gt; subtracts 1 -&gt; tree[7] covers (6, 7]</span></span>
-<span class="line-text">    <span class="docstr">  6 (0110) -&gt; lowbit=2 -&gt; subtracts 2 -&gt; tree[6] covers (4, 6]</span></span>
-<span class="line-text">    <span class="docstr">  4 (0100) -&gt; lowbit=4 -&gt; subtracts 4 -&gt; tree[4] covers (0, 4]</span></span>
-<span class="line-text">    <span class="docstr">  0 (0000) -&gt; terminates!</span></span>
-<span class="line-text">    <span class="docstr">  Stitched sum: tree[4] + tree[6] + tree[7] = prefix(7).</span></span>
-<span class="line-text">    <span class="docstr"></span></span>
-<span class="line-text">    <span class="docstr">Visual Hop ASCII Trace for update(3, delta):</span></span>
-<span class="line-text">    <span class="docstr">  3 (0011) -&gt; lowbit=1 -&gt; adds 1 -&gt; updates tree[3] (covers (2, 3])</span></span>
-<span class="line-text">    <span class="docstr">  4 (0100) -&gt; lowbit=4 -&gt; adds 4 -&gt; updates tree[4] (covers (0, 4])</span></span>
-<span class="line-text">    <span class="docstr">  8 (1000) -&gt; lowbit=8 -&gt; adds 8 -&gt; updates tree[8] (covers (0, 8])</span></span>
-<span class="line-text">    <span class="docstr">  16 &gt; n   -&gt; exceeds n, terminates!</span></span>
-<span class="line-text">    <span class="docstr"></span></span>
-<span class="line-text">    <span class="docstr">Time:  update O(log n) | query O(log n) | rangeQuery O(log n)</span></span>
-<span class="line-text">    <span class="docstr">Space: O(n) exact memory with zero tree pointer overhead</span></span>
-<span class="line-text">    <span class="docstr">&quot;&quot;&quot;</span></span>
+              <pre class="mini-code" id="fenwick-visual-code"><code><span class="line-text"><span class="kw-class">class</span> <span class="type">BIT</span><span class="punct">:</span></span>
 <span class="line-text">    <span class="kw-def">def</span> <span class="fn">__init__</span><span class="punct">(</span><span class="param">self</span><span class="punct">,</span> <span class="param">n</span><span class="punct">:</span> <span class="type">int</span><span class="punct">)</span> <span class="punct">-&gt;</span> <span class="kw-def">None</span><span class="punct">:</span></span>
-<span class="line-text">        <span class="param">self</span><span class="punct">.</span><span class="var">n</span><span class="punct">,</span> <span class="param">self</span><span class="punct">.</span><span class="var">tree</span> <span class="punct">=</span> <span class="var">n</span><span class="punct">,</span> <span class="punct">[</span><span class="num">0</span><span class="punct">]</span> <span class="punct">*</span> <span class="punct">(</span><span class="var">n</span> <span class="punct">+</span> <span class="num">1</span><span class="punct">)</span></span>
+<span class="line-text">        <span class="param">self</span><span class="punct">.</span><span class="var">n</span><span class="punct">,</span> <span class="param">self</span><span class="punct">.</span><span class="var">tree</span> <span class="punct">=</span> <span class="var">n</span><span class="punct">,</span> <span class="punct">[</span><span class="num">0</span><span class="punct">]</span> <span class="punct">*</span> <span class="punct">(</span><span class="var">n</span> <span class="punct">+</span> <span class="num">1</span><span class="punct">)</span>  <span class="comment"># 1-indexed, tree[0] unused</span></span>
 <span class="line-text"></span>
-<span class="line-text">    <span class="kw-def">def</span> <span class="fn">update</span><span class="punct">(</span><span class="param">self</span><span class="punct">,</span> <span class="param">idx</span><span class="punct">:</span> <span class="type">int</span><span class="punct">,</span> <span class="param">delta</span><span class="punct">:</span> <span class="type">int</span><span class="punct">)</span> <span class="punct">-&gt;</span> <span class="kw-def">None</span><span class="punct">:</span></span>
-<span class="line-text">        <span class="docstr">&quot;&quot;&quot;</span></span>
-<span class="line-text">        <span class="docstr">Add delta to element at 1-based index idx.</span></span>
-<span class="line-text">        <span class="docstr">Climbs up to every larger enclosing responsibility chunk by adding lowbit.</span></span>
-<span class="line-text">        <span class="docstr">&quot;&quot;&quot;</span></span>
-<span class="line-text">        <span class="flow">while</span> <span class="param">idx</span> <span class="punct">&lt;=</span> <span class="param">self</span><span class="punct">.</span><span class="var">n</span><span class="punct">:</span></span>
-<span class="line-text">            <span class="param">self</span><span class="punct">.</span><span class="var">tree</span><span class="punct">[</span><span class="param">idx</span><span class="punct">]</span> <span class="punct">+=</span> <span class="param">delta</span></span>
-<span class="line-text">            <span class="param">idx</span> <span class="punct">+=</span> <span class="param">idx</span> <span class="punct">&amp;</span> <span class="punct">(</span><span class="punct">-</span><span class="param">idx</span><span class="punct">)</span></span>
+<span class="line-text">    <span class="kw-def">def</span> <span class="fn">update</span><span class="punct">(</span><span class="param">self</span><span class="punct">,</span> <span class="param">i</span><span class="punct">:</span> <span class="type">int</span><span class="punct">,</span> <span class="param">delta</span><span class="punct">:</span> <span class="type">int</span><span class="punct">)</span> <span class="punct">-&gt;</span> <span class="kw-def">None</span><span class="punct">:</span></span>
+<span class="line-text">        <span class="flow">while</span> <span class="param">i</span> <span class="punct">&lt;=</span> <span class="param">self</span><span class="punct">.</span><span class="var">n</span><span class="punct">:</span>  <span class="comment"># first node to the right, ignoring rows below</span></span>
+<span class="line-text">            <span class="param">self</span><span class="punct">.</span><span class="var">tree</span><span class="punct">[</span><span class="param">i</span><span class="punct">]</span> <span class="punct">+=</span> <span class="param">delta</span></span>
+<span class="line-text">            <span class="param">i</span> <span class="punct">+=</span> <span class="param">i</span> <span class="punct">&amp;</span> <span class="punct">-</span><span class="param">i</span></span>
 <span class="line-text"></span>
-<span class="line-text">    <span class="kw-def">def</span> <span class="fn">query</span><span class="punct">(</span><span class="param">self</span><span class="punct">,</span> <span class="param">idx</span><span class="punct">:</span> <span class="type">int</span><span class="punct">)</span> <span class="punct">-&gt;</span> <span class="type">int</span><span class="punct">:</span></span>
-<span class="line-text">        <span class="docstr">&quot;&quot;&quot;</span></span>
-<span class="line-text">        <span class="docstr">Compute prefix sum over range [1 .. idx] (i.e. (0, idx]).</span></span>
-<span class="line-text">        <span class="docstr">Descends down the query tree by stripping the lowest set bit.</span></span>
-<span class="line-text">        <span class="docstr">&quot;&quot;&quot;</span></span>
-<span class="line-text">        <span class="var">totalSum</span> <span class="punct">=</span> <span class="num">0</span></span>
+<span class="line-text">    <span class="kw-def">def</span> <span class="fn">query</span><span class="punct">(</span><span class="param">self</span><span class="punct">,</span> <span class="param">i</span><span class="punct">:</span> <span class="type">int</span><span class="punct">)</span> <span class="punct">-&gt;</span> <span class="type">int</span><span class="punct">:</span></span>
+<span class="line-text">        <span class="var">res</span> <span class="punct">=</span> <span class="num">0</span></span>
 <span class="line-text"></span>
-<span class="line-text">        <span class="flow">while</span> <span class="param">idx</span> <span class="punct">&gt;</span> <span class="num">0</span><span class="punct">:</span></span>
-<span class="line-text">            <span class="var">totalSum</span> <span class="punct">+=</span> <span class="param">self</span><span class="punct">.</span><span class="var">tree</span><span class="punct">[</span><span class="param">idx</span><span class="punct">]</span></span>
-<span class="line-text">            <span class="param">idx</span> <span class="punct">-=</span> <span class="param">idx</span> <span class="punct">&amp;</span> <span class="punct">(</span><span class="punct">-</span><span class="param">idx</span><span class="punct">)</span></span>
+<span class="line-text">        <span class="flow">while</span> <span class="param">i</span> <span class="punct">&gt;</span> <span class="num">0</span><span class="punct">:</span>  <span class="comment"># climb to parent: drop lowest set bit</span></span>
+<span class="line-text">            <span class="var">res</span> <span class="punct">+=</span> <span class="param">self</span><span class="punct">.</span><span class="var">tree</span><span class="punct">[</span><span class="param">i</span><span class="punct">]</span></span>
+<span class="line-text">            <span class="param">i</span> <span class="punct">-=</span> <span class="param">i</span> <span class="punct">&amp;</span> <span class="punct">-</span><span class="param">i</span></span>
 <span class="line-text"></span>
-<span class="line-text">        <span class="flow">return</span> <span class="var">totalSum</span></span>
-<span class="line-text"></span>
-<span class="line-text">    <span class="kw-def">def</span> <span class="fn">rangeQuery</span><span class="punct">(</span><span class="param">self</span><span class="punct">,</span> <span class="param">left</span><span class="punct">:</span> <span class="type">int</span><span class="punct">,</span> <span class="param">right</span><span class="punct">:</span> <span class="type">int</span><span class="punct">)</span> <span class="punct">-&gt;</span> <span class="type">int</span><span class="punct">:</span></span>
-<span class="line-text">        <span class="docstr">&quot;&quot;&quot;Compute inclusive sum over [left .. right] via inclusion-exclusion.&quot;&quot;&quot;</span></span>
-<span class="line-text">        <span class="flow">return</span> <span class="param">self</span><span class="punct">.</span><span class="fn">query</span><span class="punct">(</span><span class="param">right</span><span class="punct">)</span> <span class="punct">-</span> <span class="param">self</span><span class="punct">.</span><span class="fn">query</span><span class="punct">(</span><span class="param">left</span> <span class="punct">-</span> <span class="num">1</span><span class="punct">)</span></span></code></pre>
+<span class="line-text">        <span class="flow">return</span> <span class="var">res</span></span></code></pre>
             </div>
           </article>
         </section>
