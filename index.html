@@ -9417,6 +9417,11 @@ Result: len(tails) = 3  (Optimal nesting: [2,3] -&gt; [5,4] -&gt; [6,7])</code><
         <section class="patterns-section">
           <article class="pattern-card" id="fenwick-golden-rule">
             <div class="why-box lsb-card" style="padding: 1rem 1.2rem;">
+              <strong>Fenwick tree in one look</strong>
+              <p>Fenwick tree = Binary Indexed Tree (BIT). My name for it: prefix binary tree.</p>
+              <p>Prefix sum and point update, each in O(log n); memory O(n).</p>
+              <p style="margin-bottom: 1rem;">It only gives prefix sums directly. Range sum <code>[l, r]</code> = <code>query(r) - query(l - 1)</code>.</p>
+
               <strong>Golden rule: i &amp; -i = keep only the lowest set bit</strong>
               <div class="lsb-bars" role="img" aria-label="i = 6832: flip all bits, add 1, AND with i leaves only the lowest set bit, 16">
                 <div class="lsb-row lsb-zone-row is-head"><span class="lsb-label"></span><span class="lsb-cells"><span class="lsb-zone is-left" style="width: calc(8 * var(--lsb-cell) + 7 * 3px);">above the lowest 1</span><span class="lsb-gap is-blank" aria-hidden="true"></span><span class="lsb-zone is-right" style="width: calc(5 * var(--lsb-cell) + 4 * 3px);">lowest 1 + trailing 0s</span></span><span class="lsb-val"></span></div>
