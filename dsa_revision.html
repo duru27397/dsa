@@ -968,46 +968,19 @@
               <button class="tree-toggle" type="button" aria-label="Toggle Fenwick Tree">
                 <span class="chevron">▸</span>
               </button>
-              <a class="nav-item l2-link" href="#range-fenwick-tree-sub">
-                <span class="nav-title">Fenwick Tree (BIT)</span>
-              </a>
-            </div>
-            <!-- LEVEL 3 (Topic / Technique C) -->
-            <div class="tree-children l3-children">
-              <a class="nav-item l3-link" href="#range-fenwick-tree-sub" data-target-sub="rq-fenwick-basic">
-                <span class="leaf-dot">•</span>
-                <span class="nav-title">Point Update &amp; lowbit</span>
-              </a>
-              <a class="nav-item l3-link" href="#range-fenwick-tree-sub" data-target-sub="rq-fenwick-range-diff">
-                <span class="leaf-dot">•</span>
-                <span class="nav-title">Range Update via Diff BIT</span>
-              </a>
-              <a class="nav-item l3-link" href="#range-fenwick-tree-sub" data-target-sub="rq-fenwick-two-bit">
-                <span class="leaf-dot">•</span>
-                <span class="nav-title">Range Update + Query (2 BITs)</span>
-              </a>
-              <a class="nav-item l3-link" href="#range-fenwick-tree-sub" data-target-sub="rq-fenwick-inversions">
-                <span class="leaf-dot">•</span>
-                <span class="nav-title">Frequency BIT &amp; Binary Lifting</span>
-              </a>
-            </div>
-          </div>
-
-          <!-- Subcategory 3: Fenwick Tree Visuals -->
-          <div class="tree-node l2-node">
-            <div class="tree-header l2-header">
-              <button class="tree-toggle" type="button" aria-label="Toggle Fenwick Tree Visuals">
-                <span class="chevron">▸</span>
-              </button>
               <a class="nav-item l2-link" href="#range-fenwick-visual-sub">
-                <span class="nav-title">Fenwick Tree Visuals</span>
+                <span class="nav-title">Fenwick Tree</span>
               </a>
             </div>
             <!-- LEVEL 3 (Topic / Technique C) -->
             <div class="tree-children l3-children">
-              <a class="nav-item l3-link" href="#range-fenwick-visual-sub" data-target-sub="fenwick-visual-query-tree-30">
+              <a class="nav-item l3-link" href="#range-fenwick-visual-sub" data-target-sub="fenwick-golden-rule">
                 <span class="leaf-dot">•</span>
-                <span class="nav-title">Query Tree 0–30 (Binary)</span>
+                <span class="nav-title">Golden Rule: i &amp; -i</span>
+              </a>
+              <a class="nav-item l3-link" href="#range-fenwick-visual-sub" data-target-sub="fenwick-query-tree">
+                <span class="leaf-dot">•</span>
+                <span class="nav-title">Query Tree 0–40 (Binary)</span>
               </a>
             </div>
           </div>
@@ -7944,8 +7917,7 @@ Result: len(tails) = 3  (Optimal nesting: [2,3] -&gt; [5,4] -&gt; [6,7])</code><
                 <li><strong>Specialty:</strong> Coordinate compression frequency counting, dynamic rank orders, and inversion counts (LC 315).</li>
                 <li><strong>Why it wins:</strong> Just ~15 lines of code, exactly N memory elements, 2-3x faster in practice than segment trees due to CPU cache locality.</li>
               </ul>
-              <a class="rq-dcard-link" href="#range-fenwick-tree-sub">Go to Fenwick Tree &rarr;</a>
-              <a class="rq-dcard-link" href="#range-fenwick-visual-sub" style="margin-top: 0.35rem; color: var(--cyan);">Explore Visual Architecture &rarr;</a>
+              <a class="rq-dcard-link" href="#range-fenwick-visual-sub">Go to Fenwick Tree &rarr;</a>
             </div>
 
             <!-- Card 3: 2N Iterative Segment Tree -->
@@ -9437,573 +9409,24 @@ Result: len(tails) = 3  (Optimal nesting: [2,3] -&gt; [5,4] -&gt; [6,7])</code><
       </section>
 
       <!-- PAGE 3: Fenwick Tree Subcategory -->
-      <section class="page-view" id="range-fenwick-tree-sub" data-topic-title="Advanced Range Query Structures" data-page-title="Fenwick Tree (BIT)">
-        <header class="topic-heading">
-          <span class="level-tag">Topic 09 · Subcategory 02</span>
-          <h1><span>⚡</span> Fenwick Tree (Binary Indexed Tree / BIT)</h1>
-          <p class="topic-summary" style="max-width: 860px; line-height: 1.65; font-size: 0.94rem;">Exploit the binary representation of integers using lowbit = x &amp; (-x). Maintain prefix sums and dynamic frequency counts in strictly O(n) space and ultra-fast cache lines.</p>
-        </header>
-
-                <!-- FENWICK TREE TEMPLATE SPECTRUM BANNER -->
-        <div class="rq-taxonomy-banner">
-          <div class="rq-tax-head">
-            <span class="rq-tax-badge">Fenwick Tree Template Taxonomy</span>
-            <h3>The 4 Fenwick (BIT) Templates: Spectrum &amp; Decision Flow</h3>
-          </div>
-          <div class="rq-tax-grid">
-            <div class="rq-tax-card">
-              <span class="tax-tag">Type 1 · Point &rarr; Range</span>
-              <h4>Standard Point Update &amp; Prefix Sum</h4>
-              <p>Single array of size N+1. Ascends via <code>idx += lowbit</code>, descends via <code>idx -= lowbit</code>. <strong>Optimal for:</strong> Dynamic point updates &amp; prefix sums in ~15 lines.</p>
-              <a class="tax-link" href="#range-fenwick-tree-sub" data-target-sub="rq-fenwick-basic">Go to Standard BIT &darr;</a>
-            </div>
-            <div class="rq-tax-card">
-              <span class="tax-tag">Type 2 · Range &rarr; Point</span>
-              <h4>Difference Array BIT</h4>
-              <p>Maintains D[i] = A[i] - A[i-1]. <strong>Optimal for:</strong> Range updates [L, R] += &Delta; in O(log n) (2 point updates) with single element query in O(log n).</p>
-              <a class="tax-link" href="#range-fenwick-tree-sub" data-target-sub="rq-fenwick-range-diff">Go to Diff BIT &darr;</a>
-            </div>
-            <div class="rq-tax-card">
-              <span class="tax-tag">Type 3 · Range &rarr; Range</span>
-              <h4>Two-BIT Engine (Range + Range)</h4>
-              <p>Tracks D[i] on BIT₁ and D[i]*(i-1) on BIT₂. <strong>Optimal for:</strong> BOTH Range Updates AND Range Queries in O(log n) with zero tree pointer overhead.</p>
-              <a class="tax-link" href="#range-fenwick-tree-sub" data-target-sub="rq-fenwick-two-bit">Go to Two-BIT Engine &darr;</a>
-            </div>
-            <div class="rq-tax-card">
-              <span class="tax-tag">Type 4 · Dynamic Ranks</span>
-              <h4>Frequency BIT &amp; Binary Lifting</h4>
-              <p>Coordinate compression + power-of-2 jumps. <strong>Optimal for:</strong> Inversions (LC 315) and finding k-th smallest dynamic element in O(log n) without binary search.</p>
-              <a class="tax-link" href="#range-fenwick-tree-sub" data-target-sub="rq-fenwick-inversions">Go to Binary Lifting &darr;</a>
-            </div>
-          </div>
-        </div>
-
+      <section class="page-view" id="range-fenwick-visual-sub" data-topic-title="Advanced Range Query Structures" data-page-title="Fenwick Tree">
         <section class="patterns-section">
-          <!-- VISUAL ARCHITECTURE PROMO BANNER -->
-          <div class="bit-intuition-banner" style="margin-top: 0; margin-bottom: 1.5rem;">
-            <h4><span>🎨</span> Dedicated Visual Architecture &amp; Tree Visualizations</h4>
-            <p class="bit-intuition-text" style="font-size: 0.86rem;">
-              Looking for exact coordinate geometry and vector trees? Explore our dedicated <strong><a href="#range-fenwick-visual-sub" style="color: var(--orange); text-decoration: underline;">Fenwick Tree Visual Page &rarr;</a></strong> featuring SVG interval coverage bars (N=8/16), update tree climbing paths ($3 \to 4 \to 8$), query tree stitching decomposition ($7 \to 6 \to 4 \to 0$), and an animated real-time step tracer!
-            </p>
-          </div>
-
-          <!-- Pattern Card 1: Fenwick Point Update & Prefix Sum -->
-          <article class="pattern-card" id="rq-fenwick-basic">
-            <div class="pattern-card-head">
-              <h3>Point Update &amp; Prefix Sum (lowbit = x &amp; -x)</h3>
-            </div>
-            <p class="use-when"><strong>Use when:</strong> Dynamic prefix sums and range sums with point updates where minimal code size (~15 lines), zero memory overhead, and cache speed are prioritized.</p>
-
-            <div class="why-box" style="padding: 1.35rem;">
-              <strong>Why it works: Bitwise 2's Complement Invariant</strong>
-              <p style="line-height: 1.65; margin-bottom: 0.8rem;">
-                Invented by Peter Fenwick (1994). A Fenwick tree uses 1-based indexing. Every positive integer <em>x</em> can be represented as a sum of powers of 2. The formula <code>lowbit(x) = x &amp; (-x)</code> isolates the lowest set 1-bit in binary representation because in 2's complement negation: <code>-x = ~x + 1</code>.
-              </p>
-
-              <!-- PROPER HTML FENWICK LOWBIT BOX DIAGRAM -->
-              <div class="rq-bit-diagram-container">
-                <div class="rq-tree-diagram-header">
-                  <span class="rq-diagram-badge">lowbit = x &amp; (-x) Bitwise Isolation Engine</span>
-                  <span class="rq-diagram-note">Two's Complement Negation Invariant: -x = (~x + 1)</span>
-                </div>
-
-                <div class="rq-bit-math-card">
-                  <div class="rq-bit-row-visual">
-                    <span class="rq-bit-lbl">Decimal x = 6</span>
-                    <div class="rq-bit-bits">
-                      <span class="bit-cell">0</span><span class="bit-cell">0</span><span class="bit-cell">0</span><span class="bit-cell">0</span>
-                      <span class="bit-cell">0</span><span class="bit-cell bit-active">1</span><span class="bit-cell bit-active">1</span><span class="bit-cell">0</span>
-                    </div>
-                  </div>
-
-                  <div class="rq-bit-row-visual">
-                    <span class="rq-bit-lbl">Negation -6 (~x + 1)</span>
-                    <div class="rq-bit-bits">
-                      <span class="bit-cell bit-inverted">1</span><span class="bit-cell bit-inverted">1</span><span class="bit-cell bit-inverted">1</span><span class="bit-cell bit-inverted">1</span>
-                      <span class="bit-cell bit-inverted">1</span><span class="bit-cell bit-inverted">0</span><span class="bit-cell bit-active">1</span><span class="bit-cell">0</span>
-                    </div>
-                  </div>
-
-                  <div class="rq-bit-divider"></div>
-
-                  <div class="rq-bit-row-visual rq-bit-result-row">
-                    <span class="rq-bit-lbl" style="color: var(--easy); font-weight: 700;">lowbit = 6 &amp; (-6)</span>
-                    <div class="rq-bit-bits">
-                      <span class="bit-cell">0</span><span class="bit-cell">0</span><span class="bit-cell">0</span><span class="bit-cell">0</span>
-                      <span class="bit-cell">0</span><span class="bit-cell">0</span><span class="bit-cell bit-isolated">1</span><span class="bit-cell">0</span>
-                    </div>
-                    <span class="rq-bit-val-tag">= 2 (Power of 2)</span>
-                  </div>
-                </div>
-
-                <div class="rq-bit-coverage-summary">
-                  <strong>What this means:</strong> Node <code>BIT[6]</code> is responsible for exactly <code>lowbit(6) = 2</code> elements ending at index 6, which is interval <code>[6 - 2 + 1, 6] = [5, 6]</code>.
-                </div>
-              </div>
-
-              <!-- PROPER HTML FENWICK PRIME N = 7 COVERAGE & 3-HOP TRAVERSAL BOX DIAGRAM -->
-              <div class="rq-bit-diagram-container" style="margin-top: 1.1rem;">
-                <div class="rq-tree-diagram-header">
-                  <span class="rq-diagram-badge">Prime Length Edge Case: Prime N = 7 Binary Indexed Tree</span>
-                  <span class="rq-diagram-note">Nums: [3, 1, 4, 1, 5, 9, 2] &bull; Odd Indices = 1 Element &bull; 3-Hop Prefix Query</span>
-                </div>
-
-                <div class="rq-bracket-math-summary" style="margin-bottom: 0.85rem;">
-                  <strong>Why Prime Length N = 7 Exposes Fenwick Edge Cases:</strong>
-                  In power-of-2 sizes (N = 8), symmetry hides asymmetric hopping. With prime <em>n</em> = 7:
-                  Odd indices (1, 3, 5, 7) have <code>lowbit = 1</code> and store <strong>only their own leaf element</strong>.
-                  Powers of 2 (1, 2, 4) aggregate full prefix sums from index 1.
-                  Querying the full prime array <code>query(7)</code> executes a <strong>3-hop binary path</strong>: <code>7 &rarr; 6 &rarr; 4 &rarr; 0</code>!
-                </div>
-
-                <!-- 7-Index Coverage Grid -->
-                <div class="rq-bit-row" style="grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); display: grid; gap: 0.5rem;">
-                  <div class="rq-bit-card" title="BIT[1] covers [1..1]">
-                    <div style="font-size: 0.65rem; color: var(--faint);">1 (001&sub2;) &bull; lb: 1</div>
-                    <div style="font-size: 0.68rem; color: var(--muted);">Interval [1..1]</div>
-                    <div style="font-size: 0.95rem; font-weight: 700; color: #fff; margin: 0.2rem 0;">3</div>
-                    <div style="font-size: 0.62rem; color: var(--orange);">BIT[1] = nums[0]</div>
-                  </div>
-
-                  <div class="rq-bit-card" style="border-color: #3b82f6;" title="BIT[2] covers [1..2]">
-                    <div style="font-size: 0.65rem; color: var(--faint);">2 (010&sub2;) &bull; lb: 2</div>
-                    <div style="font-size: 0.68rem; color: var(--cyan);">Interval [1..2]</div>
-                    <div style="font-size: 0.95rem; font-weight: 700; color: #fff; margin: 0.2rem 0;">4</div>
-                    <div style="font-size: 0.62rem; color: #3b82f6;">BIT[2] = 3 + 1</div>
-                  </div>
-
-                  <div class="rq-bit-card" title="BIT[3] covers [3..3]">
-                    <div style="font-size: 0.65rem; color: var(--faint);">3 (011&sub2;) &bull; lb: 1</div>
-                    <div style="font-size: 0.68rem; color: var(--muted);">Interval [3..3]</div>
-                    <div style="font-size: 0.95rem; font-weight: 700; color: #fff; margin: 0.2rem 0;">4</div>
-                    <div style="font-size: 0.62rem; color: var(--orange);">BIT[3] = nums[2]</div>
-                  </div>
-
-                  <div class="rq-bit-card" style="border-color: var(--orange); background: #1c1813;" title="BIT[4] covers [1..4]">
-                    <div style="font-size: 0.65rem; color: var(--orange);">4 (100&sub2;) &bull; lb: 4</div>
-                    <div style="font-size: 0.68rem; color: var(--orange);">Interval [1..4]</div>
-                    <div style="font-size: 0.95rem; font-weight: 700; color: var(--orange); margin: 0.2rem 0;">9</div>
-                    <div style="font-size: 0.62rem; color: var(--orange);">BIT[4] = prefix(4)</div>
-                  </div>
-
-                  <div class="rq-bit-card" title="BIT[5] covers [5..5]">
-                    <div style="font-size: 0.65rem; color: var(--faint);">5 (101&sub2;) &bull; lb: 1</div>
-                    <div style="font-size: 0.68rem; color: var(--muted);">Interval [5..5]</div>
-                    <div style="font-size: 0.95rem; font-weight: 700; color: #fff; margin: 0.2rem 0;">5</div>
-                    <div style="font-size: 0.62rem; color: var(--orange);">BIT[5] = nums[4]</div>
-                  </div>
-
-                  <div class="rq-bit-card" style="border-color: #3b82f6;" title="BIT[6] covers [5..6]">
-                    <div style="font-size: 0.65rem; color: var(--faint);">6 (110&sub2;) &bull; lb: 2</div>
-                    <div style="font-size: 0.68rem; color: var(--cyan);">Interval [5..6]</div>
-                    <div style="font-size: 0.95rem; font-weight: 700; color: #fff; margin: 0.2rem 0;">14</div>
-                    <div style="font-size: 0.62rem; color: #3b82f6;">BIT[6] = 5 + 9</div>
-                  </div>
-
-                  <div class="rq-bit-card" title="BIT[7] covers [7..7]">
-                    <div style="font-size: 0.65rem; color: var(--faint);">7 (111&sub2;) &bull; lb: 1</div>
-                    <div style="font-size: 0.68rem; color: var(--muted);">Interval [7..7]</div>
-                    <div style="font-size: 0.95rem; font-weight: 700; color: #fff; margin: 0.2rem 0;">2</div>
-                    <div style="font-size: 0.62rem; color: var(--orange);">BIT[7] = nums[6]</div>
-                  </div>
-                </div>
-
-                <!-- 3-Hop Query Trace Walkthrough -->
-                <div class="rq-sqrt-query-trace-box" style="margin-top: 0.85rem;">
-                  <div class="rq-trace-title">
-                    <strong>Query Trace for Full Prime Array: <code>query(7)</code> (Descend by <code>x -= lowbit(x)</code>):</strong>
-                  </div>
-                  <div class="rq-trace-steps">
-                    <div class="rq-step-box step-head">
-                      <span class="step-badge">Hop 1 (x = 7)</span>
-                      <span><code>BIT[7]</code> = <strong>2</strong> &bull; 7 &minus; 1 = <strong>6</strong></span>
-                    </div>
-                    <div class="rq-step-box step-mid">
-                      <span class="step-badge">Hop 2 (x = 6)</span>
-                      <span><code>BIT[6]</code> = <strong>14</strong> &bull; 6 &minus; 2 = <strong>4</strong></span>
-                    </div>
-                    <div class="rq-step-box step-tail" style="border-color: var(--orange);">
-                      <span class="step-badge" style="color: var(--orange);">Hop 3 (x = 4)</span>
-                      <span><code>BIT[4]</code> = <strong>9</strong> &bull; 4 &minus; 4 = <strong>0</strong> (Terminates!)</span>
-                    </div>
-                  </div>
-                  <div class="rq-trace-total">
-                    Total Prefix Sum = 2 + 14 + 9 = <strong>25</strong> &bull; Exactly matches 3 + 1 + 4 + 1 + 5 + 9 + 2 in 3 hops (O(log n))!
-                  </div>
-                </div>
-
-                <!-- Point Update Out-of-Bounds Edge Case Trace -->
-                <div style="margin-top: 0.65rem; background: #1a1814; border: 1px solid #3c3222; border-radius: 6px; padding: 0.65rem 0.85rem; font-size: 0.76rem; color: var(--muted); line-height: 1.55;">
-                  <strong style="color: var(--orange);">Update Edge Case on Prime Length (x += lowbit(x)):</strong>
-                  Updating index 3 (nums[2] += &Delta;): Hop 1 updates <code>BIT[3]</code> (3 + 1 = 4); Hop 2 updates <code>BIT[4]</code> (4 + 4 = 8).
-                  Because 8 &gt; <em>n</em> (8 &gt; 7), the loop terminates immediately! Fenwick never exceeds the allocated prime length <em>n</em>.
-                </div>
-              </div>
-
-              <ul style="line-height: 1.65; margin-top: 1rem;">
-                <li><strong>Update:</strong> To add &Delta; to element at index <em>x</em>, ascend the responsibility tree by adding lowbit: <code>idx += idx &amp; (-idx)</code>.</li>
-                <li><strong>Prefix Query:</strong> To sum elements in [1, x], descend by stripping lowest set bits: <code>idx -= idx &amp; (-idx)</code>.</li>
-                <li><strong>Range Query [L, R]:</strong> By inclusion-exclusion, <code>query(R) - query(L - 1)</code> in O(log n).</li>
-              </ul>
-            </div>
-
-            <div class="mini-code-wrap">
-              <button class="copy-button mini-copy" type="button" data-code="rq-fenwick-basic-code">Copy</button>
-              <pre class="mini-code" id="rq-fenwick-basic-code"><code><span class="line-text"><span class="kw-class">class</span> <span class="type">FenwickTree</span><span class="punct">:</span></span>
-<span class="line-text">    <span class="docstr">&quot;&quot;&quot;
-    Binary Indexed Tree (BIT / Fenwick Tree):
-    Maintains prefix sums with O(log n) updates and queries in strictly O(n) space.
-
-    lowbit Invariant: lowbit(x) = x &amp; (-x)
-    Tree Node x covers length lowbit(x), specifically range [x - lowbit(x) + 1, x].
-
-    Time:  Point Update O(log n) | Prefix Query O(log n) | Range Query O(log n)
-    Space: O(n) exact memory (no overhead!)
-    &quot;&quot;&quot;</span></span>
-<span class="line-text">    <span class="kw-def">def</span> <span class="fn">__init__</span><span class="punct">(</span><span class="param">self</span><span class="punct">,</span> <span class="var">n</span><span class="punct">:</span> <span class="type">int</span><span class="punct">)</span><span class="punct">:</span></span>
-<span class="line-text">        <span class="param">self</span><span class="punct">.</span><span class="var">n</span> <span class="punct">=</span> <span class="var">n</span></span>
-<span class="line-text">        <span class="param">self</span><span class="punct">.</span><span class="var">tree</span> <span class="punct">=</span> <span class="punct">[</span><span class="num">0</span><span class="punct">]</span> <span class="punct">*</span> <span class="punct">(</span><span class="var">n</span> <span class="punct">+</span> <span class="num">1</span><span class="punct">)</span></span>
-<span class="line-text"></span>
-<span class="line-text">    <span class="kw-def">def</span> <span class="fn">update</span><span class="punct">(</span><span class="param">self</span><span class="punct">,</span> <span class="param">idx</span><span class="punct">:</span> <span class="type">int</span><span class="punct">,</span> <span class="param">delta</span><span class="punct">:</span> <span class="type">int</span><span class="punct">)</span> <span class="punct">-&gt;</span> <span class="kw-def">None</span><span class="punct">:</span></span>
-<span class="line-text">        <span class="docstr">&quot;&quot;&quot;
-        Add delta to element at 1-based index idx.
-        Climbs up the tree by adding the lowest set bit.
-        &quot;&quot;&quot;</span></span>
-<span class="line-text">        <span class="flow">while</span> <span class="param">idx</span> <span class="punct">&lt;=</span> <span class="param">self</span><span class="punct">.</span><span class="var">n</span><span class="punct">:</span></span>
-<span class="line-text">            <span class="param">self</span><span class="punct">.</span><span class="var">tree</span><span class="punct">[</span><span class="param">idx</span><span class="punct">]</span> <span class="punct">+=</span> <span class="param">delta</span></span>
-<span class="line-text">            <span class="param">idx</span> <span class="punct">+=</span> <span class="param">idx</span> <span class="punct">&amp;</span> <span class="punct">(</span><span class="punct">-</span><span class="param">idx</span><span class="punct">)</span></span>
-<span class="line-text"></span>
-<span class="line-text">    <span class="kw-def">def</span> <span class="fn">query</span><span class="punct">(</span><span class="param">self</span><span class="punct">,</span> <span class="param">idx</span><span class="punct">:</span> <span class="type">int</span><span class="punct">)</span> <span class="punct">-&gt;</span> <span class="type">int</span><span class="punct">:</span></span>
-<span class="line-text">        <span class="docstr">&quot;&quot;&quot;
-        Compute prefix sum nums[1..idx].
-        Descends down the tree by stripping the lowest set bit.
-        &quot;&quot;&quot;</span></span>
-<span class="line-text">        <span class="var">total</span> <span class="punct">=</span> <span class="num">0</span></span>
-<span class="line-text"></span>
-<span class="line-text">        <span class="flow">while</span> <span class="param">idx</span> <span class="punct">&gt;</span> <span class="num">0</span><span class="punct">:</span></span>
-<span class="line-text">            <span class="var">total</span> <span class="punct">+=</span> <span class="param">self</span><span class="punct">.</span><span class="var">tree</span><span class="punct">[</span><span class="param">idx</span><span class="punct">]</span></span>
-<span class="line-text">            <span class="param">idx</span> <span class="punct">-=</span> <span class="param">idx</span> <span class="punct">&amp;</span> <span class="punct">(</span><span class="punct">-</span><span class="param">idx</span><span class="punct">)</span></span>
-<span class="line-text"></span>
-<span class="line-text">        <span class="flow">return</span> <span class="var">total</span></span>
-<span class="line-text"></span>
-<span class="line-text">    <span class="kw-def">def</span> <span class="fn">rangeQuery</span><span class="punct">(</span><span class="param">self</span><span class="punct">,</span> <span class="param">left</span><span class="punct">:</span> <span class="type">int</span><span class="punct">,</span> <span class="param">right</span><span class="punct">:</span> <span class="type">int</span><span class="punct">)</span> <span class="punct">-&gt;</span> <span class="type">int</span><span class="punct">:</span></span>
-<span class="line-text">        <span class="docstr">&quot;&quot;&quot;Inclusive sum over range [left, right] (1-based indices).&quot;&quot;&quot;</span></span>
-<span class="line-text">        <span class="flow">return</span> <span class="param">self</span><span class="punct">.</span><span class="var">query</span><span class="punct">(</span><span class="param">right</span><span class="punct">)</span> <span class="punct">-</span> <span class="param">self</span><span class="punct">.</span><span class="var">query</span><span class="punct">(</span><span class="param">left</span> <span class="punct">-</span> <span class="num">1</span><span class="punct">)</span></span></code></pre>
+          <article class="pattern-card" id="fenwick-golden-rule">
+            <div class="why-box" style="padding: 1rem 1.2rem;">
+              <strong>Golden rule: i &amp; -i = lowest set bit</strong>
+              <p><code>-i</code> = flip all bits, then +1.</p>
+              <p>Flip: every bit above the lowest 1 becomes the opposite of <code>i</code>, so the AND makes it 0.</p>
+              <p>Flip also turns the trailing 0s into 1s; the +1 carries through them and lands on the lowest 1.</p>
+              <pre class="trace-diagram"><code> 12 = 01100
+~12 = 10011
+-12 = 10100   (~12 + 1: carry runs through the trailing 1s)
+  &amp; = 00100 = 4</code></pre>
             </div>
           </article>
 
-          <!-- Pattern Card 2: Range Update via Difference BIT -->
-          <article class="pattern-card" id="rq-fenwick-range-diff">
-            <div class="pattern-card-head">
-              <h3>Range Update &amp; Point Query via Difference BIT</h3>
-            </div>
-            <p class="use-when"><strong>Use when:</strong> Applying frequent range additions [l, r] += delta but queries only request values at specific individual indices i.</p>
-
-            <div class="why-box" style="padding: 1.35rem;">
-              <strong>Why it works: Difference Array Coupling</strong>
-              <p style="line-height: 1.65; margin-bottom: 0.8rem;">
-                Consider difference array D[i] = A[i] &minus; A[i &minus; 1]. Adding &Delta; to range [l, r] alters only two differences: <code>D[l] += &Delta;</code> and <code>D[r + 1] -= &Delta;</code>.
-                The value at point <em>i</em> is prefix sum A[i] = &sum;<sub>j=1..i</sub> D[j] = <code>query(i)</code> in O(log n)!
-              </p>
-            </div>
-
-            <div class="mini-code-wrap">
-              <button class="copy-button mini-copy" type="button" data-code="rq-fenwick-diff-code">Copy</button>
-              <pre class="mini-code" id="rq-fenwick-diff-code"><code><span class="line-text"><span class="kw-class">class</span> <span class="type">RangeUpdatePointQueryBIT</span><span class="punct">:</span></span>
-<span class="line-text">    <span class="docstr">&quot;&quot;&quot;
-    Range Update &amp; Point Query via Difference Array BIT:
-    Applies D[i] = A[i] - A[i - 1] so range updates become two point updates.
-
-    Range Update [l, r] += delta:
-      bit.update(l, delta)
-      bit.update(r + 1, -delta)
-
-    Point Query at idx:
-      sum(D[1..idx]) = bit.query(idx)
-
-    Time:  Range Update O(log n), Point Query O(log n)
-    Space: O(n)
-    &quot;&quot;&quot;</span></span>
-<span class="line-text">    <span class="kw-def">def</span> <span class="fn">__init__</span><span class="punct">(</span><span class="param">self</span><span class="punct">,</span> <span class="var">n</span><span class="punct">:</span> <span class="type">int</span><span class="punct">)</span><span class="punct">:</span></span>
-<span class="line-text">        <span class="param">self</span><span class="punct">.</span><span class="var">bit</span> <span class="punct">=</span> <span class="var">FenwickTree</span><span class="punct">(</span><span class="var">n</span><span class="punct">)</span></span>
-<span class="line-text"></span>
-<span class="line-text">    <span class="kw-def">def</span> <span class="fn">updateRange</span><span class="punct">(</span><span class="param">self</span><span class="punct">,</span> <span class="param">left</span><span class="punct">:</span> <span class="type">int</span><span class="punct">,</span> <span class="param">right</span><span class="punct">:</span> <span class="type">int</span><span class="punct">,</span> <span class="param">delta</span><span class="punct">:</span> <span class="type">int</span><span class="punct">)</span> <span class="punct">-&gt;</span> <span class="kw-def">None</span><span class="punct">:</span></span>
-<span class="line-text">        <span class="param">self</span><span class="punct">.</span><span class="var">bit</span><span class="punct">.</span><span class="var">update</span><span class="punct">(</span><span class="param">left</span><span class="punct">,</span> <span class="param">delta</span><span class="punct">)</span></span>
-<span class="line-text">        <span class="param">self</span><span class="punct">.</span><span class="var">bit</span><span class="punct">.</span><span class="var">update</span><span class="punct">(</span><span class="param">right</span> <span class="punct">+</span> <span class="num">1</span><span class="punct">,</span> <span class="punct">-</span><span class="param">delta</span><span class="punct">)</span></span>
-<span class="line-text"></span>
-<span class="line-text">    <span class="kw-def">def</span> <span class="fn">queryPoint</span><span class="punct">(</span><span class="param">self</span><span class="punct">,</span> <span class="param">idx</span><span class="punct">:</span> <span class="type">int</span><span class="punct">)</span> <span class="punct">-&gt;</span> <span class="type">int</span><span class="punct">:</span></span>
-<span class="line-text">        <span class="flow">return</span> <span class="param">self</span><span class="punct">.</span><span class="var">bit</span><span class="punct">.</span><span class="var">query</span><span class="punct">(</span><span class="param">idx</span><span class="punct">)</span></span></code></pre>
-            </div>
-          </article>
-
-                    <!-- Pattern Card 3: Two-BIT Engine (Range Update & Range Query) -->
-          <article class="pattern-card" id="rq-fenwick-two-bit">
-            <div class="pattern-card-head">
-              <h3>Two-BIT Engine: Range Updates [L, R] += &Delta; AND Range Queries [L, R] in O(log n)</h3>
-            </div>
-            <p class="use-when"><strong>Use when:</strong> Both range updates AND range queries are required, but you prefer the minimal constant factor, flat contiguous array, and compact code of Fenwick Trees over Segment Trees.</p>
-
-            <div class="why-box" style="padding: 1.35rem;">
-              <strong>Why it works: Mathematical Derivation via Difference Summation</strong>
-              <p style="line-height: 1.65; margin-bottom: 0.8rem;">
-                Let D[k] = A[k] &minus; A[k &minus; 1] be the difference array. Then A[j] = &sum;<sub>k=1..j</sub> D[k]. The prefix sum up to index <em>i</em> is:
-              </p>
-              <div class="rq-math-box" style="background: #151515; border: 1px solid #333; border-radius: 6px; padding: 0.85rem; font-family: monospace; font-size: 0.82rem; line-height: 1.6; margin-bottom: 0.9rem;">
-                prefixSum(i) = &sum;<sub>j=1..i</sub> A[j]<br>
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= &sum;<sub>j=1..i</sub> &sum;<sub>k=1..j</sub> D[k]<br>
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= &sum;<sub>k=1..i</sub> D[k] &times; (i - k + 1)<br>
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= (i + 1) &times; &sum;<sub>k=1..i</sub> D[k] - &sum;<sub>k=1..i</sub> (D[k] &times; k)<br>
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= <strong>i &times; query(bit1, i) - query(bit2, i)</strong>
-              </div>
-
-              <!-- TWO-BIT INTERACTION DIAGRAM -->
-              <div class="rq-bit-diagram-container">
-                <div class="rq-tree-diagram-header">
-                  <span class="rq-diagram-badge">Dual-BIT Difference Coordination Layout</span>
-                  <span class="rq-diagram-note">BIT₁ tracks D[k] &bull; BIT₂ tracks D[k] &times; (k - 1) &bull; Both updated in 4 lowbit steps</span>
-                </div>
-                <div class="rq-dual-bit-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; margin-top: 0.75rem;">
-                  <div class="rq-bit-card" style="background: #1b1b1b; border: 1px solid #353535; border-radius: 6px; padding: 0.85rem;">
-                    <div style="font-size: 0.78rem; font-weight: 700; color: var(--cyan); margin-bottom: 0.4rem;">BIT₁ (Tracks D[k])</div>
-                    <div style="font-size: 0.74rem; color: var(--muted); line-height: 1.5;">
-                      &bull; <code>add(bit1, left, delta)</code><br>
-                      &bull; <code>add(bit1, right + 1, -delta)</code><br>
-                      Provides &sum; D[k] directly.
-                    </div>
-                  </div>
-                  <div class="rq-bit-card" style="background: #1b1b1b; border: 1px solid #353535; border-radius: 6px; padding: 0.85rem;">
-                    <div style="font-size: 0.78rem; font-weight: 700; color: var(--orange); margin-bottom: 0.4rem;">BIT₂ (Tracks D[k] &times; (k - 1))</div>
-                    <div style="font-size: 0.74rem; color: var(--muted); line-height: 1.5;">
-                      &bull; <code>add(bit2, left, delta * (left - 1))</code><br>
-                      &bull; <code>add(bit2, right + 1, -delta * right)</code><br>
-                      Compensates for the triangular offset.
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="mini-code-wrap">
-              <button class="copy-button mini-copy" type="button" data-code="rq-fenwick-two-bit-code">Copy</button>
-              <pre class="mini-code" id="rq-fenwick-two-bit-code"><code><span class="line-text"><span class="flow">from</span> <span class="var">typing</span> <span class="flow">import</span> <span class="type">List</span>
-</span>
-<span class="line-text"></span>
-<span class="line-text"><span class="kw-def">class</span> <span class="type">FenwickRangeUpdateRangeQuery</span><span class="punct">:</span>
-</span>
-<span class="line-text">    <span class="str">&quot;&quot;&quot;Two-BIT Engine: Supports BOTH Range Updates and Range Queries in O(log n).
-
-    Maintains two BITs over the difference array D[i] = A[i] - A[i-1]:
-    - bit1 tracks: D[i]
-    - bit2 tracks: D[i] * (i - 1)
-
-    Mathematical Derivation &amp; Invariant:
-    A[i] = sum_{k=1..i} D[k]
-    prefixSum(i) = sum_{j=1..i} A[j]
-                 = sum_{j=1..i} sum_{k=1..j} D[k]
-                 = sum_{k=1..i} D[k] * (i - k + 1)
-                 = (i + 1) * sum_{k=1..i} D[k] - sum_{k=1..i} (D[k] * k)
-                 = i * sum D[k] - sum (D[k] * (k - 1))
-                 = i * query(bit1, i) - query(bit2, i)
-    &quot;&quot;&quot;</span></span>
-<span class="line-text">    <span class="kw-def">def</span> <span class="fn">__init__</span><span class="punct">(</span><span class="param">self</span><span class="punct">,</span> <span class="var">n</span><span class="punct">:</span> <span class="type">int</span><span class="punct">)</span><span class="punct">:</span>
-</span>
-<span class="line-text">        <span class="param">self</span><span class="punct">.</span><span class="var">n</span> <span class="punct">=</span> <span class="var">n</span>
-</span>
-<span class="line-text">        <span class="param">self</span><span class="punct">.</span><span class="var">bit1</span> <span class="punct">=</span> <span class="punct">[</span><span class="num">0</span><span class="punct">]</span> <span class="punct">*</span> <span class="punct">(</span><span class="var">n</span> <span class="punct">+</span> <span class="num">1</span><span class="punct">)</span>
-</span>
-<span class="line-text">        <span class="param">self</span><span class="punct">.</span><span class="var">bit2</span> <span class="punct">=</span> <span class="punct">[</span><span class="num">0</span><span class="punct">]</span> <span class="punct">*</span> <span class="punct">(</span><span class="var">n</span> <span class="punct">+</span> <span class="num">1</span><span class="punct">)</span>
-</span>
-<span class="line-text"></span>
-<span class="line-text">    <span class="kw-def">def</span> <span class="fn">_add</span><span class="punct">(</span><span class="param">self</span><span class="punct">,</span> <span class="var">bit</span><span class="punct">:</span> <span class="type">List</span><span class="punct">[</span><span class="type">int</span><span class="punct">]</span><span class="punct">,</span> <span class="var">idx</span><span class="punct">:</span> <span class="type">int</span><span class="punct">,</span> <span class="var">delta</span><span class="punct">:</span> <span class="type">int</span><span class="punct">)</span> <span class="punct">-&gt;</span> <span class="kw-def">None</span><span class="punct">:</span>
-</span>
-<span class="line-text">        <span class="str">&quot;&quot;&quot;Adds delta to target BIT at index idx (1-based).&quot;&quot;&quot;</span>
-</span>
-<span class="line-text">        <span class="flow">while</span> <span class="var">idx</span> <span class="punct">&lt;=</span> <span class="param">self</span><span class="punct">.</span><span class="var">n</span><span class="punct">:</span>
-</span>
-<span class="line-text">            <span class="var">bit</span><span class="punct">[</span><span class="var">idx</span><span class="punct">]</span> <span class="punct">+=</span> <span class="var">delta</span>
-</span>
-<span class="line-text">            <span class="var">idx</span> <span class="punct">+=</span> <span class="var">idx</span> <span class="punct">&amp;</span> <span class="punct">(</span><span class="punct">-</span><span class="var">idx</span><span class="punct">)</span>
-</span>
-<span class="line-text"></span>
-<span class="line-text">    <span class="kw-def">def</span> <span class="fn">_query</span><span class="punct">(</span><span class="param">self</span><span class="punct">,</span> <span class="var">bit</span><span class="punct">:</span> <span class="type">List</span><span class="punct">[</span><span class="type">int</span><span class="punct">]</span><span class="punct">,</span> <span class="var">idx</span><span class="punct">:</span> <span class="type">int</span><span class="punct">)</span> <span class="punct">-&gt;</span> <span class="type">int</span><span class="punct">:</span>
-</span>
-<span class="line-text">        <span class="str">&quot;&quot;&quot;Returns prefix sum of target BIT up to index idx (1-based).&quot;&quot;&quot;</span>
-</span>
-<span class="line-text">        <span class="var">total</span> <span class="punct">=</span> <span class="num">0</span>
-</span>
-<span class="line-text">        <span class="flow">while</span> <span class="var">idx</span> <span class="punct">&gt;</span> <span class="num">0</span><span class="punct">:</span>
-</span>
-<span class="line-text">            <span class="var">total</span> <span class="punct">+=</span> <span class="var">bit</span><span class="punct">[</span><span class="var">idx</span><span class="punct">]</span>
-</span>
-<span class="line-text">            <span class="var">idx</span> <span class="punct">-=</span> <span class="var">idx</span> <span class="punct">&amp;</span> <span class="punct">(</span><span class="punct">-</span><span class="var">idx</span><span class="punct">)</span>
-</span>
-<span class="line-text">        <span class="flow">return</span> <span class="var">total</span>
-</span>
-<span class="line-text"></span>
-<span class="line-text">    <span class="kw-def">def</span> <span class="fn">updateRange</span><span class="punct">(</span><span class="param">self</span><span class="punct">,</span> <span class="var">left</span><span class="punct">:</span> <span class="type">int</span><span class="punct">,</span> <span class="var">right</span><span class="punct">:</span> <span class="type">int</span><span class="punct">,</span> <span class="var">delta</span><span class="punct">:</span> <span class="type">int</span><span class="punct">)</span> <span class="punct">-&gt;</span> <span class="kw-def">None</span><span class="punct">:</span>
-</span>
-<span class="line-text">        <span class="str">&quot;&quot;&quot;Adds delta to all elements in range [left, right] (1-based).&quot;&quot;&quot;</span>
-</span>
-<span class="line-text">        <span class="comment"># Maintain bit1 (stores D[k])</span>
-</span>
-<span class="line-text">        <span class="param">self</span><span class="punct">.</span><span class="fn">_add</span><span class="punct">(</span><span class="param">self</span><span class="punct">.</span><span class="var">bit1</span><span class="punct">,</span> <span class="var">left</span><span class="punct">,</span> <span class="var">delta</span><span class="punct">)</span>
-</span>
-<span class="line-text">        <span class="param">self</span><span class="punct">.</span><span class="fn">_add</span><span class="punct">(</span><span class="param">self</span><span class="punct">.</span><span class="var">bit1</span><span class="punct">,</span> <span class="var">right</span> <span class="punct">+</span> <span class="num">1</span><span class="punct">,</span> <span class="punct">-</span><span class="var">delta</span><span class="punct">)</span>
-</span>
-<span class="line-text"></span>
-<span class="line-text">        <span class="comment"># Maintain bit2 (stores D[k] * (k - 1))</span>
-</span>
-<span class="line-text">        <span class="param">self</span><span class="punct">.</span><span class="fn">_add</span><span class="punct">(</span><span class="param">self</span><span class="punct">.</span><span class="var">bit2</span><span class="punct">,</span> <span class="var">left</span><span class="punct">,</span> <span class="var">delta</span> <span class="punct">*</span> <span class="punct">(</span><span class="var">left</span> <span class="punct">-</span> <span class="num">1</span><span class="punct">)</span><span class="punct">)</span>
-</span>
-<span class="line-text">        <span class="param">self</span><span class="punct">.</span><span class="fn">_add</span><span class="punct">(</span><span class="param">self</span><span class="punct">.</span><span class="var">bit2</span><span class="punct">,</span> <span class="var">right</span> <span class="punct">+</span> <span class="num">1</span><span class="punct">,</span> <span class="punct">-</span><span class="var">delta</span> <span class="punct">*</span> <span class="var">right</span><span class="punct">)</span>
-</span>
-<span class="line-text"></span>
-<span class="line-text">    <span class="kw-def">def</span> <span class="fn">prefixSum</span><span class="punct">(</span><span class="param">self</span><span class="punct">,</span> <span class="var">idx</span><span class="punct">:</span> <span class="type">int</span><span class="punct">)</span> <span class="punct">-&gt;</span> <span class="type">int</span><span class="punct">:</span>
-</span>
-<span class="line-text">        <span class="str">&quot;&quot;&quot;Computes prefix sum of array from index 1 to idx in O(log n).&quot;&quot;&quot;</span>
-</span>
-<span class="line-text">        <span class="flow">return</span> <span class="var">idx</span> <span class="punct">*</span> <span class="param">self</span><span class="punct">.</span><span class="fn">_query</span><span class="punct">(</span><span class="param">self</span><span class="punct">.</span><span class="var">bit1</span><span class="punct">,</span> <span class="var">idx</span><span class="punct">)</span> <span class="punct">-</span> <span class="param">self</span><span class="punct">.</span><span class="fn">_query</span><span class="punct">(</span><span class="param">self</span><span class="punct">.</span><span class="var">bit2</span><span class="punct">,</span> <span class="var">idx</span><span class="punct">)</span>
-</span>
-<span class="line-text"></span>
-<span class="line-text">    <span class="kw-def">def</span> <span class="fn">queryRange</span><span class="punct">(</span><span class="param">self</span><span class="punct">,</span> <span class="var">left</span><span class="punct">:</span> <span class="type">int</span><span class="punct">,</span> <span class="var">right</span><span class="punct">:</span> <span class="type">int</span><span class="punct">)</span> <span class="punct">-&gt;</span> <span class="type">int</span><span class="punct">:</span>
-</span>
-<span class="line-text">        <span class="str">&quot;&quot;&quot;Returns sum of elements in range [left, right] in O(log n).&quot;&quot;&quot;</span>
-</span>
-<span class="line-text">        <span class="flow">return</span> <span class="param">self</span><span class="punct">.</span><span class="fn">prefixSum</span><span class="punct">(</span><span class="var">right</span><span class="punct">)</span> <span class="punct">-</span> <span class="param">self</span><span class="punct">.</span><span class="fn">prefixSum</span><span class="punct">(</span><span class="var">left</span> <span class="punct">-</span> <span class="num">1</span><span class="punct">)</span></span></code></pre>
-            </div>
-          </article>
-
-          <!-- Pattern Card 4: Coordinate Compression + BIT (Inversion Count & Binary Lifting) -->
-          <article class="pattern-card" id="rq-fenwick-inversions">
-            <div class="pattern-card-head">
-              <h3>Coordinate Compression &amp; Dynamic Inversion Counting</h3>
-            </div>
-            <p class="use-when"><strong>Use when:</strong> Counting inversions, finding count of smaller numbers to the right/left, or dynamic order statistics on unconstrained numeric domains.</p>
-
-            <div class="why-box" style="padding: 1.35rem;">
-              <strong>Why it works: Right-to-Left Frequency Sweeping</strong>
-              <p style="line-height: 1.65;">
-                When input values can be negative or large (e.g., up to 10<sup>9</sup>), map them to compact ranks [1, U] via <code>rankMap = {val: rank + 1 for rank, val in enumerate(sorted(set(nums)))}</code> in O(n log n).
-                Traversing from right to left, every element query <code>bit.query(currRank - 1)</code> counts all elements already inserted to its right with strictly smaller values in O(log n) time.
-              </p>
-            </div>
-
-            <div class="mini-code-wrap">
-              <button class="copy-button mini-copy" type="button" data-code="rq-fenwick-inv-code">Copy</button>
-              <pre class="mini-code" id="rq-fenwick-inv-code"><code><span class="line-text"><span class="flow">from</span> <span class="var">typing</span> <span class="flow">import</span> <span class="type">List</span></span>
-<span class="line-text"></span>
-<span class="line-text"><span class="kw-def">def</span> <span class="fn">countSmallerAfterSelf</span><span class="punct">(</span><span class="param">nums</span><span class="punct">:</span> <span class="type">List</span><span class="punct">[</span><span class="type">int</span><span class="punct">]</span><span class="punct">)</span> <span class="punct">-&gt;</span> <span class="type">List</span><span class="punct">[</span><span class="type">int</span><span class="punct">]</span><span class="punct">:</span></span>
-<span class="line-text">    <span class="docstr">&quot;&quot;&quot;
-    LeetCode 315: Count of Smaller Numbers After Self.
-    Traverse right to left with Coordinate Compression + Fenwick Frequency Tree.
-
-    Time:  O(n log n)
-    Space: O(n)
-    &quot;&quot;&quot;</span></span>
-<span class="line-text">    <span class="flow">if</span> <span class="flow">not</span> <span class="param">nums</span><span class="punct">:</span></span>
-<span class="line-text">        <span class="flow">return</span> <span class="punct">[</span><span class="punct">]</span></span>
-<span class="line-text"></span>
-<span class="line-text">    <span class="comment"># 1. Coordinate compression to map unique values to ranks [1, U]</span></span>
-<span class="line-text">    <span class="var">sortedVals</span> <span class="punct">=</span> <span class="fn">sorted</span><span class="punct">(</span><span class="fn">set</span><span class="punct">(</span><span class="param">nums</span><span class="punct">)</span><span class="punct">)</span></span>
-<span class="line-text">    <span class="var">rankMap</span> <span class="punct">=</span> <span class="punct">{</span><span class="param">val</span><span class="punct">:</span> <span class="var">rank</span> <span class="punct">+</span> <span class="num">1</span> <span class="flow">for</span> <span class="var">rank</span><span class="punct">,</span> <span class="param">val</span> <span class="flow">in</span> <span class="fn">enumerate</span><span class="punct">(</span><span class="var">sortedVals</span><span class="punct">)</span><span class="punct">}</span></span>
-<span class="line-text">    <span class="var">maxRank</span><span class="punct">,</span> <span class="var">n</span> <span class="punct">=</span> <span class="fn">len</span><span class="punct">(</span><span class="var">sortedVals</span><span class="punct">)</span><span class="punct">,</span> <span class="fn">len</span><span class="punct">(</span><span class="param">nums</span><span class="punct">)</span></span>
-<span class="line-text"></span>
-<span class="line-text">    <span class="var">bit</span> <span class="punct">=</span> <span class="var">FenwickTree</span><span class="punct">(</span><span class="var">maxRank</span><span class="punct">)</span></span>
-<span class="line-text">    <span class="var">res</span> <span class="punct">=</span> <span class="punct">[</span><span class="num">0</span><span class="punct">]</span> <span class="punct">*</span> <span class="var">n</span></span>
-<span class="line-text"></span>
-<span class="line-text">    <span class="comment"># 2. Iterate backwards from right to left</span></span>
-<span class="line-text">    <span class="flow">for</span> <span class="var">i</span> <span class="flow">in</span> <span class="fn">range</span><span class="punct">(</span><span class="var">n</span> <span class="punct">-</span> <span class="num">1</span><span class="punct">,</span> <span class="punct">-</span><span class="num">1</span><span class="punct">,</span> <span class="punct">-</span><span class="num">1</span><span class="punct">)</span><span class="punct">:</span></span>
-<span class="line-text">        <span class="var">currRank</span> <span class="punct">=</span> <span class="var">rankMap</span><span class="punct">[</span><span class="param">nums</span><span class="punct">[</span><span class="var">i</span><span class="punct">]</span><span class="punct">]</span></span>
-<span class="line-text"></span>
-<span class="line-text">        <span class="comment"># Count elements already placed with strictly smaller rank [1..currRank - 1]</span></span>
-<span class="line-text">        <span class="var">res</span><span class="punct">[</span><span class="var">i</span><span class="punct">]</span> <span class="punct">=</span> <span class="var">bit</span><span class="punct">.</span><span class="var">query</span><span class="punct">(</span><span class="var">currRank</span> <span class="punct">-</span> <span class="num">1</span><span class="punct">)</span></span>
-<span class="line-text"></span>
-<span class="line-text">        <span class="comment"># Insert current element into BIT frequency tree</span></span>
-<span class="line-text">        <span class="var">bit</span><span class="punct">.</span><span class="var">update</span><span class="punct">(</span><span class="var">currRank</span><span class="punct">,</span> <span class="num">1</span><span class="punct">)</span></span>
-<span class="line-text"></span>
-<span class="line-text">    <span class="flow">return</span> <span class="var">res</span></span></code></pre>
-            </div>
-          </article>
-
-          <!-- Practice Problems for Fenwick Trees -->
-          <div class="pattern-problems-section">
-            <div class="section-heading">
-              <span class="section-kicker">Practice Problems</span>
-              <h2>Linked Problems for Fenwick Trees</h2>
-            </div>
-            <div class="pattern-problems-list">
-              <div class="pattern-problem-card">
-                <div class="pattern-problem-top">
-                  <a class="pattern-problem-title" href="https://leetcode.com/problems/count-of-smaller-numbers-after-self/" target="_blank" rel="noopener">
-                    <span>Count of Smaller Numbers After Self</span>
-                    <span>↗</span>
-                  </a>
-                  <div class="pattern-problem-badges">
-                    <span class="problem-tag">Coordinate Compression + BIT</span>
-                    <span class="badge-diff diff-hard">Hard</span>
-                    <span class="actual-diff">Actual: <span class="diff-num">4.5/5</span></span>
-                  </div>
-                </div>
-                <p class="pattern-problem-takeaway">
-                  <strong>Pattern Takeaway:</strong> Discretize array to rank space [1, U]. Sweep right-to-left: query strictly smaller prefix sum, then increment current rank.
-                </p>
-              </div>
-
-              <div class="pattern-problem-card">
-                <div class="pattern-problem-top">
-                  <a class="pattern-problem-title" href="https://leetcode.com/problems/queue-reconstruction-by-height/" target="_blank" rel="noopener">
-                    <span>Queue Reconstruction by Height</span>
-                    <span>↗</span>
-                  </a>
-                  <div class="pattern-problem-badges">
-                    <span class="problem-tag">Fenwick Binary Search</span>
-                    <span class="badge-diff diff-medium">Medium</span>
-                    <span class="actual-diff">Actual: <span class="diff-num">3/5</span></span>
-                  </div>
-                </div>
-                <p class="pattern-problem-takeaway">
-                  <strong>Pattern Takeaway:</strong> Track available empty slots using a BIT. Binary search BIT prefix sums to deposit people at exact k-th vacant slot in O(n log^2 n).
-                </p>
-              </div>
-
-              <div class="pattern-problem-card">
-                <div class="pattern-problem-top">
-                  <a class="pattern-problem-title" href="https://leetcode.com/problems/reverse-pairs/" target="_blank" rel="noopener">
-                    <span>Reverse Pairs</span>
-                    <span>↗</span>
-                  </a>
-                  <div class="pattern-problem-badges">
-                    <span class="problem-tag">Coordinate Compression BIT</span>
-                    <span class="badge-diff diff-hard">Hard</span>
-                    <span class="actual-diff">Actual: <span class="diff-num">4.5/5</span></span>
-                  </div>
-                </div>
-                <p class="pattern-problem-takeaway">
-                  <strong>Pattern Takeaway:</strong> Condition is nums[i] &gt; 2 * nums[j]. Compress both nums[i] and 2 * nums[i] into unified rank map for seamless BIT lookups.
-                </p>
-              </div>
-            </div>
-          </div>
-        </section>
-      </section>
-
-      <!-- PAGE 3B: Fenwick Tree Visualizations Subcategory -->
-      <section class="page-view" id="range-fenwick-visual-sub" data-topic-title="Advanced Range Query Structures" data-page-title="Fenwick Tree Visuals">
-        <header class="topic-heading">
-          <span class="level-tag">Topic 09 · Visual</span>
-          <h1><span>⚡</span> Fenwick Tree (BIT): Query Tree for N = 30</h1>
-          <p class="topic-summary" style="max-width: 860px; line-height: 1.65; font-size: 0.94rem;">One picture, four rules: parent links, what each <code>tree[i]</code> stores, the query path and the update path.</p>
-        </header>
-
-        <section class="patterns-section">
-          <article class="pattern-card" id="fenwick-visual-query-tree-30">
-            <div class="pattern-card-head">
-              <h3>Query Tree for N = 30</h3>
-            </div>
-            <p class="use-when"><strong>Read it as:</strong> column = index, row = number of set bits, binary inside each node, 0 = dummy root. Highlighted: <code>query(13)</code>. Hover a node for its range.</p>
-
-            <div class="bit-svg-wrap" role="region" aria-label="Query tree for indices 0 to 30" tabindex="0">
-<svg class="bit-svg bit-q30-svg" id="bit-query-tree-30-svg" viewBox="0 0 1572 520" width="100%" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Fenwick query tree for indices 0 to 30; parent of i is i minus lowbit of i; query(13) path highlighted">
+          <article class="pattern-card" id="fenwick-query-tree">
+            <div class="bit-svg-wrap" role="region" aria-label="Query tree for indices 0 to 40" tabindex="0">
+<svg class="bit-svg bit-q40-svg" id="bit-query-tree-40-svg" viewBox="0 0 2072 625" width="100%" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Fenwick query tree for indices 0 to 40; parent of i is i minus lowbit of i; query(13) path highlighted">
   <defs>
     <marker id="q30-arr-default" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M 0 1 L 10 5 L 0 9 z" fill="#64748b"/></marker>
     <marker id="q30-arr-easy" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#00b8a3"/></marker>
@@ -10014,6 +9437,7 @@ Result: len(tails) = 3  (Optimal nesting: [2,3] -&gt; [5,4] -&gt; [6,7])</code><
   <text x="4" y="233" fill="#64748b" font-size="9" font-family="monospace" text-anchor="start">2 set bits</text>
   <text x="4" y="338" fill="#64748b" font-size="9" font-family="monospace" text-anchor="start">3 set bits</text>
   <text x="4" y="443" fill="#64748b" font-size="9" font-family="monospace" text-anchor="start">4 set bits</text>
+  <text x="4" y="548" fill="#64748b" font-size="9" font-family="monospace" text-anchor="start">5 set bits</text>
   <!-- Directed Query Edges: parent = i - lowbit(i) -->
   <line id="q30-edge-1-0" x1="75.7" y1="133.3" x2="48.0" y2="75.3" stroke="#383838" stroke-width="1.6" stroke-dasharray="3,3" marker-end="url(#q30-arr-default)"/>
   <line id="q30-edge-2-0" x1="119.4" y1="137.6" x2="55.3" y2="70.3" stroke="#383838" stroke-width="1.6" stroke-dasharray="3,3" marker-end="url(#q30-arr-default)"/>
@@ -10045,161 +9469,221 @@ Result: len(tails) = 3  (Optimal nesting: [2,3] -&gt; [5,4] -&gt; [6,7])</code><
   <line id="q30-edge-28-24" x1="1414.8" y1="353.8" x2="1260.8" y2="273.0" stroke="#383838" stroke-width="1.6" stroke-dasharray="3,3" marker-end="url(#q30-arr-default)"/>
   <line id="q30-edge-29-28" x1="1475.7" y1="448.3" x2="1448.0" y2="390.3" stroke="#383838" stroke-width="1.6" stroke-dasharray="3,3" marker-end="url(#q30-arr-default)"/>
   <line id="q30-edge-30-28" x1="1519.4" y1="452.6" x2="1455.3" y2="385.3" stroke="#383838" stroke-width="1.6" stroke-dasharray="3,3" marker-end="url(#q30-arr-default)"/>
+  <line id="q30-edge-31-30" x1="1575.7" y1="553.3" x2="1548.0" y2="495.3" stroke="#383838" stroke-width="1.6" stroke-dasharray="3,3" marker-end="url(#q30-arr-default)"/>
+  <line id="q30-edge-32-0" x1="1612.1" y1="153.4" x2="63.9" y2="51.8" stroke="#383838" stroke-width="1.6" stroke-dasharray="3,3" marker-end="url(#q30-arr-default)"/>
+  <line id="q30-edge-33-32" x1="1675.7" y1="238.3" x2="1648.0" y2="180.3" stroke="#383838" stroke-width="1.6" stroke-dasharray="3,3" marker-end="url(#q30-arr-default)"/>
+  <line id="q30-edge-34-32" x1="1719.4" y1="242.6" x2="1655.3" y2="175.3" stroke="#383838" stroke-width="1.6" stroke-dasharray="3,3" marker-end="url(#q30-arr-default)"/>
+  <line id="q30-edge-35-34" x1="1775.7" y1="343.3" x2="1748.0" y2="285.3" stroke="#383838" stroke-width="1.6" stroke-dasharray="3,3" marker-end="url(#q30-arr-default)"/>
+  <line id="q30-edge-36-32" x1="1814.8" y1="248.8" x2="1660.8" y2="168.0" stroke="#383838" stroke-width="1.6" stroke-dasharray="3,3" marker-end="url(#q30-arr-default)"/>
+  <line id="q30-edge-37-36" x1="1875.7" y1="343.3" x2="1848.0" y2="285.3" stroke="#383838" stroke-width="1.6" stroke-dasharray="3,3" marker-end="url(#q30-arr-default)"/>
+  <line id="q30-edge-38-36" x1="1919.4" y1="347.6" x2="1855.3" y2="280.3" stroke="#383838" stroke-width="1.6" stroke-dasharray="3,3" marker-end="url(#q30-arr-default)"/>
+  <line id="q30-edge-39-38" x1="1975.7" y1="448.3" x2="1948.0" y2="390.3" stroke="#383838" stroke-width="1.6" stroke-dasharray="3,3" marker-end="url(#q30-arr-default)"/>
+  <line id="q30-edge-40-32" x1="2012.8" y1="253.9" x2="1663.1" y2="162.1" stroke="#383838" stroke-width="1.6" stroke-dasharray="3,3" marker-end="url(#q30-arr-default)"/>
   <!-- Circular Nodes: index + 5-bit binary -->
   <g id="q30-node-0" data-node="0"><title>Sentinel root 0: query stops here</title>
     <circle cx="36" cy="50" r="22" fill="rgba(0, 184, 163, 0.22)" stroke="#00b8a3" stroke-width="2.6" filter="url(#glow-easy-q30)"/>
     <text x="36" y="52" fill="#00b8a3" font-size="14" font-weight="800" font-family="monospace" text-anchor="middle" pointer-events="none">0</text>
-    <text x="36" y="63" fill="#9ea0a5" font-size="8.5" font-family="monospace" text-anchor="middle" pointer-events="none">00000</text>
+    <text x="36" y="63" fill="#9ea0a5" font-size="8" font-family="monospace" text-anchor="middle" pointer-events="none">000000</text>
   </g>
   <g id="q30-node-1" data-node="1"><title>tree[1] covers (0, 1] · lowbit = 1 · parent = 0</title>
     <circle cx="86" cy="155" r="22" fill="#1e1e1e" stroke="#ffa116" stroke-width="1.8"/>
     <text x="86" y="157" fill="#ffffff" font-size="14" font-weight="800" font-family="monospace" text-anchor="middle" pointer-events="none">1</text>
-    <text x="86" y="168" fill="#9ea0a5" font-size="8.5" font-family="monospace" text-anchor="middle" pointer-events="none">00001</text>
+    <text x="86" y="168" fill="#9ea0a5" font-size="8" font-family="monospace" text-anchor="middle" pointer-events="none">000001</text>
   </g>
   <g id="q30-node-2" data-node="2"><title>tree[2] covers (0, 2] · lowbit = 2 · parent = 0</title>
     <circle cx="136" cy="155" r="22" fill="#1e1e1e" stroke="#ffa116" stroke-width="1.8"/>
     <text x="136" y="157" fill="#ffffff" font-size="14" font-weight="800" font-family="monospace" text-anchor="middle" pointer-events="none">2</text>
-    <text x="136" y="168" fill="#9ea0a5" font-size="8.5" font-family="monospace" text-anchor="middle" pointer-events="none">00010</text>
+    <text x="136" y="168" fill="#9ea0a5" font-size="8" font-family="monospace" text-anchor="middle" pointer-events="none">000010</text>
   </g>
   <g id="q30-node-3" data-node="3"><title>tree[3] covers (2, 3] · lowbit = 1 · parent = 2</title>
     <circle cx="186" cy="260" r="22" fill="#1e1e1e" stroke="#2dd4bf" stroke-width="1.8"/>
     <text x="186" y="262" fill="#ffffff" font-size="14" font-weight="800" font-family="monospace" text-anchor="middle" pointer-events="none">3</text>
-    <text x="186" y="273" fill="#9ea0a5" font-size="8.5" font-family="monospace" text-anchor="middle" pointer-events="none">00011</text>
+    <text x="186" y="273" fill="#9ea0a5" font-size="8" font-family="monospace" text-anchor="middle" pointer-events="none">000011</text>
   </g>
   <g id="q30-node-4" data-node="4"><title>tree[4] covers (0, 4] · lowbit = 4 · parent = 0</title>
     <circle cx="236" cy="155" r="22" fill="#1e1e1e" stroke="#ffa116" stroke-width="1.8"/>
     <text x="236" y="157" fill="#ffffff" font-size="14" font-weight="800" font-family="monospace" text-anchor="middle" pointer-events="none">4</text>
-    <text x="236" y="168" fill="#9ea0a5" font-size="8.5" font-family="monospace" text-anchor="middle" pointer-events="none">00100</text>
+    <text x="236" y="168" fill="#9ea0a5" font-size="8" font-family="monospace" text-anchor="middle" pointer-events="none">000100</text>
   </g>
   <g id="q30-node-5" data-node="5"><title>tree[5] covers (4, 5] · lowbit = 1 · parent = 4</title>
     <circle cx="286" cy="260" r="22" fill="#1e1e1e" stroke="#2dd4bf" stroke-width="1.8"/>
     <text x="286" y="262" fill="#ffffff" font-size="14" font-weight="800" font-family="monospace" text-anchor="middle" pointer-events="none">5</text>
-    <text x="286" y="273" fill="#9ea0a5" font-size="8.5" font-family="monospace" text-anchor="middle" pointer-events="none">00101</text>
+    <text x="286" y="273" fill="#9ea0a5" font-size="8" font-family="monospace" text-anchor="middle" pointer-events="none">000101</text>
   </g>
   <g id="q30-node-6" data-node="6"><title>tree[6] covers (4, 6] · lowbit = 2 · parent = 4</title>
     <circle cx="336" cy="260" r="22" fill="#1e1e1e" stroke="#2dd4bf" stroke-width="1.8"/>
     <text x="336" y="262" fill="#ffffff" font-size="14" font-weight="800" font-family="monospace" text-anchor="middle" pointer-events="none">6</text>
-    <text x="336" y="273" fill="#9ea0a5" font-size="8.5" font-family="monospace" text-anchor="middle" pointer-events="none">00110</text>
+    <text x="336" y="273" fill="#9ea0a5" font-size="8" font-family="monospace" text-anchor="middle" pointer-events="none">000110</text>
   </g>
   <g id="q30-node-7" data-node="7"><title>tree[7] covers (6, 7] · lowbit = 1 · parent = 6</title>
     <circle cx="386" cy="365" r="22" fill="#1e1e1e" stroke="#c586c0" stroke-width="1.8"/>
     <text x="386" y="367" fill="#ffffff" font-size="14" font-weight="800" font-family="monospace" text-anchor="middle" pointer-events="none">7</text>
-    <text x="386" y="378" fill="#9ea0a5" font-size="8.5" font-family="monospace" text-anchor="middle" pointer-events="none">00111</text>
+    <text x="386" y="378" fill="#9ea0a5" font-size="8" font-family="monospace" text-anchor="middle" pointer-events="none">000111</text>
   </g>
   <g id="q30-node-8" data-node="8"><title>tree[8] covers (0, 8] · lowbit = 8 · parent = 0</title>
     <circle cx="436" cy="155" r="22" fill="rgba(0, 184, 163, 0.22)" stroke="#00b8a3" stroke-width="2.6" filter="url(#glow-easy-q30)"/>
     <text x="436" y="157" fill="#00b8a3" font-size="14" font-weight="800" font-family="monospace" text-anchor="middle" pointer-events="none">8</text>
-    <text x="436" y="168" fill="#9ea0a5" font-size="8.5" font-family="monospace" text-anchor="middle" pointer-events="none">01000</text>
+    <text x="436" y="168" fill="#9ea0a5" font-size="8" font-family="monospace" text-anchor="middle" pointer-events="none">001000</text>
   </g>
   <g id="q30-node-9" data-node="9"><title>tree[9] covers (8, 9] · lowbit = 1 · parent = 8</title>
     <circle cx="486" cy="260" r="22" fill="#1e1e1e" stroke="#2dd4bf" stroke-width="1.8"/>
     <text x="486" y="262" fill="#ffffff" font-size="14" font-weight="800" font-family="monospace" text-anchor="middle" pointer-events="none">9</text>
-    <text x="486" y="273" fill="#9ea0a5" font-size="8.5" font-family="monospace" text-anchor="middle" pointer-events="none">01001</text>
+    <text x="486" y="273" fill="#9ea0a5" font-size="8" font-family="monospace" text-anchor="middle" pointer-events="none">001001</text>
   </g>
   <g id="q30-node-10" data-node="10"><title>tree[10] covers (8, 10] · lowbit = 2 · parent = 8</title>
     <circle cx="536" cy="260" r="22" fill="#1e1e1e" stroke="#2dd4bf" stroke-width="1.8"/>
     <text x="536" y="262" fill="#ffffff" font-size="14" font-weight="800" font-family="monospace" text-anchor="middle" pointer-events="none">10</text>
-    <text x="536" y="273" fill="#9ea0a5" font-size="8.5" font-family="monospace" text-anchor="middle" pointer-events="none">01010</text>
+    <text x="536" y="273" fill="#9ea0a5" font-size="8" font-family="monospace" text-anchor="middle" pointer-events="none">001010</text>
   </g>
   <g id="q30-node-11" data-node="11"><title>tree[11] covers (10, 11] · lowbit = 1 · parent = 10</title>
     <circle cx="586" cy="365" r="22" fill="#1e1e1e" stroke="#c586c0" stroke-width="1.8"/>
     <text x="586" y="367" fill="#ffffff" font-size="14" font-weight="800" font-family="monospace" text-anchor="middle" pointer-events="none">11</text>
-    <text x="586" y="378" fill="#9ea0a5" font-size="8.5" font-family="monospace" text-anchor="middle" pointer-events="none">01011</text>
+    <text x="586" y="378" fill="#9ea0a5" font-size="8" font-family="monospace" text-anchor="middle" pointer-events="none">001011</text>
   </g>
   <g id="q30-node-12" data-node="12"><title>tree[12] covers (8, 12] · lowbit = 4 · parent = 8</title>
     <circle cx="636" cy="260" r="22" fill="rgba(0, 184, 163, 0.22)" stroke="#00b8a3" stroke-width="2.6" filter="url(#glow-easy-q30)"/>
     <text x="636" y="262" fill="#00b8a3" font-size="14" font-weight="800" font-family="monospace" text-anchor="middle" pointer-events="none">12</text>
-    <text x="636" y="273" fill="#9ea0a5" font-size="8.5" font-family="monospace" text-anchor="middle" pointer-events="none">01100</text>
+    <text x="636" y="273" fill="#9ea0a5" font-size="8" font-family="monospace" text-anchor="middle" pointer-events="none">001100</text>
   </g>
   <g id="q30-node-13" data-node="13"><title>tree[13] covers (12, 13] · lowbit = 1 · parent = 12</title>
     <circle cx="686" cy="365" r="22" fill="rgba(0, 184, 163, 0.22)" stroke="#00b8a3" stroke-width="2.6" filter="url(#glow-easy-q30)"/>
     <text x="686" y="367" fill="#00b8a3" font-size="14" font-weight="800" font-family="monospace" text-anchor="middle" pointer-events="none">13</text>
-    <text x="686" y="378" fill="#9ea0a5" font-size="8.5" font-family="monospace" text-anchor="middle" pointer-events="none">01101</text>
+    <text x="686" y="378" fill="#9ea0a5" font-size="8" font-family="monospace" text-anchor="middle" pointer-events="none">001101</text>
   </g>
   <g id="q30-node-14" data-node="14"><title>tree[14] covers (12, 14] · lowbit = 2 · parent = 12</title>
     <circle cx="736" cy="365" r="22" fill="#1e1e1e" stroke="#c586c0" stroke-width="1.8"/>
     <text x="736" y="367" fill="#ffffff" font-size="14" font-weight="800" font-family="monospace" text-anchor="middle" pointer-events="none">14</text>
-    <text x="736" y="378" fill="#9ea0a5" font-size="8.5" font-family="monospace" text-anchor="middle" pointer-events="none">01110</text>
+    <text x="736" y="378" fill="#9ea0a5" font-size="8" font-family="monospace" text-anchor="middle" pointer-events="none">001110</text>
   </g>
   <g id="q30-node-15" data-node="15"><title>tree[15] covers (14, 15] · lowbit = 1 · parent = 14</title>
     <circle cx="786" cy="470" r="22" fill="#1e1e1e" stroke="#64748b" stroke-width="1.8"/>
     <text x="786" y="472" fill="#ffffff" font-size="14" font-weight="800" font-family="monospace" text-anchor="middle" pointer-events="none">15</text>
-    <text x="786" y="483" fill="#9ea0a5" font-size="8.5" font-family="monospace" text-anchor="middle" pointer-events="none">01111</text>
+    <text x="786" y="483" fill="#9ea0a5" font-size="8" font-family="monospace" text-anchor="middle" pointer-events="none">001111</text>
   </g>
   <g id="q30-node-16" data-node="16"><title>tree[16] covers (0, 16] · lowbit = 16 · parent = 0</title>
     <circle cx="836" cy="155" r="22" fill="#1e1e1e" stroke="#ffa116" stroke-width="1.8"/>
     <text x="836" y="157" fill="#ffffff" font-size="14" font-weight="800" font-family="monospace" text-anchor="middle" pointer-events="none">16</text>
-    <text x="836" y="168" fill="#9ea0a5" font-size="8.5" font-family="monospace" text-anchor="middle" pointer-events="none">10000</text>
+    <text x="836" y="168" fill="#9ea0a5" font-size="8" font-family="monospace" text-anchor="middle" pointer-events="none">010000</text>
   </g>
   <g id="q30-node-17" data-node="17"><title>tree[17] covers (16, 17] · lowbit = 1 · parent = 16</title>
     <circle cx="886" cy="260" r="22" fill="#1e1e1e" stroke="#2dd4bf" stroke-width="1.8"/>
     <text x="886" y="262" fill="#ffffff" font-size="14" font-weight="800" font-family="monospace" text-anchor="middle" pointer-events="none">17</text>
-    <text x="886" y="273" fill="#9ea0a5" font-size="8.5" font-family="monospace" text-anchor="middle" pointer-events="none">10001</text>
+    <text x="886" y="273" fill="#9ea0a5" font-size="8" font-family="monospace" text-anchor="middle" pointer-events="none">010001</text>
   </g>
   <g id="q30-node-18" data-node="18"><title>tree[18] covers (16, 18] · lowbit = 2 · parent = 16</title>
     <circle cx="936" cy="260" r="22" fill="#1e1e1e" stroke="#2dd4bf" stroke-width="1.8"/>
     <text x="936" y="262" fill="#ffffff" font-size="14" font-weight="800" font-family="monospace" text-anchor="middle" pointer-events="none">18</text>
-    <text x="936" y="273" fill="#9ea0a5" font-size="8.5" font-family="monospace" text-anchor="middle" pointer-events="none">10010</text>
+    <text x="936" y="273" fill="#9ea0a5" font-size="8" font-family="monospace" text-anchor="middle" pointer-events="none">010010</text>
   </g>
   <g id="q30-node-19" data-node="19"><title>tree[19] covers (18, 19] · lowbit = 1 · parent = 18</title>
     <circle cx="986" cy="365" r="22" fill="#1e1e1e" stroke="#c586c0" stroke-width="1.8"/>
     <text x="986" y="367" fill="#ffffff" font-size="14" font-weight="800" font-family="monospace" text-anchor="middle" pointer-events="none">19</text>
-    <text x="986" y="378" fill="#9ea0a5" font-size="8.5" font-family="monospace" text-anchor="middle" pointer-events="none">10011</text>
+    <text x="986" y="378" fill="#9ea0a5" font-size="8" font-family="monospace" text-anchor="middle" pointer-events="none">010011</text>
   </g>
   <g id="q30-node-20" data-node="20"><title>tree[20] covers (16, 20] · lowbit = 4 · parent = 16</title>
     <circle cx="1036" cy="260" r="22" fill="#1e1e1e" stroke="#2dd4bf" stroke-width="1.8"/>
     <text x="1036" y="262" fill="#ffffff" font-size="14" font-weight="800" font-family="monospace" text-anchor="middle" pointer-events="none">20</text>
-    <text x="1036" y="273" fill="#9ea0a5" font-size="8.5" font-family="monospace" text-anchor="middle" pointer-events="none">10100</text>
+    <text x="1036" y="273" fill="#9ea0a5" font-size="8" font-family="monospace" text-anchor="middle" pointer-events="none">010100</text>
   </g>
   <g id="q30-node-21" data-node="21"><title>tree[21] covers (20, 21] · lowbit = 1 · parent = 20</title>
     <circle cx="1086" cy="365" r="22" fill="#1e1e1e" stroke="#c586c0" stroke-width="1.8"/>
     <text x="1086" y="367" fill="#ffffff" font-size="14" font-weight="800" font-family="monospace" text-anchor="middle" pointer-events="none">21</text>
-    <text x="1086" y="378" fill="#9ea0a5" font-size="8.5" font-family="monospace" text-anchor="middle" pointer-events="none">10101</text>
+    <text x="1086" y="378" fill="#9ea0a5" font-size="8" font-family="monospace" text-anchor="middle" pointer-events="none">010101</text>
   </g>
   <g id="q30-node-22" data-node="22"><title>tree[22] covers (20, 22] · lowbit = 2 · parent = 20</title>
     <circle cx="1136" cy="365" r="22" fill="#1e1e1e" stroke="#c586c0" stroke-width="1.8"/>
     <text x="1136" y="367" fill="#ffffff" font-size="14" font-weight="800" font-family="monospace" text-anchor="middle" pointer-events="none">22</text>
-    <text x="1136" y="378" fill="#9ea0a5" font-size="8.5" font-family="monospace" text-anchor="middle" pointer-events="none">10110</text>
+    <text x="1136" y="378" fill="#9ea0a5" font-size="8" font-family="monospace" text-anchor="middle" pointer-events="none">010110</text>
   </g>
   <g id="q30-node-23" data-node="23"><title>tree[23] covers (22, 23] · lowbit = 1 · parent = 22</title>
     <circle cx="1186" cy="470" r="22" fill="#1e1e1e" stroke="#64748b" stroke-width="1.8"/>
     <text x="1186" y="472" fill="#ffffff" font-size="14" font-weight="800" font-family="monospace" text-anchor="middle" pointer-events="none">23</text>
-    <text x="1186" y="483" fill="#9ea0a5" font-size="8.5" font-family="monospace" text-anchor="middle" pointer-events="none">10111</text>
+    <text x="1186" y="483" fill="#9ea0a5" font-size="8" font-family="monospace" text-anchor="middle" pointer-events="none">010111</text>
   </g>
   <g id="q30-node-24" data-node="24"><title>tree[24] covers (16, 24] · lowbit = 8 · parent = 16</title>
     <circle cx="1236" cy="260" r="22" fill="#1e1e1e" stroke="#2dd4bf" stroke-width="1.8"/>
     <text x="1236" y="262" fill="#ffffff" font-size="14" font-weight="800" font-family="monospace" text-anchor="middle" pointer-events="none">24</text>
-    <text x="1236" y="273" fill="#9ea0a5" font-size="8.5" font-family="monospace" text-anchor="middle" pointer-events="none">11000</text>
+    <text x="1236" y="273" fill="#9ea0a5" font-size="8" font-family="monospace" text-anchor="middle" pointer-events="none">011000</text>
   </g>
   <g id="q30-node-25" data-node="25"><title>tree[25] covers (24, 25] · lowbit = 1 · parent = 24</title>
     <circle cx="1286" cy="365" r="22" fill="#1e1e1e" stroke="#c586c0" stroke-width="1.8"/>
     <text x="1286" y="367" fill="#ffffff" font-size="14" font-weight="800" font-family="monospace" text-anchor="middle" pointer-events="none">25</text>
-    <text x="1286" y="378" fill="#9ea0a5" font-size="8.5" font-family="monospace" text-anchor="middle" pointer-events="none">11001</text>
+    <text x="1286" y="378" fill="#9ea0a5" font-size="8" font-family="monospace" text-anchor="middle" pointer-events="none">011001</text>
   </g>
   <g id="q30-node-26" data-node="26"><title>tree[26] covers (24, 26] · lowbit = 2 · parent = 24</title>
     <circle cx="1336" cy="365" r="22" fill="#1e1e1e" stroke="#c586c0" stroke-width="1.8"/>
     <text x="1336" y="367" fill="#ffffff" font-size="14" font-weight="800" font-family="monospace" text-anchor="middle" pointer-events="none">26</text>
-    <text x="1336" y="378" fill="#9ea0a5" font-size="8.5" font-family="monospace" text-anchor="middle" pointer-events="none">11010</text>
+    <text x="1336" y="378" fill="#9ea0a5" font-size="8" font-family="monospace" text-anchor="middle" pointer-events="none">011010</text>
   </g>
   <g id="q30-node-27" data-node="27"><title>tree[27] covers (26, 27] · lowbit = 1 · parent = 26</title>
     <circle cx="1386" cy="470" r="22" fill="#1e1e1e" stroke="#64748b" stroke-width="1.8"/>
     <text x="1386" y="472" fill="#ffffff" font-size="14" font-weight="800" font-family="monospace" text-anchor="middle" pointer-events="none">27</text>
-    <text x="1386" y="483" fill="#9ea0a5" font-size="8.5" font-family="monospace" text-anchor="middle" pointer-events="none">11011</text>
+    <text x="1386" y="483" fill="#9ea0a5" font-size="8" font-family="monospace" text-anchor="middle" pointer-events="none">011011</text>
   </g>
   <g id="q30-node-28" data-node="28"><title>tree[28] covers (24, 28] · lowbit = 4 · parent = 24</title>
     <circle cx="1436" cy="365" r="22" fill="#1e1e1e" stroke="#c586c0" stroke-width="1.8"/>
     <text x="1436" y="367" fill="#ffffff" font-size="14" font-weight="800" font-family="monospace" text-anchor="middle" pointer-events="none">28</text>
-    <text x="1436" y="378" fill="#9ea0a5" font-size="8.5" font-family="monospace" text-anchor="middle" pointer-events="none">11100</text>
+    <text x="1436" y="378" fill="#9ea0a5" font-size="8" font-family="monospace" text-anchor="middle" pointer-events="none">011100</text>
   </g>
   <g id="q30-node-29" data-node="29"><title>tree[29] covers (28, 29] · lowbit = 1 · parent = 28</title>
     <circle cx="1486" cy="470" r="22" fill="#1e1e1e" stroke="#64748b" stroke-width="1.8"/>
     <text x="1486" y="472" fill="#ffffff" font-size="14" font-weight="800" font-family="monospace" text-anchor="middle" pointer-events="none">29</text>
-    <text x="1486" y="483" fill="#9ea0a5" font-size="8.5" font-family="monospace" text-anchor="middle" pointer-events="none">11101</text>
+    <text x="1486" y="483" fill="#9ea0a5" font-size="8" font-family="monospace" text-anchor="middle" pointer-events="none">011101</text>
   </g>
   <g id="q30-node-30" data-node="30"><title>tree[30] covers (28, 30] · lowbit = 2 · parent = 28</title>
     <circle cx="1536" cy="470" r="22" fill="#1e1e1e" stroke="#64748b" stroke-width="1.8"/>
     <text x="1536" y="472" fill="#ffffff" font-size="14" font-weight="800" font-family="monospace" text-anchor="middle" pointer-events="none">30</text>
-    <text x="1536" y="483" fill="#9ea0a5" font-size="8.5" font-family="monospace" text-anchor="middle" pointer-events="none">11110</text>
+    <text x="1536" y="483" fill="#9ea0a5" font-size="8" font-family="monospace" text-anchor="middle" pointer-events="none">011110</text>
+  </g>
+  <g id="q30-node-31" data-node="31"><title>tree[31] covers (30, 31] · lowbit = 1 · parent = 30</title>
+    <circle cx="1586" cy="575" r="22" fill="#1e1e1e" stroke="#9cdcfe" stroke-width="1.8"/>
+    <text x="1586" y="577" fill="#ffffff" font-size="14" font-weight="800" font-family="monospace" text-anchor="middle" pointer-events="none">31</text>
+    <text x="1586" y="588" fill="#9ea0a5" font-size="8" font-family="monospace" text-anchor="middle" pointer-events="none">011111</text>
+  </g>
+  <g id="q30-node-32" data-node="32"><title>tree[32] covers (0, 32] · lowbit = 32 · parent = 0</title>
+    <circle cx="1636" cy="155" r="22" fill="#1e1e1e" stroke="#ffa116" stroke-width="1.8"/>
+    <text x="1636" y="157" fill="#ffffff" font-size="14" font-weight="800" font-family="monospace" text-anchor="middle" pointer-events="none">32</text>
+    <text x="1636" y="168" fill="#9ea0a5" font-size="8" font-family="monospace" text-anchor="middle" pointer-events="none">100000</text>
+  </g>
+  <g id="q30-node-33" data-node="33"><title>tree[33] covers (32, 33] · lowbit = 1 · parent = 32</title>
+    <circle cx="1686" cy="260" r="22" fill="#1e1e1e" stroke="#2dd4bf" stroke-width="1.8"/>
+    <text x="1686" y="262" fill="#ffffff" font-size="14" font-weight="800" font-family="monospace" text-anchor="middle" pointer-events="none">33</text>
+    <text x="1686" y="273" fill="#9ea0a5" font-size="8" font-family="monospace" text-anchor="middle" pointer-events="none">100001</text>
+  </g>
+  <g id="q30-node-34" data-node="34"><title>tree[34] covers (32, 34] · lowbit = 2 · parent = 32</title>
+    <circle cx="1736" cy="260" r="22" fill="#1e1e1e" stroke="#2dd4bf" stroke-width="1.8"/>
+    <text x="1736" y="262" fill="#ffffff" font-size="14" font-weight="800" font-family="monospace" text-anchor="middle" pointer-events="none">34</text>
+    <text x="1736" y="273" fill="#9ea0a5" font-size="8" font-family="monospace" text-anchor="middle" pointer-events="none">100010</text>
+  </g>
+  <g id="q30-node-35" data-node="35"><title>tree[35] covers (34, 35] · lowbit = 1 · parent = 34</title>
+    <circle cx="1786" cy="365" r="22" fill="#1e1e1e" stroke="#c586c0" stroke-width="1.8"/>
+    <text x="1786" y="367" fill="#ffffff" font-size="14" font-weight="800" font-family="monospace" text-anchor="middle" pointer-events="none">35</text>
+    <text x="1786" y="378" fill="#9ea0a5" font-size="8" font-family="monospace" text-anchor="middle" pointer-events="none">100011</text>
+  </g>
+  <g id="q30-node-36" data-node="36"><title>tree[36] covers (32, 36] · lowbit = 4 · parent = 32</title>
+    <circle cx="1836" cy="260" r="22" fill="#1e1e1e" stroke="#2dd4bf" stroke-width="1.8"/>
+    <text x="1836" y="262" fill="#ffffff" font-size="14" font-weight="800" font-family="monospace" text-anchor="middle" pointer-events="none">36</text>
+    <text x="1836" y="273" fill="#9ea0a5" font-size="8" font-family="monospace" text-anchor="middle" pointer-events="none">100100</text>
+  </g>
+  <g id="q30-node-37" data-node="37"><title>tree[37] covers (36, 37] · lowbit = 1 · parent = 36</title>
+    <circle cx="1886" cy="365" r="22" fill="#1e1e1e" stroke="#c586c0" stroke-width="1.8"/>
+    <text x="1886" y="367" fill="#ffffff" font-size="14" font-weight="800" font-family="monospace" text-anchor="middle" pointer-events="none">37</text>
+    <text x="1886" y="378" fill="#9ea0a5" font-size="8" font-family="monospace" text-anchor="middle" pointer-events="none">100101</text>
+  </g>
+  <g id="q30-node-38" data-node="38"><title>tree[38] covers (36, 38] · lowbit = 2 · parent = 36</title>
+    <circle cx="1936" cy="365" r="22" fill="#1e1e1e" stroke="#c586c0" stroke-width="1.8"/>
+    <text x="1936" y="367" fill="#ffffff" font-size="14" font-weight="800" font-family="monospace" text-anchor="middle" pointer-events="none">38</text>
+    <text x="1936" y="378" fill="#9ea0a5" font-size="8" font-family="monospace" text-anchor="middle" pointer-events="none">100110</text>
+  </g>
+  <g id="q30-node-39" data-node="39"><title>tree[39] covers (38, 39] · lowbit = 1 · parent = 38</title>
+    <circle cx="1986" cy="470" r="22" fill="#1e1e1e" stroke="#64748b" stroke-width="1.8"/>
+    <text x="1986" y="472" fill="#ffffff" font-size="14" font-weight="800" font-family="monospace" text-anchor="middle" pointer-events="none">39</text>
+    <text x="1986" y="483" fill="#9ea0a5" font-size="8" font-family="monospace" text-anchor="middle" pointer-events="none">100111</text>
+  </g>
+  <g id="q30-node-40" data-node="40"><title>tree[40] covers (32, 40] · lowbit = 8 · parent = 32</title>
+    <circle cx="2036" cy="260" r="22" fill="#1e1e1e" stroke="#2dd4bf" stroke-width="1.8"/>
+    <text x="2036" y="262" fill="#ffffff" font-size="14" font-weight="800" font-family="monospace" text-anchor="middle" pointer-events="none">40</text>
+    <text x="2036" y="273" fill="#9ea0a5" font-size="8" font-family="monospace" text-anchor="middle" pointer-events="none">101000</text>
   </g>
 </svg>
             </div>
@@ -11160,7 +10644,7 @@ Result: len(tails) = 3  (Optimal nesting: [2,3] -&gt; [5,4] -&gt; [6,7])</code><
                 <span class="problem-tag">Coordinate Compression + BIT</span>
                 <span class="badge-diff diff-hard">Hard</span>
                 <span class="actual-diff">Actual: <span class="diff-num">4.5/5</span></span>
-                <a class="pattern-ref-link" href="#range-fenwick-tree-sub">View Pattern →</a>
+                <a class="pattern-ref-link" href="#range-fenwick-visual-sub">View Pattern →</a>
               </div>
             </li>
             <li>
@@ -11193,7 +10677,7 @@ Result: len(tails) = 3  (Optimal nesting: [2,3] -&gt; [5,4] -&gt; [6,7])</code><
                 <span class="problem-tag">Fenwick Binary Search</span>
                 <span class="badge-diff diff-medium">Medium</span>
                 <span class="actual-diff">Actual: <span class="diff-num">3/5</span></span>
-                <a class="pattern-ref-link" href="#range-fenwick-tree-sub">View Pattern →</a>
+                <a class="pattern-ref-link" href="#range-fenwick-visual-sub">View Pattern →</a>
               </div>
             </li>
             <li>
@@ -11204,7 +10688,7 @@ Result: len(tails) = 3  (Optimal nesting: [2,3] -&gt; [5,4] -&gt; [6,7])</code><
                 <span class="problem-tag">Coordinate Compression BIT</span>
                 <span class="badge-diff diff-hard">Hard</span>
                 <span class="actual-diff">Actual: <span class="diff-num">4.5/5</span></span>
-                <a class="pattern-ref-link" href="#range-fenwick-tree-sub">View Pattern →</a>
+                <a class="pattern-ref-link" href="#range-fenwick-visual-sub">View Pattern →</a>
               </div>
             </li>
             <li>
@@ -11215,7 +10699,7 @@ Result: len(tails) = 3  (Optimal nesting: [2,3] -&gt; [5,4] -&gt; [6,7])</code><
                 <span class="problem-tag">2D Fenwick Tree</span>
                 <span class="badge-diff diff-hard">Hard</span>
                 <span class="actual-diff">Actual: <span class="diff-num">4/5</span></span>
-                <a class="pattern-ref-link" href="#range-fenwick-tree-sub">View Pattern →</a>
+                <a class="pattern-ref-link" href="#range-fenwick-visual-sub">View Pattern →</a>
               </div>
             </li>
             <li>

@@ -3239,44 +3239,6 @@ h1 {
 .rq-tag-odd { background: rgba(255, 161, 22, 0.2); color: var(--orange); border: 1px solid var(--orange); }
 .rq-tag-query { background: rgba(197, 134, 192, 0.2); color: #e879f9; border: 1px solid #c586c0; }
 
-/* Fenwick Bitwise lowbit Box */
-.rq-bit-diagram-container {
-  margin: 1.1rem 0;
-  background: #141414;
-  border: 1px solid #2d2d2d;
-  border-radius: 8px;
-  padding: 1.15rem;
-}
-
-.rq-bit-math-card {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  background: #1a1a1a;
-  border: 1px solid #303030;
-  border-radius: 6px;
-  padding: 0.95rem;
-  font-family: "SFMono-Regular", Consolas, monospace;
-}
-
-.rq-bit-row-visual {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  flex-wrap: wrap;
-}
-
-.rq-bit-lbl {
-  min-width: 140px;
-  font-size: 0.77rem;
-  color: var(--muted);
-}
-
-.rq-bit-bits {
-  display: flex;
-  gap: 3px;
-}
-
 .bit-cell {
   width: 22px;
   height: 26px;
@@ -3287,45 +3249,6 @@ h1 {
   border-radius: 3px;
   font-size: 0.8rem;
   color: #94a3b8;
-}
-
-.bit-cell.bit-active {
-  background: rgba(255, 161, 22, 0.25);
-  border-color: var(--orange);
-  color: #fff;
-  font-weight: 700;
-}
-
-.bit-cell.bit-inverted {
-  background: rgba(100, 116, 139, 0.25);
-  color: #cbd5e1;
-}
-
-.bit-cell.bit-isolated {
-  background: rgba(0, 184, 163, 0.35);
-  border-color: var(--easy);
-  color: #fff;
-  font-weight: 800;
-  box-shadow: 0 0 8px rgba(0, 184, 163, 0.6);
-}
-
-.rq-bit-divider {
-  height: 1px;
-  background: #333;
-  margin: 0.2rem 0;
-}
-
-.rq-bit-val-tag {
-  font-size: 0.74rem;
-  color: var(--easy);
-  font-weight: 700;
-}
-
-.rq-bit-coverage-summary {
-  margin-top: 0.85rem;
-  font-size: 0.79rem;
-  color: var(--muted);
-  line-height: 1.5;
 }
 
 /* SQRT Decomposition Chunky Boxes */
@@ -4002,7 +3925,7 @@ h1 {
 
 
 /* ========================================================================= */
-/* FENWICK TREE (BIT) VISUALS: N = 30 QUERY TREE                             */
+/* FENWICK TREE (BIT): N = 40 QUERY TREE                                     */
 /* ========================================================================= */
 
 .bit-svg-wrap {
@@ -4023,42 +3946,7 @@ h1 {
   height: auto;
 }
 
-/* Full 0..30 query tree: keep node + binary labels legible; wrap scrolls horizontally */
-.bit-q30-svg {
-  min-width: 1400px;
-}
-
-.bit-intuition-banner {
-  background: linear-gradient(135deg, #1c1813 0%, #171717 100%);
-  border: 1px solid rgba(255, 161, 22, 0.4);
-  border-left: 4px solid var(--orange);
-  border-radius: 8px;
-  padding: 1.15rem 1.35rem;
-  margin: 1.25rem 0;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.28);
-}
-
-.bit-intuition-banner h4 {
-  margin: 0 0 0.5rem;
-  color: var(--orange);
-  font-size: 0.96rem;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.bit-intuition-text {
-  font-size: 0.9rem;
-  line-height: 1.68;
-  color: var(--text);
-  margin: 0;
-}
-
-.bit-intuition-text strong {
-  color: #fff;
-}
-
-.bit-intuition-text em {
-  color: var(--cyan);
-  font-style: normal;
+/* Full 0..40 query tree: keep node + binary labels legible; wrap scrolls horizontally */
+.bit-q40-svg {
+  min-width: 1800px;
 }
