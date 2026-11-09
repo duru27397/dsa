@@ -3985,3 +3985,12 @@ h1 {
 .lsb-arrow { color: var(--faint); }
 .lsb-count { color: var(--orange); font-weight: 700; }
 @media (max-width: 768px) { .lsb-card { --lsb-cell: 26px; } .lsb-row { grid-template-columns: 4.6rem max-content 3.6rem; } }
+
+/* Collapsible side note inside the Fenwick page (e.g. n & (n - 1)) */
+.fenwick-details { margin-top: 0.8rem; border: 1px solid var(--border-soft); border-radius: 8px; background: var(--bg-card); }
+.fenwick-details > summary { display: flex; align-items: center; gap: 0.5rem; min-height: 38px; padding: 0.55rem 1rem; cursor: pointer; list-style: none; color: var(--cyan); font-size: 0.8rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; }
+.fenwick-details > summary::-webkit-details-marker { display: none; }
+.fenwick-details > summary::before { content: "▸"; color: var(--faint); transition: transform 0.15s ease; }
+.fenwick-details[open] > summary::before { transform: rotate(90deg); }
+.fenwick-details-body { padding: 0 0.8rem 0.8rem; }
+.fenwick-details-body > .why-box { margin-top: 0; }

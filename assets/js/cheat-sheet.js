@@ -170,6 +170,7 @@
     if (subTargetId) {
       const subElem = document.getElementById(subTargetId);
       if (subElem) {
+        if (subElem.tagName === "DETAILS") subElem.open = true; // reveal collapsed sections before scrolling
         document.querySelectorAll(".technique-card.highlighted, .pattern-card.highlighted").forEach((c) => c.classList.remove("highlighted"));
         subElem.classList.add("highlighted");
         subElem.scrollIntoView({ behavior: "smooth", block: "center" });

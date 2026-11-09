@@ -974,17 +974,25 @@
             </div>
             <!-- LEVEL 3 (Topic / Technique C) -->
             <div class="tree-children l3-children">
-              <a class="nav-item l3-link" href="#range-fenwick-visual-sub" data-target-sub="fenwick-golden-rule">
+              <a class="nav-item l3-link" href="#range-fenwick-visual-sub" data-target-sub="fenwick-query-tree">
                 <span class="leaf-dot">•</span>
-                <span class="nav-title">Golden Rule: i &amp; -i</span>
+                <span class="nav-title">Query Tree 0–40 (Binary)</span>
+              </a>
+              <a class="nav-item l3-link" href="#range-fenwick-visual-sub" data-target-sub="fenwick-one-look">
+                <span class="leaf-dot">•</span>
+                <span class="nav-title">Fenwick Tree in One Look</span>
               </a>
               <a class="nav-item l3-link" href="#range-fenwick-visual-sub" data-target-sub="fenwick-drop-lowest-bit">
                 <span class="leaf-dot">•</span>
                 <span class="nav-title">n &amp; (n - 1) &amp; Bit Count</span>
               </a>
-              <a class="nav-item l3-link" href="#range-fenwick-visual-sub" data-target-sub="fenwick-query-tree">
+              <a class="nav-item l3-link" href="#range-fenwick-visual-sub" data-target-sub="fenwick-golden-rule">
                 <span class="leaf-dot">•</span>
-                <span class="nav-title">Query Tree 0–40 (Binary)</span>
+                <span class="nav-title">Golden Rule: i &amp; -i</span>
+              </a>
+              <a class="nav-item l3-link" href="#range-fenwick-visual-sub" data-target-sub="fenwick-notes">
+                <span class="leaf-dot">•</span>
+                <span class="nav-title">Tree Rules, Query, Update &amp; Code</span>
               </a>
             </div>
           </div>
@@ -9414,58 +9422,12 @@ Result: len(tails) = 3  (Optimal nesting: [2,3] -&gt; [5,4] -&gt; [6,7])</code><
 
       <!-- PAGE 3: Fenwick Tree Subcategory -->
       <section class="page-view" id="range-fenwick-visual-sub" data-topic-title="Advanced Range Query Structures" data-page-title="Fenwick Tree">
+        <header class="topic-heading">
+          <span class="level-tag">Topic 09 · Range Queries</span>
+          <h1><span>⚡</span> Fenwick Tree (Binary Indexed Tree)</h1>
+        </header>
+
         <section class="patterns-section">
-          <article class="pattern-card" id="fenwick-golden-rule">
-            <div class="why-box lsb-card" style="padding: 1rem 1.2rem;">
-              <strong>Fenwick tree in one look</strong>
-              <p>Fenwick tree = Binary Indexed Tree (BIT). My name for it: prefix binary tree.</p>
-              <p>Prefix sum and point update, each in O(log n); memory O(n).</p>
-              <p style="margin-bottom: 1rem;">It only gives prefix sums directly. Range sum <code>[l, r]</code> = <code>query(r) - query(l - 1)</code>.</p>
-
-              <strong>Golden rule: i &amp; -i = keep only the lowest set bit</strong>
-              <div class="lsb-bars" role="img" aria-label="i = 6832: flip all bits, add 1, AND with i leaves only the lowest set bit, 16">
-                <div class="lsb-row lsb-zone-row is-head"><span class="lsb-label"></span><span class="lsb-cells"><span class="lsb-zone is-left" style="width: calc(8 * var(--lsb-cell) + 7 * 3px);">above the lowest 1</span><span class="lsb-gap is-blank" aria-hidden="true"></span><span class="lsb-zone is-right" style="width: calc(5 * var(--lsb-cell) + 4 * 3px);">lowest 1 + trailing 0s</span></span><span class="lsb-val"></span></div>
-                <div class="lsb-row"><span class="lsb-label">i</span><span class="lsb-cells"><span class="lsb-cell is-prefix is-on">1</span><span class="lsb-cell is-prefix is-on">1</span><span class="lsb-cell is-prefix">0</span><span class="lsb-cell is-prefix is-on">1</span><span class="lsb-cell is-prefix">0</span><span class="lsb-cell is-prefix is-on">1</span><span class="lsb-cell is-prefix">0</span><span class="lsb-cell is-prefix is-on">1</span><span class="lsb-gap" aria-hidden="true"></span><span class="lsb-cell is-lsb is-on">1</span><span class="lsb-cell is-trail">0</span><span class="lsb-cell is-trail">0</span><span class="lsb-cell is-trail">0</span><span class="lsb-cell is-trail">0</span></span><span class="lsb-val">= 6832</span></div>
-                <div class="lsb-row"><span class="lsb-label">flip ~i</span><span class="lsb-cells"><span class="lsb-cell is-prefix">0</span><span class="lsb-cell is-prefix">0</span><span class="lsb-cell is-prefix is-on">1</span><span class="lsb-cell is-prefix">0</span><span class="lsb-cell is-prefix is-on">1</span><span class="lsb-cell is-prefix">0</span><span class="lsb-cell is-prefix is-on">1</span><span class="lsb-cell is-prefix">0</span><span class="lsb-gap" aria-hidden="true"></span><span class="lsb-cell is-lsb">0</span><span class="lsb-cell is-trail is-on">1</span><span class="lsb-cell is-trail is-on">1</span><span class="lsb-cell is-trail is-on">1</span><span class="lsb-cell is-trail is-on">1</span></span><span class="lsb-val"></span></div>
-                <div class="lsb-row"><span class="lsb-label">+1 &rarr; -i</span><span class="lsb-cells"><span class="lsb-cell is-prefix">0</span><span class="lsb-cell is-prefix">0</span><span class="lsb-cell is-prefix is-on">1</span><span class="lsb-cell is-prefix">0</span><span class="lsb-cell is-prefix is-on">1</span><span class="lsb-cell is-prefix">0</span><span class="lsb-cell is-prefix is-on">1</span><span class="lsb-cell is-prefix">0</span><span class="lsb-gap" aria-hidden="true"></span><span class="lsb-cell is-lsb is-on">1</span><span class="lsb-cell is-trail">0</span><span class="lsb-cell is-trail">0</span><span class="lsb-cell is-trail">0</span><span class="lsb-cell is-trail">0</span></span><span class="lsb-val"></span></div>
-                <div class="lsb-row is-result"><span class="lsb-label">i &amp; -i</span><span class="lsb-cells"><span class="lsb-cell is-prefix">0</span><span class="lsb-cell is-prefix">0</span><span class="lsb-cell is-prefix">0</span><span class="lsb-cell is-prefix">0</span><span class="lsb-cell is-prefix">0</span><span class="lsb-cell is-prefix">0</span><span class="lsb-cell is-prefix">0</span><span class="lsb-cell is-prefix">0</span><span class="lsb-gap" aria-hidden="true"></span><span class="lsb-cell is-lsb is-on">1</span><span class="lsb-cell is-trail">0</span><span class="lsb-cell is-trail">0</span><span class="lsb-cell is-trail">0</span><span class="lsb-cell is-trail">0</span></span><span class="lsb-val">= 16</span></div>
-                <div class="lsb-row lsb-zone-row is-note"><span class="lsb-label"></span><span class="lsb-cells"><span class="lsb-zone is-left" style="width: calc(8 * var(--lsb-cell) + 7 * 3px);"><b>flip</b> &rarr; opposite of i<br><b>&amp;</b> &rarr; 0</span><span class="lsb-gap is-blank" aria-hidden="true"></span><span class="lsb-zone is-right" style="width: calc(5 * var(--lsb-cell) + 4 * 3px);"><b>flip</b> &rarr; 0s become 1s<br><b>+1</b> carries to the lowest 1</span></span><span class="lsb-val"></span></div>
-              </div>
-            </div>
-          </article>
-
-          <article class="pattern-card" id="fenwick-drop-lowest-bit">
-            <div class="why-box lsb-card" style="padding: 1rem 1.2rem;">
-              <strong>Don't confuse: n &amp; (n - 1) = drop the lowest set bit</strong>
-              <div class="lsb-bars" role="img" aria-label="n = 6832: n minus 1 borrows from the lowest 1; AND with n removes the lowest set bit, 6816">
-                <div class="lsb-row lsb-zone-row is-head"><span class="lsb-label"></span><span class="lsb-cells"><span class="lsb-zone is-left" style="width: calc(8 * var(--lsb-cell) + 7 * 3px);">above the lowest 1</span><span class="lsb-gap is-blank" aria-hidden="true"></span><span class="lsb-zone is-right" style="width: calc(5 * var(--lsb-cell) + 4 * 3px);">lowest 1 + trailing 0s</span></span><span class="lsb-val"></span></div>
-                <div class="lsb-row"><span class="lsb-label">n</span><span class="lsb-cells"><span class="lsb-cell is-prefix is-on">1</span><span class="lsb-cell is-prefix is-on">1</span><span class="lsb-cell is-prefix">0</span><span class="lsb-cell is-prefix is-on">1</span><span class="lsb-cell is-prefix">0</span><span class="lsb-cell is-prefix is-on">1</span><span class="lsb-cell is-prefix">0</span><span class="lsb-cell is-prefix is-on">1</span><span class="lsb-gap" aria-hidden="true"></span><span class="lsb-cell is-lsb is-on">1</span><span class="lsb-cell is-trail">0</span><span class="lsb-cell is-trail">0</span><span class="lsb-cell is-trail">0</span><span class="lsb-cell is-trail">0</span></span><span class="lsb-val">= 6832</span></div>
-                <div class="lsb-row"><span class="lsb-label">n - 1</span><span class="lsb-cells"><span class="lsb-cell is-prefix is-on">1</span><span class="lsb-cell is-prefix is-on">1</span><span class="lsb-cell is-prefix">0</span><span class="lsb-cell is-prefix is-on">1</span><span class="lsb-cell is-prefix">0</span><span class="lsb-cell is-prefix is-on">1</span><span class="lsb-cell is-prefix">0</span><span class="lsb-cell is-prefix is-on">1</span><span class="lsb-gap" aria-hidden="true"></span><span class="lsb-cell is-lsb">0</span><span class="lsb-cell is-trail is-on">1</span><span class="lsb-cell is-trail is-on">1</span><span class="lsb-cell is-trail is-on">1</span><span class="lsb-cell is-trail is-on">1</span></span><span class="lsb-val"></span></div>
-                <div class="lsb-row is-result"><span class="lsb-label">n &amp; (n-1)</span><span class="lsb-cells"><span class="lsb-cell is-prefix is-on">1</span><span class="lsb-cell is-prefix is-on">1</span><span class="lsb-cell is-prefix">0</span><span class="lsb-cell is-prefix is-on">1</span><span class="lsb-cell is-prefix">0</span><span class="lsb-cell is-prefix is-on">1</span><span class="lsb-cell is-prefix">0</span><span class="lsb-cell is-prefix is-on">1</span><span class="lsb-gap" aria-hidden="true"></span><span class="lsb-cell is-lsb">0</span><span class="lsb-cell is-trail">0</span><span class="lsb-cell is-trail">0</span><span class="lsb-cell is-trail">0</span><span class="lsb-cell is-trail">0</span></span><span class="lsb-val">= 6816</span></div>
-                <div class="lsb-row lsb-zone-row is-note"><span class="lsb-label"></span><span class="lsb-cells"><span class="lsb-zone is-left" style="width: calc(8 * var(--lsb-cell) + 7 * 3px);"><b>-1</b> leaves it unchanged<br><b>&amp;</b> &rarr; kept</span><span class="lsb-gap is-blank" aria-hidden="true"></span><span class="lsb-zone is-right" style="width: calc(5 * var(--lsb-cell) + 4 * 3px);"><b>-1</b> borrows: 1&rarr;0, 0s&rarr;1s<br><b>&amp;</b> &rarr; 0</span></span><span class="lsb-val"></span></div>
-              </div>
-              <div class="lsb-compare">
-                <span class="lsb-chip is-lsb"><code>n &amp; -n</code> = 16 &nbsp;keeps only the lowest 1</span>
-                <span class="lsb-chip is-drop"><code>n &amp; (n-1)</code> = 6816 &nbsp;removes it = Fenwick parent</span>
-              </div>
-              <div class="lsb-chain" aria-label="bit count of 6832 by repeated n &amp; (n - 1)">
-                <span class="lsb-chain-title">Bit count: repeat <code>n &amp;= n - 1</code> until 0</span>
-                <span class="lsb-chain-steps"><span class="lsb-step">6832</span><span class="lsb-arrow">&rarr;</span><span class="lsb-step">6816</span><span class="lsb-arrow">&rarr;</span><span class="lsb-step">6784</span><span class="lsb-arrow">&rarr;</span><span class="lsb-step">6656</span><span class="lsb-arrow">&rarr;</span><span class="lsb-step">6144</span><span class="lsb-arrow">&rarr;</span><span class="lsb-step">4096</span><span class="lsb-arrow">&rarr;</span><span class="lsb-step is-zero">0</span> <span class="lsb-count">= 6 steps = 6 set bits</span></span>
-              </div>
-            </div>
-            <div class="mini-code-wrap">
-              <button class="copy-button mini-copy" type="button" data-code="fenwick-count-bits-code">Copy</button>
-              <pre class="mini-code" id="fenwick-count-bits-code"><code><span class="line-text"><span class="kw-def">def</span> <span class="fn">countBits</span><span class="punct">(</span><span class="param">n</span><span class="punct">:</span> <span class="type">int</span><span class="punct">)</span> <span class="punct">-&gt;</span> <span class="type">int</span><span class="punct">:</span></span>
-<span class="line-text">    <span class="var">count</span> <span class="punct">=</span> <span class="num">0</span></span>
-<span class="line-text"></span>
-<span class="line-text">    <span class="flow">while</span> <span class="param">n</span><span class="punct">:</span></span>
-<span class="line-text">        <span class="param">n</span> <span class="punct">&amp;=</span> <span class="param">n</span> <span class="punct">-</span> <span class="num">1</span>  <span class="comment"># drop the lowest set bit</span></span>
-<span class="line-text">        <span class="var">count</span> <span class="punct">+=</span> <span class="num">1</span></span>
-<span class="line-text"></span>
-<span class="line-text">    <span class="flow">return</span> <span class="var">count</span></span></code></pre>
-            </div>
-          </article>
-
           <article class="pattern-card" id="fenwick-query-tree">
             <div class="bit-svg-wrap" role="region" aria-label="Query tree for indices 0 to 40" tabindex="0">
 <svg class="bit-svg bit-q40-svg" id="bit-query-tree-40-svg" viewBox="0 0 2072 625" width="100%" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Fenwick query tree for indices 0 to 40; parent of i is i minus lowbit of i; query(13) path highlighted">
@@ -9729,7 +9691,66 @@ Result: len(tails) = 3  (Optimal nesting: [2,3] -&gt; [5,4] -&gt; [6,7])</code><
   </g>
 </svg>
             </div>
+          </article>
 
+          <article class="pattern-card" id="fenwick-one-look">
+            <div class="why-box lsb-card" style="padding: 1rem 1.2rem;">
+              <strong>Fenwick tree in one look</strong>
+              <p><b style="color: var(--text);">Names:</b> Fenwick tree = Binary Indexed Tree (BIT). My name for it: prefix binary tree, because every node's children share its bits up to its lowest 1.</p>
+              <p><b style="color: var(--text);">O(log n):</b> query and point update each move one bit per hop (query clears the lowest 1, update adds it), so at most about log&#8322; n + 1 hops. Memory O(n): <code>tree</code> has n + 1 cells.</p>
+              <p><b style="color: var(--text);">Prefix only:</b> each <code>tree[i]</code> stores a fixed range ending at i, so a query can only stitch ranges that start at 1. Range sum <code>[l, r]</code> = <code>query(r) - query(l - 1)</code>: everything up to r, minus everything before l. That needs an operation you can undo (sum, XOR), so not min or max.</p>
+            </div>
+
+            <details class="fenwick-details" id="fenwick-drop-lowest-bit">
+              <summary>Don't confuse: n &amp; (n - 1) = drop the lowest set bit</summary>
+              <div class="fenwick-details-body">
+                <div class="why-box lsb-card" style="padding: 1rem 1.2rem;">
+              <div class="lsb-bars" role="img" aria-label="n = 6832: n minus 1 borrows from the lowest 1; AND with n removes the lowest set bit, 6816">
+                <div class="lsb-row lsb-zone-row is-head"><span class="lsb-label"></span><span class="lsb-cells"><span class="lsb-zone is-left" style="width: calc(8 * var(--lsb-cell) + 7 * 3px);">above the lowest 1</span><span class="lsb-gap is-blank" aria-hidden="true"></span><span class="lsb-zone is-right" style="width: calc(5 * var(--lsb-cell) + 4 * 3px);">lowest 1 + trailing 0s</span></span><span class="lsb-val"></span></div>
+                <div class="lsb-row"><span class="lsb-label">n</span><span class="lsb-cells"><span class="lsb-cell is-prefix is-on">1</span><span class="lsb-cell is-prefix is-on">1</span><span class="lsb-cell is-prefix">0</span><span class="lsb-cell is-prefix is-on">1</span><span class="lsb-cell is-prefix">0</span><span class="lsb-cell is-prefix is-on">1</span><span class="lsb-cell is-prefix">0</span><span class="lsb-cell is-prefix is-on">1</span><span class="lsb-gap" aria-hidden="true"></span><span class="lsb-cell is-lsb is-on">1</span><span class="lsb-cell is-trail">0</span><span class="lsb-cell is-trail">0</span><span class="lsb-cell is-trail">0</span><span class="lsb-cell is-trail">0</span></span><span class="lsb-val">= 6832</span></div>
+                <div class="lsb-row"><span class="lsb-label">n - 1</span><span class="lsb-cells"><span class="lsb-cell is-prefix is-on">1</span><span class="lsb-cell is-prefix is-on">1</span><span class="lsb-cell is-prefix">0</span><span class="lsb-cell is-prefix is-on">1</span><span class="lsb-cell is-prefix">0</span><span class="lsb-cell is-prefix is-on">1</span><span class="lsb-cell is-prefix">0</span><span class="lsb-cell is-prefix is-on">1</span><span class="lsb-gap" aria-hidden="true"></span><span class="lsb-cell is-lsb">0</span><span class="lsb-cell is-trail is-on">1</span><span class="lsb-cell is-trail is-on">1</span><span class="lsb-cell is-trail is-on">1</span><span class="lsb-cell is-trail is-on">1</span></span><span class="lsb-val"></span></div>
+                <div class="lsb-row is-result"><span class="lsb-label">n &amp; (n-1)</span><span class="lsb-cells"><span class="lsb-cell is-prefix is-on">1</span><span class="lsb-cell is-prefix is-on">1</span><span class="lsb-cell is-prefix">0</span><span class="lsb-cell is-prefix is-on">1</span><span class="lsb-cell is-prefix">0</span><span class="lsb-cell is-prefix is-on">1</span><span class="lsb-cell is-prefix">0</span><span class="lsb-cell is-prefix is-on">1</span><span class="lsb-gap" aria-hidden="true"></span><span class="lsb-cell is-lsb">0</span><span class="lsb-cell is-trail">0</span><span class="lsb-cell is-trail">0</span><span class="lsb-cell is-trail">0</span><span class="lsb-cell is-trail">0</span></span><span class="lsb-val">= 6816</span></div>
+                <div class="lsb-row lsb-zone-row is-note"><span class="lsb-label"></span><span class="lsb-cells"><span class="lsb-zone is-left" style="width: calc(8 * var(--lsb-cell) + 7 * 3px);"><b>-1</b> leaves it unchanged<br><b>&amp;</b> &rarr; kept</span><span class="lsb-gap is-blank" aria-hidden="true"></span><span class="lsb-zone is-right" style="width: calc(5 * var(--lsb-cell) + 4 * 3px);"><b>-1</b> borrows: 1&rarr;0, 0s&rarr;1s<br><b>&amp;</b> &rarr; 0</span></span><span class="lsb-val"></span></div>
+              </div>
+              <div class="lsb-compare">
+                <span class="lsb-chip is-lsb"><code>n &amp; -n</code> = 16 &nbsp;keeps only the lowest 1</span>
+                <span class="lsb-chip is-drop"><code>n &amp; (n-1)</code> = 6816 &nbsp;removes it = Fenwick parent</span>
+              </div>
+              <div class="lsb-chain" aria-label="bit count of 6832 by repeated n &amp; (n - 1)">
+                <span class="lsb-chain-title">Bit count: repeat <code>n &amp;= n - 1</code> until 0</span>
+                <span class="lsb-chain-steps"><span class="lsb-step">6832</span><span class="lsb-arrow">&rarr;</span><span class="lsb-step">6816</span><span class="lsb-arrow">&rarr;</span><span class="lsb-step">6784</span><span class="lsb-arrow">&rarr;</span><span class="lsb-step">6656</span><span class="lsb-arrow">&rarr;</span><span class="lsb-step">6144</span><span class="lsb-arrow">&rarr;</span><span class="lsb-step">4096</span><span class="lsb-arrow">&rarr;</span><span class="lsb-step is-zero">0</span> <span class="lsb-count">= 6 steps = 6 set bits</span></span>
+              </div>
+            </div>
+            <div class="mini-code-wrap">
+              <button class="copy-button mini-copy" type="button" data-code="fenwick-count-bits-code">Copy</button>
+              <pre class="mini-code" id="fenwick-count-bits-code"><code><span class="line-text"><span class="kw-def">def</span> <span class="fn">countBits</span><span class="punct">(</span><span class="param">n</span><span class="punct">:</span> <span class="type">int</span><span class="punct">)</span> <span class="punct">-&gt;</span> <span class="type">int</span><span class="punct">:</span></span>
+<span class="line-text">    <span class="var">count</span> <span class="punct">=</span> <span class="num">0</span></span>
+<span class="line-text"></span>
+<span class="line-text">    <span class="flow">while</span> <span class="param">n</span><span class="punct">:</span></span>
+<span class="line-text">        <span class="param">n</span> <span class="punct">&amp;=</span> <span class="param">n</span> <span class="punct">-</span> <span class="num">1</span>  <span class="comment"># drop the lowest set bit</span></span>
+<span class="line-text">        <span class="var">count</span> <span class="punct">+=</span> <span class="num">1</span></span>
+<span class="line-text"></span>
+<span class="line-text">    <span class="flow">return</span> <span class="var">count</span></span></code></pre>
+            </div>
+              </div>
+            </details>
+          </article>
+
+          <article class="pattern-card" id="fenwick-golden-rule">
+            <div class="why-box lsb-card" style="padding: 1rem 1.2rem;">
+              <strong>Golden rule: i &amp; -i = keep only the lowest set bit</strong>
+              <div class="lsb-bars" role="img" aria-label="i = 6832: flip all bits, add 1, AND with i leaves only the lowest set bit, 16">
+                <div class="lsb-row lsb-zone-row is-head"><span class="lsb-label"></span><span class="lsb-cells"><span class="lsb-zone is-left" style="width: calc(8 * var(--lsb-cell) + 7 * 3px);">above the lowest 1</span><span class="lsb-gap is-blank" aria-hidden="true"></span><span class="lsb-zone is-right" style="width: calc(5 * var(--lsb-cell) + 4 * 3px);">lowest 1 + trailing 0s</span></span><span class="lsb-val"></span></div>
+                <div class="lsb-row"><span class="lsb-label">i</span><span class="lsb-cells"><span class="lsb-cell is-prefix is-on">1</span><span class="lsb-cell is-prefix is-on">1</span><span class="lsb-cell is-prefix">0</span><span class="lsb-cell is-prefix is-on">1</span><span class="lsb-cell is-prefix">0</span><span class="lsb-cell is-prefix is-on">1</span><span class="lsb-cell is-prefix">0</span><span class="lsb-cell is-prefix is-on">1</span><span class="lsb-gap" aria-hidden="true"></span><span class="lsb-cell is-lsb is-on">1</span><span class="lsb-cell is-trail">0</span><span class="lsb-cell is-trail">0</span><span class="lsb-cell is-trail">0</span><span class="lsb-cell is-trail">0</span></span><span class="lsb-val">= 6832</span></div>
+                <div class="lsb-row"><span class="lsb-label">flip ~i</span><span class="lsb-cells"><span class="lsb-cell is-prefix">0</span><span class="lsb-cell is-prefix">0</span><span class="lsb-cell is-prefix is-on">1</span><span class="lsb-cell is-prefix">0</span><span class="lsb-cell is-prefix is-on">1</span><span class="lsb-cell is-prefix">0</span><span class="lsb-cell is-prefix is-on">1</span><span class="lsb-cell is-prefix">0</span><span class="lsb-gap" aria-hidden="true"></span><span class="lsb-cell is-lsb">0</span><span class="lsb-cell is-trail is-on">1</span><span class="lsb-cell is-trail is-on">1</span><span class="lsb-cell is-trail is-on">1</span><span class="lsb-cell is-trail is-on">1</span></span><span class="lsb-val"></span></div>
+                <div class="lsb-row"><span class="lsb-label">+1 &rarr; -i</span><span class="lsb-cells"><span class="lsb-cell is-prefix">0</span><span class="lsb-cell is-prefix">0</span><span class="lsb-cell is-prefix is-on">1</span><span class="lsb-cell is-prefix">0</span><span class="lsb-cell is-prefix is-on">1</span><span class="lsb-cell is-prefix">0</span><span class="lsb-cell is-prefix is-on">1</span><span class="lsb-cell is-prefix">0</span><span class="lsb-gap" aria-hidden="true"></span><span class="lsb-cell is-lsb is-on">1</span><span class="lsb-cell is-trail">0</span><span class="lsb-cell is-trail">0</span><span class="lsb-cell is-trail">0</span><span class="lsb-cell is-trail">0</span></span><span class="lsb-val"></span></div>
+                <div class="lsb-row is-result"><span class="lsb-label">i &amp; -i</span><span class="lsb-cells"><span class="lsb-cell is-prefix">0</span><span class="lsb-cell is-prefix">0</span><span class="lsb-cell is-prefix">0</span><span class="lsb-cell is-prefix">0</span><span class="lsb-cell is-prefix">0</span><span class="lsb-cell is-prefix">0</span><span class="lsb-cell is-prefix">0</span><span class="lsb-cell is-prefix">0</span><span class="lsb-gap" aria-hidden="true"></span><span class="lsb-cell is-lsb is-on">1</span><span class="lsb-cell is-trail">0</span><span class="lsb-cell is-trail">0</span><span class="lsb-cell is-trail">0</span><span class="lsb-cell is-trail">0</span></span><span class="lsb-val">= 16</span></div>
+                <div class="lsb-row lsb-zone-row is-note"><span class="lsb-label"></span><span class="lsb-cells"><span class="lsb-zone is-left" style="width: calc(8 * var(--lsb-cell) + 7 * 3px);"><b>flip</b> &rarr; opposite of i<br><b>&amp;</b> &rarr; 0</span><span class="lsb-gap is-blank" aria-hidden="true"></span><span class="lsb-zone is-right" style="width: calc(5 * var(--lsb-cell) + 4 * 3px);"><b>flip</b> &rarr; 0s become 1s<br><b>+1</b> carries to the lowest 1</span></span><span class="lsb-val"></span></div>
+              </div>
+            </div>
+          </article>
+
+          <article class="pattern-card" id="fenwick-notes">
             <div class="why-box" style="padding: 1rem 1.2rem;">
               <strong>1 · Tree rules</strong>
               <p>Parent = remove the lowest set bit: <code>i - (i &amp; -i)</code>.</p>
