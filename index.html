@@ -9825,6 +9825,22 @@ Sorted unique prefixes → 0-based ranks → BIT stores earlier prefix frequenci
 query(rank) counts ≤; query(rank − 1) counts &lt;; query before update.</code></pre>
               <p>Include prefix 0. If the original ratio requires odd &gt; 0, exclude all-even subarrays; the cross-multiplied condition alone counts them. Time O(n log n), space O(n).</p>
             </div>
+            <div class="why-box" style="margin-top: 1rem;">
+              <strong>Visual: what does the BIT query count?</strong>
+              <p>Suppose the current prefix is <code>3</code>. Each frequency is the number of <em>earlier</em> prefixes with that value, including the initial prefix 0. The sorted values are the compressed coordinate space.</p>
+              <div style="overflow-x: auto; -webkit-overflow-scrolling: touch;">
+                <table style="border-collapse: collapse; min-width: 450px; text-align: center; font-family: monospace;">
+                  <caption style="text-align: left; padding: 0.4rem 0;">Query through rank 3: count earlier prefixes ≤ 3</caption>
+                  <thead><tr><th scope="col" style="padding: 0.55rem; text-align: left;">Rank</th><th scope="col" style="padding: 0.55rem; border: 1px solid var(--border);">0</th><th scope="col" style="padding: 0.55rem; border: 1px solid var(--border);">1</th><th scope="col" style="padding: 0.55rem; border: 1px solid var(--border);">2</th><th scope="col" style="padding: 0.55rem; border: 1px solid var(--border);">3</th><th scope="col" style="padding: 0.55rem; border: 1px solid var(--border);">4</th></tr></thead>
+                  <tbody>
+                    <tr><th scope="row" style="padding: 0.55rem; text-align: left;">Prefix value</th><td style="padding: 0.55rem; border: 1px solid var(--border); background: rgba(45,212,191,.12);">−4</td><td style="padding: 0.55rem; border: 1px solid var(--border); background: rgba(45,212,191,.12);">−1</td><td style="padding: 0.55rem; border: 1px solid var(--border); background: rgba(45,212,191,.12);">0</td><td style="padding: 0.55rem; border: 1px solid var(--cyan); background: rgba(45,212,191,.2);">3</td><td style="padding: 0.55rem; border: 1px solid var(--border);">4</td></tr>
+                    <tr><th scope="row" style="padding: 0.55rem; text-align: left;">Earlier frequency</th><td style="padding: 0.55rem; border: 1px solid var(--border); background: rgba(45,212,191,.12);">1</td><td style="padding: 0.55rem; border: 1px solid var(--border); background: rgba(45,212,191,.12);">0</td><td style="padding: 0.55rem; border: 1px solid var(--border); background: rgba(45,212,191,.12);">2</td><td style="padding: 0.55rem; border: 1px solid var(--cyan); background: rgba(45,212,191,.2);">1</td><td style="padding: 0.55rem; border: 1px solid var(--border);">0</td></tr>
+                  </tbody>
+                </table>
+              </div>
+              <p><strong>query(3) = 1 + 0 + 2 + 1 = 4.</strong> Each earlier prefix gives one valid subarray ending here. Then update rank 3 to record the current prefix for later queries.</p>
+              <p>The frequency row shows conceptual counts by value; internal BIT cells store sums over ranges of ranks.</p>
+            </div>
             <div class="mini-code-wrap">
               <button class="copy-button mini-copy" type="button" data-code="rq-fenwick-prefix-count-code">Copy</button>
               <pre class="mini-code" id="rq-fenwick-prefix-count-code"><code><span class="line-text"><span class="kw-def">def</span> <span class="fn">countRatioSubarrays</span><span class="punct">(</span><span class="var">nums</span><span class="punct">:</span> <span class="type">list</span><span class="punct">[</span><span class="type">int</span><span class="punct">]</span><span class="punct">,</span> <span class="var">a</span><span class="punct">:</span> <span class="type">int</span><span class="punct">,</span> <span class="var">b</span><span class="punct">:</span> <span class="type">int</span><span class="punct">)</span> <span class="punct">-&gt;</span> <span class="type">int</span><span class="punct">:</span></span>
