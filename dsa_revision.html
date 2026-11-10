@@ -974,6 +974,10 @@
             </div>
             <!-- LEVEL 3 (Topic / Technique C) -->
             <div class="tree-children l3-children">
+              <a class="nav-item l3-link" href="#range-fenwick-visual-sub" data-target-sub="rq-fenwick-prefix-count">
+                <span class="leaf-dot">•</span>
+                <span class="nav-title">Prefix Sums + Frequency BIT</span>
+              </a>
               <a class="nav-item l3-link" href="#range-fenwick-visual-sub" data-target-sub="fenwick-query-tree">
                 <span class="leaf-dot">•</span>
                 <span class="nav-title">Query Tree 0–40 (Binary)</span>
@@ -9431,6 +9435,41 @@ Result: len(tails) = 3  (Optimal nesting: [2,3] -&gt; [5,4] -&gt; [6,7])</code><
         </header>
 
         <section class="patterns-section">
+          <article class="pattern-card" id="rq-fenwick-prefix-count">
+            <div class="pattern-card-head"><h3>Weighted Prefix Sums + Frequency BIT</h3></div>
+            <p class="use-when"><strong>Use when:</strong> Count subarrays satisfying a sum, balance, or ratio inequality.</p>
+            <div class="why-box">
+              <strong>Transform → Prefix sums → Compress → Count</strong>
+              <p>For even / odd ≤ a / b, cross-multiply (assuming b &gt; 0 and odd &gt; 0): b × even ≤ a × odd. Assign even −b and odd +a. A valid subarray has sum ≥ 0, so its earlier prefix ≤ its current prefix.</p>
+              <pre class="trace-diagram"><code>P[right] − P[left] ≥ 0  →  P[left] ≤ P[right]
+Sorted unique prefixes → 1-based ranks → BIT stores earlier prefix frequencies
+query(rank) counts ≤; query(rank − 1) counts &lt;; query before update.</code></pre>
+              <p>Include prefix 0. If the original ratio requires odd &gt; 0, exclude all-even subarrays; the cross-multiplied condition alone counts them. Time O(n log n), space O(n).</p>
+            </div>
+            <div class="mini-code-wrap">
+              <button class="copy-button mini-copy" type="button" data-code="rq-fenwick-prefix-count-code">Copy</button>
+              <pre class="mini-code" id="rq-fenwick-prefix-count-code"><code><span class="kw-def">def</span> <span class="fn">countRatioSubarrays</span><span class="punct">(</span><span class="var">nums</span><span class="punct">:</span> <span class="type">list</span><span class="punct">[</span><span class="type">int</span><span class="punct">]</span><span class="punct">,</span> <span class="var">a</span><span class="punct">:</span> <span class="type">int</span><span class="punct">,</span> <span class="var">b</span><span class="punct">:</span> <span class="type">int</span><span class="punct">)</span> <span class="punct">-&gt;</span> <span class="type">int</span><span class="punct">:</span>
+    <span class="docstr">&quot;&quot;&quot;even -&gt; -b, odd -&gt; +a; valid when prefix[left] &lt;= prefix[right].&quot;&quot;&quot;</span>
+    <span class="var">prefixSums</span><span class="punct">,</span> <span class="var">prefixSum</span> <span class="punct">=</span> <span class="punct">[</span><span class="num">0</span><span class="punct">]</span><span class="punct">,</span> <span class="num">0</span>
+
+    <span class="flow">for</span> <span class="var">num</span> <span class="flow">in</span> <span class="var">nums</span><span class="punct">:</span>
+        <span class="var">prefixSum</span> <span class="punct">+=</span> <span class="var">a</span> <span class="flow">if</span> <span class="var">num</span> <span class="punct">&amp;</span> <span class="num">1</span> <span class="flow">else</span> <span class="punct">-</span><span class="var">b</span>
+        <span class="var">prefixSums</span><span class="punct">.</span><span class="var">append</span><span class="punct">(</span><span class="var">prefixSum</span><span class="punct">)</span>
+
+    <span class="var">rank</span> <span class="punct">=</span> <span class="punct">{</span><span class="var">value</span><span class="punct">:</span> <span class="var">i</span> <span class="punct">+</span> <span class="num">1</span> <span class="flow">for</span> <span class="var">i</span><span class="punct">,</span> <span class="var">value</span> <span class="flow">in</span> <span class="fn">enumerate</span><span class="punct">(</span><span class="fn">sorted</span><span class="punct">(</span><span class="fn">set</span><span class="punct">(</span><span class="var">prefixSums</span><span class="punct">)</span><span class="punct">)</span><span class="punct">)</span><span class="punct">}</span>
+    <span class="var">bit</span><span class="punct">,</span> <span class="var">result</span> <span class="punct">=</span> <span class="type">FenwickTree</span><span class="punct">(</span><span class="fn">len</span><span class="punct">(</span><span class="var">rank</span><span class="punct">)</span><span class="punct">)</span><span class="punct">,</span> <span class="num">0</span>
+
+    <span class="flow">for</span> <span class="var">prefixSum</span> <span class="flow">in</span> <span class="var">prefixSums</span><span class="punct">:</span>
+        <span class="var">idx</span> <span class="punct">=</span> <span class="var">rank</span><span class="punct">[</span><span class="var">prefixSum</span><span class="punct">]</span>
+        <span class="var">result</span> <span class="punct">+=</span> <span class="var">bit</span><span class="punct">.</span><span class="var">query</span><span class="punct">(</span><span class="var">idx</span><span class="punct">)</span>  <span class="comment"># Earlier prefixes &lt;= current prefix.</span>
+        <span class="var">bit</span><span class="punct">.</span><span class="var">update</span><span class="punct">(</span><span class="var">idx</span><span class="punct">,</span> <span class="num">1</span><span class="punct">)</span>       <span class="comment"># Insert after query: no empty subarray.</span>
+
+    <span class="flow">return</span> <span class="var">result</span>
+</code></pre>
+            </div>
+            <p>Uses the 1-based <code>FenwickTree</code> from the Range Queries blueprint. The function counts the cross-multiplied condition, including all-even subarrays.</p>
+          </article>
+
           <article class="pattern-card" id="fenwick-query-tree">
             <div class="bit-svg-wrap" role="region" aria-label="Query tree for indices 0 to 40" tabindex="0">
 <svg class="bit-svg bit-q40-svg" id="bit-query-tree-40-svg" viewBox="0 0 2072 625" width="100%" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Fenwick query tree for indices 0 to 40; parent of i is i minus lowbit of i; query(13) path highlighted">
@@ -10694,6 +10733,13 @@ Result: len(tails) = 3  (Optimal nesting: [2,3] -&gt; [5,4] -&gt; [6,7])</code><
 
         <section class="patterns-section">
           <ul class="reference-list">
+            <li>
+              <div class="ref-left">Count Ratio Subarrays (weighted even / odd)</div>
+              <div class="ref-right">
+                <span class="problem-tag">Weighted Prefix Sum + Frequency BIT</span>
+                <a class="pattern-ref-link" href="#range-fenwick-visual-sub" data-target-sub="rq-fenwick-prefix-count">View Pattern →</a>
+              </div>
+            </li>
             <li>
               <div class="ref-left">
                 <a class="prob-link" href="https://leetcode.com/problems/range-sum-query-mutable/" target="_blank" rel="noopener">Range Sum Query - Mutable ↗</a>
